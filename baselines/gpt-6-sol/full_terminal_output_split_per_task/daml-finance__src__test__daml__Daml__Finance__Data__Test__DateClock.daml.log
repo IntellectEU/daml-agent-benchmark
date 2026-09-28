@@ -1,0 +1,155 @@
+launching codex via: <package>/src/daml_agent_benchmark/codex_in_container.py
+timeout: 600s
+transport: app_server
+[codex] container export timeout: 120.0s
+[codex-stderr] [wrapper 1790350619.493] initialized work_dir='<repo-copies>/260925-173549/daml-finance_____n9jl4gpe' needs_stdin=True copyback_paths_configured=True
+[codex-stderr] [wrapper 1790350619.493] run begin
+[codex-stderr] [wrapper 1790350619.494] egress.network_create start: docker network create --driver bridge --internal --opt com.docker.network.bridge.gateway_mode_ipv4=isolated --subnet 10.219.93.48/28 --label com.daml-agent-benchmark.runner=container-agent-eval daml-agent-task-1790350619-78078-293435
+[codex-stderr] [wrapper 1790350619.540] egress.network_create end rc=0 network=daml-agent-task-1790350619-78078-293435 subnet=10.219.93.48/28
+[codex-stderr] [task-network] name=daml-agent-task-1790350619-78078-293435 subnet=10.219.93.48/28 gateway_isolated=True
+[codex-stderr] [wrapper 1790350619.540] egress.network_connect_proxy start: docker network connect --alias egress-proxy daml-agent-task-1790350619-78078-293435 0850a8300bfef6585e977d18fa8334eed2e57dd8cff3f9ded37b5303d504a262
+[codex-stderr] [wrapper 1790350619.574] egress.network_connect_proxy end rc=0 elapsed=0.03s
+[codex-stderr] [egress] proxy attached: network=daml-agent-task-1790350619-78078-293435, subnet=10.219.93.48/28, proxy=0850a8300bfef6585e977d18fa8334eed2e57dd8cff3f9ded37b5303d504a262, allowed=openai.com,oaiusercontent.com
+[codex-stderr] [wrapper 1790350619.580] container.create start: docker create --platform linux/amd64 -v ~/daml-sdk-store/daml:/opt/daml:ro -v ~/daml-sdk-store/dpm:/opt/dpm-store:ro --cap-drop=ALL --security-opt no-new-privileges --label com.daml-agent-benchmark.runner=container-agent-eval --pids-limit 1024 --tmpfs /tmp:exec,mode=1777 --tmpfs /var/tmp:exec,mode=1777 --env HOME=/tmp/container-home --env DAML_HOME=/opt/daml -i --user 501:20 --network daml-agent-task-1790350619-78078-293435 --env HTTP_PROXY=http://egress-proxy:3128 --env HTTPS_PROXY=http://egress-proxy:3128 --env ALL_PROXY=http://egress-proxy:3128 --env http_proxy=http://egress-proxy:3128 --env https_proxy=http://egress-proxy:3128 --env all_proxy=http://egress-proxy:3128 --env NO_PROXY=localhost,127.0.0.1 --env no_proxy=localhost,127.0.0.1 --env 'OPENAI_API_KEY=<redacted>' --env 'CODEX_API_KEY=<redacted>' --env CODEX_HOME=.codex_home --workdir /workspace daml-agent-eval:latest python3 /opt/codex_diff_wrapper.py codex -C /workspace app-server --listen stdio://
+[codex-stderr] [wrapper 1790350619.629] container.create end rc=0 elapsed=0.05s
+[codex-stderr] [wrapper 1790350619.629] container created id=6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73
+[codex] container id captured for incremental sync: 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73
+[codex-stderr] CONTAINER_ID=6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73
+[codex-stderr] [wrapper 1790350619.700] workspace.audit baseline files=1078 elapsed=0.07s
+[codex-stderr] [wrapper 1790350619.700] container.copy_workspace_in start: docker cp <repo-copies>/260925-173549/daml-finance_____n9jl4gpe/. 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73:/workspace
+[codex-stderr] [wrapper 1790350619.987] container.copy_workspace_in end rc=0 elapsed=0.29s
+[codex-stderr] [wrapper 1790350619.987] container.copy_diff_wrapper start: docker cp <package>/src/daml_agent_benchmark/docker/codex_diff_wrapper.py 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73:/opt/codex_diff_wrapper.py
+[codex-stderr] [wrapper 1790350620.031] container.copy_diff_wrapper end rc=0 elapsed=0.04s
+[codex] started impl-file sync watcher
+[codex-stderr] [wrapper 1790350620.031] container.start begin cmd=docker start -a -i 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73
+[codex-stderr] 2026-09-25T15:37:00.994054Z ERROR codex_app_server: Codex could not find bubblewrap on PATH. Install bubblewrap with your OS package manager. See the sandbox prerequisites: https://developers.openai.com/codex/concepts/sandboxing#prerequisites. Codex will use the bundled bubblewrap in the meantime.
+[codex] watcher synced impl files: src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml, src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml, src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml
+[codex] runtime identity: model='gpt-6-sol' effort=None cli='0.153.4'
+[codex] still running... 10s
+[codex] still running... 20s
+[codex] still running... 30s
+[codex] still running... 40s
+[codex] still running... 50s
+[codex] still running... 60s
+[codex] still running... 70s
+[codex] still running... 80s
+[codex] still running... 90s
+[codex] watcher synced impl files: src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml, src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml, src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml
+[codex] still running... 101s
+[codex] watcher synced impl files: src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml, src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml
+[codex] still running... 111s
+[codex] watcher synced impl files: src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml, src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml
+[codex] still running... 121s
+[codex] watcher synced impl files: src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml
+[codex] still running... 131s
+[codex] still running... 141s
+[codex] final copyback from container: src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml, src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml, src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml
+[codex-stderr] [wrapper 1790350762.861] signal received: 15
+[codex-stderr] [wrapper 1790350762.866] cleanup begin
+[codex-stderr] [wrapper 1790350762.866] cleanup.container begin container_id=6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73
+[codex-stderr] [wrapper 1790350762.867] cleanup.stop start: docker stop -t 5 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73
+[codex-stderr] [wrapper 1790350763.180] cleanup.stop end rc=0 elapsed=0.31s
+[codex-stderr] [wrapper 1790350763.180] cleanup.copyback mode=impl_only
+[codex-stderr] [wrapper 1790350763.181] cleanup.copyback_file rel=src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml start: docker cp 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73:/workspace/src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml <repo-copies>/260925-173549/daml-finance_____n9jl4gpe/src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml
+[codex-stderr] [wrapper 1790350763.221] cleanup.copyback_file rel=src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml end rc=0 elapsed=0.04s
+[codex-stderr] [wrapper 1790350763.222] cleanup.copyback_file rel=src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml start: docker cp 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73:/workspace/src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml <repo-copies>/260925-173549/daml-finance_____n9jl4gpe/src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml
+[codex-stderr] [wrapper 1790350763.258] cleanup.copyback_file rel=src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml end rc=0 elapsed=0.04s
+[codex-stderr] [wrapper 1790350763.259] cleanup.copyback_file rel=src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml start: docker cp 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73:/workspace/src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml <repo-copies>/260925-173549/daml-finance_____n9jl4gpe/src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml
+[codex-stderr] [wrapper 1790350763.280] cleanup.copyback_file rel=src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml end rc=0 elapsed=0.02s
+[codex-stderr] [wrapper 1790350763.280] cleanup.copyback impl_only_done copied_ok=3
+[codex-stderr] [wrapper 1790350763.281] workspace.audit_export start: docker cp 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73:/workspace/. <tmp>/daml-agent-workspace-audit-88u59our
+[codex-stderr] [wrapper 1790350763.892] workspace.audit_export end rc=0 elapsed=0.61s
+[codex-stderr] [workspace-change] {"path": ".codex_home/.sandbox_migration", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/config.toml", "kind": "modified"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/installation_id", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/.codex-system-skills.marker", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/LICENSE.txt", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/SKILL.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/agents/openai.yaml", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/assets/imagegen.png", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/cli.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/codex-network.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/image-api.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/prompting.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/LICENSE.txt", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/SKILL.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/assets/openai.png", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/latest-model.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/model-migration.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/model-selection.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/official-docs.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/SKILL.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/review-agent/SKILL.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/review-agent/agents/openai.yaml", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/SKILL.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/license.txt", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-installer/LICENSE.txt", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-installer/SKILL.md", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py", "kind": "added"}
+[codex-stderr] [workspace-change] {"path": "src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml", "kind": "modified"}
+[codex-stderr] [workspace-change] {"path": "src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml", "kind": "modified"}
+[codex-stderr] [workspace-change] {"path": "src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml", "kind": "modified"}
+[codex-stderr] [workspace-audit] complete changes=66
+[codex-stderr] [wrapper 1790350764.110] cleanup.rm_container start: docker rm -f 6572bc6ca648f831c6db0dc3a1c1e2d067d60f11e1b3303ec59a045fdbed3a73
+[codex-stderr] [wrapper 1790350764.168] cleanup.rm_container end rc=0 elapsed=0.06s
+[codex-stderr] [wrapper 1790350764.168] cleanup.container done
+[codex-stderr] [egress-event] {"timestamp": 1790350624.919, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350630.84, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350636.137, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350640.852, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350644.195, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350650.526, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350655.686, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350662.645, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350667.23, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350673.535, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350690.245, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350699.74, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350716.124, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350725.518, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350731.83, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350735.693, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350744.93, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [egress-event] {"timestamp": 1790350758.73, "client": "10.219.93.50", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[codex-stderr] [wrapper 1790350764.169] egress.audit done events=18
+[codex-stderr] [wrapper 1790350764.169] cleanup.network_disconnect_proxy start: docker network disconnect -f daml-agent-task-1790350619-78078-293435 0850a8300bfef6585e977d18fa8334eed2e57dd8cff3f9ded37b5303d504a262
+[codex-stderr] [wrapper 1790350764.277] cleanup.network_disconnect_proxy end rc=0 elapsed=0.11s
+[codex-stderr] [wrapper 1790350764.277] cleanup.rm_network start: docker network rm daml-agent-task-1790350619-78078-293435
+[codex-stderr] [wrapper 1790350764.429] cleanup.rm_network end rc=0 elapsed=0.15s
+[codex-stderr] [wrapper 1790350764.429] cleanup end

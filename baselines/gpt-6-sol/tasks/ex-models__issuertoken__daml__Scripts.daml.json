@@ -1,0 +1,507 @@
+{
+  "task_id": "ex-models/issuertoken/daml/Scripts.daml",
+  "task_safe_name": "ex-models__issuertoken__daml__Scripts.daml",
+  "test_file": "ex-models/issuertoken/daml/Scripts.daml",
+  "impl_files": [
+    "ex-models/issuertoken/daml/Main.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-09-25T15:35:49.919838+00:00",
+  "started_at_utc": "2026-09-25T15:56:52.531914+00:00",
+  "finished_at_utc": "2026-09-25T15:58:36.175395+00:00",
+  "live_updated_at_utc": "2026-09-25T15:58:36.175395+00:00",
+  "repo_copy": "260925-173549/ex-models_____bvcjoav3",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Scripts.daml:setup": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Scripts.daml:setup": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": false,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:57:07.305274+00:00",
+    "build_outputs_removed": 76
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/260925-173549/ex-models_____bvcjoav3/issuertoken/daml/Main.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 4,
+    "bytes_scanned": 4223,
+    "elapsed_seconds": 0.001,
+    "repo_copy_digest": "7147704fb882861317b2df0280268bef16561d4fde28aae8bee1581a1d8ea145",
+    "pruned_archives": []
+  },
+  "impl_file_snapshots": [
+    {
+      "impl_file": "ex-models/issuertoken/daml/Main.daml",
+      "path_in_copy": "issuertoken/daml/Main.daml",
+      "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Main where\n\n-- Wallet tracking tokens issued to a single owner. \n-- An owner is authorized to tokens by virtue of having a (initially empty)\n-- `Wallet` contract.\n-- An owner can only see their own wallet. The issuer can see everybody's.\ntemplate Wallet\n  with \n    owner: Party\n    issuer: Party\n    tokens: Int\n    maxTokens: Int\n    -- name: String -- This could be added to differentiate Tokens.\n  where\n    ensure tokens >= 0 && tokens <= maxTokens\n    signatory issuer\n    observer owner\n\n    -- The issuer, being the `signatory` to the contract can freely update wallets.\n    controller issuer can \n\n      -- Only authorized investors can `RequestTokens`\n      nonconsuming AuthorizeInvestor: ContractId Wallet\n        with \n          investor: Party\n          maxTokens': Int\n        do create Wallet with \n            owner = investor\n            issuer\n            tokens = 0\n            maxTokens = maxTokens'\n\n      -- Transfer tokens to another wallet, returning the updated source and target wallets.\n      TransferTokens: (ContractId Wallet, ContractId Wallet)\n        with quantity: Int ; toWalletId: ContractId Wallet\n        do\n          remainder <- create this with tokens = tokens - quantity\n          toWallet <- fetch toWalletId\n          _ <- exercise toWalletId Archive\n          quotient <- create toWallet with tokens = toWallet.tokens + quantity\n          return (remainder, quotient)\n\n      -- Delegates to `TransferTokens` with the requested quantity.\n      nonconsuming AcceptTokenRequest: (ContractId Wallet, ContractId Wallet)\n        with requestId: ContractId TokenRequest\n        do \n          request <- fetch requestId\n          exercise self TransferTokens with \n            quantity = request.quantity\n            toWalletId = request.walletId\n\n    -- The owner, being only an observer, needs to create `RequestTokens` rather than\n    -- updating the contract. In other words, they have a read-only view.\n    controller owner can\n\n      -- Creates a new type of 'request' contract. Does not modify the existing contract.\n      nonconsuming RequestTokens: ContractId TokenRequest\n        with \n          requestedQuantity: Int\n        do create TokenRequest with \n            issuer = this.issuer\n            owner = this.owner\n            walletId = self\n            quantity = requestedQuantity\n\n-- Separate contract which allows an investor to initiate transfers.\ntemplate TokenRequest\n  with\n    issuer: Party\n    owner: Party\n    walletId: ContractId Wallet\n    quantity: Int\n  where\n    signatory owner,issuer",
+      "generated": "module Main where\n\ntemplate Wallet\n  with\n    issuer : Party\n    owner : Party\n    tokens : Int\n    maxTokens : Int\n  where\n    signatory issuer\n    observer owner\n\n    ensure tokens >= 0 && tokens <= maxTokens\n\n    nonconsuming choice AuthorizeInvestor : ContractId Wallet\n      with\n        investor : Party\n        maxTokens' : Int\n      controller issuer\n      do\n        assertMsg \"Investor limit must be positive\" (maxTokens' > 0)\n        create this with owner = investor; tokens = 0; maxTokens = maxTokens'\n\n    nonconsuming choice RequestTokens : ContractId TokenRequest\n      with\n        requestedQuantity : Int\n      controller owner\n      do\n        assertMsg \"Requested quantity must be positive\" (requestedQuantity > 0)\n        create TokenRequest with\n          issuer\n          investor = owner\n          walletId = self\n          requestedQuantity\n\n    choice AcceptTokenRequest : (ContractId Wallet, ContractId Wallet)\n      with\n        requestId : ContractId TokenRequest\n      controller issuer\n      do\n        request <- fetch requestId\n        assertMsg \"Request belongs to another issuer\" (request.issuer == issuer)\n        recipient <- fetch request.walletId\n        assertMsg \"Request belongs to another wallet\" (recipient.owner == request.investor && recipient.issuer == issuer)\n        assertMsg \"Insufficient tokens\" (tokens >= request.requestedQuantity)\n        assertMsg \"Investor limit exceeded\" (recipient.tokens + request.requestedQuantity <= recipient.maxTokens)\n        exercise requestId Fulfill\n        issuerWalletId <- create this with tokens = tokens - request.requestedQuantity\n        investorWalletId <- create recipient with tokens = recipient.tokens + request.requestedQuantity\n        archive request.walletId\n        return (issuerWalletId, investorWalletId)\n\n    choice TransferTokens : (ContractId Wallet, ContractId Wallet)\n      with\n        quantity : Int\n        toWalletId : ContractId Wallet\n      controller issuer\n      do\n        recipient <- fetch toWalletId\n        assertMsg \"Quantity must be positive\" (quantity > 0)\n        assertMsg \"Insufficient tokens\" (tokens >= quantity)\n        assertMsg \"Recipient belongs to another issuer\" (recipient.issuer == issuer)\n        assertMsg \"Investor limit exceeded\" (recipient.tokens + quantity <= recipient.maxTokens)\n        senderWalletId <- create this with tokens = tokens - quantity\n        recipientWalletId <- create recipient with tokens = recipient.tokens + quantity\n        archive toWalletId\n        return (senderWalletId, recipientWalletId)\n\ntemplate TokenRequest\n  with\n    issuer : Party\n    investor : Party\n    walletId : ContractId Wallet\n    requestedQuantity : Int\n  where\n    signatory investor\n    observer issuer\n\n    choice Fulfill : ()\n      controller issuer\n      do return ()\n",
+      "captured_at_utc": "2026-09-25T15:58:36.169217+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/260925-173549/ex-models_____bvcjoav3",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Implemented the wallet, token-request, authorization, and transfer choices in `issuertoken/daml/Main.daml`, including balance and holding-limit checks. `daml test` passes.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 75.42217420903035,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 84353,
+      "output_tokens": 2839,
+      "cached_input_tokens": 72877
+    },
+    "usage_by_thread": {
+      "01a0d948-e8e8-75f2-be20-c4aa811aaa7d": {
+        "usage": {
+          "input_tokens": 84353,
+          "output_tokens": 2839,
+          "cached_input_tokens": 72877
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.0659174,
+    "input_usd": 0.022952000000000004,
+    "cached_input_usd": 0.014575399999999999,
+    "output_usd": 0.028390000000000002,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790351834.193,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351838.336,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351846.184,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351866.078,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351872.862,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351875.791,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351886.704,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351889.682,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351897.995,
+          "client": "10.219.155.2",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "impl_changes": [
+        {
+          "path": "issuertoken/daml/Main.daml",
+          "kind": "modified"
+        }
+      ],
+      "test_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

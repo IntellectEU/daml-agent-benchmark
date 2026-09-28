@@ -1,0 +1,43 @@
+_gitignored/
+
+# Python
+uv.lock
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Env / secrets
+.env
+.env.*
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.logs/
+
+# Editor
+.idea/
+.vscode/
+
+# Run outputs are generated locally. The published baseline runs under
+# baselines/ ship with the repo.
+logs/
+redteam_logs/
+tmp_sandboxes/
+tmp_sandboxes_*/
+tmp_repo_copies/
+tmp_repo_copies_*/
+
+# Source repositories fetched by daml_agent_benchmark.fetch_sources, several GB.
+sources/
+
+# Local experiment config (copy experiment.example.py to this and edit).
+experiment.py
+frontend/*.tsbuildinfo

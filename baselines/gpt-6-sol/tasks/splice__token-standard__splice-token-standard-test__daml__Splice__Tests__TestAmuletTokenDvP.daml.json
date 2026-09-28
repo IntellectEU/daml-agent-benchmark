@@ -1,0 +1,820 @@
+{
+  "task_id": "splice/token-standard/splice-token-standard-test/daml/Splice/Tests/TestAmuletTokenDvP.daml",
+  "task_safe_name": "splice__token-standard__splice-token-standard-test__daml__Splice__Tests__TestAmuletTokenDvP.daml",
+  "test_file": "splice/token-standard/splice-token-standard-test/daml/Splice/Tests/TestAmuletTokenDvP.daml",
+  "impl_files": [
+    "splice/daml/splice-amulet/daml/Splice/AmuletAllocation.daml",
+    "splice/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-09-23T16:44:11.506380+00:00",
+  "started_at_utc": "2026-09-23T16:44:11.507606+00:00",
+  "finished_at_utc": "2026-09-23T16:50:21.655343+00:00",
+  "live_updated_at_utc": "2026-09-23T16:50:21.655343+00:00",
+  "repo_copy": "260923-184411/splice_____vcfwwral",
+  "findings": [
+    {
+      "flag": "blocked_egress",
+      "detail": "blocked egress attempts to ['raw.githubusercontent.com']"
+    }
+  ],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Splice/Tests/TestAmuletTokenDvP.daml:setupOtcTrade": true,
+      "daml/Splice/Tests/TestAmuletTokenDvP.daml:testDvPCancel": true,
+      "daml/Splice/Tests/TestAmuletTokenDvP.daml:testDvPWithdraw": true,
+      "daml/Splice/Tests/TestAmuletTokenDvP.daml:testDvP": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Splice/Tests/TestAmuletTokenDvP.daml:setupOtcTrade": true,
+        "daml/Splice/Tests/TestAmuletTokenDvP.daml:testDvPCancel": true,
+        "daml/Splice/Tests/TestAmuletTokenDvP.daml:testDvPWithdraw": true,
+        "daml/Splice/Tests/TestAmuletTokenDvP.daml:testDvP": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": false,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-23T16:45:10.456349+00:00",
+    "build_outputs_removed": 613
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/260923-184411/splice_____vcfwwral/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml",
+      "<repo-copies>/260923-184411/splice_____vcfwwral/daml/splice-amulet/daml/Splice/AmuletAllocation.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 1346,
+    "bytes_scanned": 33160280,
+    "elapsed_seconds": 3.389,
+    "repo_copy_digest": "519ee389cdd79872864abe60d8e074fea2001bfbc1910ebf262c25a78a54defd",
+    "pruned_archives": []
+  },
+  "impl_file_snapshots": [
+    {
+      "impl_file": "splice/daml/splice-amulet/daml/Splice/AmuletAllocation.daml",
+      "path_in_copy": "daml/splice-amulet/daml/Splice/AmuletAllocation.daml",
+      "original": "-- Copyright (c) 2024 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Splice.AmuletAllocation (\n  AmuletAllocation(..),\n  allocationToTwoStepTransfer,\n) where\n\nimport DA.Text as Text\n\nimport Splice.Api.Token.MetadataV1\nimport Splice.Api.Token.HoldingV1\nimport Splice.Api.Token.AllocationV1\n\nimport Splice.Amulet\nimport Splice.Amulet.TwoStepTransfer\n\n\n-- | Amulet allocated in locked form to a trade.\ntemplate AmuletAllocation\n  with\n    lockedAmulet : ContractId LockedAmulet -- ^ Locked amulet that holds the funds for the allocation\n    allocation : AllocationSpecification\n  where\n    signatory allocationInstrumentAdmin allocation, allocation.transferLeg.sender\n    observer allocation.settlement.executor\n\n    interface instance Allocation for AmuletAllocation where\n      view = AllocationView with\n        allocation\n        holdingCids = [toInterfaceContractId lockedAmulet]\n        meta = emptyMetadata\n\n      allocation_executeTransferImpl _self Allocation_ExecuteTransfer{..} = transferAmuletAllocation this extraArgs\n\n      allocation_withdrawImpl _self Allocation_Withdraw{..} = do\n        senderHoldingCids <- unlockAmuletAllocation this extraArgs\n        pure Allocation_WithdrawResult\n          with\n            senderHoldingCids\n            meta = emptyMetadata\n\n      allocation_cancelImpl _self Allocation_Cancel{..} = do\n        senderHoldingCids <- unlockAmuletAllocation this extraArgs\n        pure Allocation_CancelResult\n          with\n            senderHoldingCids\n            meta = emptyMetadata\n\nallocationInstrumentAdmin : AllocationSpecification -> Party\nallocationInstrumentAdmin AllocationSpecification{..} = transferLeg.instrumentId.admin\n\n\n-- Allocation usage\n-------------------\n\nallocationToTwoStepTransfer : AllocationSpecification -> TwoStepTransfer\nallocationToTwoStepTransfer allocation =\n  TwoStepTransfer with\n    dso = allocationInstrumentAdmin allocation\n    sender = allocation.transferLeg.sender\n    receiver = allocation.transferLeg.receiver\n    amount = allocation.transferLeg.amount\n    provider = allocation.settlement.executor\n    transferBefore = allocation.settlement.settleBefore\n    transferBeforeDeadline = \"allocation.settlement.settleBefore\"\n    allowFeaturing = True\n    lockContext = Text.implode\n      -- We don't show more context to avoid bloating the response here.\n      [\"allocation for transfer leg \", show allocation.transferLegId, \" to \", show allocation.transferLeg.receiver]\n\ntransferAmuletAllocation : AmuletAllocation -> ExtraArgs -> Update Allocation_ExecuteTransferResult\ntransferAmuletAllocation amuletAllocation extraArgs = do\n  let twoStepTransfer = allocationToTwoStepTransfer amuletAllocation.allocation\n  (senderHoldingCids, receiverHoldingCids, meta) <-\n    executeTwoStepTransfer twoStepTransfer amuletAllocation.lockedAmulet extraArgs\n  pure Allocation_ExecuteTransferResult\n    with\n      senderHoldingCids\n      receiverHoldingCids\n      meta\n\nunlockAmuletAllocation : AmuletAllocation -> ExtraArgs -> Update [ContractId Holding]\nunlockAmuletAllocation amuletAllocation extraArgs = do\n  let twoStepTransfer = allocationToTwoStepTransfer amuletAllocation.allocation\n  abortTwoStepTransfer twoStepTransfer amuletAllocation.lockedAmulet extraArgs\n",
+      "generated": "module Splice.AmuletAllocation where\n\nimport Splice.Api.Token.AllocationV1\nimport Splice.Api.Token.MetadataV1\nimport Splice.Amulet\nimport Splice.Amulet.TwoStepTransfer\n\nallocationToTwoStepTransfer : AllocationSpecification -> TwoStepTransfer\nallocationToTwoStepTransfer allocation =\n  TwoStepTransfer with\n    dso = allocation.transferLeg.instrumentId.admin\n    sender = allocation.transferLeg.sender\n    provider = allocation.settlement.executor\n    receiver = allocation.transferLeg.receiver\n    amount = allocation.transferLeg.amount\n    transferBefore = allocation.settlement.settleBefore\n    transferBeforeDeadline = \"Allocation.settlement.settleBefore\"\n    allowFeaturing = True\n    lockContext = \"allocation for transfer leg \" <> show allocation.transferLegId <> \" to \" <> show allocation.transferLeg.receiver\n\ntemplate AmuletAllocation\n  with\n    allocation : AllocationSpecification\n    lockedAmulet : ContractId LockedAmulet\n  where\n    signatory allocation.transferLeg.instrumentId.admin, allocation.transferLeg.sender\n    observer allocation.settlement.executor\n\n    interface instance Allocation for AmuletAllocation where\n      view = AllocationView with\n        allocation\n        holdingCids = [toInterfaceContractId lockedAmulet]\n        meta = emptyMetadata\n\n      allocation_executeTransferImpl _self arg = do\n        (senderHoldingCids, receiverHoldingCids, meta) <-\n          executeTwoStepTransfer (allocationToTwoStepTransfer allocation) lockedAmulet arg.extraArgs\n        pure Allocation_ExecuteTransferResult with\n          senderHoldingCids\n          receiverHoldingCids\n          meta\n\n      allocation_cancelImpl _self arg = do\n        senderHoldingCids <- abortTwoStepTransfer (allocationToTwoStepTransfer allocation) lockedAmulet arg.extraArgs\n        pure Allocation_CancelResult with\n          senderHoldingCids\n          meta = emptyMetadata\n\n      allocation_withdrawImpl _self arg = do\n        senderHoldingCids <- abortTwoStepTransfer (allocationToTwoStepTransfer allocation) lockedAmulet arg.extraArgs\n        pure Allocation_WithdrawResult with\n          senderHoldingCids\n          meta = emptyMetadata\n",
+      "captured_at_utc": "2026-09-23T16:50:21.623367+00:00"
+    },
+    {
+      "impl_file": "splice/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml",
+      "path_in_copy": "daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml",
+      "original": "-- Copyright (c) 2024 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\n-- | Generic code for a two-step transfer of amulet. The first step is to lock\n-- the amulet, the second step is to transfer it.\n\nmodule Splice.Amulet.TwoStepTransfer (\n  TwoStepTransfer(..),\n\n  prepareTwoStepTransfer,\n  executeTwoStepTransfer,\n  abortTwoStepTransfer,\n\n  -- * Shared support code\n  holdingToTransferInputs,\n) where\n\nimport DA.Assert\nimport DA.Optional (optionalToList)\n\nimport Splice.Api.Token.MetadataV1\nimport Splice.Api.Token.HoldingV1\n\nimport Splice.Amulet\nimport Splice.Amulet.TokenApiUtils\nimport Splice.AmuletRules\nimport Splice.Expiry\nimport Splice.Round\nimport Splice.Types\nimport Splice.Util\n\n\ndata TwoStepTransfer = TwoStepTransfer with\n    dso : Party\n    sender : Party\n    receiver : Party\n    amount : Decimal\n    lockContext : Text\n      -- ^ Context description of the lock. This is used to display the reason for\n      -- the lock in wallets.\n    transferBefore : Time\n    transferBeforeDeadline : Text -- ^ Name of the deadline for the transfer\n    provider : Party\n      -- ^ Provider that should be marked as the app provider on the second step.\n    allowFeaturing : Bool\n      -- ^ Whether the second step can be featured.\n\n-- | The extra amount locked to guard against the transfer fees changing between\n-- the time of locking the amulet and the time of executing the actual transfer.\nfeeReserveMultiplier : Decimal\nfeeReserveMultiplier = 4.0\n\n-- | Converting a set of holding inputs to inputs for an amulet transfer,\n-- unlocking any expired LockedAmulet holdings on the fly.\nholdingToTransferInputs : ForOwner -> PaymentTransferContext -> [ContractId Holding] -> Update [TransferInput]\nholdingToTransferInputs forOwner paymentContext inputHoldingCids =\n  forA inputHoldingCids $ \\holdingCid -> do\n    holding <- fetchCheckedInterface @Holding forOwner holdingCid\n    case fromInterface holding of\n      Some (LockedAmulet {}) -> do\n        let lockedAmuletCid : ContractId LockedAmulet = fromInterfaceContractId holdingCid\n        -- We assume the lock is expired, and if not then we rely `LockedAmulet_OwnerExpireLock` to fail\n        result <- exercise lockedAmuletCid LockedAmulet_OwnerExpireLock with\n          openRoundCid = paymentContext.context.openMiningRound\n        pure $ InputAmulet result.amuletSum.amulet\n      None -> pure $ InputAmulet $ coerceContractId holdingCid\n\n-- | Prepare a two-step transfer of amulet by locking the funds.\nprepareTwoStepTransfer\n  : TwoStepTransfer -> Time -> [ContractId Holding] -> PaymentTransferContext\n  -> Update (ContractId LockedAmulet, [ContractId Holding], Metadata)\nprepareTwoStepTransfer TwoStepTransfer{..} requestedAt inputHoldingCids paymentContext = do\n  require \"requestedAt < transferBefore\" (requestedAt < transferBefore)\n  -- over-approximate fees that will be due on the actual transfer\n  let receiverOutputForActualTransfer = TransferOutput with\n        receiver\n        amount\n        receiverFeeRatio = 0.0  -- all fees are paid by the sender\n        lock = None\n  [expectedTransferFees] <- exerciseComputeFees dso paymentContext sender [receiverOutputForActualTransfer]\n  let feesReserveAmount = expectedTransferFees * feeReserveMultiplier\n\n  -- lock the amulet\n  transferInputs <- holdingToTransferInputs (ForOwner with dso; owner = sender) paymentContext inputHoldingCids\n  let transfer = Splice.AmuletRules.Transfer with\n        sender\n        provider = sender -- the sender is serving as its own \"app provider\"\n        outputs =\n          [ TransferOutput with\n              receiver = sender\n              amount = amount + feesReserveAmount\n              receiverFeeRatio = 0.0 -- locking fees are paid by the sender\n              lock = Some TimeLock with\n                expiresAt = transferBefore\n                holders = [dso]\n                optContext = Some lockContext\n          ]\n        inputs = transferInputs\n        beneficiaries = None\n\n  result <- exercisePaymentTransfer dso paymentContext transfer\n  let [TransferResultLockedAmulet lockedAmulet] = result.createdAmulets\n  pure\n    ( lockedAmulet\n    , toInterfaceContractId <$> optionalToList result.senderChangeAmulet\n    , copyOnlyBurnMeta result.meta\n    )\n\nexecuteTwoStepTransfer\n  : TwoStepTransfer -> ContractId LockedAmulet -> ExtraArgs\n  -> Update ([ContractId Holding], [ContractId Holding], Metadata)\nexecuteTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do\n  assertWithinDeadline transferBeforeDeadline transferBefore\n  (paymentContext, beneficiaries) <-\n    if allowFeaturing\n      then do\n        beneficiaries <- either fail pure $ beneficiariesFromMetadata extraArgs.meta\n        context <- paymentFromChoiceContext dso extraArgs.context\n        pure (context, beneficiaries)\n      else do\n        -- ignore beneficiaries in case we are not allowing featuring\n        context <- unfeaturedPaymentContextFromChoiceContext dso extraArgs.context\n        pure (context, None)\n  let openRoundCid = paymentContext.context.openMiningRound\n  -- unlock amulet\n  unlockResult <- exercise lockedAmuletCid LockedAmulet_Unlock with openRoundCid\n  let amuletCid = unlockResult.amuletSum.amulet\n  -- execute transfer\n  let receiverOutput = TransferOutput with\n        receiver = receiver\n        amount = amount\n        receiverFeeRatio = 0.0  -- all fees are paid by the sender\n        lock = None\n  let amuletRulesTransfer = Splice.AmuletRules.Transfer with\n        sender\n        provider\n        inputs = [InputAmulet amuletCid]\n        outputs = [receiverOutput]\n        beneficiaries\n  result <- exercisePaymentTransfer dso paymentContext amuletRulesTransfer\n  pure\n    ( optionalToList (toInterfaceContractId <$> result.senderChangeAmulet)\n    , createdAmuletToHolding <$> result.createdAmulets\n    , copyOnlyBurnMeta result.meta\n    )\n\nabortTwoStepTransfer : TwoStepTransfer -> ContractId LockedAmulet -> ExtraArgs -> Update [ContractId Holding]\nabortTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do\n  expireLockedAmulet <- getFromContextU @Bool extraArgs.context expireLockKey\n  if expireLockedAmulet\n    then do\n      openRoundCid <- getFromContextU @(ContractId OpenMiningRound) extraArgs.context openRoundContextKey\n      -- prudent engineering: check the DSO party\n      _ <- fetchChecked (ForDso with dso) openRoundCid\n      result <- exercise lockedAmuletCid LockedAmulet_Unlock with openRoundCid\n      pure [toInterfaceContractId result.amuletSum.amulet]\n    else do\n      -- scan is telling us to not expire the lock, this is OK if the transfer expired\n      assertDeadlineExceeded transferBeforeDeadline transferBefore\n      pure []\n\n",
+      "generated": "module Splice.Amulet.TwoStepTransfer where\n\nimport DA.Assert\nimport DA.Optional (optionalToList)\n\nimport Splice.Api.Token.HoldingV1 (Holding)\nimport Splice.Api.Token.MetadataV1\nimport Splice.Amulet\nimport Splice.Amulet.TokenApiUtils\nimport Splice.AmuletRules\nimport Splice.Expiry\nimport Splice.Round\nimport Splice.Types\nimport Splice.Util\n\ndata TwoStepTransfer = TwoStepTransfer with\n    dso : Party\n    sender : Party\n    provider : Party\n    receiver : Party\n    amount : Decimal\n    transferBefore : Time\n    transferBeforeDeadline : Text\n    allowFeaturing : Bool\n    lockContext : Text\n  deriving (Eq, Show)\n\nholdingToTransferInputs : ForOwner -> PaymentTransferContext -> [ContractId Holding] -> Update [TransferInput]\nholdingToTransferInputs forOwner context holdingCids =\n  mapA toInput holdingCids\n  where\n    toInput holdingCid = do\n      holding <- fetch holdingCid\n      let holdingView = view holding\n      require \"Holding owner must match sender\" (holdingView.owner == forOwner.owner)\n      require \"Holding instrument must match DSO\" (holdingView.instrumentId.admin == forOwner.dso)\n      case holdingView.lock of\n        None -> pure (InputAmulet (coerceContractId holdingCid))\n        Some _ -> do\n          let lockedAmuletCid : ContractId LockedAmulet = coerceContractId holdingCid\n          result <- exercise lockedAmuletCid LockedAmulet_OwnerExpireLock with\n            openRoundCid = context.context.openMiningRound\n          pure (InputAmulet result.amuletSum.amulet)\n\nprepareTwoStepTransfer : TwoStepTransfer -> Time -> [ContractId Holding] -> PaymentTransferContext -> Update (ContractId LockedAmulet, [ContractId Holding], Metadata)\nprepareTwoStepTransfer transfer requestedAt holdingCids context = do\n  assertDeadlineExceeded \"requestedAt\" requestedAt\n  assertWithinDeadline transfer.transferBeforeDeadline transfer.transferBefore\n  inputs <- holdingToTransferInputs (ForOwner with dso = transfer.dso; owner = transfer.sender) context holdingCids\n  [executionFee] <- exerciseComputeFees transfer.dso context transfer.sender [TransferOutput with\n    receiver = transfer.receiver\n    amount = transfer.amount\n    receiverFeeRatio = 0.0\n    lock = None]\n  result <- exercisePaymentTransfer transfer.dso context Transfer with\n    sender = transfer.sender\n    provider = transfer.sender\n    inputs\n    outputs = [TransferOutput with\n      receiver = transfer.sender\n      amount = transfer.amount + executionFee\n      receiverFeeRatio = 0.0\n      lock = Some TimeLock with\n        holders = [transfer.dso]\n        expiresAt = transfer.transferBefore\n        optContext = Some transfer.lockContext]\n    beneficiaries = None\n  case result.createdAmulets of\n    [TransferResultLockedAmulet lockedAmulet] ->\n      pure (lockedAmulet, toInterfaceContractId <$> optionalToList result.senderChangeAmulet, copyOnlyBurnMeta result.meta)\n    _ -> fail \"Expected one locked amulet from transfer\"\n\nexecuteTwoStepTransfer : TwoStepTransfer -> ContractId LockedAmulet -> ExtraArgs -> Update ([ContractId Holding], [ContractId Holding], Metadata)\nexecuteTwoStepTransfer transfer lockedAmulet extraArgs = do\n  assertWithinDeadline transfer.transferBeforeDeadline transfer.transferBefore\n  openRoundCid <- getFromContextU @(ContractId OpenMiningRound) extraArgs.context openRoundContextKey\n  unlocked <- exercise lockedAmulet LockedAmulet_Unlock with openRoundCid\n  context <- paymentFromChoiceContext transfer.dso extraArgs.context\n  beneficiaries <- either fail pure $ beneficiariesFromMetadata extraArgs.meta\n  let paymentContext = if transfer.allowFeaturing then context else context with\n        context = context.context with featuredAppRight = None\n  result <- exercisePaymentTransfer transfer.dso paymentContext Transfer with\n    sender = transfer.sender\n    provider = transfer.provider\n    inputs = [InputAmulet unlocked.amuletSum.amulet]\n    outputs = [TransferOutput with\n      receiver = transfer.receiver\n      amount = transfer.amount\n      receiverFeeRatio = 0.0\n      lock = None]\n    beneficiaries\n  pure (toInterfaceContractId <$> optionalToList result.senderChangeAmulet,\n        createdAmuletToHolding <$> result.createdAmulets, copyOnlyBurnMeta result.meta)\n\nabortTwoStepTransfer : TwoStepTransfer -> ContractId LockedAmulet -> ExtraArgs -> Update [ContractId Holding]\nabortTwoStepTransfer transfer lockedAmulet extraArgs = do\n  active <- getFromContextU @Bool extraArgs.context expireLockKey\n  if active\n    then do\n      openRoundCid <- getFromContextU @(ContractId OpenMiningRound) extraArgs.context openRoundContextKey\n      unlocked <- exercise lockedAmulet LockedAmulet_Unlock with openRoundCid\n      pure [toInterfaceContractId unlocked.amuletSum.amulet]\n    else do\n      assertDeadlineExceeded transfer.transferBeforeDeadline transfer.transferBefore\n      pure []\n",
+      "captured_at_utc": "2026-09-23T16:50:21.623367+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/260923-184411/splice_____vcfwwral",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Restored the two allowed Amulet modules with allocation locking, transfer execution, and cancel/withdraw handling. The DvP tests pass: `setupOtcTrade`, `testDvP`, `testDvPCancel`, and `testDvPWithdraw`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 268.9921255420195,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 1171351,
+      "output_tokens": 9100,
+      "cached_input_tokens": 1109728
+    },
+    "usage_by_thread": {
+      "01a0cf28-4428-7090-a386-37c4759f669a": {
+        "usage": {
+          "input_tokens": 1171351,
+          "output_tokens": 9100,
+          "cached_input_tokens": 1109728
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.43619160000000007,
+    "input_usd": 0.123246,
+    "cached_input_usd": 0.22194560000000005,
+    "output_usd": 0.09100000000000001,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790181924.943,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181929.767,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181932.637,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181935.589,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181940.337,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181946.312,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181949.682,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181952.687,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181952.851,
+          "client": "10.219.157.178",
+          "action": "TCP_DENIED_ABORTED",
+          "http_status": 403,
+          "method": "CONNECT",
+          "url": "raw.githubusercontent.com:443",
+          "host": "raw.githubusercontent.com",
+          "domain": "raw.githubusercontent.com",
+          "blocked": true
+        },
+        {
+          "timestamp": 1790181957.373,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181957.483,
+          "client": "10.219.157.178",
+          "action": "TCP_DENIED",
+          "http_status": 403,
+          "method": "CONNECT",
+          "url": "raw.githubusercontent.com:443",
+          "host": "raw.githubusercontent.com",
+          "domain": "raw.githubusercontent.com",
+          "blocked": true
+        },
+        {
+          "timestamp": 1790181960.443,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181967.481,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181970.67,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181973.567,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181978.201,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181981.46,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181987.091,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181990.81,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790181995.135,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182010.815,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182020.012,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182039.687,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182048.348,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182056.747,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182059.408,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182080.202,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182083.397,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182092.873,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182099.403,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182103.69,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182132.367,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182139.142,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182151.282,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790182178.353,
+          "client": "10.219.157.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com",
+        "raw.githubusercontent.com"
+      ],
+      "blocked_domains": [
+        "raw.githubusercontent.com"
+      ],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "impl_changes": [
+        {
+          "path": "daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml",
+          "kind": "modified"
+        },
+        {
+          "path": "daml/splice-amulet/daml/Splice/AmuletAllocation.daml",
+          "kind": "modified"
+        }
+      ],
+      "test_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

@@ -1,0 +1,847 @@
+:root {
+  color: #0f172a;
+  background: #f1f5f9;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(14, 165, 233, 0.16), transparent),
+    radial-gradient(1000px 700px at 95% 0%, rgba(245, 158, 11, 0.13), transparent),
+    #f1f5f9;
+}
+
+.label-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The run table's figure columns: one narrow column per number, tinted per column. */
+:root {
+  --run-shade-good: #1f9d55;
+  --run-shade-bad: #d64545;
+  --run-shade-size: #3b6fd8;
+  --run-group-edge: #c7ccd4;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-num,
+.ant-table-wrapper .ant-table-tbody > tr > td.run-col-num {
+  padding: 6px 3px !important;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-num .ant-table-column-sorters {
+  justify-content: center;
+  gap: 0;
+}
+
+/* The sort arrows take no width in the narrow columns: they sit over the header's right
+   edge and show only on the sorted column or while the header is hovered. The fixed
+   columns are sticky, which already anchors the arrows. */
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-num .ant-table-column-sorter {
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  transform: translateY(-50%);
+  visibility: hidden;
+}
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-num.ant-table-column-sort .ant-table-column-sorter,
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-num:hover .ant-table-column-sorter {
+  visibility: visible;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-num .ant-table-column-title {
+  flex: 0 0 auto;
+}
+
+.run-col-header {
+  display: inline-block;
+  font-size: 15px;
+  line-height: 1.2;
+  cursor: help;
+}
+
+.run-col-share {
+  display: grid;
+  line-height: 1.25;
+}
+
+.run-col-share small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.run-col-muted {
+  color: #94a3b8;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-group-start,
+.ant-table-wrapper .ant-table-tbody > tr > td.run-col-group-start {
+  border-left: 1px solid var(--run-group-edge);
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-group-end,
+.ant-table-wrapper .ant-table-tbody > tr > td.run-col-group-end {
+  border-right: 1px solid var(--run-group-edge);
+}
+
+.run-cost-split {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 4px 12px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.run-cost-split > span {
+  text-align: right;
+}
+
+.agent-matrix-header {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  max-height: 140px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0 auto;
+  font-size: 11px;
+  line-height: 1.05;
+}
+
+.agent-matrix-status-header {
+  border-top: 1px solid #c7ccd4 !important;
+  border-bottom: 1px solid #c7ccd4 !important;
+  padding: 3px 1px !important;
+}
+
+.agent-matrix-status-header-start {
+  border-left: 1px solid #c7ccd4 !important;
+}
+
+.agent-matrix-status-header-end {
+  border-right: 1px solid #c7ccd4 !important;
+}
+
+.agent-matrix-status-cell {
+  text-align: center;
+  padding: 3px 1px !important;
+}
+
+.ant-table-tbody > tr > td.agent-matrix-cell-success {
+  background: #dcfce7;
+}
+
+.ant-table-tbody > tr > td.agent-matrix-cell-failed {
+  background: #fee2e2;
+}
+
+.ant-table-tbody > tr > td.agent-matrix-cell-usage-limit {
+  background: #fef3c7;
+}
+
+.ant-table-tbody > tr > td.agent-matrix-cell-running {
+  background: #dbeafe;
+}
+
+.ant-table-tbody > tr > td.agent-matrix-cell-not-run {
+  background: #f8fafc;
+}
+
+/* antd greys every cell of a hovered row; a status cell keeps its own colour. */
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td.agent-matrix-cell-success {
+  background: #dcfce7;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td.agent-matrix-cell-failed {
+  background: #fee2e2;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td.agent-matrix-cell-usage-limit {
+  background: #fef3c7;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td.agent-matrix-cell-running {
+  background: #dbeafe;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td.agent-matrix-cell-not-run {
+  background: #f8fafc;
+}
+
+.agent-matrix-emoji {
+  font-size: 15px;
+  line-height: 1;
+  display: inline-block;
+}
+
+.agent-matrix-cost {
+  /* The cell is as narrow as its status emoji; four digits have to fit inside it. */
+  font-size: 12px;
+  line-height: 1.05;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Arial Narrow", "Helvetica Condensed", "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-stretch: condensed;
+  letter-spacing: -0.6px;
+  overflow: visible;
+  white-space: nowrap;
+}
+
+.agent-matrix-cost-symbol {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-bottom: 1px;
+}
+
+.agent-matrix-cell-btn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* The pointer alone does not read as "clickable" on a grid of emoji; the cell lifts under it. */
+.agent-matrix-cell-btn:hover {
+  outline: 2px solid rgba(37, 99, 235, 0.55);
+  outline-offset: -2px;
+  border-radius: 3px;
+}
+
+.agent-task-detail-block {
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #ffffff;
+}
+
+.agent-task-detail-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.agent-task-detail-grid {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 8px 12px;
+  align-items: start;
+}
+
+.agent-task-detail-top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.agent-task-result-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.agent-task-detail-pre {
+  margin: 0;
+  white-space: pre-wrap;
+  max-height: 220px;
+  overflow: auto;
+  background: #0b1220;
+  color: #dbeafe;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.agent-task-detail-error {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.agent-md-block {
+  max-height: 260px;
+  overflow: auto;
+  background: #0b1220;
+  color: #dbeafe;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.agent-md-paragraph {
+  margin: 0 0 8px 0;
+}
+
+.agent-md-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.agent-md-list {
+  margin: 0 0 8px 18px;
+  padding: 0;
+}
+
+.agent-md-inline-code {
+  background: rgba(148, 163, 184, 0.28);
+  border: 1px solid rgba(148, 163, 184, 0.38);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+}
+
+.agent-matrix-header-tooltip {
+  pointer-events: auto;
+}
+
+.agent-matrix-header-tooltip .ant-tooltip-inner {
+  user-select: text;
+  cursor: text;
+  white-space: pre-wrap;
+}
+
+.agent-codex-events {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 840px;
+  overflow: auto;
+}
+
+.agent-codex-event {
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  padding: 6px 8px;
+  background: #f8fafc;
+}
+
+.agent-codex-event-user-message {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.agent-codex-event-frame {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.agent-codex-event-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-codex-event-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.agent-codex-event-inline-text {
+  color: #334155;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.agent-codex-event-command-inline {
+  display: block;
+  flex-basis: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.agent-codex-event-line {
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  color: #475569;
+  min-width: 44px;
+}
+
+.agent-codex-event-row {
+  margin-top: 8px;
+  min-width: 0;
+}
+
+.agent-codex-event-row strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.agent-codex-event-pre {
+  max-height: 260px;
+}
+
+.agent-codex-cmd-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.agent-token-usage-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: #334155;
+  font-size: 12px;
+}
+
+.agent-token-usage-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.agent-token-usage-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.agent-token-usage-legend-swatch-input {
+  background: #0ea5e9;
+}
+
+.agent-token-usage-legend-swatch-output {
+  background: #f97316;
+}
+
+.agent-token-usage-legend-swatch-cache-drop {
+  background: #b91c1c;
+}
+
+.agent-token-usage-legend-text-marker {
+  min-width: 10px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  color: #334155;
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+}
+
+.agent-token-usage-chart-scroll {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 8px;
+}
+
+.agent-token-usage-plot {
+  position: relative;
+}
+
+.agent-token-usage-guide-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid rgba(51, 65, 85, 0.4);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.agent-token-usage-guide-line-top {
+  top: 0;
+}
+
+.agent-token-usage-guide-label {
+  position: absolute;
+  right: 0;
+  top: -10px;
+  padding: 0 4px;
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+  font-size: 10px;
+  line-height: 1.2;
+  color: #334155;
+  background: #f8fafc;
+}
+
+.agent-token-usage-chart {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  min-height: 108px;
+  min-width: 0;
+  width: 100%;
+}
+
+.agent-token-usage-bucket {
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  padding: 0;
+  min-width: 0;
+  width: auto;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  cursor: pointer;
+}
+
+.agent-token-usage-bucket-selected {
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.agent-token-usage-bars {
+  position: relative;
+  height: 96px;
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0;
+}
+
+.agent-token-usage-bar {
+  width: 100%;
+}
+
+.agent-token-usage-bar-input {
+  background: #0ea5e9;
+  border-radius: 0 0 3px 3px;
+}
+
+.agent-token-usage-bar-output {
+  background: #f97316;
+  border-radius: 3px 3px 0 0;
+}
+
+.agent-token-usage-cache-drop-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 50%;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+  background: #b91c1c;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.agent-token-usage-test-marker {
+  min-height: 11px;
+  line-height: 11px;
+  margin-top: 1px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #334155;
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+}
+
+.agent-impl-viewer-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.agent-impl-viewer-select {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 320px;
+}
+
+.agent-impl-viewer-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.agent-impl-viewer-path {
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+
+.agent-impl-diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.agent-impl-diff-col {
+  min-width: 0;
+}
+
+.agent-impl-diff-header {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.agent-impl-diff-line-same {
+  background: transparent;
+}
+
+.agent-impl-diff-line-delete {
+  background: rgba(254, 226, 226, 0.9);
+}
+
+.agent-impl-diff-line-insert {
+  background: rgba(220, 252, 231, 0.9);
+}
+
+.agent-impl-diff-line-modify {
+  background: rgba(254, 243, 199, 0.9);
+}
+
+.agent-impl-diff-line-empty {
+  background: rgba(248, 250, 252, 0.9);
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-top-row) {
+  order: 1;
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-block-final-message) {
+  order: 2;
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-block-token-usage) {
+  order: 3;
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-block-timeline) {
+  order: 4;
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-block-per-test) {
+  order: 5;
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-block-paths) {
+  order: 6;
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-block-impl-viewer) {
+  order: 7;
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-block-errors) {
+  order: 8;
+}
+
+.agent-task-detail-layout > .ant-space-item:has(> .agent-task-detail-block-terminal) {
+  order: 9;
+}
+
+@media (max-width: 1200px) {
+  .agent-task-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .agent-task-detail-top-row {
+    grid-template-columns: 1fr;
+  }
+
+  .agent-impl-diff-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Make table selection feel immediate (avoid default Ant animation lag). */
+.ant-checkbox .ant-checkbox-inner,
+.ant-checkbox .ant-checkbox-inner::after,
+.ant-table-tbody > tr.ant-table-row-selected > td {
+  transition: none !important;
+}
+
+/* The two row actions, stacked: one width, text centred. */
+.agent-row-action {
+  width: 72px;
+  text-align: center;
+  justify-content: center;
+}
+
+.agent-cost-summary {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.agent-cost-summary-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  font-size: 13px;
+}
+
+.agent-cost-stack {
+  display: flex;
+  height: 12px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #e2e8f0;
+}
+
+.agent-cost-stack i {
+  display: block;
+  height: 100%;
+}
+
+.agent-cost-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 12px;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+.agent-cost-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.agent-cost-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.agent-cost-legend b {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.agent-cost-chip {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.agent-cost-bar {
+  width: 64px;
+  height: 6px;
+  border-radius: 3px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.agent-cost-bar i {
+  display: block;
+  height: 100%;
+  background: #0b5c3a;
+}
+
+.agent-cost-amount {
+  font-weight: 600;
+  font-size: 13px;
+  color: #0b5c3a;
+}
+
+.agent-cost-share {
+  min-width: 3em;
+  text-align: right;
+  font-size: 12px;
+  color: #475569;
+}
+
+.agent-cost-chip-miss .agent-cost-bar i {
+  background: #b91c1c;
+}
+
+.agent-cost-chip-miss .agent-cost-amount {
+  color: #b91c1c;
+}
+
+.agent-cost-split {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+.agent-cache-miss {
+  border-color: transparent;
+  background: #fdecea;
+}
+
+.agent-request {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 2px 2px 0;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.agent-request-label {
+  font-weight: 600;
+  color: #475569;
+}
+
+.agent-request-nums {
+  color: #64748b;
+}
+
+.agent-request-amount {
+  margin-left: auto;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* The label over the outcome columns overflows its header cell, so that cell is drawn
+   above its sticky neighbours. */
+.ant-table-wrapper .ant-table-thead > tr > th.run-col-group-label-host {
+  overflow: visible;
+  z-index: 4 !important;
+}
+.run-col-group-label {
+  position: absolute;
+  left: 0;
+  bottom: calc(50% + 16px);
+  text-align: center;
+  font-weight: 600;
+  pointer-events: none;
+}

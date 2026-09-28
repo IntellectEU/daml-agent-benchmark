@@ -1,0 +1,559 @@
+{
+  "task_id": "ex-models/crowd-funding/daml/Test.daml",
+  "task_safe_name": "ex-models__crowd-funding__daml__Test.daml",
+  "test_file": "ex-models/crowd-funding/daml/Test.daml",
+  "impl_files": [
+    "ex-models/crowd-funding/daml/CrowdFunding.daml",
+    "ex-models/crowd-funding/daml/Iou.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-09-25T15:35:49.918848+00:00",
+  "started_at_utc": "2026-09-25T15:53:41.897152+00:00",
+  "finished_at_utc": "2026-09-25T15:56:52.522907+00:00",
+  "live_updated_at_utc": "2026-09-25T15:56:52.522907+00:00",
+  "repo_copy": "260925-173549/ex-models_____aeobgxjr",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Test.daml:invalidClaim": true,
+      "daml/Test.daml:invalidReclaim": true,
+      "daml/Test.daml:validClaim": true,
+      "daml/Test.daml:validReclaim": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Test.daml:invalidClaim": true,
+        "daml/Test.daml:invalidReclaim": true,
+        "daml/Test.daml:validClaim": true,
+        "daml/Test.daml:validReclaim": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": false,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:53:59.471141+00:00",
+    "build_outputs_removed": 78
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/260925-173549/ex-models_____aeobgxjr/crowd-funding/daml/CrowdFunding.daml",
+      "<repo-copies>/260925-173549/ex-models_____aeobgxjr/crowd-funding/daml/Iou.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 4,
+    "bytes_scanned": 4104,
+    "elapsed_seconds": 0.003,
+    "repo_copy_digest": "309fee1bf9e202f1d66f02248e4272d23f2903163747e7ca2f605a58f54c3919",
+    "pruned_archives": []
+  },
+  "impl_file_snapshots": [
+    {
+      "impl_file": "ex-models/crowd-funding/daml/CrowdFunding.daml",
+      "path_in_copy": "crowd-funding/daml/CrowdFunding.daml",
+      "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule CrowdFunding where\n\nimport Iou\n\ntemplate Campaign\n  with\n    originator : Party\n    name : Text\n    description : Text\n    backers : [Party]\n    ious : [ContractId Iou]\n    raised : Decimal\n    deadline : Time\n    threshold : Decimal\n  where\n    signatory originator\n    signatory backers\n\n    controller originator can\n      Invite : ContractId BackerInvite\n        with backer : Party\n        do\n          create BackerInvite with project = this; backer\n      Claim : [ContractId Iou]\n        do\n          now <- getTime\n          assertMsg \"Can only claim after deadline\" $ now >= deadline\n          assertMsg \"Can only claim if raised more than threshold\" $ raised >= threshold\n          unlockedIous <- mapA (\\i -> exercise i Unlock) ious\n          mapA (\\i -> exercise i Transfer with newOwner = originator) unlockedIous\n\n    choice Pledge : ContractId Campaign\n      with\n        backer : Party\n        iouId : ContractId Iou\n      controller backer\n      do\n        now <- getTime\n        assertMsg \"Pledges can only happen before the deadline\" $ now < deadline\n        assert $ elem backer backers\n        iou <- fetch iouId\n        assert $ iou.amount > 0.0\n        lockedIou <- exercise iouId Lock with newLocker = originator\n        create this with ious = lockedIou :: ious; raised = raised + iou.amount\n\n    choice Reclaim : [ContractId Iou]\n      with backer : Party\n      controller backer\n      do\n        now <- getTime\n        assert $ elem backer backers\n        assertMsg \"Can only reclaim after deadline\" $ now >= deadline\n        assertMsg \"Can only reclaim if raised less than threshold\" $ raised < threshold\n        mapA (\\i -> exercise i Unlock) ious\n\ntemplate BackerInvite\n  with\n    project : Campaign\n    backer : Party\n  where\n    signatory project.originator, project.backers\n    controller backer can\n      Accept : ContractId Campaign\n        do\n          create project with backers = backer :: project.backers\n",
+      "generated": "module CrowdFunding where\n\nimport Iou\n\ntemplate Campaign\n  with\n    originator : Party\n    name : Text\n    description : Text\n    backers : [Party]\n    ious : [(Party, ContractId Iou)]\n    raised : Decimal\n    deadline : Time\n    threshold : Decimal\n  where\n    signatory originator\n    observer backers\n\n    nonconsuming choice Invite : ContractId Invitation\n      with backer : Party\n      controller originator\n      do\n        create Invitation with originator; backer; campaign = this\n\n    choice AddBacker : ContractId Campaign\n      with backer : Party\n      controller originator\n      do\n        assert (notElem backer backers)\n        create this with backers = backer :: backers\n\n    choice Pledge : ContractId Campaign\n      with backer : Party; iouId : ContractId Iou\n      controller backer\n      do\n        now <- getTime\n        assert (now < deadline)\n        assert (elem backer backers)\n        iou <- fetch iouId\n        assert (iou.owner == backer)\n        lockedId <- exercise iouId Lock with newLocker = originator\n        create this with\n          ious = (backer, lockedId) :: ious\n          raised = raised + iou.amount\n\n    choice Claim : [ContractId Iou]\n      controller originator\n      do\n        now <- getTime\n        assert (now >= deadline && raised >= threshold)\n        forA ious \\(_, iouId) -> exercise iouId Transfer with newOwner = originator\n\n    choice Reclaim : ContractId Campaign\n      with backer : Party\n      controller backer\n      do\n        now <- getTime\n        assert (now >= deadline && raised < threshold)\n        let backerIous = filter (\\(pledger, _) -> pledger == backer) ious\n        amounts <- forA backerIous \\(_, iouId) -> do\n          iou <- fetch iouId\n          pure iou.amount\n        forA backerIous \\(_, iouId) -> exercise iouId Transfer with newOwner = backer\n        create this with\n          ious = filter (\\(pledger, _) -> pledger /= backer) ious\n          raised = raised - sum amounts\n\ntemplate Invitation\n  with\n    originator : Party\n    backer : Party\n    campaign : Campaign\n  where\n    signatory originator\n    observer backer\n\n    choice Accept : ContractId Campaign\n      controller backer\n      do\n        create campaign with backers = backer :: campaign.backers\n",
+      "captured_at_utc": "2026-09-25T15:56:52.505550+00:00"
+    },
+    {
+      "impl_file": "ex-models/crowd-funding/daml/Iou.daml",
+      "path_in_copy": "crowd-funding/daml/Iou.daml",
+      "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Iou where\n\ntemplate Iou\n  with\n    issuer : Party\n    owner : Party\n    locker : Party\n    amount : Decimal\n    currency : Text\n  where\n    signatory issuer\n\n    controller owner can\n      Transfer : ContractId Iou\n        with newOwner : Party\n        do\n          assert $ owner == locker\n          create this with owner = newOwner; locker = newOwner\n      Lock : ContractId Iou\n        with newLocker : Party\n        do\n          assert $ owner == locker\n          create this with locker = newLocker\n\n    controller locker can\n      Unlock : ContractId Iou\n        do\n          assert $ owner /= locker\n          create this with locker = owner\n",
+      "generated": "module Iou where\n\ntemplate Iou\n  with\n    issuer : Party\n    owner : Party\n    locker : Party\n    amount : Decimal\n    currency : Text\n  where\n    signatory issuer\n    observer owner, locker\n\n    choice Lock : ContractId Iou\n      with newLocker : Party\n      controller owner\n      do\n        assert (locker == owner)\n        create this with locker = newLocker\n\n    choice Transfer : ContractId Iou\n      with newOwner : Party\n      controller locker\n      do\n        create this with owner = newOwner; locker = newOwner\n",
+      "captured_at_utc": "2026-09-25T15:56:52.505550+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/260925-173549/ex-models_____aeobgxjr",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Implemented the campaign invitation, pledge, claim, and reclaim workflows in `crowd-funding/daml/CrowdFunding.daml:1`, with IOU locking and transfer in `crowd-funding/daml/Iou.daml:1`.\n\n`daml test` passes all four scripts in `crowd-funding/daml/Test.daml`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 150.6898562500137,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 158199,
+      "output_tokens": 6116,
+      "cached_input_tokens": 137123
+    },
+    "usage_by_thread": {
+      "01a0d946-0aab-7c70-98a5-2f8b49277c64": {
+        "usage": {
+          "input_tokens": 158199,
+          "output_tokens": 6116,
+          "cached_input_tokens": 137123
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.1307366,
+    "input_usd": 0.042151999999999995,
+    "cached_input_usd": 0.027424600000000004,
+    "output_usd": 0.061160000000000006,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790351644.532,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351648.52,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351652.06,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351682.68,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351685.578,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351702.159,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351722.253,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351739.709,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351751.964,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351766.541,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351781.616,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790351784.862,
+          "client": "10.219.227.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "impl_changes": [
+        {
+          "path": "crowd-funding/daml/CrowdFunding.daml",
+          "kind": "modified"
+        },
+        {
+          "path": "crowd-funding/daml/Iou.daml",
+          "kind": "modified"
+        }
+      ],
+      "test_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

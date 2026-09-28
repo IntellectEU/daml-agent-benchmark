@@ -1,0 +1,38 @@
+Daml Agent Benchmark
+Copyright 2026 IntellectEU NV
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+------------------------------------------------------------------------------
+Source repository attribution
+------------------------------------------------------------------------------
+
+Each benchmark task names a test file and the implementation files it exercises
+inside one of the publicly available Daml repositories listed below, pinned to a
+specific commit. The repositories are fetched by the daml_agent_benchmark.fetch_sources
+module and are not redistributed here. All of them are licensed under the Apache
+License, Version 2.0.
+
+  - daml
+    Copyright (c) Digital Asset (Switzerland) GmbH and/or its affiliates.
+    https://github.com/digital-asset/daml
+
+  - daml-finance
+    Copyright (c) Digital Asset (Switzerland) GmbH and/or its affiliates.
+    https://github.com/digital-asset/daml-finance
+
+  - splice
+    Copyright (c) Digital Asset (Switzerland) GmbH and/or its affiliates.
+    https://github.com/hyperledger-labs/splice
+
+  - canton
+    Copyright (c) Digital Asset (Switzerland) GmbH and/or its affiliates.
+    https://github.com/digital-asset/canton
+
+  - ex-models
+    Copyright (c) Digital Asset (Switzerland) GmbH and/or its affiliates.
+    https://github.com/digital-asset-archive/ex-models
+
+  - account-hierarchy
+    Copyright (c) ASX Operations Pty Ltd (Synfini).
+    https://github.com/SynfiniDLT/account-hierarchy

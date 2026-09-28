@@ -1,0 +1,36 @@
+# Repositories that the benchmark tasks come from, keyed by the directory name under which
+# each is checked out. `commit` pins the snapshot against which the tasks were written.
+# `build_tool` selects the CLI that builds and tests the repository's packages:
+# the classic daml assistant or dpm, the Digital Asset package manager.
+
+# Public, Apache-2.0
+account-hierarchy:
+  url: https://github.com/SynfiniDLT/account-hierarchy.git
+  commit: 407a020bd7b76ed044a3e169c621048bf2faf22e
+  license: Apache-2.0
+  build_tool: daml
+canton:
+  url: https://github.com/digital-asset/canton.git
+  commit: bb8170fb7ba00312ed425f2ddfc624e8125f9717
+  license: Apache-2.0
+  build_tool: dpm
+daml:
+  url: https://github.com/digital-asset/daml.git
+  commit: c69d4fdda3fb132aeb06a52562ea51f91171a53d
+  license: Apache-2.0
+  build_tool: daml
+daml-finance:
+  url: https://github.com/digital-asset/daml-finance.git
+  commit: 155f931b6ebe7d3662fd72788cb17f0bfb5a7ba6
+  license: Apache-2.0
+  build_tool: daml
+ex-models:
+  url: https://github.com/digital-asset-archive/ex-models.git
+  commit: ca6818c10923360f7158e03a4c50dabe156f5419
+  license: Apache-2.0
+  build_tool: daml
+splice:
+  url: https://github.com/hyperledger-labs/splice.git
+  commit: e04a9d54a4385bf5a72200087ed3f120f0b51157
+  license: Apache-2.0
+  build_tool: daml

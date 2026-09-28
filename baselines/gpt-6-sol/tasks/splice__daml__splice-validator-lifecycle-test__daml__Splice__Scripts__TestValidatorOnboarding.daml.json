@@ -1,0 +1,553 @@
+{
+  "task_id": "splice/daml/splice-validator-lifecycle-test/daml/Splice/Scripts/TestValidatorOnboarding.daml",
+  "task_safe_name": "splice__daml__splice-validator-lifecycle-test__daml__Splice__Scripts__TestValidatorOnboarding.daml",
+  "test_file": "splice/daml/splice-validator-lifecycle-test/daml/Splice/Scripts/TestValidatorOnboarding.daml",
+  "impl_files": [
+    "splice/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-09-28T08:42:04.161067+00:00",
+  "started_at_utc": "2026-09-28T08:52:54.404652+00:00",
+  "finished_at_utc": "2026-09-28T08:55:00.164897+00:00",
+  "live_updated_at_utc": "2026-09-28T08:55:00.164897+00:00",
+  "repo_copy": "260928-104204/splice_____ev4rlz1d",
+  "findings": [
+    {
+      "flag": "suspicious_commands",
+      "detail": "commands referencing the environment, API key or OpenAI API: ['env']"
+    }
+  ],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Splice/Scripts/TestValidatorOnboarding.daml:testValidatorOnboardingExpire": true,
+      "daml/Splice/Scripts/TestValidatorOnboarding.daml:testValidatorOnboarding": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Splice/Scripts/TestValidatorOnboarding.daml:testValidatorOnboardingExpire": true,
+        "daml/Splice/Scripts/TestValidatorOnboarding.daml:testValidatorOnboarding": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": false,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-28T08:53:23.812412+00:00",
+    "build_outputs_removed": 290
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/260928-104204/splice_____ev4rlz1d/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 830,
+    "bytes_scanned": 19886798,
+    "elapsed_seconds": 1.391,
+    "repo_copy_digest": "ce2949218cbffae7b2f089d220607da45e986c74f65811645efb83bea2c25936",
+    "pruned_archives": []
+  },
+  "impl_file_snapshots": [
+    {
+      "impl_file": "splice/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml",
+      "path_in_copy": "daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml",
+      "original": "-- Copyright (c) 2024 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Splice.ValidatorOnboarding where\n\nimport DA.Assert\n\nimport Splice.Util\n\ndata ValidatorOnboarding_MatchResult = ValidatorOnboarding_MatchResult with\n    usedSecret : ContractId UsedSecret\n\ndata ValidatorOnboarding_ExpireResult = ValidatorOnboarding_ExpireResult\n\n-- | Template used by a sponsoring SV node to keep track of the onboarding of a validator candidate.\n-- We use a secret for authenticating the candidate once he has set up his participant.\n-- The secret should be unique, contain at least 256-bits of entropy,\n-- and be communicated to the candidate via a secure off-ledger channel.\n-- Once the candidate has set up his participants, he contacts the SV node via an API call\n-- and presents his secret, which triggers the SV node to add him as a validator\n-- (as a separate on-ledger action for reducing coupling with the DSO governance contracts).\ntemplate ValidatorOnboarding with\n    sv : Party                  -- ^ The SV node sponsoring this onboarding.\n    candidateSecret : Text      -- ^ The unique secret given to the candidate.\n    expiresAt : Time            -- ^ Can be used by the SV for time-bounding the offer.\n  where\n    signatory sv\n\n    -- Archive the offer if the right secret was provided, noting which validator (party) used it.\n    choice ValidatorOnboarding_Match: ValidatorOnboarding_MatchResult\n      with\n        providedSecret : Text\n        validator : Party\n      controller sv\n      do\n        assertWithinDeadline \"ValidatorOnboarding.expiresAt\" expiresAt\n        require \"provided secret matches the stored secret\" (providedSecret == candidateSecret)\n        usedSecret <- create UsedSecret with\n          secret = candidateSecret\n          ..\n        return ValidatorOnboarding_MatchResult with ..\n\n    -- Archive if we are past the `expiresAt`.\n    choice ValidatorOnboarding_Expire : ValidatorOnboarding_ExpireResult\n      controller sv\n      do\n        assertDeadlineExceeded \"ValidatorOnboarding.expiresAt\" expiresAt\n        pure ValidatorOnboarding_ExpireResult\n\n\n-- | Template used by a sponsoring SV node for enforcing that an onboarding secret is used only once.\ntemplate UsedSecret with\n    sv : Party                  -- ^ The SV node that sponsored the onboarding.\n    secret : Text               -- ^ An onboarding secret.\n    validator : Party           -- ^ The validator that onboarded using the secret.\n  where\n    signatory sv\n",
+      "generated": "module Splice.ValidatorOnboarding where\n\ntemplate ValidatorOnboarding with\n    sv : Party\n    secret : Text\n    expiresAt : Time\n  where\n    signatory sv\n\n    choice ValidatorOnboarding_Match : ContractId UsedSecret\n      with\n        presentedSecret : Text\n        validator : Party\n      controller sv\n      do\n        now <- getTime\n        assert (now < expiresAt)\n        assert (presentedSecret == secret)\n        create UsedSecret with sv; secret; validator\n\n    choice ValidatorOnboarding_Expire : ()\n      controller sv\n      do\n        now <- getTime\n        assert (now >= expiresAt)\n\ntemplate UsedSecret with\n    sv : Party\n    secret : Text\n    validator : Party\n  where\n    signatory sv\n",
+      "captured_at_utc": "2026-09-28T08:55:00.157176+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/260928-104204/splice_____ev4rlz1d",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Implemented validator onboarding in `daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml:1`: matching checks the secret and expiry before creating `UsedSecret`; expiry succeeds only after the deadline.\n\nBoth scripts in `TestValidatorOnboarding.daml` pass.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 75.43985204199998,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 189604,
+      "output_tokens": 2460,
+      "cached_input_tokens": 168914
+    },
+    "usage_by_thread": {
+      "01a0e738-1c48-7682-b978-2c62f8f5d60e": {
+        "usage": {
+          "input_tokens": 189604,
+          "output_tokens": 2460,
+          "cached_input_tokens": 168914
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.0997628,
+    "input_usd": 0.04138,
+    "cached_input_usd": 0.0337828,
+    "output_usd": 0.024599999999999997,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [
+      {
+        "id": "call_COdwKi2JbqUIABe1p0JuzPbE",
+        "command": "/usr/bin/bash -lc \"type -a apply_patch || true; ls /usr/local/bin/*patch* /tmp/*patch* 2>/dev/null || true; command -v git || true; env | rg -i 'patch|codex' | head\"",
+        "matched": "env"
+      }
+    ],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790585612.099,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585614.718,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585619.348,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585622.652,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585628.964,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585633.204,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585639.639,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585646.638,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585650.551,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585653.404,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585658.181,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790585675.65,
+          "client": "10.219.138.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "impl_changes": [
+        {
+          "path": "daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml",
+          "kind": "modified"
+        }
+      ],
+      "test_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

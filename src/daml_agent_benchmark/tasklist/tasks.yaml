@@ -1,0 +1,198 @@
+# The benchmark tasks. Each entry names one test file in a source repository and the
+# implementation files that are exercised by that test. For a task, the harness copies the repository,
+# empties those implementation files, and asks the agent to write them again so that the
+# test passes. Paths are relative to the repository named in `repo`; repos.yaml pins each
+# repository to a commit.
+#
+# The comments per repository record why these tests were chosen and why some related files
+# are left in place rather than emptied. Emptying a file only makes sense when the test is
+# separate from the implementation that it checks. A file that every module imports as shared
+# vocabulary stays visible: asking the agent to reinvent it would turn "implement this"
+# into "guess the whole domain model".
+
+# daml-finance: one task, the date-clock test and the three modules that it exercises.
+- repo: daml-finance
+  test: src/test/daml/Daml/Finance/Data/Test/DateClock.daml
+  impl:
+    - src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml
+    - src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml
+    - src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml
+# ex-models: Digital Asset's example models, each a small self-contained package (SDK 1.16.0,
+# no external dependencies).
+- repo: ex-models
+  test: tic-tac-toe/daml/Test.daml
+  impl:
+    - tic-tac-toe/daml/TicTacToe.daml
+- repo: ex-models
+  test: crowd-funding/daml/Test.daml
+  impl:
+    - crowd-funding/daml/CrowdFunding.daml
+    - crowd-funding/daml/Iou.daml
+- repo: ex-models
+  test: governance/daml/Test.daml
+  impl:
+    - governance/daml/Governance.daml
+- repo: ex-models
+  test: shop/daml/Test.daml
+  impl:
+    - shop/daml/Asset.daml
+    - shop/daml/Shop.daml
+- repo: ex-models
+  test: issuertoken/daml/Scripts.daml
+  impl:
+    - issuertoken/daml/Main.daml
+# A setup script that walks the happy path without assertions; it still exercises every Auction choice.
+- repo: ex-models
+  test: auction/daml/Main.daml
+  impl:
+    - auction/daml/Auction.daml
+# ex-models chess: one package with a test module per rule group, so each task below empties
+# a different set of rule modules. Files that stay visible: Types.daml (the vocabulary that every
+# module imports), Rules/Data.daml and Rules/Util.daml (board and move helpers used by every
+# rule module), Tests/All.daml (only re-exports the other tests), and Init.daml (it imports
+# Daml.Script, which the syntax check cannot resolve under SDK 1.16, so emptying it would fail
+# every task at the syntax stage). Each set of emptied files breaks the build until rewritten:
+# Move and Castle are imported by Rules/Main, EnPassant and Promotion by Rules/Move, Draw by
+# Chess.daml, and Chess.daml itself is the whole game engine.
+- repo: ex-models
+  test: chess/daml/Tests/Chess.daml
+  impl:
+    - chess/daml/Chess.daml
+- repo: ex-models
+  test: chess/daml/Tests/Rules.daml
+  impl:
+    - chess/daml/Rules/Move.daml
+    - chess/daml/Rules/Path.daml
+- repo: ex-models
+  test: chess/daml/Tests/SpecialRules.daml
+  impl:
+    - chess/daml/Rules/Castle.daml
+    - chess/daml/Rules/EnPassant.daml
+    - chess/daml/Rules/Promotion.daml
+- repo: ex-models
+  test: chess/daml/Tests/Draw.daml
+  impl:
+    - chess/daml/Rules/Draw.daml
+# canton: the CantonExamples package (Daml 2.x). Its test modules SafePaint, Paint and
+# Divulgence drive the separate implementation modules Iou and LockIou; the test module stays,
+# the implementation modules are emptied. The package normally builds through canton's own
+# build system; the canton handler supplies the equivalent standalone configuration and flags.
+- repo: canton
+  test: community/common/src/main/daml/CantonExamples/SafePaint.daml
+  impl:
+    - community/common/src/main/daml/CantonExamples/LockIou.daml
+    - community/common/src/main/daml/CantonExamples/Iou.daml
+- repo: canton
+  test: community/common/src/main/daml/CantonExamples/Paint.daml
+  impl:
+    - community/common/src/main/daml/CantonExamples/Iou.daml
+- repo: canton
+  test: community/common/src/main/daml/CantonExamples/Divulgence.daml
+  impl:
+    - community/common/src/main/daml/CantonExamples/Iou.daml
+# daml: the SDK's smart-contract tutorials (sdk/docs/source/sdk/tutorials/smart-contracts/daml).
+# Only tutorials whose test lives apart from the implementation qualify: compose (test and
+# implementation modules in one package), intro-test (test packages depending on the asset and
+# multi-trade packages), interfaces (library tests over the catalog-item, book, disc and library
+# packages; only book is emptied, disc stays visible as a worked example of the same pattern).
+# The other tutorials inline their test scripts in the implementation file, so there is nothing
+# to empty without removing the test. The tutorial packages ship daml.yaml templates meant to
+# be filled in at SDK release time; the daml handler fills them in and builds the dependency
+# packages the tests need.
+- repo: daml
+  test: sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml
+  impl:
+    - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+- repo: daml
+  test: sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset/Role.daml
+  impl:
+    - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml
+- repo: daml
+  test: sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset/Trade.daml
+  impl:
+    - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml
+- repo: daml
+  test: sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml
+  impl:
+    - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+- repo: daml
+  test: sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/Asset/RoleTests.daml
+  impl:
+    - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml
+- repo: daml
+  test: sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/Asset/TradeTests.daml
+  impl:
+    - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+- repo: daml
+  test: sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade-tests/daml/Intro/Asset/MultiTradeTests.daml
+  impl:
+    - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+- repo: daml
+  test: sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml
+  impl:
+    - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+# account-hierarchy (SDK 1.17.1): the packages depend on the lib-finance library, included in
+# the repository as a git submodule pinned to commit 0b21a072; the handler builds its DAR. Two
+# test files exist under core-model/test. Lifecycle.daml and Trade.daml have no test of their
+# own and stay visible.
+- repo: account-hierarchy
+  test: core-model/test/src/Synfini/AccountHierarchy/Custody/Test.daml
+  impl:
+    - core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+- repo: account-hierarchy
+  test: core-model/test/src/Synfini/AccountHierarchy/Allocation/Test.daml
+  impl:
+    - core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+    - core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+# splice (SDK 3.3.0 snapshot): packages depend on each other through prebuilt DAR files
+# (.daml/dist/<name>-current.dar). Before a task, the splice handler builds the packages that a task
+# needs from source, except any package that contains a file which the agent must write: its DAR would
+# contain the answer. That package is built by the evaluation, from the agent's code. Tasks
+# were chosen so that no prebuilt dependency contains a target package's code. Example: the
+# amulet implementation is tested from two test packages. The tasks use the tests in
+# splice-token-standard-test, whose dependencies contain no prebuilt copy of amulet. The tests
+# in splice-amulet-test were not used: that package depends on a prebuilt DAR of
+# splice-token-standard-test, which contains compiled amulet code and would hand the agent the
+# answer.
+- repo: splice
+  test: token-standard/splice-token-standard-test/daml/Splice/Tests/TestAmuletTokenTransfer.daml
+  impl:
+    - daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+    - daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+- repo: splice
+  test: token-standard/splice-token-standard-test/daml/Splice/Tests/TestAmuletTokenDvP.daml
+  impl:
+    - daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+    - daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+- repo: splice
+  test: daml/splice-wallet-test/daml/Splice/Scripts/Wallet/TestTransferOffers.daml
+  impl:
+    - daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+- repo: splice
+  test: daml/splice-wallet-test/daml/Splice/Scripts/Wallet/TestMintingDelegation.daml
+  impl:
+    - daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+- repo: splice
+  test: daml/splitwell-test/daml/Splice/Scripts/TestSplitwell.daml
+  impl:
+    - daml/splitwell/daml/Splice/Splitwell.daml
+- repo: splice
+  test: daml/splice-validator-lifecycle-test/daml/Splice/Scripts/TestValidatorOnboarding.daml
+  impl:
+    - daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+- repo: splice
+  test: daml/splice-amulet-name-service-test/daml/Splice/Scripts/TestAns.daml
+  impl:
+    - daml/splice-amulet-name-service/daml/Splice/Ans.daml
+- repo: splice
+  test: daml/splice-amulet-name-service-test/daml/Splice/Scripts/TestAmuletConversionRateFeed.daml
+  impl:
+    - daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+- repo: splice
+  test: daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml
+  impl:
+    - daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+- repo: splice
+  test: daml/splice-dso-governance-test/daml/Splice/Scripts/TestSvStatus.daml
+  impl:
+    - daml/splice-dso-governance/daml/Splice/DSO/SvState.daml

@@ -1,0 +1,173 @@
+[wrapper 1790586072.540] initialized work_dir='<repo-copies>/260928-104204/splice_____wii1ucir' needs_stdin=True copyback_paths_configured=True
+[wrapper 1790586072.540] run begin
+[wrapper 1790586072.540] egress.network_create start: docker network create --driver bridge --internal --opt com.docker.network.bridge.gateway_mode_ipv4=isolated --subnet 10.219.237.160/28 --label com.daml-agent-benchmark.runner=container-agent-eval daml-agent-task-1790586072-39356-689162
+[wrapper 1790586072.574] egress.network_create end rc=0 network=daml-agent-task-1790586072-39356-689162 subnet=10.219.237.160/28
+[task-network] name=daml-agent-task-1790586072-39356-689162 subnet=10.219.237.160/28 gateway_isolated=True
+[wrapper 1790586072.574] egress.network_connect_proxy start: docker network connect --alias egress-proxy daml-agent-task-1790586072-39356-689162 4fa771b76700fb46f532eb9e7a2508abfdcd41c139ca850e7e63d792d2b2747b
+[wrapper 1790586072.600] egress.network_connect_proxy end rc=0 elapsed=0.03s
+[egress] proxy attached: network=daml-agent-task-1790586072-39356-689162, subnet=10.219.237.160/28, proxy=4fa771b76700fb46f532eb9e7a2508abfdcd41c139ca850e7e63d792d2b2747b, allowed=openai.com,oaiusercontent.com
+[wrapper 1790586072.606] container.create start: docker create --platform linux/amd64 -v ~/daml-sdk-store/daml:/opt/daml:ro -v ~/daml-sdk-store/dpm:/opt/dpm-store:ro --cap-drop=ALL --security-opt no-new-privileges --label com.daml-agent-benchmark.runner=container-agent-eval --pids-limit 1024 --tmpfs /tmp:exec,mode=1777 --tmpfs /var/tmp:exec,mode=1777 --env HOME=/tmp/container-home --env DAML_HOME=/opt/daml -i --user 501:20 --network daml-agent-task-1790586072-39356-689162 --env HTTP_PROXY=http://egress-proxy:3128 --env HTTPS_PROXY=http://egress-proxy:3128 --env ALL_PROXY=http://egress-proxy:3128 --env http_proxy=http://egress-proxy:3128 --env https_proxy=http://egress-proxy:3128 --env all_proxy=http://egress-proxy:3128 --env NO_PROXY=localhost,127.0.0.1 --env no_proxy=localhost,127.0.0.1 --env 'OPENAI_API_KEY=<redacted>' --env 'CODEX_API_KEY=<redacted>' --env CODEX_HOME=.codex_home --env BUNDLE=<repo-copies>/260928-104204/splice_____wii1ucir/apps/app/target/release/splice-node --env CACHE_DEV_DOCKER_REGISTRY=us-central1-docker.pkg.dev/da-cn-shared/ghcr/digital-asset/decentralized-canton-sync-dev/docker --env CACHE_DEV_REGISTRY=us-central1-docker.pkg.dev/da-cn-shared/ghcr/digital-asset/decentralized-canton-sync-dev --env CACHE_GHCR=us-central1-docker.pkg.dev/da-cn-shared/ghcr --env CIRCLECI_CLI_TOKEN= --env CLOUDSDK_COMPUTE_REGION=us-central1 --env CLOUDSDK_CORE_PROJECT=da-cn-scratchnet --env COMETBFT_DOCKER_IMAGE=digitalasset-canton-enterprise-docker.jfrog.io/cometbft-canton-network: --env COMETBFT_PROTO=<repo-copies>/260928-104204/splice_____wii1ucir/nix/vendored --env DATA_EXPORT_BUCKET_SA_IAM_ACCOUNT=da-cn-data-exports@da-cn-devnet.iam.gserviceaccount.com --env 'DATA_EXPORT_BUCKET_SA_KEY_SECRET=<redacted>' --env DB_CLOUDSDK_COMPUTE_ZONE=us-central1-a --env DEPLOYMENT_DIR=<repo-copies>/260928-104204/splice_____wii1ucir/cluster/deployment --env DEV_DOCKER_REGISTRY=ghcr.io/digital-asset/decentralized-canton-sync-dev/docker --env DEV_HELM_REGISTRY=ghcr.io/digital-asset/decentralized-canton-sync-dev/helm --env DEV_REGISTRY=ghcr.io/digital-asset/decentralized-canton-sync-dev --env DNS01_SA_IAM_ACCOUNT=dns01-solver@da-gcp-canton-domain.iam.gserviceaccount.com --env DNS01_SA_KEY_SECRET=dns01-sa-key-secret --env DSO_SIZE=3 --env ENTERPRISE_ARTIFACTORY_DOCKER_REGISTRY=digitalasset-canton-enterprise-docker.jfrog.io --env EXPECTED_FILES_DIR=<repo-copies>/260928-104204/splice_____wii1ucir/cluster/expected --env GCP_DNS_PROJECT=da-gcp-canton-domain --env 'GCP_DNS_SA_SECRET=<redacted>' --env GHCR=ghcr.io --env HELM_MAX_HISTORY_SIZE=10 --env IS_DEVNET=1 --env K9S_CONFIG_DIR=<repo-copies>/260928-104204/splice_____wii1ucir/.k9s --env LOGS_PATH=<repo-copies>/260928-104204/splice_____wii1ucir/log --env MULTIVALIDATOR_SIZE=0 --env OCI_DEV_HELM_REGISTRY=oci://ghcr.io/digital-asset/decentralized-canton-sync-dev/helm --env OCI_RELEASE_HELM_REGISTRY=oci://ghcr.io/digital-asset/decentralized-canton-sync/helm --env OIDC_AUTHORITY_LEDGER_API_AUDIENCE=https://canton.network.global --env OIDC_AUTHORITY_SV_AUDIENCE=https://canton.network.global --env OIDC_AUTHORITY_VALIDATOR_AUDIENCE=https://canton.network.global --env OTEL_COLLECTOR_IMAGE=otel/opentelemetry-collector-contrib:0.81.0 --env POSTGRES_HOST=localhost --env 'POSTGRES_PASSWORD=<redacted>' --env POSTGRES_USER=postgres --env PRIVATE_CONFIGS_PATH=<repo-copies>/260928-104204/splice_____wii1ucir/cluster/configs/configs-private --env PUBLIC_CONFIGS_PATH=<repo-copies>/260928-104204/splice_____wii1ucir/cluster/configs/configs --env PULUMI_TEST_DIR=<repo-copies>/260928-104204/splice_____wii1ucir/cluster/pulumi --env RELEASE_DOCKER_REGISTRY=ghcr.io/digital-asset/decentralized-canton-sync/docker --env RELEASE_HELM_REGISTRY=ghcr.io/digital-asset/decentralized-canton-sync/helm --env RELEASE_REGISTRY=ghcr.io/digital-asset/decentralized-canton-sync --env SBT_LAUNCH_PATH=/opt/homebrew/share/sbt/bin/sbt-launch.jar --env 'SBT_OPTS=-XX:MaxRAMPercentage=90.0 -Xmx16G -Xms4G -Xss6M -XX:+UseG1GC -XX:ReservedCodeCacheSize=1G' --env SPLICECLUSTER_STATIC_DIRTY_VERSION=1 --env SPLICE_OAUTH_DEV_AUTHORITY=canton-network-dev.us.auth0.com --env SPLICE_OAUTH_DEV_CLIENT_ID_SPLITWELL_VALIDATOR=hqpZ6TP0wGyG2yYwhH6NLpuo0MpJMQZW --env SPLICE_OAUTH_DEV_CLIENT_ID_SV1=OBpJ9oTyOLuAKF0H2hhzdSFUICt0diIn --env SPLICE_OAUTH_DEV_CLIENT_ID_SV1_VALIDATOR=7YEiu1ty0N6uWAjL8tCAWTNi7phr7tov --env SPLICE_OAUTH_DEV_CLIENT_ID_SV2=rv4bllgKWAiW9tBtdvURMdHW42MAXghz --env SPLICE_OAUTH_DEV_CLIENT_ID_SV2_VALIDATOR=5N2kwYLOqrHtnnikBqw8A7foa01kui7h --env SPLICE_OAUTH_DEV_CLIENT_ID_SV3=SeG68w0ubtLQ1dEMDOs4YKPRTyMMdDLk --env SPLICE_OAUTH_DEV_CLIENT_ID_SV3_VALIDATOR=V0RjcwPCsIXqYTslkF5mjcJn70AiD0dh --env SPLICE_OAUTH_DEV_CLIENT_ID_SVDA1=bxjt0vzLyRG2rk2fapXfOzH5lzK4mrl7 --env SPLICE_OAUTH_DEV_CLIENT_ID_SVDA1_VALIDATOR=fBFpzZSRuufk9ueV2pSEkOXNYXuQtVmY --env SPLICE_OAUTH_DEV_CLIENT_ID_VALIDATOR1=cf0cZaTagQUN59C1HBL2udiIBdFh2CWq --env 'SPLICE_OAUTH_DEV_VALIDATOR_WALLET_USER=auth0|63e3d75ff4114d87a2c1e4f5' --env SPLICE_OAUTH_SV_TEST_AUTHORITY=canton-network-sv-test.us.auth0.com --env SPLICE_OAUTH_SV_TEST_CLIENT_ID_VALIDATOR=bUfFRpl2tEfZBB7wzIo9iRNGTj8wMeIn --env SPLICE_OAUTH_TEST_AUTHORITY=canton-network-test.us.auth0.com --env SPLICE_OAUTH_TEST_CLIENT_ID_VALIDATOR=cznBUeB70fnpfjaq9TzblwiwjkVyvh5z --env SPLICE_OAUTH_TEST_FRONTEND_CLIENT_ID=Ob8YZSBvbZR3vsM2vGKllg3KRlRgLQSw --env 'SPLICE_OAUTH_TEST_VALIDATOR_WALLET_USER=auth0|6526fab5214c99a9a8e1e3cc' --env SPLICE_OAUTH_VALIDATOR_TEST_AUTHORITY=canton-network-validator-test.us.auth0.com --env SPLICE_ROOT=<repo-copies>/260928-104204/splice_____wii1ucir --env TESTCONTAINERS_CHECKS_DISABLE=true --env TESTCONTAINERS_RYUK_DISABLED=true --env TESTCONTAINERS_SSHD_CONTAINER_IMAGE=testcontainers/sshd:1.1.0 --env TOOLS_LIB=<repo-copies>/260928-104204/splice_____wii1ucir/build-tools/lib --env TZ=UTC --env USE_GKE_GCLOUD_AUTH_PLUGIN=true --workdir /workspace daml-agent-eval:latest python3 /opt/codex_diff_wrapper.py codex -C /workspace app-server --listen stdio://
+[wrapper 1790586072.644] container.create end rc=0 elapsed=0.04s
+[wrapper 1790586072.644] container created id=85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6
+CONTAINER_ID=85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6
+[wrapper 1790586072.711] workspace.audit baseline files=820 elapsed=0.07s
+[wrapper 1790586072.711] container.copy_workspace_in start: docker cp <repo-copies>/260928-104204/splice_____wii1ucir/. 85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6:/workspace
+[wrapper 1790586073.166] container.copy_workspace_in end rc=0 elapsed=0.46s
+[wrapper 1790586073.166] container.copy_diff_wrapper start: docker cp <package>/src/daml_agent_benchmark/docker/codex_diff_wrapper.py 85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6:/opt/codex_diff_wrapper.py
+[wrapper 1790586073.189] container.copy_diff_wrapper end rc=0 elapsed=0.02s
+[wrapper 1790586073.189] container.start begin cmd=docker start -a -i 85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6
+[2m2026-09-28T09:01:14.116948Z[0m [31mERROR[0m [2mcodex_app_server[0m[2m:[0m Codex could not find bubblewrap on PATH. Install bubblewrap with your OS package manager. See the sandbox prerequisites: https://developers.openai.com/codex/concepts/sandboxing#prerequisites. Codex will use the bundled bubblewrap in the meantime.
+[wrapper 1790586426.366] signal received: 15
+[wrapper 1790586426.368] cleanup begin
+[wrapper 1790586426.368] cleanup.container begin container_id=85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6
+[wrapper 1790586426.369] cleanup.stop start: docker stop -t 5 85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6
+[wrapper 1790586426.570] cleanup.stop end rc=0 elapsed=0.20s
+[wrapper 1790586426.570] cleanup.copyback mode=impl_only
+[wrapper 1790586426.571] cleanup.copyback_file rel=daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml start: docker cp 85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6:/workspace/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml <repo-copies>/260928-104204/splice_____wii1ucir/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+[wrapper 1790586426.606] cleanup.copyback_file rel=daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml end rc=0 elapsed=0.04s
+[wrapper 1790586426.607] cleanup.copyback_file rel=daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml start: docker cp 85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6:/workspace/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml <repo-copies>/260928-104204/splice_____wii1ucir/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+[wrapper 1790586426.629] cleanup.copyback_file rel=daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml end rc=0 elapsed=0.02s
+[wrapper 1790586426.629] cleanup.copyback impl_only_done copied_ok=2
+[wrapper 1790586426.631] workspace.audit_export start: docker cp 85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6:/workspace/. <tmp>/daml-agent-workspace-audit-e5gzvflk
+[wrapper 1790586428.948] workspace.audit_export end rc=0 elapsed=2.32s
+[workspace-change] {"path": ".codex_home/.sandbox_migration", "kind": "added"}
+[workspace-change] {"path": ".codex_home/config.toml", "kind": "modified"}
+[workspace-change] {"path": ".codex_home/installation_id", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/.codex-system-skills.marker", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/LICENSE.txt", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/SKILL.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/agents/openai.yaml", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/assets/imagegen.png", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/cli.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/codex-network.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/image-api.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/prompting.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/LICENSE.txt", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/SKILL.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/assets/openai.png", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/latest-model.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/model-migration.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/model-selection.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/official-docs.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/SKILL.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/review-agent/SKILL.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/review-agent/agents/openai.yaml", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/SKILL.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/license.txt", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-installer/LICENSE.txt", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-installer/SKILL.md", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py", "kind": "added"}
+[workspace-change] {"path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py", "kind": "added"}
+[workspace-change] {"path": "daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml", "kind": "modified"}
+[workspace-change] {"path": "daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml", "kind": "modified"}
+[workspace-audit] complete changes=65
+[wrapper 1790586429.211] cleanup.rm_container start: docker rm -f 85cba6330ee0b004142bb398042781e2b6a0ebbd5dca9b0b0ea1f833541560c6
+[wrapper 1790586429.275] cleanup.rm_container end rc=0 elapsed=0.06s
+[wrapper 1790586429.275] cleanup.container done
+[egress-event] {"timestamp": 1790586077.127, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586080.564, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586085.93, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586089.774, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586092.988, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586098.223, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586098.416, "client": "10.219.237.162", "action": "TCP_DENIED", "http_status": 403, "method": "CONNECT", "url": "raw.githubusercontent.com:443", "host": "raw.githubusercontent.com", "domain": "raw.githubusercontent.com", "blocked": true}
+[egress-event] {"timestamp": 1790586101.748, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586105.743, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586105.825, "client": "10.219.237.162", "action": "TCP_DENIED", "http_status": 403, "method": "CONNECT", "url": "raw.githubusercontent.com:443", "host": "raw.githubusercontent.com", "domain": "raw.githubusercontent.com", "blocked": true}
+[egress-event] {"timestamp": 1790586109.187, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586113.508, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586116.848, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586120.063, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586124.62, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586128.247, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586132.126, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586138.769, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586144.108, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586149.166, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586170.629, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586174.713, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586180.143, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586199.592, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586203.279, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586207.244, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586211.111, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586217.381, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586220.545, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586223.288, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586231.156, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586237.975, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586240.167, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586247.177, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586250.9, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586253.049, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586260.51, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586263.441, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586266.938, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586270.167, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586273.473, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586279.04, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586282.603, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586289.265, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586296.174, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586303.039, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586306.537, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586309.601, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586316.466, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586323.291, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586330.62, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586335.295, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586342.552, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586345.494, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586352.803, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586360.675, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586367.987, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586374.588, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586379.964, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586385.551, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586388.926, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586396.394, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586403.041, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586409.68, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586417.13, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[egress-event] {"timestamp": 1790586422.268, "client": "10.219.237.162", "action": "TCP_TUNNEL", "http_status": 200, "method": "CONNECT", "url": "api.openai.com:443", "host": "api.openai.com", "domain": "api.openai.com", "blocked": false}
+[wrapper 1790586429.276] egress.audit done events=66
+[wrapper 1790586429.276] cleanup.network_disconnect_proxy start: docker network disconnect -f daml-agent-task-1790586072-39356-689162 4fa771b76700fb46f532eb9e7a2508abfdcd41c139ca850e7e63d792d2b2747b
+[wrapper 1790586429.339] cleanup.network_disconnect_proxy end rc=0 elapsed=0.06s
+[wrapper 1790586429.339] cleanup.rm_network start: docker network rm daml-agent-task-1790586072-39356-689162
+[wrapper 1790586429.423] cleanup.rm_network end rc=0 elapsed=0.08s
+[wrapper 1790586429.423] cleanup end
