@@ -1,0 +1,38 @@
+task: splice/daml/splice-dso-governance-test/daml/Splice/Scripts/TestSvStatus.daml
+notes: "The implementation file holds only data types and templates; the status report logic lives in DsoRules.daml, which is not an implementation file, so only template-level mutations are possible."
+mutations:
+  - id: status-report-signatory-sv-only
+    source: llm
+    target_script: testStatusReportSubmission
+    kind: authorization
+    reason: SvStatusReport is signed by the submitting SV instead of the DSO party, so the DSO party no longer sees the report.
+    patch: |
+      diff --git a/daml/splice-dso-governance/daml/Splice/DSO/SvState.daml b/daml/splice-dso-governance/daml/Splice/DSO/SvState.daml
+      index 72239fd..98803d3 100644
+      --- a/daml/splice-dso-governance/daml/Splice/DSO/SvState.daml
+      +++ b/daml/splice-dso-governance/daml/Splice/DSO/SvState.daml
+      @@ -107,7 +107,7 @@ template SvStatusReport with
+           status : Optional SvStatus
+             -- ^ None is used when initially creating the contract upon sv addition.
+         where
+      -    signatory dso
+      +    signatory sv
+       
+       
+       -- instances
+  - id: status-report-group-id-sv-is-dso
+    source: llm
+    target_script: testStatusReportSubmission
+    kind: lookup
+    reason: The checked-fetch group id of SvStatusReport uses the DSO party where the SV party belongs, so the previous report never matches the submitting SV.
+    patch: |
+      diff --git a/daml/splice-dso-governance/daml/Splice/DSO/SvState.daml b/daml/splice-dso-governance/daml/Splice/DSO/SvState.daml
+      index 72239fd..304eaf5 100644
+      --- a/daml/splice-dso-governance/daml/Splice/DSO/SvState.daml
+      +++ b/daml/splice-dso-governance/daml/Splice/DSO/SvState.daml
+      @@ -120,4 +120,4 @@ instance HasCheckedFetch SvNodeState ForSvNode where
+         contractGroupId SvNodeState {..} = ForSvNode with dso; sv; svName
+       
+       instance HasCheckedFetch SvStatusReport ForSvNode where
+      -  contractGroupId SvStatusReport {..} = ForSvNode with dso; sv; svName
+      +  contractGroupId SvStatusReport {..} = ForSvNode with dso; sv = dso; svName

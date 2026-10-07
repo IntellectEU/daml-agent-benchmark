@@ -1,0 +1,39 @@
+task: ex-models/shop/daml/Test.daml
+notes: "The ground-truth file has a single script, gwt, which runs three flows (offer added, offer visible to user, asset exchange); each mutation breaks a different flow."
+mutations:
+  - id: offer-not-listed
+    source: llm
+    target_script: gwt
+    kind: field
+    reason: The new shop contract is created without the new offer id, as if the offer list update was forgotten.
+    patch: |
+      diff --git a/shop/daml/Shop.daml b/shop/daml/Shop.daml
+      index b99ad23..1b1da23 100644
+      --- a/shop/daml/Shop.daml
+      +++ b/shop/daml/Shop.daml
+      @@ -63,7 +63,7 @@ template VendorRelationship
+                 shop <- fetch shopId
+                 disclosedItemId <- exercise itemId Disclose with users = owner :: shop.users
+                 offerId <- create Offer with itemId = disclosedItemId; users = shop.users; ..
+      -          shopId <- create shop with offerIds = offerId :: shop.offerIds
+      +          shopId <- create shop with offerIds = shop.offerIds
+                 pure (shopId, offerId)
+                 
+       template UserInvite
+  - id: iou-not-paid
+    source: llm
+    target_script: gwt
+    kind: field
+    reason: The payment IOU is transferred back to the buyer instead of to the offer's vendor.
+    patch: |
+      diff --git a/shop/daml/Shop.daml b/shop/daml/Shop.daml
+      index b99ad23..bfd4062 100644
+      --- a/shop/daml/Shop.daml
+      +++ b/shop/daml/Shop.daml
+      @@ -98,5 +98,5 @@ template UserRelationship
+       
+                 newShopId <- create shop with offerIds = filter (/= offerId) shop.offerIds
+                 newItemId <- exercise offerId Settle with buyer = user
+      -          newIouId <- exercise iouId TransferIou with newOwner = offer.vendor
+      +          newIouId <- exercise iouId TransferIou with newOwner = user
+                 pure (newShopId, newItemId, newIouId)

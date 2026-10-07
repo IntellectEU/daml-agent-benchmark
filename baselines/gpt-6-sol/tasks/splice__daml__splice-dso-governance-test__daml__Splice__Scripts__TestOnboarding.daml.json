@@ -85,9 +85,9 @@
     "repo_copy_digest": "caf6cf35b9028a3bc1acca4677c2a3d6a09d3b3e6c0afa831f88e1a0597dec7c",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "splice/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml",
+      "answer_file": "splice/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml",
       "path_in_copy": "daml/splice-dso-governance/daml/Splice/SvOnboarding.daml",
       "original": "-- Copyright (c) 2024 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Splice.SvOnboarding where\n\nimport Splice.Types\n\nimport Splice.Util\n\ndata SvOnboardingRequest_ExpireResult = SvOnboardingRequest_ExpireResult\n\ndata SvOnboardingConfirmed_ExpireResult = SvOnboardingConfirmed_ExpireResult\n\n-- | Template used by the SVs to collect confirmations for the onboarding of an SV candidate.\n-- The existence of this contract triggers SV automation that creates confirmation contracts for\n-- the candidate if the token is a valid `SvOnboardingToken` and matches an `ApprovedSvIdentity`.\ntemplate SvOnboardingRequest with\n    candidateName : Text            -- ^ Human-readable name of the SV candidate. Must match the one in `ApprovedSvIdentity`!\n    candidateParty : Party          -- ^ PartyId of the candidate SV party.\n    candidateParticipantId : Text   -- ^ ParticipantId of the candidate SV.\n    token : Text                    -- ^ An encoded and signed `SvOnboardingToken` that confirms the candidate's identity.\n    sponsor : Party                 -- ^ The established SV node that created this contract.\n    dso: Party\n    expiresAt : Time                -- ^ When this contract can be archived even if the onboarding did not succeed.\n  where\n    signatory dso\n    observer candidateParty\n\n    -- Archive if we are past the `expiresAt`.\n    choice SvOnboardingRequest_Expire : SvOnboardingRequest_ExpireResult\n      controller dso\n      do\n        now <- getTime\n        require \"Onboarding has expired\" (now >= expiresAt)\n        pure SvOnboardingRequest_ExpireResult\n\n-- | A confirmation for approval of a candidate SV.\n--\n-- Once this contract is created, the workflows to onboard that SVs node starts.\ntemplate SvOnboardingConfirmed with\n    svParty : Party\n    svName : Text\n    svRewardWeight : Int\n    svParticipantId: Text\n    reason : Text\n    dso : Party\n    expiresAt : Time            -- ^ When this contract can be archived.\n  where\n    signatory dso\n    observer svParty\n\n    -- Archive if we are past the `expiresAt`.\n    choice SvOnboardingConfirmed_Expire : SvOnboardingConfirmed_ExpireResult\n      controller dso\n      do\n        now <- getTime\n        require \"SV candidate confirmation has expired\" (now >= expiresAt)\n        pure SvOnboardingConfirmed_ExpireResult\n\n\n-- instances\n------------\n\ninstance HasCheckedFetch SvOnboardingConfirmed ForOwner where\n  contractGroupId SvOnboardingConfirmed {..} = ForOwner with dso; owner = svParty\n\ninstance HasCheckedFetch SvOnboardingConfirmed ForDso where\n  contractGroupId SvOnboardingConfirmed {..} = ForDso with dso\n\n\ninstance HasCheckedFetch SvOnboardingRequest ForDso where\n  contractGroupId SvOnboardingRequest {..} = ForDso with dso\n",
       "generated": "module Splice.SvOnboarding where\n\nimport DA.Assert\n\nimport Splice.Types\nimport Splice.Util\n\ndata SvOnboardingRequest_ExpireResult = SvOnboardingRequest_ExpireResult\n\ntemplate SvOnboardingRequest with\n    candidateName : Text\n    candidateParty : Party\n    candidateParticipantId : Text\n    token : Text\n    sponsor : Party\n    dso : Party\n    expiresAt : Time\n  where\n    signatory dso\n    observer sponsor, candidateParty\n\n    choice SvOnboardingRequest_Expire : SvOnboardingRequest_ExpireResult\n      controller dso\n      do\n        assertDeadlineExceeded \"SvOnboardingRequest.expiresAt\" expiresAt\n        pure SvOnboardingRequest_ExpireResult\n\ndata SvOnboardingConfirmed_ExpireResult = SvOnboardingConfirmed_ExpireResult\n\ntemplate SvOnboardingConfirmed with\n    svParty : Party\n    svName : Text\n    svParticipantId : Text\n    reason : Text\n    svRewardWeight : Int\n    dso : Party\n    expiresAt : Time\n  where\n    signatory dso\n    observer svParty\n\n    choice SvOnboardingConfirmed_Expire : SvOnboardingConfirmed_ExpireResult\n      controller dso\n      do\n        assertDeadlineExceeded \"SvOnboardingConfirmed.expiresAt\" expiresAt\n        pure SvOnboardingConfirmed_ExpireResult\n\ninstance HasCheckedFetch SvOnboardingRequest ForDso where\n  contractGroupId SvOnboardingRequest {..} = ForDso with dso\n\ninstance HasCheckedFetch SvOnboardingConfirmed ForDso where\n  contractGroupId SvOnboardingConfirmed {..} = ForDso with dso\n\ninstance HasCheckedFetch SvOnboardingConfirmed ForOwner where\n  contractGroupId SvOnboardingConfirmed {..} = ForOwner with dso; owner = svParty\n",
@@ -317,13 +317,13 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "daml/splice-dso-governance/daml/Splice/SvOnboarding.daml",
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

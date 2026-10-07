@@ -1,0 +1,191 @@
+task: splice/token-standard/splice-token-standard-test/daml/Splice/Tests/TestAmuletTokenTransfer.daml
+notes: "Only the five two-step scripts (success, withdraw, withdraw_locked_amulet_gone, reject, reject_locked_amulet_gone; each in a with_fees and a no_fees variant) exercise the implementation files. The happy_path_self, happy_path_direct, no_holdings, expired, wrong_admin and factory_PublicFetch scripts go through the transfer factory, not these files, so they have no mutations. Mutations serving both fee variants name one of them as target."
+mutations:
+  - id: instruction-receiver-not-observer
+    source: llm
+    target_script: test_two_step_success_no_fees
+    kind: authorization
+    reason: The receiver is left out of the observers of the transfer instruction, so the receiver cannot see the offer to accept it.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml b/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      index 2f6702b..0003477 100644
+      --- a/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      +++ b/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      @@ -20,7 +20,7 @@ template AmuletTransferInstruction
+           transfer : Splice.Api.Token.TransferInstructionV1.Transfer
+         where
+           signatory transfer.instrumentId.admin, transfer.sender
+      -    observer transfer.receiver
+      +    observer transfer.instrumentId.admin
+       
+           interface instance TransferInstruction for AmuletTransferInstruction where
+             view = TransferInstructionView with
+  - id: reject-executes-transfer
+    source: llm
+    target_script: test_two_step_reject_no_fees
+    kind: branch
+    reason: Rejecting the instruction runs the transfer to completion instead of aborting it and returning the funds.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml b/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      index 2f6702b..d2d76c8 100644
+      --- a/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      +++ b/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      @@ -33,7 +33,7 @@ template AmuletTransferInstruction
+               executeTransferInstr this arg.extraArgs
+       
+             transferInstruction_rejectImpl _self arg =
+      -        abortAmuletTransferInstruction this arg.extraArgs
+      +        executeTransferInstr this arg.extraArgs
+       
+             transferInstruction_updateImpl _self _arg =
+               fail "AmuletTransferInstruction.updateImpl: not used, and thus not implemented"
+  - id: withdraw-executes-transfer
+    source: llm
+    target_script: test_two_step_withdraw_no_fees
+    kind: branch
+    reason: Withdrawing the instruction runs the transfer to completion instead of aborting it and returning the funds.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml b/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      index 2f6702b..a265960 100644
+      --- a/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      +++ b/daml/splice-amulet/daml/Splice/AmuletTransferInstruction.daml
+      @@ -39,7 +39,7 @@ template AmuletTransferInstruction
+               fail "AmuletTransferInstruction.updateImpl: not used, and thus not implemented"
+       
+             transferInstruction_withdrawImpl _self arg = do
+      -        abortAmuletTransferInstruction this arg.extraArgs
+      +        executeTransferInstr this arg.extraArgs
+       
+       
+       -- Transfer instruction evolution
+  - id: lock-holders-sender
+    source: llm
+    target_script: test_two_step_success_no_fees
+    kind: authorization
+    reason: The sender is made the holder of the time lock instead of the DSO.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..186724d 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -92,7 +92,7 @@ prepareTwoStepTransfer TwoStepTransfer{..} requestedAt inputHoldingCids paymentC
+                     receiverFeeRatio = 0.0 -- locking fees are paid by the sender
+                     lock = Some TimeLock with
+                       expiresAt = transferBefore
+      -                holders = [dso]
+      +                holders = [sender]
+                       optContext = Some lockContext
+                 ]
+               inputs = transferInputs
+  - id: lock-expiry-requested-at
+    source: llm
+    target_script: test_two_step_success_no_fees
+    kind: time
+    reason: The lock expires at the request time instead of the transfer deadline.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..0bd0b4f 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -91,7 +91,7 @@ prepareTwoStepTransfer TwoStepTransfer{..} requestedAt inputHoldingCids paymentC
+                     amount = amount + feesReserveAmount
+                     receiverFeeRatio = 0.0 -- locking fees are paid by the sender
+                     lock = Some TimeLock with
+      -                expiresAt = transferBefore
+      +                expiresAt = requestedAt
+                       holders = [dso]
+                       optContext = Some lockContext
+                 ]
+  - id: prepare-drops-burn-meta
+    source: llm
+    target_script: test_two_step_success_with_fees
+    kind: field
+    reason: The metadata of the lock step is returned empty instead of carrying the burned amount.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..a04ebc9 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -103,7 +103,7 @@ prepareTwoStepTransfer TwoStepTransfer{..} requestedAt inputHoldingCids paymentC
+         pure
+           ( lockedAmulet
+           , toInterfaceContractId <$> optionalToList result.senderChangeAmulet
+      -    , copyOnlyBurnMeta result.meta
+      +    , emptyMetadata
+           )
+       
+       executeTwoStepTransfer
+  - id: execute-receiver-is-sender
+    source: llm
+    target_script: test_two_step_success_no_fees
+    kind: field
+    reason: The transfer output of the second step goes to the sender instead of the receiver.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..d04639c 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -127,7 +127,7 @@ executeTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+         let amuletCid = unlockResult.amuletSum.amulet
+         -- execute transfer
+         let receiverOutput = TransferOutput with
+      -        receiver = receiver
+      +        receiver = sender
+               amount = amount
+               receiverFeeRatio = 0.0  -- all fees are paid by the sender
+               lock = None
+  - id: abort-expire-condition-inverted
+    source: llm
+    target_script: test_two_step_withdraw_no_fees
+    kind: branch
+    reason: The branch on whether scan asks to expire the lock is inverted.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..d29e454 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -147,7 +147,7 @@ executeTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+       abortTwoStepTransfer : TwoStepTransfer -> ContractId LockedAmulet -> ExtraArgs -> Update [ContractId Holding]
+       abortTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+         expireLockedAmulet <- getFromContextU @Bool extraArgs.context expireLockKey
+      -  if expireLockedAmulet
+      +  if not expireLockedAmulet
+           then do
+             openRoundCid <- getFromContextU @(ContractId OpenMiningRound) extraArgs.context openRoundContextKey
+             -- prudent engineering: check the DSO party
+  - id: abort-drops-deadline-check
+    source: llm
+    target_script: test_two_step_withdraw_locked_amulet_gone_no_fees
+    kind: time
+    reason: When the lock is not expired, the check that the transfer deadline has passed is dropped.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..a9c5cfb 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -156,6 +156,5 @@ abortTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+             pure [toInterfaceContractId result.amuletSum.amulet]
+           else do
+             -- scan is telling us to not expire the lock, this is OK if the transfer expired
+      -      assertDeadlineExceeded transferBeforeDeadline transferBefore
+             pure []
+       
+  - id: abort-returns-no-change
+    source: llm
+    target_script: test_two_step_reject_no_fees
+    kind: field
+    reason: After unlocking the amulet on abort, the unlocked amulet is not returned to the caller.
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..91e462b 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -153,7 +153,7 @@ abortTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+             -- prudent engineering: check the DSO party
+             _ <- fetchChecked (ForDso with dso) openRoundCid
+             result <- exercise lockedAmuletCid LockedAmulet_Unlock with openRoundCid
+      -      pure [toInterfaceContractId result.amuletSum.amulet]
+      +      pure []
+           else do
+             -- scan is telling us to not expire the lock, this is OK if the transfer expired
+             assertDeadlineExceeded transferBeforeDeadline transferBefore

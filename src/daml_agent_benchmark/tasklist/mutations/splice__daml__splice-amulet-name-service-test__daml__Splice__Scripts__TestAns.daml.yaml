@@ -1,0 +1,146 @@
+task: splice/daml/splice-amulet-name-service-test/daml/Splice/Scripts/TestAns.daml
+notes: ""
+mutations:
+  - id: renewal-of-expired-entry
+    source: real-bug
+    commit: 5b915b7022c3425a990037009e01f5e40636a2f7
+    target_script: testWithSubscription
+    kind: time
+    reason: AnsRules_CollectEntryRenewalPayment does not check that the entry is still live, so an expired name can be renewed.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans.daml b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      @@ -144,8 +144,6 @@ template AnsRules
+                 ((AnsEntryContext dso entry.user entry.name entry.url entry.description subscription.reference) == context)
+               require "Subscription entry renewal times are in sync"
+                 (payment.thisPaymentDueAt == entry.expiresAt)
+      -        time <- getTime
+      -        require "Current entry is not expired" (time < entry.expiresAt)
+               -- accept payment
+               result <- exercise paymentCid SubscriptionPayment_Collect with
+                 transferContext
+  - id: renewal-extends-by-duration
+    source: llm
+    target_script: testWithSubscription
+    kind: field
+    reason: Renewal extends the entry by the subscription's renewal window (paymentDuration) instead of its payment interval.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans.daml b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      @@ -154,7 +154,7 @@ template AnsRules
+               void $ fetchAndArchive (ForOwner with dso; owner = dso) amuletCid
+               -- renew entry
+               renewSummary <- exercise entryCid AnsEntry_Renew with
+      -          extension = payment.payData.paymentInterval
+      +          extension = payment.payData.paymentDuration
+               -- return the created contracts
+               return AnsRules_CollectEntryRenewalPaymentResult with
+                 entryCid = renewSummary.entryCid
+  - id: initial-payment-not-burned
+    source: llm
+    target_script: testWithSubscription
+    kind: archival
+    reason: The initial payment's amulet, transferred to the DSO, is never archived, so the DSO keeps holding it.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans.daml b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      @@ -112,7 +112,6 @@ template AnsRules
+               collectResult <- exercise paymentCid SubscriptionInitialPayment_Collect with
+                 transferContext
+               -- burn the amulet transferred to the DSO party (using fetchAndArchive for extra safety)
+      -        void $ fetchAndArchive (ForOwner with dso; owner = dso) collectResult.amulet
+               let subscriptionStateCid = collectResult.subscriptionState
+               subscriptionState <- fetchUncheckedReferenceData subscriptionStateCid
+               -- deliver the promised good: create the ans entry
+  - id: renewal-payment-not-burned
+    source: llm
+    target_script: testWithSubscription
+    kind: archival
+    reason: The renewal payment's amulet, transferred to the DSO, is never archived, so the DSO keeps holding it.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans.daml b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      @@ -151,7 +151,6 @@ template AnsRules
+                 transferContext
+               let (subscriptionStateCid, amuletCid) = (result.subscriptionState, result.amulet)
+               -- burn the amulet transferred to the DSO party (using fetchAndArchive for extra safety)
+      -        void $ fetchAndArchive (ForOwner with dso; owner = dso) amuletCid
+               -- renew entry
+               renewSummary <- exercise entryCid AnsEntry_Renew with
+                 extension = payment.payData.paymentInterval
+  - id: expire-before-deadline
+    source: llm
+    target_script: testWithSubscription
+    kind: time
+    reason: AnsEntry_Expire compares the expiry time the wrong way round, allowing live entries to be expired and refusing expired ones.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans.daml b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      @@ -303,7 +303,7 @@ template AnsEntry
+             controller actor
+             do time <- getTime
+                require ("Actor " <> show actor <> " is a signatory") (actor `elem` signatory this)
+      -         require "Contract expired" (expiresAt < time)
+      +         require "Contract expired" (expiresAt > time)
+                return AnsEntry_ExpireResult
+       
+           choice AnsEntry_Renew : AnsEntry_RenewResult
+  - id: terminated-subscription-not-archived
+    source: llm
+    target_script: terminatedSubscriptionCanBeCleanedUp
+    kind: archival
+    reason: Terminating an entry context only reads the terminated subscription instead of archiving it, leaving it behind.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans.daml b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      @@ -232,7 +232,7 @@ template AnsEntryContext
+               terminatedSubscriptionCid : ContractId TerminatedSubscription
+             controller actor
+             do require "Actor is signatory" (actor `elem` signatory this)
+      -         terminated <- fetchUncheckedAndArchive terminatedSubscriptionCid
+      +         terminated <- fetchUncheckedReferenceData terminatedSubscriptionCid
+                require "Reference matches" (terminated.reference == reference)
+                return AnsEntryContext_TerminateResult
+       
+  - id: terminate-context-nonconsuming
+    source: llm
+    target_script: terminatedSubscriptionCanBeCleanedUp
+    kind: archival
+    reason: AnsEntryContext_Terminate is declared nonconsuming, so the context outlives its termination.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans.daml b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      @@ -226,7 +226,7 @@ template AnsEntryContext
+           signatory dso, user
+       
+       
+      -    choice AnsEntryContext_Terminate : AnsEntryContext_TerminateResult
+      +    nonconsuming choice AnsEntryContext_Terminate : AnsEntryContext_TerminateResult
+             with
+               actor : Party
+               terminatedSubscriptionCid : ContractId TerminatedSubscription
+  - id: terminate-reference-mismatch
+    source: llm
+    target_script: terminatedSubscriptionCanBeCleanedUp
+    kind: validation
+    reason: The reference check in AnsEntryContext_Terminate is inverted, requiring the terminated subscription to belong to a different request.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans.daml b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans.daml
+      @@ -233,7 +233,7 @@ template AnsEntryContext
+             controller actor
+             do require "Actor is signatory" (actor `elem` signatory this)
+                terminated <- fetchUncheckedAndArchive terminatedSubscriptionCid
+      -         require "Reference matches" (terminated.reference == reference)
+      +         require "Reference matches" (terminated.reference /= reference)
+                return AnsEntryContext_TerminateResult
+       
+           nonconsuming choice AnsEntryContext_CollectInitialEntryPayment : AnsEntryContext_CollectInitialEntryPaymentResult

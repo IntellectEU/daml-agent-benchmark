@@ -62,9 +62,9 @@
     "repo_copy_digest": "e227ee5f8ad76540f59c1a6eb17d21cb4e37d8e10e5d354561cf97738524224d",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml",
+      "answer_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml",
       "path_in_copy": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml",
       "original": "-- Copyright (c) 2025 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\n\nmodule Intro.Asset.Trade where\n\nimport Intro.Asset\n\ntemplate Trade\n  with\n    baseAssetCid : ContractId Asset\n    baseAsset : Asset\n    quoteApprovalCid : ContractId TransferApproval\n    quoteAsset : Asset\n  where\n    signatory baseAsset.owner\n    observer quoteAsset.owner\n\n    choice Trade_Cancel\n        : ()\n        controller baseAsset.owner\n        do\n          return ()\n\n    choice Trade_Reject\n        : ()\n        controller quoteAsset.owner\n        do\n          return ()\n\n-- TRADE_SETTLE_BEGIN\n    choice Trade_Settle\n      : (ContractId Asset, ContractId Asset)\n      with\n        quoteAssetCid : ContractId Asset\n        baseApprovalCid : ContractId TransferApproval\n      controller quoteAsset.owner\n      do\n        fetchedBaseAsset <- fetch baseAssetCid\n        assertMsg\n          \"Base asset mismatch\"\n          (baseAsset == fetchedBaseAsset with\n            observers = baseAsset.observers)\n\n        fetchedQuoteAsset <- fetch quoteAssetCid\n        assertMsg\n          \"Quote asset mismatch\"\n          (quoteAsset == fetchedQuoteAsset with\n            observers = quoteAsset.observers)\n\n        transferredBaseCid <- exercise\n          baseApprovalCid TransferApproval_Transfer with\n            assetCid = baseAssetCid\n\n        transferredQuoteCid <- exercise\n          quoteApprovalCid TransferApproval_Transfer with\n            assetCid = quoteAssetCid\n\n        return (transferredBaseCid, transferredQuoteCid)\n-- TRADE_SETTLE_END\n",
       "generated": "module Intro.Asset.Trade where\n\nimport Intro.Asset\n\ntemplate Trade\n  with\n    baseAssetCid : ContractId Asset\n    baseAsset : Asset\n    quoteApprovalCid : ContractId TransferApproval\n    quoteAsset : Asset\n  where\n    signatory baseAsset.owner\n    observer quoteAsset.owner\n\n    choice Trade_Settle\n      : (ContractId Asset, ContractId Asset)\n      with\n        quoteAssetCid : ContractId Asset\n        baseApprovalCid : ContractId TransferApproval\n      controller quoteAsset.owner\n      do\n        quoteApproval <- fetch quoteApprovalCid\n        baseApproval <- fetch baseApprovalCid\n        assertMsg \"Quote approval does not match the trade\"\n          (quoteApproval.asset == quoteAsset && quoteApproval.newOwner == baseAsset.owner)\n        assertMsg \"Base approval does not match the trade\"\n          (baseApproval.asset == baseAsset && baseApproval.newOwner == quoteAsset.owner)\n        baseCid <- exercise baseApprovalCid TransferApproval_Transfer with\n          assetCid = baseAssetCid\n        quoteCid <- exercise quoteApprovalCid TransferApproval_Transfer with\n          assetCid = quoteAssetCid\n        return (baseCid, quoteCid)\n",
@@ -266,13 +266,13 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml",
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

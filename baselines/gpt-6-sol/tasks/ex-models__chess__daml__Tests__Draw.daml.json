@@ -69,9 +69,9 @@
     "repo_copy_digest": "6f6d136712ad738b83f2efc5d276183f5c30d3ed936286e5e25115e5707cd12f",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "ex-models/chess/daml/Rules/Draw.daml",
+      "answer_file": "ex-models/chess/daml/Rules/Draw.daml",
       "path_in_copy": "chess/daml/Rules/Draw.daml",
       "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Rules.Draw where\n\nimport DA.Foldable as F\nimport DA.List as L\nimport DA.Map as M\nimport DA.Optional\n\nimport Types\n\nimport Rules.Data\nimport Rules.Main\nimport Rules.Move\n\ndata OrdGameState = OrdGameState with\n  player : Player\n  pieces : Map Coord Piece\n    deriving (Eq, Show, Ord)\n\ndata DrawState = DrawState with\n  idleMoves : Int\n  stateCounts : [(OrdGameState, Int)]\n  gameState : GameState\n\n-- | Checkdraw checks the 50 move rule and threefold repetition by\n-- | Replaying the whole game\ncheckDraw : [ChessMove] -> E Bool\ncheckDraw moves = do\n  fds <- efds\n  let maxRepeats = maximum $ map snd fds.stateCounts\n  return (maxRepeats >= 3 || fds.idleMoves >= 50)\n  where\n    is = initState ()\n\n    ids = DrawState with\n      idleMoves = 0\n      stateCounts = [(toOrd is, 1)]\n      gameState = is\n\n    efds = L.foldr\n      moveFn\n      (Right ids)\n      moves\n\ntoOrd : GameState -> OrdGameState\ntoOrd gs = OrdGameState with\n  player = gs.player\n  pieces = M.fromList $ map (\\p -> (p.coord, p)) gs.pieces\n\nmoveFn : ChessMove -> E DrawState -> E DrawState\nmoveFn move eds = do\n  ds <- eds\n  gameState <- tryMoveInner ds.gameState move\n  md <- toMoveData ds.gameState move\n  capture <- checkCapture md\n  let\n    idle = isNone capture && md.piece.tp /= Pawn\n    idleMoves = if idle\n      then ds.idleMoves + 1\n      else 0\n    stateCounts = increment (toOrd gameState) ds.stateCounts\n  return $ DrawState with ..\n\nincrement : (Ord a) => a -> [(a, Int)] -> [(a, Int)]\nincrement k list =\n  let\n    filtered = L.filter (\\(a, _) -> a /= k) list\n    elem = find (\\(a, _) -> a == k) list\n  in case elem of\n      None -> (k, 1) :: filtered\n      Some (_, i) -> (k, i + 1) :: filtered\n",
       "generated": "module Rules.Draw where\n\nimport Types\nimport Rules.Data (initState)\nimport Rules.Main (tryMoveInner)\n\ncheckDraw : [ChessMove] -> Either Text Bool\ncheckDraw moves = do\n  (current, previous) <- foldl advance (Right (initState (), [])) (reverse moves)\n  return (length moves >= 50 || length (filter (samePosition current) previous) >= 2)\n\nadvance : Either Text (GameState, [GameState]) -> ChessMove -> Either Text (GameState, [GameState])\nadvance accumulated move = do\n  (state, previous) <- accumulated\n  next <- tryMoveInner state move\n  return (next, state :: previous)\n\nsamePosition : GameState -> GameState -> Bool\nsamePosition state other =\n  state.player == other.player\n    && length state.pieces == length other.pieces\n    && all (\\piece -> elem piece other.pieces) state.pieces\n    && enPassantMove state == enPassantMove other\n\nenPassantMove : GameState -> Optional Coord\nenPassantMove state = case state.moves of\n  move :: _ ->\n    if abs (fromEnum move.to % 8 - fromEnum move.from % 8) == 2\n      && any (\\piece -> piece.coord == move.to && piece.tp == Pawn) state.pieces\n    then Some move.to\n    else None\n  [] -> None\n",
@@ -257,13 +257,13 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "chess/daml/Rules/Draw.daml",
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

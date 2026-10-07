@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+from dataclasses import asdict
 from pathlib import Path
 
 import pytest
@@ -37,12 +38,16 @@ register(RepoHandler(name="acme-settlement", excluded_subpaths=("dist/dars",)))
 
 @pytest.fixture(autouse=True)
 def restore_state():
-    """Put the task-list directories, the catalog caches, the handlers and the loaded modules back."""
-    tasklist_dirs, extra_code_dirs = locations.tasklist_dirs, locations.extra_code_dirs
+    """Start from the package's own task list, and put the locations, the catalog caches, the handlers and the loaded modules back.
+
+    `locations` is shared by the whole process, and code outside the package that ran earlier may have added its own task-list directories.
+    """
+    saved = asdict(locations)
     handlers = dict(registry._HANDLERS)
     modules = set(sys.modules)
+    configure(tasklist_dirs=(PACKAGE_TASKLIST_DIR,), extra_code_dirs=())
     yield
-    configure(tasklist_dirs=tasklist_dirs, extra_code_dirs=extra_code_dirs)
+    configure(**saved)
     registry._HANDLERS.clear()
     registry._HANDLERS.update(handlers)
     for name in set(sys.modules) - modules:

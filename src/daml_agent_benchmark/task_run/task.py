@@ -26,22 +26,22 @@ from daml_agent_benchmark.records import (
     write_task_live_result,
 )
 from daml_agent_benchmark.run_files import (
-    build_impl_file_snapshots,
-    read_impl_original_snapshots,
+    build_answer_file_snapshots,
+    read_answer_original_snapshots,
     task_live_stdout_events_path,
     task_safe_name,
 )
 from daml_agent_benchmark.task_run.attempt import attempt_with_quota_retries, redacted
-from daml_agent_benchmark.task_run.ground_truth import grade_in_environment, verify_copy
+from daml_agent_benchmark.task_kinds import TaskCopy, task_kind
+from daml_agent_benchmark.task_run.ground_truth import verify_copy
 from daml_agent_benchmark.task_run.inputs import (
-    build_codex_prompt,
-    clear_implementation_files,
+    blank_files,
     load_prompt_guidance,
     stage_skill_into_copy,
     stage_task_docs,
 )
 from daml_agent_benchmark.task_run.outcome import classify_attempt
-from daml_agent_benchmark.task_run.repo_copy import prepare_task_repo_copy
+from daml_agent_benchmark.task_run.repo_copy import hide_in_repo_copy, prepare_task_repo_copy
 from daml_agent_benchmark.tasklist_catalog import repo_relative_id, repo_root_for_path
 
 
@@ -66,11 +66,14 @@ def run_task(
 
     1. Copy the source repository, so the agent works in a tree of its own
     2. Verify the copy: it must not hold the answer, and the task must build and pass here
-    3. Blank the implementation files, so the agent writes them from scratch
+    3. Blank the answer files, so the agent writes them from scratch
     4. Stage what the agent is handed: the prompt, and any skill and documentation
     5. Let it attempt the task, retrying while the provider rate-limits the run
     6. Classify what it did, and grade what it wrote
     7. Delete the copy
+
+    The task kind (`config.task_kind`) decides which files are the answer, what the prompt
+    says and how the answer is graded; every step here is the same for every kind.
 
     The record exists from the first line and is narrowed as each step answers something,
     so the live snapshot the dashboard polls and the record written at the end are the same
@@ -78,6 +81,7 @@ def run_task(
     out either way: what survives the copy is in the record.
     """
     started_at = now_utc()
+    kind = task_kind(config.task_kind)
     task_id_rel = repo_relative_id(test_file_path)
     safe_name = task_safe_name(test_file_path)
     task = TaskResult(
@@ -95,7 +99,7 @@ def run_task(
         grade=None,
         ground_truth_control=None,
         repo_copy_integrity=None,
-        impl_file_snapshots=[],
+        answer_file_snapshots=[],
         attempts=None,
     )
 
@@ -112,12 +116,22 @@ def run_task(
     repo_copy_dir, pruned_dars = prepare_task_repo_copy(
         repo_root, impl_files, run_repo_copies_dir, log_prefix=task_prefix, test_file_path=test_file_path
     )
+    hide_in_repo_copy(repo_copy_dir, kind.hidden_from_copy(task_id_rel))
     task = replace(task, repo_copy=copies_relative(repo_copy_dir))
 
     relative_test_path = os.path.relpath(test_file_path, repo_root)
     repo_copy_test_file = os.path.join(repo_copy_dir, relative_test_path)
     repo_copy_impl_files = [os.path.join(repo_copy_dir, os.path.relpath(p, repo_root)) for p in impl_files]
-    original_impl_snapshots = read_impl_original_snapshots(impl_files)
+    copy = TaskCopy(
+        task_id=task_id_rel,
+        root=repo_copy_dir,
+        test_file=repo_copy_test_file,
+        impl_files=repo_copy_impl_files,
+        module_source=Path(test_file_path).read_text(encoding="utf-8"),
+    )
+    repo_copy_answer_files = kind.answer_files(copy.test_file, copy.impl_files)
+    host_answer_files = [os.path.join(repo_root, copy.rel(p)) for p in repo_copy_answer_files]
+    original_answer_snapshots = read_answer_original_snapshots(host_answer_files)
 
     # 2. Whether this copy can measure an agent at all: it must not hold the answer, and
     # the task must build and pass its own tests here. Neither can be asked once it is blanked.
@@ -127,6 +141,7 @@ def run_task(
         repo_copy_dir=repo_copy_dir,
         repo_copy_test_file=repo_copy_test_file,
         repo_copy_impl_files=repo_copy_impl_files,
+        repo_copy_answer_files=repo_copy_answer_files,
         pruned_archives=pruned_dars,
         log_prefix=task_prefix,
     )
@@ -140,17 +155,12 @@ def run_task(
         shutil.rmtree(repo_copy_dir, ignore_errors=True)
         return failure
 
-    # 3. Always clear impl files so every task is from-scratch generation, not patching existing code.
-    clear_implementation_files(repo_copy_impl_files)
+    # 3. The answer is always written from scratch, never patched.
+    blank_files(repo_copy_answer_files)
 
     # 4. What the agent is handed: the prompt, and whatever else the experiment stages.
     docs_skill_content = load_prompt_guidance(config) if config.prompt_guidance_file else None
-    prompt = build_codex_prompt(
-        repo_copy_test_file,
-        repo_copy_impl_files,
-        repo_copy_dir,
-        docs_skill_content=docs_skill_content,
-    )
+    prompt = kind.prompt(copy, docs_skill_content)
 
     task_log_path = None
     if run_dir:
@@ -168,9 +178,9 @@ def run_task(
         config,
         task_id=task_id_rel,
         repo_copy_root=repo_copy_dir,
-        repo_copy_impl_files=repo_copy_impl_files,
+        repo_copy_answer_files=repo_copy_answer_files,
         prompt=prompt,
-        test_rel_path=relative_test_path.replace("\\", "/"),
+        protected_rel_paths=[copy.rel(p) for p in kind.protected_files(copy.test_file, copy.impl_files)],
         log_prefix=task_prefix,
         task_log_path=task_log_path,
         live_stdout_events_path=live_stdout_events_path,
@@ -188,14 +198,14 @@ def run_task(
     result = replace(
         task,
         findings=findings,
-        grade=grade_in_environment(config, repo_copy_test_file, repo_copy_impl_files),
+        grade=kind.grade(config, copy),
         ground_truth_control=control,
         repo_copy_integrity=integrity,
-        impl_file_snapshots=build_impl_file_snapshots(
-            impl_files=impl_files,
-            repo_copy_impl_files=repo_copy_impl_files,
+        answer_file_snapshots=build_answer_file_snapshots(
+            answer_files=host_answer_files,
+            repo_copy_answer_files=repo_copy_answer_files,
             repo_copy_root=repo_copy_dir,
-            original_snapshots=original_impl_snapshots,
+            original_snapshots=original_answer_snapshots,
         ),
         attempts=redacted(attempt, [os.environ[name] for name in secret_env_names(config)]),
     ).completed()

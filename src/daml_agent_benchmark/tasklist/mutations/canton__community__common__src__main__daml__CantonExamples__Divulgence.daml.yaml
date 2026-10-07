@@ -1,0 +1,41 @@
+task: canton/community/common/src/main/daml/CantonExamples/Divulgence.daml
+notes: "The only script is aliceDivulgesHerIouToBob; the Iou is created by the bank, then fetched through Divulge, so all mutations act on Iou creation."
+mutations:
+  - id: signatory-owner
+    source: llm
+    target_script: aliceDivulgesHerIouToBob
+    kind: authorization
+    reason: The Iou is signed by its owner instead of its payer, so the bank can no longer issue it.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/Iou.daml b/community/common/src/main/daml/CantonExamples/Iou.daml
+      index b685659..9ecb906 100644
+      --- a/community/common/src/main/daml/CantonExamples/Iou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/Iou.daml
+      @@ -20,7 +20,7 @@ template Iou
+       
+           ensure (amount.value >= 0.0)
+       
+      -    signatory payer
+      +    signatory owner
+           observer owner
+           observer viewers
+       
+  - id: ensure-inverted
+    source: llm
+    target_script: aliceDivulgesHerIouToBob
+    kind: validation
+    reason: The ensure clause comparison is flipped, rejecting positive amounts and accepting negative ones.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/Iou.daml b/community/common/src/main/daml/CantonExamples/Iou.daml
+      index b685659..f3a384e 100644
+      --- a/community/common/src/main/daml/CantonExamples/Iou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/Iou.daml
+      @@ -18,7 +18,7 @@ template Iou
+           viewers: [Party]
+         where
+       
+      -    ensure (amount.value >= 0.0)
+      +    ensure (amount.value < 0.0)
+       
+           signatory payer
+           observer owner

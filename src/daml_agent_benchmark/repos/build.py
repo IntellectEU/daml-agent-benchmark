@@ -11,7 +11,7 @@ from typing import Iterator
 
 from daml_agent_benchmark.constants import REPO_COPY_DIR_SPLITTER
 from daml_agent_benchmark.locations import locations
-from daml_agent_benchmark.tasklist_catalog import load_repos
+from daml_agent_benchmark.tasklist_catalog import BuildTool, load_repos
 
 
 def repo_name_for_package_path(path: str | Path) -> str | None:
@@ -45,7 +45,7 @@ def _package_uses_dpm(package_root: str | Path) -> bool:
     repos = load_repos()
     if repo_name not in repos:
         raise KeyError(f"Repository {repo_name!r} is not declared in the task list's repos.yaml.")
-    return repos[repo_name].build_tool == "dpm"
+    return repos[repo_name].build_tool is BuildTool.DPM
 
 
 class _EvalState(threading.local):

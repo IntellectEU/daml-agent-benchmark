@@ -16,10 +16,8 @@
   "task_docs_dir": null,
   "run_tasks_in_parallel": true,
   "max_parallel_tasks": 2,
-  "eval_in_container": true,
   "ground_truth_control": true,
   "max_task_runtime_seconds": 600,
-  "codex_auth_mode": "api_key",
   "run_id": "gpt-6-sol",
   "run_name": "gpt-6-sol",
   "task_set": "package",
@@ -58,5 +56,6 @@
     "splice/daml/splitwell-test/daml/Splice/Scripts/TestSplitwell.daml",
     "splice/token-standard/splice-token-standard-test/daml/Splice/Tests/TestAmuletTokenDvP.daml",
     "splice/token-standard/splice-token-standard-test/daml/Splice/Tests/TestAmuletTokenTransfer.daml"
-  ]
+  ],
+  "task_kind": "implementation"
 }

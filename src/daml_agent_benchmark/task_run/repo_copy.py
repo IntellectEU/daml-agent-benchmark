@@ -7,13 +7,10 @@ files emptied. The preflight check runs once per run, before any copy is made.
 from __future__ import annotations
 
 import re
+import shutil
 from pathlib import Path
 
-from daml_agent_benchmark.constants import (
-    CONTAINER_IMAGE,
-    CONTAINER_REQUIRE_NIX_FOR_NIX_TASKS,
-    REPO_COPY_DIR_SPLITTER,
-)
+from daml_agent_benchmark.constants import CONTAINER_IMAGE, REPO_COPY_DIR_SPLITTER
 from daml_agent_benchmark.container.image import container_has_command
 from daml_agent_benchmark.context_guardrails import make_repo_copy_path_filter
 from daml_agent_benchmark.repos.registry import handler_for
@@ -57,9 +54,6 @@ def _repos_requiring_nix_shell(tasks: dict[str, list[str]]) -> list[Path]:
 def assert_nix_shell_preflight(tasks: dict[str, list[str]]) -> None:
     """Check that nix-shell is available inside the container image (not on the host)
     if any selected tasks need it. Fails early rather than letting tasks fail at runtime."""
-    if not CONTAINER_REQUIRE_NIX_FOR_NIX_TASKS:
-        return
-
     required_repos = _repos_requiring_nix_shell(tasks)
     if not required_repos:
         return
@@ -75,6 +69,29 @@ def assert_nix_shell_preflight(tasks: dict[str, list[str]]) -> None:
         f"{repo_lines}\n"
         "Install nix in the image or switch tasks."
     )
+
+
+def hide_in_repo_copy(repo_copy_dir: str, rel_paths: list[str]) -> None:
+    """Remove files or package directories from a repository copy, and drop a removed package
+    from every `multi-package.yaml` above it, so that building all packages still works."""
+    copy_root = Path(repo_copy_dir)
+    for rel in rel_paths:
+        target = copy_root / rel
+        if target.is_dir():
+            shutil.rmtree(target)
+        else:
+            target.unlink()  # a path that is not there is a stale entry: fail rather than run unhidden
+        for parent in target.parents:
+            manifest = parent / "multi-package.yaml"
+            if manifest.is_file():
+                lines = manifest.read_text(encoding="utf-8").splitlines(keepends=True)
+                kept = [
+                    line for line in lines
+                    if not ((m := re.fullmatch(r"\s*-\s*(\S+)\s*", line)) and (parent / m[1]).resolve() == target.resolve())
+                ]
+                manifest.write_text("".join(kept), encoding="utf-8")
+            if parent == copy_root:
+                break
 
 
 def prepare_task_repo_copy(

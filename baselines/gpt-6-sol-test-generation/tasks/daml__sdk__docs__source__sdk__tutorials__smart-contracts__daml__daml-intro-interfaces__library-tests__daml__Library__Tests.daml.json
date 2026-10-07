@@ -1,0 +1,879 @@
+{
+  "task_id": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml",
+  "task_safe_name": "daml__sdk__docs__source__sdk__tutorials__smart-contracts__daml__daml-intro-interfaces__library-tests__daml__Library__Tests.daml",
+  "test_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml",
+  "impl_files": [
+    "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.430087+00:00",
+  "started_at_utc": "2026-10-02T16:34:47.905150+00:00",
+  "finished_at_utc": "2026-10-02T16:40:22.924660+00:00",
+  "live_updated_at_utc": "2026-10-02T16:40:22.924660+00:00",
+  "repo_copy": "261002-180850/daml_____u_v46y50",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Library/Tests.daml:bookRejectsUnauthorizedActions": true,
+      "daml/Library/Tests.daml:bookDisclosure": true,
+      "daml/Library/Tests.daml:bookLoanAndReturn": true,
+      "daml/Library/Tests.daml:bookViewAndCreation": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "disclose-keeps-only-existing",
+        "source": "llm",
+        "kind": "branch",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Library/Tests.daml:bookRejectsUnauthorizedActions": true,
+            "daml/Library/Tests.daml:bookDisclosure": false,
+            "daml/Library/Tests.daml:bookLoanAndReturn": false,
+            "daml/Library/Tests.daml:bookViewAndCreation": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:39:30.77 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 57:6a:40:db:a3:95:c5:c2'. Ignoring it.\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    94:15-94:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:94:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    112:18-112:29\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:112:18: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    134:15-134:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:134:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    53:1-53:15\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Library.Tests:58:15)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'disclosure-owner-c812a76d' (0),\n                            'existing-observer-40b5f04b' (0)\n  └─> 'disclosure-owner-c812a76d' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                                  with\n                                    owner = 'disclosure-owner-c812a76d';\n                                    title = \"The Left Hand of Darkness\";\n                                    loanedTo = none;\n                                    author = \"Ursula K. Le Guin\";\n                                    observers = ['existing-observer-40b5f04b']\n  \n  TX 1 1970-01-01T00:00:00Z (Library.Tests:60:16)\n  #1:0\n  │   disclosed to (since): 'disclosure-owner-c812a76d' (1),\n                            'existing-observer-40b5f04b' (1)\n  └─> 'disclosure-owner-c812a76d' exercises CatalogItem_Disclose on #0:0 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n                                  with\n                                    observers =\n                                      ['existing-observer-40b5f04b', 'new-observer-9cefe94d',\n                                       'another-observer-fb9a0f58']\n      children:\n      #1:1\n      │   disclosed to (since): 'disclosure-owner-c812a76d' (1),\n                                'existing-observer-40b5f04b' (1)\n      └─> 'disclosure-owner-c812a76d' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                                      with\n                                        owner = 'disclosure-owner-c812a76d';\n                                        title = \"The Left Hand of Darkness\";\n                                        loanedTo = none;\n                                        author = \"Ursula K. Le Guin\";\n                                        observers =\n                                          ['existing-observer-40b5f04b',\n                                           'existing-observer-40b5f04b']\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    94:15-94:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:94:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    112:18-112:29\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:112:18: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    134:15-134:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:134:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    53:1-53:15\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Library.Tests:58:15)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'disclosure-owner-c812a76d' (0),\n                            'existing-observer-40b5f04b' (0)\n  └─> 'disclosure-owner-c812a76d' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                                  with\n                                    owner = 'disclosure-owner-c812a76d';\n                                    title = \"The Left Hand of Darkness\";\n                                    loanedTo = none;\n                                    author = \"Ursula K. Le Guin\";\n                                    observers = ['existing-observer-40b5f04b']\n  \n  TX 1 1970-01-01T00:00:00Z (Library.Tests:60:16)\n  #1:0\n  │   disclosed to (since): 'disclosure-owner-c812a76d' (1),\n                            'existing-observer-40b5f04b' (1)\n  └─> 'disclosure-owner-c812a76d' exercises CatalogItem_Disclose on #0:0 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n                                  with\n                                    observers =\n                                      ['existing-observer-40b5f04b', 'new-observer-9cefe94d',\n                                       'another-observer-fb9a0f58']\n      children:\n      #1:1\n      │   disclosed to (since): 'disclosure-owner-c812a76d' (1),\n                                'existing-observer-40b5f04b' (1)\n      └─> 'disclosure-owner-c812a76d' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                                      with\n                                        owner = 'disclosure-owner-c812a76d';\n                                        title = \"The Left Hand of Darkness\";\n                                        loanedTo = none;\n                                        author = \"Ursula K. Le Guin\";\n                                        observers =\n                                          ['existing-observer-40b5f04b',\n                                           'existing-observer-40b5f04b']\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    78:1-78:18\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Library.Tests:82:15)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'loan-observer-501c9270' (0),\n                            'loan-owner-05e8b107' (0)\n  └─> 'loan-owner-05e8b107' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                            with\n                              owner = 'loan-owner-05e8b107';\n                              title = \"The Left Hand of Darkness\";\n                              loanedTo = none;\n                              author = \"Ursula K. Le Guin\";\n                              observers = ['loan-observer-501c9270']\n  \n  TX 1 1970-01-01T00:00:00Z (Library.Tests:84:13)\n  #1:0\n  │   disclosed to (since): 'loan-observer-501c9270' (1),\n                            'loan-owner-05e8b107' (1)\n  └─> 'loan-owner-05e8b107' exercises CatalogItem_LoanTo on #0:0 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n                            with\n                              borrower = 'loan-borrower-2d0cd0f1'\n      children:\n      #1:1\n      │   consumed by: #4:0\n      │   referenced by #3:1, #4:0\n      │   disclosed to (since): 'loan-observer-501c9270' (1),\n                                'loan-owner-05e8b107' (1)\n      └─> 'loan-owner-05e8b107' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                                with\n                                  owner = 'loan-owner-05e8b107';\n                                  title = \"The Left Hand of Darkness\";\n                                  loanedTo = some 'loan-borrower-2d0cd0f1';\n                                  author = \"Ursula K. Le Guin\";\n                                  observers = ['loan-observer-501c9270']\n  \n  TX 2 1970-01-01T00:00:00Z (Library.Tests:33:13)\n  #2:0\n  │   referenced by #3:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (2)\n  └─> 'loan-owner-05e8b107' creates Library.Tests:ViewReader\n                            with\n                              owner = 'loan-owner-05e8b107'\n  \n  TX 3 1970-01-01T00:00:00Z (Library.Tests:34:3)\n  #3:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (3)\n  └─> 'loan-owner-05e8b107' exercises ReadView on #2:0 (Library.Tests:ViewReader)\n                            with\n                              item = #1:1\n      children:\n      #3:1\n      │   disclosed to (since): 'loan-owner-05e8b107' (3)\n      └─> 'loan-owner-05e8b107' fetches #1:1 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n  \n  TX 4 1970-01-01T00:00:00Z (Library.Tests:94:15)\n  #4:0\n  │   disclosed to (since): 'loan-borrower-2d0cd0f1' (4),\n                            'loan-observer-501c9270' (4), 'loan-owner-05e8b107' (4)\n  └─> 'loan-borrower-2d0cd0f1' exercises CatalogItem_ReturnToOwner on #1:1 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n      children:\n      #4:1\n      │   consumed by: #7:0\n      │   referenced by #6:1, #7:0\n      │   disclosed to (since): 'loan-borrower-2d0cd0f1' (4),\n                                'loan-observer-501c9270' (4), 'loan-owner-05e8b107' (4)\n      └─> 'loan-owner-05e8b107' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                                with\n                                  owner = 'loan-owner-05e8b107';\n                                  title = \"The Left Hand of Darkness\";\n                                  loanedTo = none;\n                                  author = \"Ursula K. Le Guin\";\n                                  observers = ['loan-observer-501c9270']\n  \n  TX 5 1970-01-01T00:00:00Z (Library.Tests:33:13)\n  #5:0\n  │   referenced by #6:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (5)\n  └─> 'loan-owner-05e8b107' creates Library.Tests:ViewReader\n                            with\n                              owner = 'loan-owner-05e8b107'\n  \n  TX 6 1970-01-01T00:00:00Z (Library.Tests:34:3)\n  #6:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (6)\n  └─> 'loan-owner-05e8b107' exercises ReadView on #5:0 (Library.Tests:ViewReader)\n                            with\n                              item = #4:1\n      children:\n      #6:1\n      │   disclosed to (since): 'loan-owner-05e8b107' (6)\n      └─> 'loan-owner-05e8b107' fetches #4:1 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n  \n  TX 7 1970-01-01T00:00:00Z (Library.Tests:101:20)\n  #7:0\n  │   disclosed to (since): 'loan-observer-501c9270' (7),\n                            'loan-owner-05e8b107' (7)\n  └─> 'loan-owner-05e8b107' exercises CatalogItem_LoanTo on #4:1 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n                            with\n                              borrower = 'loan-borrower-2d0cd0f1'\n      children:\n      #7:1\n      │   consumed by: #10:0\n      │   referenced by #9:1, #10:0\n      │   disclosed to (since): 'loan-observer-501c9270' (7),\n                                'loan-owner-05e8b107' (7)\n      └─> 'loan-owner-05e8b107' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                                with\n                                  owner = 'loan-owner-05e8b107';\n                                  title = \"The Left Hand of Darkness\";\n                                  loanedTo = some 'loan-borrower-2d0cd0f1';\n                                  author = \"Ursula K. Le Guin\";\n                                  observers = ['loan-observer-501c9270']\n  \n  TX 8 1970-01-01T00:00:00Z (Library.Tests:33:13)\n  #8:0\n  │   referenced by #9:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (8)\n  └─> 'loan-owner-05e8b107' creates Library.Tests:ViewReader\n                            with\n                              owner = 'loan-owner-05e8b107'\n  \n  TX 9 1970-01-01T00:00:00Z (Library.Tests:34:3)\n  #9:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (9)\n  └─> 'loan-owner-05e8b107' exercises ReadView on #8:0 (Library.Tests:ViewReader)\n                            with\n                              item = #7:1\n      children:\n      #9:1\n      │   disclosed to (since): 'loan-owner-05e8b107' (9)\n      └─> 'loan-owner-05e8b107' fetches #7:1 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n  \n  TX 10 1970-01-01T00:00:00Z (Library.Tests:104:27)\n  #10:0\n  │   disclosed to (since): 'loan-observer-501c9270' (10),\n                            'loan-owner-05e8b107' (10)\n  └─> 'loan-owner-05e8b107' exercises CatalogItem_Disclose on #7:1 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\n                            with\n                              observers = ['loan-borrower-2d0cd0f1', 'loan-observer-501c9270']\n      children:\n      #10:1\n      │   referenced by #12:1\n      │   disclosed to (since): 'loan-observer-501c9270' (10),\n                                'loan-owner-05e8b107' (10)\n      └─> 'loan-owner-05e8b107' creates Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec\n                                with\n                                  owner = 'loan-owner-05e8b107';\n                                  title = \"The Left Hand of Darkness\";\n                                  loanedTo = some 'loan-borrower-2d0cd0f1';\n                                  author = \"Ursula K. Le Guin\";\n                                  observers = ['loan-observer-501c9270', 'loan-observer-501c9270']\n  \n  TX 11 1970-01-01T00:00:00Z (Library.Tests:33:13)\n  #11:0\n  │   referenced by #12:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (11)\n  └─> 'loan-owner-05e8b107' creates Library.Tests:ViewReader\n                            with\n                              owner = 'loan-owner-05e8b107'\n  \n  TX 12 1970-01-01T00:00:00Z (Library.Tests:34:3)\n  #12:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (12)\n  └─> 'loan-owner-05e8b107' exercises ReadView on #11:0 (Library.Tests:ViewReader)\n                            with\n                              item = #10:1\n      children:\n      #12:1\n      │   disclosed to (since): 'loan-owner-05e8b107' (12)\n      └─> 'loan-owner-05e8b107' fetches #10:1 (Library.Book:Book@e0f2929c43f3f3babd488003bcc432cef0fbc655002fe2f0f2c2b96cf88220ec)\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    94:15-94:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:94:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    112:18-112:29\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:112:18: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    134:15-134:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:134:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "loan-to-owner",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Library/Tests.daml:bookRejectsUnauthorizedActions": false,
+            "daml/Library/Tests.daml:bookDisclosure": true,
+            "daml/Library/Tests.daml:bookLoanAndReturn": false,
+            "daml/Library/Tests.daml:bookViewAndCreation": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:39:50.73 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: d8:36:ba:bb:e0:1c:55:c3'. Ignoring it.\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    94:15-94:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:94:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    112:18-112:29\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:112:18: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    134:15-134:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:134:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    118:1-118:31\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Library.Tests:132:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises CatalogItem_ReturnToOwner on #6:1 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n    with\n  Sub-transactions:\n     0\n     └─> 'rights-owner-d4d95138' exercises CatalogItem_ReturnToOwner on #6:1 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n         children:\n         1\n         └─> 'rights-owner-d4d95138' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                                     with\n                                       owner = 'rights-owner-d4d95138';\n                                       title = \"The Left Hand of Darkness\";\n                                       loanedTo = none;\n                                       author = \"Ursula K. Le Guin\";\n                                       observers = ['rights-observer-9b3970be']\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Library.Tests:123:15)\n  #0:0\n  │   consumed by: #6:0\n  │   referenced by #6:0\n  │   disclosed to (since): 'rights-observer-9b3970be' (0),\n                            'rights-owner-d4d95138' (0)\n  └─> 'rights-owner-d4d95138' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                              with\n                                owner = 'rights-owner-d4d95138';\n                                title = \"The Left Hand of Darkness\";\n                                loanedTo = none;\n                                author = \"Ursula K. Le Guin\";\n                                observers = ['rights-observer-9b3970be']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-observer-9b3970be'} readAs:\n                                                      {} (Library.Tests:125:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-stranger-4f1df03a'} readAs:\n                                                      {} (Library.Tests:126:3)\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-observer-9b3970be'} readAs:\n                                                      {} (Library.Tests:127:3)\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-stranger-4f1df03a'} readAs:\n                                                      {} (Library.Tests:128:3)\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-owner-d4d95138'} readAs:\n                                                   {} (Library.Tests:129:3)\n  \n  TX 6 1970-01-01T00:00:00Z (Library.Tests:130:13)\n  #6:0\n  │   disclosed to (since): 'rights-observer-9b3970be' (6),\n                            'rights-owner-d4d95138' (6)\n  └─> 'rights-owner-d4d95138' exercises CatalogItem_LoanTo on #0:0 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n                              with\n                                borrower = 'rights-borrower-1df42503'\n      children:\n      #6:1\n      │   consumed by: #8:0\n      │   referenced by #8:0\n      │   disclosed to (since): 'rights-observer-9b3970be' (6),\n                                'rights-owner-d4d95138' (6)\n      └─> 'rights-owner-d4d95138' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                                  with\n                                    owner = 'rights-owner-d4d95138';\n                                    title = \"The Left Hand of Darkness\";\n                                    loanedTo = some 'rights-owner-d4d95138';\n                                    author = \"Ursula K. Le Guin\";\n                                    observers = ['rights-observer-9b3970be']\n  \n  TX 7 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-owner-d4d95138'} readAs:\n                                                   {} (Library.Tests:131:3)\n  \n  TX 8 1970-01-01T00:00:00Z (Library.Tests:132:3)\n  #8:0\n  │   disclosed to (since): 'rights-observer-9b3970be' (8),\n                            'rights-owner-d4d95138' (8)\n  └─> 'rights-owner-d4d95138' exercises CatalogItem_ReturnToOwner on #6:1 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n      children:\n      #8:1\n      │   disclosed to (since): 'rights-observer-9b3970be' (8),\n                                'rights-owner-d4d95138' (8)\n      └─> 'rights-owner-d4d95138' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                                  with\n                                    owner = 'rights-owner-d4d95138';\n                                    title = \"The Left Hand of Darkness\";\n                                    loanedTo = none;\n                                    author = \"Ursula K. Le Guin\";\n                                    observers = ['rights-observer-9b3970be']\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    94:15-94:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:94:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    112:18-112:29\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:112:18: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    134:15-134:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:134:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    78:1-78:18\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Library.Tests:82:15)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'loan-observer-501c9270' (0),\n                            'loan-owner-05e8b107' (0)\n  └─> 'loan-owner-05e8b107' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                            with\n                              owner = 'loan-owner-05e8b107';\n                              title = \"The Left Hand of Darkness\";\n                              loanedTo = none;\n                              author = \"Ursula K. Le Guin\";\n                              observers = ['loan-observer-501c9270']\n  \n  TX 1 1970-01-01T00:00:00Z (Library.Tests:84:13)\n  #1:0\n  │   disclosed to (since): 'loan-observer-501c9270' (1),\n                            'loan-owner-05e8b107' (1)\n  └─> 'loan-owner-05e8b107' exercises CatalogItem_LoanTo on #0:0 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n                            with\n                              borrower = 'loan-borrower-2d0cd0f1'\n      children:\n      #1:1\n      │   referenced by #3:1\n      │   disclosed to (since): 'loan-observer-501c9270' (1),\n                                'loan-owner-05e8b107' (1)\n      └─> 'loan-owner-05e8b107' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                                with\n                                  owner = 'loan-owner-05e8b107';\n                                  title = \"The Left Hand of Darkness\";\n                                  loanedTo = some 'loan-owner-05e8b107';\n                                  author = \"Ursula K. Le Guin\";\n                                  observers = ['loan-observer-501c9270']\n  \n  TX 2 1970-01-01T00:00:00Z (Library.Tests:33:13)\n  #2:0\n  │   referenced by #3:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (2)\n  └─> 'loan-owner-05e8b107' creates Library.Tests:ViewReader\n                            with\n                              owner = 'loan-owner-05e8b107'\n  \n  TX 3 1970-01-01T00:00:00Z (Library.Tests:34:3)\n  #3:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (3)\n  └─> 'loan-owner-05e8b107' exercises ReadView on #2:0 (Library.Tests:ViewReader)\n                            with\n                              item = #1:1\n      children:\n      #3:1\n      │   disclosed to (since): 'loan-owner-05e8b107' (3)\n      └─> 'loan-owner-05e8b107' fetches #1:1 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    118:1-118:31\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Library.Tests:132:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises CatalogItem_ReturnToOwner on #6:1 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n    with\n  Sub-transactions:\n     0\n     └─> 'rights-owner-d4d95138' exercises CatalogItem_ReturnToOwner on #6:1 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n         children:\n         1\n         └─> 'rights-owner-d4d95138' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                                     with\n                                       owner = 'rights-owner-d4d95138';\n                                       title = \"The Left Hand of Darkness\";\n                                       loanedTo = none;\n                                       author = \"Ursula K. Le Guin\";\n                                       observers = ['rights-observer-9b3970be']\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Library.Tests:123:15)\n  #0:0\n  │   consumed by: #6:0\n  │   referenced by #6:0\n  │   disclosed to (since): 'rights-observer-9b3970be' (0),\n                            'rights-owner-d4d95138' (0)\n  └─> 'rights-owner-d4d95138' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                              with\n                                owner = 'rights-owner-d4d95138';\n                                title = \"The Left Hand of Darkness\";\n                                loanedTo = none;\n                                author = \"Ursula K. Le Guin\";\n                                observers = ['rights-observer-9b3970be']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-observer-9b3970be'} readAs:\n                                                      {} (Library.Tests:125:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-stranger-4f1df03a'} readAs:\n                                                      {} (Library.Tests:126:3)\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-observer-9b3970be'} readAs:\n                                                      {} (Library.Tests:127:3)\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-stranger-4f1df03a'} readAs:\n                                                      {} (Library.Tests:128:3)\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-owner-d4d95138'} readAs:\n                                                   {} (Library.Tests:129:3)\n  \n  TX 6 1970-01-01T00:00:00Z (Library.Tests:130:13)\n  #6:0\n  │   disclosed to (since): 'rights-observer-9b3970be' (6),\n                            'rights-owner-d4d95138' (6)\n  └─> 'rights-owner-d4d95138' exercises CatalogItem_LoanTo on #0:0 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n                              with\n                                borrower = 'rights-borrower-1df42503'\n      children:\n      #6:1\n      │   consumed by: #8:0\n      │   referenced by #8:0\n      │   disclosed to (since): 'rights-observer-9b3970be' (6),\n                                'rights-owner-d4d95138' (6)\n      └─> 'rights-owner-d4d95138' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                                  with\n                                    owner = 'rights-owner-d4d95138';\n                                    title = \"The Left Hand of Darkness\";\n                                    loanedTo = some 'rights-owner-d4d95138';\n                                    author = \"Ursula K. Le Guin\";\n                                    observers = ['rights-observer-9b3970be']\n  \n  TX 7 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'rights-owner-d4d95138'} readAs:\n                                                   {} (Library.Tests:131:3)\n  \n  TX 8 1970-01-01T00:00:00Z (Library.Tests:132:3)\n  #8:0\n  │   disclosed to (since): 'rights-observer-9b3970be' (8),\n                            'rights-owner-d4d95138' (8)\n  └─> 'rights-owner-d4d95138' exercises CatalogItem_ReturnToOwner on #6:1 (Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622)\n      children:\n      #8:1\n      │   disclosed to (since): 'rights-observer-9b3970be' (8),\n                                'rights-owner-d4d95138' (8)\n      └─> 'rights-owner-d4d95138' creates Library.Book:Book@9317bac02eddf1fdb4c7d30e495a4efde112a1490a3d609703261dd6be557622\n                                  with\n                                    owner = 'rights-owner-d4d95138';\n                                    title = \"The Left Hand of Darkness\";\n                                    loanedTo = none;\n                                    author = \"Ursula K. Le Guin\";\n                                    observers = ['rights-observer-9b3970be']\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    94:15-94:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:94:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    112:18-112:29\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:112:18: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    134:15-134:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:134:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "return-keeps-loan",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Library/Tests.daml:bookRejectsUnauthorizedActions": true,
+            "daml/Library/Tests.daml:bookDisclosure": true,
+            "daml/Library/Tests.daml:bookLoanAndReturn": false,
+            "daml/Library/Tests.daml:bookViewAndCreation": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:40:13.62 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 8f:9b:52:eb:05:88:9b:eb'. Ignoring it.\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    94:15-94:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:94:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    112:18-112:29\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:112:18: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    134:15-134:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:134:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    78:1-78:18\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Library.Tests:82:15)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'loan-observer-501c9270' (0),\n                            'loan-owner-05e8b107' (0)\n  └─> 'loan-owner-05e8b107' creates Library.Book:Book@6dd36986a7648d2b0e2cc53407d937426600572c39e3b771acaeb008ea58f9ca\n                            with\n                              owner = 'loan-owner-05e8b107';\n                              title = \"The Left Hand of Darkness\";\n                              loanedTo = none;\n                              author = \"Ursula K. Le Guin\";\n                              observers = ['loan-observer-501c9270']\n  \n  TX 1 1970-01-01T00:00:00Z (Library.Tests:84:13)\n  #1:0\n  │   disclosed to (since): 'loan-observer-501c9270' (1),\n                            'loan-owner-05e8b107' (1)\n  └─> 'loan-owner-05e8b107' exercises CatalogItem_LoanTo on #0:0 (Library.Book:Book@6dd36986a7648d2b0e2cc53407d937426600572c39e3b771acaeb008ea58f9ca)\n                            with\n                              borrower = 'loan-borrower-2d0cd0f1'\n      children:\n      #1:1\n      │   consumed by: #4:0\n      │   referenced by #3:1, #4:0\n      │   disclosed to (since): 'loan-observer-501c9270' (1),\n                                'loan-owner-05e8b107' (1)\n      └─> 'loan-owner-05e8b107' creates Library.Book:Book@6dd36986a7648d2b0e2cc53407d937426600572c39e3b771acaeb008ea58f9ca\n                                with\n                                  owner = 'loan-owner-05e8b107';\n                                  title = \"The Left Hand of Darkness\";\n                                  loanedTo = some 'loan-borrower-2d0cd0f1';\n                                  author = \"Ursula K. Le Guin\";\n                                  observers = ['loan-observer-501c9270']\n  \n  TX 2 1970-01-01T00:00:00Z (Library.Tests:33:13)\n  #2:0\n  │   referenced by #3:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (2)\n  └─> 'loan-owner-05e8b107' creates Library.Tests:ViewReader\n                            with\n                              owner = 'loan-owner-05e8b107'\n  \n  TX 3 1970-01-01T00:00:00Z (Library.Tests:34:3)\n  #3:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (3)\n  └─> 'loan-owner-05e8b107' exercises ReadView on #2:0 (Library.Tests:ViewReader)\n                            with\n                              item = #1:1\n      children:\n      #3:1\n      │   disclosed to (since): 'loan-owner-05e8b107' (3)\n      └─> 'loan-owner-05e8b107' fetches #1:1 (Library.Book:Book@6dd36986a7648d2b0e2cc53407d937426600572c39e3b771acaeb008ea58f9ca)\n  \n  TX 4 1970-01-01T00:00:00Z (Library.Tests:94:15)\n  #4:0\n  │   disclosed to (since): 'loan-borrower-2d0cd0f1' (4),\n                            'loan-observer-501c9270' (4), 'loan-owner-05e8b107' (4)\n  └─> 'loan-borrower-2d0cd0f1' exercises CatalogItem_ReturnToOwner on #1:1 (Library.Book:Book@6dd36986a7648d2b0e2cc53407d937426600572c39e3b771acaeb008ea58f9ca)\n      children:\n      #4:1\n      │   referenced by #6:1\n      │   disclosed to (since): 'loan-borrower-2d0cd0f1' (4),\n                                'loan-observer-501c9270' (4), 'loan-owner-05e8b107' (4)\n      └─> 'loan-owner-05e8b107' creates Library.Book:Book@6dd36986a7648d2b0e2cc53407d937426600572c39e3b771acaeb008ea58f9ca\n                                with\n                                  owner = 'loan-owner-05e8b107';\n                                  title = \"The Left Hand of Darkness\";\n                                  loanedTo = some 'loan-borrower-2d0cd0f1';\n                                  author = \"Ursula K. Le Guin\";\n                                  observers = ['loan-observer-501c9270']\n  \n  TX 5 1970-01-01T00:00:00Z (Library.Tests:33:13)\n  #5:0\n  │   referenced by #6:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (5)\n  └─> 'loan-owner-05e8b107' creates Library.Tests:ViewReader\n                            with\n                              owner = 'loan-owner-05e8b107'\n  \n  TX 6 1970-01-01T00:00:00Z (Library.Tests:34:3)\n  #6:0\n  │   disclosed to (since): 'loan-owner-05e8b107' (6)\n  └─> 'loan-owner-05e8b107' exercises ReadView on #5:0 (Library.Tests:ViewReader)\n                            with\n                              item = #4:1\n      children:\n      #6:1\n      │   disclosed to (since): 'loan-owner-05e8b107' (6)\n      └─> 'loan-owner-05e8b107' fetches #4:1 (Library.Book:Book@6dd36986a7648d2b0e2cc53407d937426600572c39e3b771acaeb008ea58f9ca)\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    94:15-94:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:94:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    112:18-112:29\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:112:18: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Library/Tests.daml\nHidden:   no\nRange:    134:15-134:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Library/Tests.daml:134:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 3,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Library/Tests.daml:test": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:43:20.505257+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/daml_____u_v46y50/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 181,
+    "bytes_scanned": 4148045,
+    "elapsed_seconds": 0.4,
+    "repo_copy_digest": "1ba89385c83c94354935b576a97a5144270abdc335c60b179c7635e643810801",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml",
+      "path_in_copy": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml",
+      "original": "-- Copyright (c) 2025 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Library.Tests where\n\nimport Library\nimport Library.Book\nimport Library.Disc\n\nimport Daml.Script\n\ntest = do\n  alice <- allocateParty \"alice\"\n  bob <- allocateParty \"bob\"\n  charlie <- allocateParty \"charlie\"\n\n  library1 <- submit [bob, alice, charlie] do\n    createCmd Library with\n      items = []\n      members = [alice, bob, charlie]\n\n  book1 <- submit alice do\n    createCmd Book with\n      owner = alice\n      author = \"Tolkien\"\n      title = \"The Hobbit\"\n      loanedTo = None\n      observers = []\n\n  (library2, book2) <- submit alice do\n      exerciseCmd library1 Library_Donate with\n        owner = alice\n        item = toInterfaceContractId book1\n\n  disc1 <- submit bob do\n    createCmd Disc with\n      owner = bob\n      title = \"The Hobbit\"\n      format = BluRay\n      borrowedBy = None\n      observers = []\n\n  (library3, disc2) <- submit bob do\n    exerciseCmd library2 Library_Donate with\n      owner = bob\n      item = toInterfaceContractId disc1\n\n  (library4, book3) <- submit bob do\n    exerciseCmd library3 Library_TakeOut with\n      borrower = bob\n      item = book2\n\n  submitMustFail charlie do\n    exerciseCmd library4 Library_TakeOut with\n      borrower = charlie\n      item = book3\n\n  (library5, book4) <- submit bob do\n    exerciseCmd library4 Library_GiveBack with\n      borrower = bob\n      item = book3\n\n  (library6, book5) <- submit charlie do\n    exerciseCmd library5 Library_TakeOut with\n      borrower = charlie\n      item = book4\n\n  pure ()\n\n",
+      "generated": "module Library.Tests where\n\nimport Daml.Script\nimport Library.Book\nimport Library.CatalogItem\n\nbookView : Party -> Optional Party -> CatalogItemView\nbookView owner loanedTo = CatalogItemView with\n  owner\n  media = \"Book\"\n  title = \"The Left Hand of Darkness\"\n  loanedTo\n\nbook : Party -> [Party] -> Book\nbook owner observers = Book with\n  owner\n  title = \"The Left Hand of Darkness\"\n  loanedTo = None\n  author = \"Ursula K. Le Guin\"\n  observers\n\ntemplate ViewReader\n  with owner : Party\n  where\n    signatory owner\n    nonconsuming choice ReadView : CatalogItemView\n      with item : ContractId CatalogItem\n      controller owner\n      do view <$> fetch item\n\nreadView : Party -> ContractId CatalogItem -> Script CatalogItemView\nreadView owner item = script do\n  reader <- submit owner do createCmd (ViewReader owner)\n  submit owner do exerciseCmd reader ReadView with item\n\nviewMatches : CatalogItemView -> CatalogItemView -> Bool\nviewMatches actual expected =\n  actual.owner == expected.owner && actual.media == expected.media &&\n  actual.title == expected.title && actual.loanedTo == expected.loanedTo\n\nbookViewAndCreation : Script ()\nbookViewAndCreation = script do\n  owner <- allocateParty \"book-owner\"\n  observer <- allocateParty \"book-observer\"\n  original <- submit owner do createCmd (book owner [observer])\n  let item : ContractId CatalogItem = toInterfaceContractId original\n  itemView <- readView owner item\n  assert (viewMatches itemView (bookView owner None))\n  visible <- query @Book observer\n  assert (visible == [(original, book owner [observer])])\n\nbookDisclosure : Script ()\nbookDisclosure = script do\n  owner <- allocateParty \"disclosure-owner\"\n  oldObserver <- allocateParty \"existing-observer\"\n  newObserver <- allocateParty \"new-observer\"\n  anotherObserver <- allocateParty \"another-observer\"\n  original <- submit owner do createCmd (book owner [oldObserver])\n  let item : ContractId CatalogItem = toInterfaceContractId original\n  disclosed <- submit owner do exerciseCmd item CatalogItem_Disclose with observers = [oldObserver, newObserver, anotherObserver]\n  contracts <- query @Book owner\n  let expected = book owner [oldObserver, newObserver, anotherObserver]\n  assert (length contracts == 1)\n  assert (map snd contracts == [expected])\n  assert (map (toInterfaceContractId . fst) contracts == [disclosed])\n  newObserverContracts <- query @Book newObserver\n  assert (newObserverContracts == contracts)\n  oldObserverContracts <- query @Book oldObserver\n  assert (oldObserverContracts == contracts)\n  disclosedView <- readView owner disclosed\n  assert (viewMatches disclosedView (bookView owner None))\n  again <- submit owner do exerciseCmd disclosed CatalogItem_Disclose with observers = [newObserver, oldObserver]\n  againContracts <- query @Book owner\n  assert (map snd againContracts == [expected])\n  assert (map (toInterfaceContractId . fst) againContracts == [again])\n\nbookLoanAndReturn : Script ()\nbookLoanAndReturn = script do\n  owner <- allocateParty \"loan-owner\"\n  borrower <- allocateParty \"loan-borrower\"\n  observer <- allocateParty \"loan-observer\"\n  original <- submit owner do createCmd (book owner [observer])\n  let originalItem : ContractId CatalogItem = toInterfaceContractId original\n  loaned <- submit owner do exerciseCmd originalItem CatalogItem_LoanTo with borrower\n  loanView <- readView owner loaned\n  assert (viewMatches loanView (bookView owner (Some borrower)))\n  loanedBooks <- query @Book owner\n  assert (map snd loanedBooks == [(book owner [observer]) with loanedTo = Some borrower])\n  assert (map (toInterfaceContractId . fst) loanedBooks == [loaned])\n  borrowerBooks <- query @Book borrower\n  assert (borrowerBooks == [])\n  observerBooks <- query @Book observer\n  assert (observerBooks == loanedBooks)\n  returned <- submitMulti [owner, borrower] [] do exerciseCmd loaned CatalogItem_ReturnToOwner\n  returnedView <- readView owner returned\n  assert (viewMatches returnedView (bookView owner None))\n  returnedBooks <- query @Book owner\n  assert (map snd returnedBooks == [book owner [observer]])\n  assert (map (toInterfaceContractId . fst) returnedBooks == [returned])\n  assert (originalItem /= loaned && loaned /= returned)\n  borrowedAgain <- submit owner do exerciseCmd returned CatalogItem_LoanTo with borrower\n  borrowedAgainView <- readView owner borrowedAgain\n  assert (viewMatches borrowedAgainView (bookView owner (Some borrower)))\n  disclosedWhileLoaned <- submit owner do exerciseCmd borrowedAgain CatalogItem_Disclose with observers = [borrower, observer]\n  disclosedView <- readView owner disclosedWhileLoaned\n  assert (viewMatches disclosedView (bookView owner (Some borrower)))\n  disclosedBooks <- query @Book owner\n  assert (map snd disclosedBooks == [(book owner [observer, borrower]) with loanedTo = Some borrower])\n  assert (map (toInterfaceContractId . fst) disclosedBooks == [disclosedWhileLoaned])\n  borrowerVisible <- query @Book borrower\n  assert (borrowerVisible == disclosedBooks)\n  finalReturn <- submitMulti [owner, borrower] [] do exerciseCmd disclosedWhileLoaned CatalogItem_ReturnToOwner\n  finalBooks <- query @Book owner\n  assert (map snd finalBooks == [book owner [observer, borrower]])\n  assert (map (toInterfaceContractId . fst) finalBooks == [finalReturn])\n\nbookRejectsUnauthorizedActions : Script ()\nbookRejectsUnauthorizedActions = script do\n  owner <- allocateParty \"rights-owner\"\n  observer <- allocateParty \"rights-observer\"\n  stranger <- allocateParty \"rights-stranger\"\n  borrower <- allocateParty \"rights-borrower\"\n  original <- submit owner do createCmd (book owner [observer])\n  let item : ContractId CatalogItem = toInterfaceContractId original\n  submitMustFail observer do exerciseCmd item CatalogItem_LoanTo with borrower\n  submitMustFail stranger do exerciseCmd item CatalogItem_LoanTo with borrower\n  submitMustFail observer do exerciseCmd item CatalogItem_Disclose with observers = [stranger]\n  submitMustFail stranger do exerciseCmd item CatalogItem_Disclose with observers = [stranger]\n  submitMustFail owner do exerciseCmd item CatalogItem_ReturnToOwner\n  loaned <- submit owner do exerciseCmd item CatalogItem_LoanTo with borrower\n  submitMustFail owner do exerciseCmd loaned CatalogItem_LoanTo with borrower = stranger\n  submitMustFail owner do exerciseCmd loaned CatalogItem_ReturnToOwner\n  submitMustFail observer do exerciseCmd loaned CatalogItem_ReturnToOwner\n  returned <- submitMulti [owner, borrower] [] do exerciseCmd loaned CatalogItem_ReturnToOwner\n  submitMustFail owner do exerciseCmd returned CatalogItem_ReturnToOwner\n",
+      "captured_at_utc": "2026-10-02T16:40:22.908075+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/daml_____u_v46y50",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added four Daml Script tests in `sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml:1`. They cover Book views, disclosure and observer visibility, loan-and-return behavior, and actions that must be refused.\n\nAll four scripts pass with `daml test`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 233.86415804200806,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 813700,
+      "output_tokens": 11292,
+      "cached_input_tokens": 777422
+    },
+    "usage_by_thread": {
+      "01a0fd78-3097-7ac3-ad8a-04c0ad8c35b5": {
+        "usage": {
+          "input_tokens": 813700,
+          "output_tokens": 11292,
+          "cached_input_tokens": 777422
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.34096039999999983,
+    "input_usd": 0.07255599999999997,
+    "cached_input_usd": 0.15548439999999997,
+    "output_usd": 0.11291999999999992,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790958910.294,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958913.402,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958918.767,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958922.012,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958926.785,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958929.358,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958943.467,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958958.969,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958961.838,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958965.708,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958978.97,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958984.044,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958993.608,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958997.756,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959003.994,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959008.53,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959011.586,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959014.262,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959017.28,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959034.012,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959039.754,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959043.379,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959046.562,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959059.84,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959064.681,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959068.492,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959074.648,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959077.218,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959083.614,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959091.281,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959093.722,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959100.267,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959108.857,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959113.865,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959117.461,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959127.279,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959133.99,
+          "client": "10.219.67.178",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

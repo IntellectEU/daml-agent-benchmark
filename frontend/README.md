@@ -38,5 +38,7 @@ The proxy targets port 8010. Point it elsewhere with `VITE_API_TARGET=http://127
 - `GET /api/agent/runs/{run_id}/tasks/detail?task_id=...`: one task in full.
 - `POST /api/agent/runs/archive`: move runs to `z_archive/` under the logs directory.
 - `POST /api/agent/runs/delete`: delete runs, active or archived.
+- `GET /api/agent/mutations`: every task that has mutations, with each mutation's id, kind and origin.
+- `GET /api/agent/mutations/{task file name}`: one task's mutations in full, with their validation where a report has one and the original text of the files they patch.
 
 Runs are read from `locations.logs_dir`, which defaults to `logs/` in the repository root.

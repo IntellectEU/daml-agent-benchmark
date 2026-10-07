@@ -64,16 +64,16 @@
     "repo_copy_digest": "309fee1bf9e202f1d66f02248e4272d23f2903163747e7ca2f605a58f54c3919",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "ex-models/crowd-funding/daml/CrowdFunding.daml",
+      "answer_file": "ex-models/crowd-funding/daml/CrowdFunding.daml",
       "path_in_copy": "crowd-funding/daml/CrowdFunding.daml",
       "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule CrowdFunding where\n\nimport Iou\n\ntemplate Campaign\n  with\n    originator : Party\n    name : Text\n    description : Text\n    backers : [Party]\n    ious : [ContractId Iou]\n    raised : Decimal\n    deadline : Time\n    threshold : Decimal\n  where\n    signatory originator\n    signatory backers\n\n    controller originator can\n      Invite : ContractId BackerInvite\n        with backer : Party\n        do\n          create BackerInvite with project = this; backer\n      Claim : [ContractId Iou]\n        do\n          now <- getTime\n          assertMsg \"Can only claim after deadline\" $ now >= deadline\n          assertMsg \"Can only claim if raised more than threshold\" $ raised >= threshold\n          unlockedIous <- mapA (\\i -> exercise i Unlock) ious\n          mapA (\\i -> exercise i Transfer with newOwner = originator) unlockedIous\n\n    choice Pledge : ContractId Campaign\n      with\n        backer : Party\n        iouId : ContractId Iou\n      controller backer\n      do\n        now <- getTime\n        assertMsg \"Pledges can only happen before the deadline\" $ now < deadline\n        assert $ elem backer backers\n        iou <- fetch iouId\n        assert $ iou.amount > 0.0\n        lockedIou <- exercise iouId Lock with newLocker = originator\n        create this with ious = lockedIou :: ious; raised = raised + iou.amount\n\n    choice Reclaim : [ContractId Iou]\n      with backer : Party\n      controller backer\n      do\n        now <- getTime\n        assert $ elem backer backers\n        assertMsg \"Can only reclaim after deadline\" $ now >= deadline\n        assertMsg \"Can only reclaim if raised less than threshold\" $ raised < threshold\n        mapA (\\i -> exercise i Unlock) ious\n\ntemplate BackerInvite\n  with\n    project : Campaign\n    backer : Party\n  where\n    signatory project.originator, project.backers\n    controller backer can\n      Accept : ContractId Campaign\n        do\n          create project with backers = backer :: project.backers\n",
       "generated": "module CrowdFunding where\n\nimport Iou\n\ntemplate Campaign\n  with\n    originator : Party\n    name : Text\n    description : Text\n    backers : [Party]\n    ious : [(Party, ContractId Iou)]\n    raised : Decimal\n    deadline : Time\n    threshold : Decimal\n  where\n    signatory originator\n    observer backers\n\n    nonconsuming choice Invite : ContractId Invitation\n      with backer : Party\n      controller originator\n      do\n        create Invitation with originator; backer; campaign = this\n\n    choice AddBacker : ContractId Campaign\n      with backer : Party\n      controller originator\n      do\n        assert (notElem backer backers)\n        create this with backers = backer :: backers\n\n    choice Pledge : ContractId Campaign\n      with backer : Party; iouId : ContractId Iou\n      controller backer\n      do\n        now <- getTime\n        assert (now < deadline)\n        assert (elem backer backers)\n        iou <- fetch iouId\n        assert (iou.owner == backer)\n        lockedId <- exercise iouId Lock with newLocker = originator\n        create this with\n          ious = (backer, lockedId) :: ious\n          raised = raised + iou.amount\n\n    choice Claim : [ContractId Iou]\n      controller originator\n      do\n        now <- getTime\n        assert (now >= deadline && raised >= threshold)\n        forA ious \\(_, iouId) -> exercise iouId Transfer with newOwner = originator\n\n    choice Reclaim : ContractId Campaign\n      with backer : Party\n      controller backer\n      do\n        now <- getTime\n        assert (now >= deadline && raised < threshold)\n        let backerIous = filter (\\(pledger, _) -> pledger == backer) ious\n        amounts <- forA backerIous \\(_, iouId) -> do\n          iou <- fetch iouId\n          pure iou.amount\n        forA backerIous \\(_, iouId) -> exercise iouId Transfer with newOwner = backer\n        create this with\n          ious = filter (\\(pledger, _) -> pledger /= backer) ious\n          raised = raised - sum amounts\n\ntemplate Invitation\n  with\n    originator : Party\n    backer : Party\n    campaign : Campaign\n  where\n    signatory originator\n    observer backer\n\n    choice Accept : ContractId Campaign\n      controller backer\n      do\n        create campaign with backers = backer :: campaign.backers\n",
       "captured_at_utc": "2026-09-25T15:56:52.505550+00:00"
     },
     {
-      "impl_file": "ex-models/crowd-funding/daml/Iou.daml",
+      "answer_file": "ex-models/crowd-funding/daml/Iou.daml",
       "path_in_copy": "crowd-funding/daml/Iou.daml",
       "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Iou where\n\ntemplate Iou\n  with\n    issuer : Party\n    owner : Party\n    locker : Party\n    amount : Decimal\n    currency : Text\n  where\n    signatory issuer\n\n    controller owner can\n      Transfer : ContractId Iou\n        with newOwner : Party\n        do\n          assert $ owner == locker\n          create this with owner = newOwner; locker = newOwner\n      Lock : ContractId Iou\n        with newLocker : Party\n        do\n          assert $ owner == locker\n          create this with locker = newLocker\n\n    controller locker can\n      Unlock : ContractId Iou\n        do\n          assert $ owner /= locker\n          create this with locker = owner\n",
       "generated": "module Iou where\n\ntemplate Iou\n  with\n    issuer : Party\n    owner : Party\n    locker : Party\n    amount : Decimal\n    currency : Text\n  where\n    signatory issuer\n    observer owner, locker\n\n    choice Lock : ContractId Iou\n      with newLocker : Party\n      controller owner\n      do\n        assert (locker == owner)\n        create this with locker = newLocker\n\n    choice Transfer : ContractId Iou\n      with newOwner : Party\n      controller locker\n      do\n        create this with owner = newOwner; locker = newOwner\n",
@@ -286,7 +286,7 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "crowd-funding/daml/CrowdFunding.daml",
           "kind": "modified"
@@ -296,7 +296,7 @@
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

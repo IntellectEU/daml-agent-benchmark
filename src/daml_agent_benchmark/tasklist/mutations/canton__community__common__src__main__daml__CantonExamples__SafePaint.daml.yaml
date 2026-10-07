@@ -1,0 +1,57 @@
+task: canton/community/common/src/main/daml/CantonExamples/SafePaint.daml
+notes: The three scripts run the same flow (safeTwoPainterOffers runs the other two), so each mutation serves all three; target_script is the first.
+mutations:
+  - id: transfer-keeps-owner
+    source: llm
+    target_script: safePainterOffersAndAliceAccepts
+    kind: field
+    reason: Unlocking an IOU forgets to hand it to the beneficiary and leaves the original owner in place.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/LockIou.daml b/community/common/src/main/daml/CantonExamples/LockIou.daml
+      index 394eba0..20a8391 100644
+      --- a/community/common/src/main/daml/CantonExamples/LockIou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/LockIou.daml
+      @@ -39,4 +39,4 @@ template LockedIou
+           choice Transfer : ContractId LockableIou
+             controller owner
+               do
+      -          create LockableIou with payer; owner = beneficiary; amount
+      +          create LockableIou with payer; owner; amount
+  - id: call-controller-payer
+    source: llm
+    target_script: safePainterOffersAndAliceAccepts
+    kind: authorization
+    reason: Call on a lockable IOU is controlled by the payer instead of the owner.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/LockIou.daml b/community/common/src/main/daml/CantonExamples/LockIou.daml
+      index 394eba0..2a96ae5 100644
+      --- a/community/common/src/main/daml/CantonExamples/LockIou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/LockIou.daml
+      @@ -22,7 +22,7 @@ template LockableIou
+                 create LockedIou with payer; owner; beneficiary; amount
+       
+           choice Call : ContractId GetCash
+      -      controller owner
+      +      controller payer
+               do
+                 create GetCash with payer; owner; amount
+       
+  - id: assign-controller-payer
+    source: llm
+    target_script: safePainterOffersAndAliceAccepts
+    kind: authorization
+    reason: Assign on a lockable IOU is controlled by the payer instead of the owner.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/LockIou.daml b/community/common/src/main/daml/CantonExamples/LockIou.daml
+      index 394eba0..99e61da 100644
+      --- a/community/common/src/main/daml/CantonExamples/LockIou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/LockIou.daml
+      @@ -17,7 +17,7 @@ template LockableIou
+           choice Assign : ContractId LockedIou
+             with
+               beneficiary: Party
+      -      controller owner
+      +      controller payer
+               do
+                 create LockedIou with payer; owner; beneficiary; amount
+       

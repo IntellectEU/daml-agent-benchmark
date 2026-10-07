@@ -1,0 +1,714 @@
+{
+  "task_id": "canton/community/common/src/main/daml/CantonExamples/Paint.daml",
+  "task_safe_name": "canton__community__common__src__main__daml__CantonExamples__Paint.daml",
+  "test_file": "canton/community/common/src/main/daml/CantonExamples/Paint.daml",
+  "impl_files": [
+    "canton/community/common/src/main/daml/CantonExamples/Iou.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T14:32:12.438013+00:00",
+  "started_at_utc": "2026-10-02T14:32:12.443284+00:00",
+  "finished_at_utc": "2026-10-02T14:36:03.997418+00:00",
+  "live_updated_at_utc": "2026-10-02T14:36:03.997418+00:00",
+  "repo_copy": "261002-163212/canton_____wr720n6s",
+  "findings": [
+    {
+      "flag": "suspicious_commands",
+      "detail": "commands referencing the environment, API key or OpenAI API: ['printenv']"
+    }
+  ],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "Paint.daml:testTransferAndCall": true,
+      "Paint.daml:testShareAndVisibility": true,
+      "Paint.daml:testCallWithoutTransfer": true,
+      "Paint.daml:testAmountAndIssuance": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "iou-signatory-owner",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "Paint.daml:testTransferAndCall": false,
+            "Paint.daml:testShareAndVisibility": false,
+            "Paint.daml:testCallWithoutTransfer": false,
+            "Paint.daml:testAmountAndIssuance": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "\n2026-10-02 14:34:35.76 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 51:b2:ed:df:20:59:3f:c3'. Ignoring it.\nFile:     ./Iou.daml\nHidden:   no\nRange:    68:1-68:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'Alice-9b3970be'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-9b3970be' creates Iou:Iou\n                          with\n                            payer = 'Bank-d4d95138';\n                            owner = 'Alice-9b3970be';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    68:1-68:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'Alice-9b3970be'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-9b3970be' creates Iou:Iou\n                          with\n                            payer = 'Bank-d4d95138';\n                            owner = 'Alice-9b3970be';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    70:1-70:27\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'David-1df42503'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'David-1df42503' creates Iou:Iou\n                          with\n                            payer = 'DavidsBank-4f1df03a';\n                            owner = 'David-1df42503';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:68:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'TransferAlice-40b5f04b'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'TransferAlice-40b5f04b' creates Iou:Iou\n                                  with\n                                    payer = 'TransferBank-c812a76d';\n                                    owner = 'TransferAlice-40b5f04b';\n                                    amount =\n                                      (Iou:Amount with\n                                         value = 99.9900000000; currency = \"USD\");\n                                    viewers = ['TransferCarol-fb9a0f58']\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    82:1-82:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:77:14:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'Alice-2d0cd0f1'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-2d0cd0f1' creates Iou:Iou\n                          with\n                            payer = 'Bank-05e8b107';\n                            owner = 'Alice-2d0cd0f1';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    68:1-68:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'Alice-9b3970be'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-9b3970be' creates Iou:Iou\n                          with\n                            payer = 'Bank-d4d95138';\n                            owner = 'Alice-9b3970be';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    70:1-70:27\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'David-1df42503'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'David-1df42503' creates Iou:Iou\n                          with\n                            payer = 'DavidsBank-4f1df03a';\n                            owner = 'David-1df42503';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    28:1-28:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:34:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'ShareAlice-b4865538'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'ShareAlice-b4865538' creates Iou:Iou\n                               with\n                                 payer = 'ShareBank-5e33a8f6';\n                                 owner = 'ShareAlice-b4865538';\n                                 amount =\n                                   (Iou:Amount with\n                                      value = 37.2500000000; currency = \"CHF\");\n                                 viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:68:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'TransferAlice-40b5f04b'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'TransferAlice-40b5f04b' creates Iou:Iou\n                                  with\n                                    payer = 'TransferBank-c812a76d';\n                                    owner = 'TransferAlice-40b5f04b';\n                                    amount =\n                                      (Iou:Amount with\n                                         value = 99.9900000000; currency = \"USD\");\n                                    viewers = ['TransferCarol-fb9a0f58']\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    96:1-96:29\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:89:14:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'Alice-40bcf2e7'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-40bcf2e7' creates Iou:Iou\n                          with\n                            payer = 'Bank-901d787a';\n                            owner = 'Alice-40bcf2e7';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    82:1-82:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:77:14:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'Alice-2d0cd0f1'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-2d0cd0f1' creates Iou:Iou\n                          with\n                            payer = 'Bank-05e8b107';\n                            owner = 'Alice-2d0cd0f1';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    68:1-68:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'Alice-9b3970be'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-9b3970be' creates Iou:Iou\n                          with\n                            payer = 'Bank-d4d95138';\n                            owner = 'Alice-9b3970be';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    70:1-70:27\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'David-1df42503'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'David-1df42503' creates Iou:Iou\n                          with\n                            payer = 'DavidsBank-4f1df03a';\n                            owner = 'David-1df42503';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    110:1-110:24\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:115:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'CallAlice-fa08de96'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'CallAlice-fa08de96' creates Iou:Iou\n                              with\n                                payer = 'CallBank-03d242ca';\n                                owner = 'CallAlice-fa08de96';\n                                amount =\n                                  (Iou:Amount with\n                                     value = 10.0000000000; currency = \"GBP\");\n                                viewers = ['CallViewer-b030232e']\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    28:1-28:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:34:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'ShareAlice-b4865538'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'ShareAlice-b4865538' creates Iou:Iou\n                               with\n                                 payer = 'ShareBank-5e33a8f6';\n                                 owner = 'ShareAlice-b4865538';\n                                 amount =\n                                   (Iou:Amount with\n                                      value = 37.2500000000; currency = \"CHF\");\n                                 viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:68:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'TransferAlice-40b5f04b'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'TransferAlice-40b5f04b' creates Iou:Iou\n                                  with\n                                    payer = 'TransferBank-c812a76d';\n                                    owner = 'TransferAlice-40b5f04b';\n                                    amount =\n                                      (Iou:Amount with\n                                         value = 99.9900000000; currency = \"USD\");\n                                    viewers = ['TransferCarol-fb9a0f58']\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    6:1-6:22\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:15:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'AmountAlice-fb1f38d6' creates Iou:Iou\n                                with\n                                  payer = 'AmountBank-de203044';\n                                  owner = 'AmountAlice-fb1f38d6';\n                                  amount =\n                                    (Iou:Amount with\n                                       value = 0.0000000000; currency = \"EUR\");\n                                  viewers = []\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'AmountBank-de203044'} readAs: {} (Paint:13:3)\n  \n  TX 1 1970-01-01T00:00:00Z (Paint:15:3)\n  #1:0\n  │   disclosed to (since): 'AmountAlice-fb1f38d6' (1)\n  └─> 'AmountAlice-fb1f38d6' creates Iou:Iou\n                             with\n                               payer = 'AmountBank-de203044';\n                               owner = 'AmountAlice-fb1f38d6';\n                               amount =\n                                 (Iou:Amount with\n                                    value = 0.0000000000; currency = \"EUR\");\n                               viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    110:1-110:24\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:115:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'CallAlice-fa08de96'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'CallAlice-fa08de96' creates Iou:Iou\n                              with\n                                payer = 'CallBank-03d242ca';\n                                owner = 'CallAlice-fa08de96';\n                                amount =\n                                  (Iou:Amount with\n                                     value = 10.0000000000; currency = \"GBP\");\n                                viewers = ['CallViewer-b030232e']\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    28:1-28:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:34:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'ShareAlice-b4865538'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'ShareAlice-b4865538' creates Iou:Iou\n                               with\n                                 payer = 'ShareBank-5e33a8f6';\n                                 owner = 'ShareAlice-b4865538';\n                                 amount =\n                                   (Iou:Amount with\n                                      value = 37.2500000000; currency = \"CHF\");\n                                 viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:68:12:\n  0: create of Iou:Iou at DA.Internal.Prelude:380:23\n     failed due to a missing authorization from 'TransferAlice-40b5f04b'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'TransferAlice-40b5f04b' creates Iou:Iou\n                                  with\n                                    payer = 'TransferBank-c812a76d';\n                                    owner = 'TransferAlice-40b5f04b';\n                                    amount =\n                                      (Iou:Amount with\n                                         value = 99.9900000000; currency = \"USD\");\n                                    viewers = ['TransferCarol-fb9a0f58']\u001b[0m\n"
+        }
+      },
+      {
+        "id": "iou-ensure-inverted",
+        "source": "llm",
+        "kind": "validation",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "Paint.daml:testTransferAndCall": false,
+            "Paint.daml:testShareAndVisibility": false,
+            "Paint.daml:testCallWithoutTransfer": false,
+            "Paint.daml:testAmountAndIssuance": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "\n2026-10-02 14:34:56.54 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 41:42:bd:8b:24:e8:7f:de'. Ignoring it.\nFile:     ./Iou.daml\nHidden:   no\nRange:    68:1-68:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'Bank-d4d95138', owner = 'Alice-9b3970be', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    68:1-68:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'Bank-d4d95138', owner = 'Alice-9b3970be', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    70:1-70:27\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'DavidsBank-4f1df03a', owner = 'David-1df42503', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:68:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'TransferBank-c812a76d', owner = 'TransferAlice-40b5f04b', amount = Amount {value = 99.99, currency = \"USD\"}, viewers = ['TransferCarol-fb9a0f58']}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    82:1-82:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:77:14:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'Bank-05e8b107', owner = 'Alice-2d0cd0f1', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    68:1-68:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'Bank-d4d95138', owner = 'Alice-9b3970be', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    70:1-70:27\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'DavidsBank-4f1df03a', owner = 'David-1df42503', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    28:1-28:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:34:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'ShareBank-5e33a8f6', owner = 'ShareAlice-b4865538', amount = Amount {value = 37.25, currency = \"CHF\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:68:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'TransferBank-c812a76d', owner = 'TransferAlice-40b5f04b', amount = Amount {value = 99.99, currency = \"USD\"}, viewers = ['TransferCarol-fb9a0f58']}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    96:1-96:29\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:89:14:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'Bank-901d787a', owner = 'Alice-40bcf2e7', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    82:1-82:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:77:14:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'Bank-05e8b107', owner = 'Alice-2d0cd0f1', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    68:1-68:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'Bank-d4d95138', owner = 'Alice-9b3970be', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    70:1-70:27\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:65:5:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'DavidsBank-4f1df03a', owner = 'David-1df42503', amount = Amount {value = 100.0, currency = \"USD\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    110:1-110:24\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:115:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'CallBank-03d242ca', owner = 'CallAlice-fa08de96', amount = Amount {value = 10.0, currency = \"GBP\"}, viewers = ['CallViewer-b030232e']}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    28:1-28:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:34:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'ShareBank-5e33a8f6', owner = 'ShareAlice-b4865538', amount = Amount {value = 37.25, currency = \"CHF\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:68:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'TransferBank-c812a76d', owner = 'TransferAlice-40b5f04b', amount = Amount {value = 99.99, currency = \"USD\"}, viewers = ['TransferCarol-fb9a0f58']}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    6:1-6:22\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:13:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'AmountBank-de203044' creates Iou:Iou\n                               with\n                                 payer = 'AmountBank-de203044';\n                                 owner = 'AmountAlice-fb1f38d6';\n                                 amount =\n                                   (Iou:Amount with\n                                      value = -0.0100000000; currency = \"EUR\");\n                                 viewers = []\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Paint:13:3)\n  #0:0\n  │   disclosed to (since): 'AmountAlice-fb1f38d6' (0),\n                            'AmountBank-de203044' (0)\n  └─> 'AmountBank-de203044' creates Iou:Iou\n                            with\n                              payer = 'AmountBank-de203044';\n                              owner = 'AmountAlice-fb1f38d6';\n                              amount =\n                                (Iou:Amount with\n                                   value = -0.0100000000; currency = \"EUR\");\n                              viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    110:1-110:24\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:115:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'CallBank-03d242ca', owner = 'CallAlice-fa08de96', amount = Amount {value = 10.0, currency = \"GBP\"}, viewers = ['CallViewer-b030232e']}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    28:1-28:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:34:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'ShareBank-5e33a8f6', owner = 'ShareAlice-b4865538', amount = Amount {value = 37.25, currency = \"CHF\"}, viewers = []}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:68:12:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.PreconditionFailed:PreconditionFailed: Template precondition violated: Iou {payer = 'TransferBank-c812a76d', owner = 'TransferAlice-40b5f04b', amount = Amount {value = 99.99, currency = \"USD\"}, viewers = ['TransferCarol-fb9a0f58']}\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\u001b[0m\n"
+        }
+      },
+      {
+        "id": "transfer-keeps-owner",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "Paint.daml:testTransferAndCall": false,
+            "Paint.daml:testShareAndVisibility": true,
+            "Paint.daml:testCallWithoutTransfer": true,
+            "Paint.daml:testAmountAndIssuance": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "\n2026-10-02 14:35:14.94 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: a4:77:94:23:8c:d5:c8:7e'. Ignoring it.\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Paint:68:12)\n  #0:0\n  │   consumed by: #4:0\n  │   referenced by #4:0\n  │   disclosed to (since): 'TransferAlice-40b5f04b' (0),\n                            'TransferBank-c812a76d' (0), 'TransferCarol-fb9a0f58' (0)\n  └─> 'TransferBank-c812a76d' creates Iou:Iou\n                              with\n                                payer = 'TransferBank-c812a76d';\n                                owner = 'TransferAlice-40b5f04b';\n                                amount =\n                                  (Iou:Amount with\n                                     value = 99.9900000000; currency = \"USD\");\n                                viewers = ['TransferCarol-fb9a0f58']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferBank-c812a76d'} readAs: {} (Paint:74:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferCarol-fb9a0f58'} readAs:\n                                                    {} (Paint:75:3)\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferBob-9cefe94d'} readAs: {} (Paint:76:3)\n  \n  TX 4 1970-01-01T00:00:00Z (Paint:77:20)\n  #4:0\n  │   disclosed to (since): 'TransferAlice-40b5f04b' (4),\n                            'TransferBank-c812a76d' (4), 'TransferCarol-fb9a0f58' (4)\n  └─> 'TransferAlice-40b5f04b' exercises Transfer on #0:0 (Iou:Iou)\n                               with\n                                 newOwner = 'TransferBob-9cefe94d'\n      children:\n      #4:1\n      │   disclosed to (since): 'TransferAlice-40b5f04b' (4),\n                                'TransferBank-c812a76d' (4), 'TransferCarol-fb9a0f58' (4)\n      └─> 'TransferBank-c812a76d' creates Iou:Iou\n                                  with\n                                    payer = 'TransferBank-c812a76d';\n                                    owner = 'TransferAlice-40b5f04b';\n                                    amount =\n                                      (Iou:Amount with\n                                         value = 99.9900000000; currency = \"USD\");\n                                    viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    96:1-96:29\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:93:5:\n  Attempt to fetch or exercise a contract not visible to the reading parties.\n  Contract:  #1:1 (Iou:Iou)\n  actAs: 'Bob-49310e6c'\n  readAs:\n  Disclosed to: 'Alice-40bcf2e7', 'Bank-901d787a'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Iou:89:14)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'Alice-40bcf2e7' (0), 'Bank-901d787a' (0)\n  └─> 'Bank-901d787a' creates Iou:Iou\n                      with\n                        payer = 'Bank-901d787a';\n                        owner = 'Alice-40bcf2e7';\n                        amount =\n                          (Iou:Amount with\n                             value = 100.0000000000; currency = \"USD\");\n                        viewers = []\n  \n  TX 1 1970-01-01T00:00:00Z (Iou:91:17)\n  #1:0\n  │   disclosed to (since): 'Alice-40bcf2e7' (1), 'Bank-901d787a' (1)\n  └─> 'Alice-40bcf2e7' exercises Transfer on #0:0 (Iou:Iou)\n                       with\n                         newOwner = 'Bob-49310e6c'\n      children:\n      #1:1\n      │   disclosed to (since): 'Alice-40bcf2e7' (1), 'Bank-901d787a' (1)\n      └─> 'Bank-901d787a' creates Iou:Iou\n                          with\n                            payer = 'Bank-901d787a';\n                            owner = 'Alice-40bcf2e7';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\n"
+        }
+      },
+      {
+        "id": "call-controller-payer",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "Paint.daml:testTransferAndCall": false,
+            "Paint.daml:testShareAndVisibility": true,
+            "Paint.daml:testCallWithoutTransfer": false,
+            "Paint.daml:testAmountAndIssuance": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "\n2026-10-02 14:35:33.06 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 04:de:36:c1:d9:cf:05:b6'. Ignoring it.\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:94:13:\n  0: exercise of Call in Iou:Iou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'TransferBank-c812a76d'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Paint:68:12)\n  #0:0\n  │   consumed by: #4:0\n  │   referenced by #4:0\n  │   disclosed to (since): 'TransferAlice-40b5f04b' (0),\n                            'TransferBank-c812a76d' (0), 'TransferCarol-fb9a0f58' (0)\n  └─> 'TransferBank-c812a76d' creates Iou:Iou\n                              with\n                                payer = 'TransferBank-c812a76d';\n                                owner = 'TransferAlice-40b5f04b';\n                                amount =\n                                  (Iou:Amount with\n                                     value = 99.9900000000; currency = \"USD\");\n                                viewers = ['TransferCarol-fb9a0f58']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferBank-c812a76d'} readAs: {} (Paint:74:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferCarol-fb9a0f58'} readAs:\n                                                    {} (Paint:75:3)\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferBob-9cefe94d'} readAs: {} (Paint:76:3)\n  \n  TX 4 1970-01-01T00:00:00Z (Paint:77:20)\n  #4:0\n  │   disclosed to (since): 'TransferAlice-40b5f04b' (4),\n                            'TransferBank-c812a76d' (4), 'TransferCarol-fb9a0f58' (4)\n  └─> 'TransferAlice-40b5f04b' exercises Transfer on #0:0 (Iou:Iou)\n                               with\n                                 newOwner = 'TransferBob-9cefe94d'\n      children:\n      #4:1\n      │   disclosed to (since): 'TransferAlice-40b5f04b' (4),\n                                'TransferBank-c812a76d' (4), 'TransferCarol-fb9a0f58' (4),\n                                'TransferBob-9cefe94d' (4)\n      └─> 'TransferBank-c812a76d' creates Iou:Iou\n                                  with\n                                    payer = 'TransferBank-c812a76d';\n                                    owner = 'TransferBob-9cefe94d';\n                                    amount =\n                                      (Iou:Amount with\n                                         value = 99.9900000000; currency = \"USD\");\n                                    viewers = []\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferAlice-40b5f04b'} readAs:\n                                                    {} (Paint:92:3)\n  \n  TX 6 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferBank-c812a76d'} readAs: {} (Paint:93:3)\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    96:1-96:29\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:93:5:\n  0: exercise of Call in Iou:Iou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-901d787a'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Iou:89:14)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'Alice-40bcf2e7' (0), 'Bank-901d787a' (0)\n  └─> 'Bank-901d787a' creates Iou:Iou\n                      with\n                        payer = 'Bank-901d787a';\n                        owner = 'Alice-40bcf2e7';\n                        amount =\n                          (Iou:Amount with\n                             value = 100.0000000000; currency = \"USD\");\n                        viewers = []\n  \n  TX 1 1970-01-01T00:00:00Z (Iou:91:17)\n  #1:0\n  │   disclosed to (since): 'Alice-40bcf2e7' (1), 'Bank-901d787a' (1)\n  └─> 'Alice-40bcf2e7' exercises Transfer on #0:0 (Iou:Iou)\n                       with\n                         newOwner = 'Bob-49310e6c'\n      children:\n      #1:1\n      │   disclosed to (since): 'Alice-40bcf2e7' (1),\n                                'Bank-901d787a' (1), 'Bob-49310e6c' (1)\n      └─> 'Bank-901d787a' creates Iou:Iou\n                          with\n                            payer = 'Bank-901d787a';\n                            owner = 'Bob-49310e6c';\n                            amount =\n                              (Iou:Amount with\n                                 value = 100.0000000000; currency = \"USD\");\n                            viewers = []\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    110:1-110:24\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:118:13:\n  0: exercise of Call in Iou:Iou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'CallBank-03d242ca'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Paint:115:12)\n  #0:0\n  │   disclosed to (since): 'CallAlice-fa08de96' (0),\n                            'CallBank-03d242ca' (0), 'CallViewer-b030232e' (0)\n  └─> 'CallBank-03d242ca' creates Iou:Iou\n                          with\n                            payer = 'CallBank-03d242ca';\n                            owner = 'CallAlice-fa08de96';\n                            amount =\n                              (Iou:Amount with\n                                 value = 10.0000000000; currency = \"GBP\");\n                            viewers = ['CallViewer-b030232e']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'CallViewer-b030232e'} readAs: {} (Paint:117:3)\u001b[0m\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:94:13:\n  0: exercise of Call in Iou:Iou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'TransferBank-c812a76d'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Paint:68:12)\n  #0:0\n  │   consumed by: #4:0\n  │   referenced by #4:0\n  │   disclosed to (since): 'TransferAlice-40b5f04b' (0),\n                            'TransferBank-c812a76d' (0), 'TransferCarol-fb9a0f58' (0)\n  └─> 'TransferBank-c812a76d' creates Iou:Iou\n                              with\n                                payer = 'TransferBank-c812a76d';\n                                owner = 'TransferAlice-40b5f04b';\n                                amount =\n                                  (Iou:Amount with\n                                     value = 99.9900000000; currency = \"USD\");\n                                viewers = ['TransferCarol-fb9a0f58']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferBank-c812a76d'} readAs: {} (Paint:74:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferCarol-fb9a0f58'} readAs:\n                                                    {} (Paint:75:3)\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferBob-9cefe94d'} readAs: {} (Paint:76:3)\n  \n  TX 4 1970-01-01T00:00:00Z (Paint:77:20)\n  #4:0\n  │   disclosed to (since): 'TransferAlice-40b5f04b' (4),\n                            'TransferBank-c812a76d' (4), 'TransferCarol-fb9a0f58' (4)\n  └─> 'TransferAlice-40b5f04b' exercises Transfer on #0:0 (Iou:Iou)\n                               with\n                                 newOwner = 'TransferBob-9cefe94d'\n      children:\n      #4:1\n      │   disclosed to (since): 'TransferAlice-40b5f04b' (4),\n                                'TransferBank-c812a76d' (4), 'TransferCarol-fb9a0f58' (4),\n                                'TransferBob-9cefe94d' (4)\n      └─> 'TransferBank-c812a76d' creates Iou:Iou\n                                  with\n                                    payer = 'TransferBank-c812a76d';\n                                    owner = 'TransferBob-9cefe94d';\n                                    amount =\n                                      (Iou:Amount with\n                                         value = 99.9900000000; currency = \"USD\");\n                                    viewers = []\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferAlice-40b5f04b'} readAs:\n                                                    {} (Paint:92:3)\n  \n  TX 6 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'TransferBank-c812a76d'} readAs: {} (Paint:93:3)\u001b[0m\n"
+        }
+      },
+      {
+        "id": "transfer-controller-payer",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "Paint.daml:testTransferAndCall": false,
+            "Paint.daml:testShareAndVisibility": true,
+            "Paint.daml:testCallWithoutTransfer": true,
+            "Paint.daml:testAmountAndIssuance": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "\n2026-10-02 14:35:52.13 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: e2:e9:66:a1:10:9b:da:fb'. Ignoring it.\nFile:     Paint.daml\nHidden:   no\nRange:    62:1-62:20\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Paint:74:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises Transfer on #0:0 (Iou:Iou)\n    with\n      newOwner = 'TransferBob-9cefe94d'\n  Sub-transactions:\n     0\n     └─> 'TransferBank-c812a76d' exercises Transfer on #0:0 (Iou:Iou)\n                                 with\n                                   newOwner = 'TransferBob-9cefe94d'\n         children:\n         1\n         └─> 'TransferBank-c812a76d' creates Iou:Iou\n                                     with\n                                       payer = 'TransferBank-c812a76d';\n                                       owner = 'TransferBob-9cefe94d';\n                                       amount =\n                                         (Iou:Amount with\n                                            value = 99.9900000000; currency = \"USD\");\n                                       viewers = []\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Paint:68:12)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'TransferAlice-40b5f04b' (0),\n                            'TransferBank-c812a76d' (0), 'TransferCarol-fb9a0f58' (0)\n  └─> 'TransferBank-c812a76d' creates Iou:Iou\n                              with\n                                payer = 'TransferBank-c812a76d';\n                                owner = 'TransferAlice-40b5f04b';\n                                amount =\n                                  (Iou:Amount with\n                                     value = 99.9900000000; currency = \"USD\");\n                                viewers = ['TransferCarol-fb9a0f58']\n  \n  TX 1 1970-01-01T00:00:00Z (Paint:74:3)\n  #1:0\n  │   disclosed to (since): 'TransferAlice-40b5f04b' (1),\n                            'TransferBank-c812a76d' (1), 'TransferCarol-fb9a0f58' (1)\n  └─> 'TransferBank-c812a76d' exercises Transfer on #0:0 (Iou:Iou)\n                              with\n                                newOwner = 'TransferBob-9cefe94d'\n      children:\n      #1:1\n      │   disclosed to (since): 'TransferAlice-40b5f04b' (1),\n                                'TransferBank-c812a76d' (1), 'TransferCarol-fb9a0f58' (1),\n                                'TransferBob-9cefe94d' (1)\n      └─> 'TransferBank-c812a76d' creates Iou:Iou\n                                  with\n                                    payer = 'TransferBank-c812a76d';\n                                    owner = 'TransferBob-9cefe94d';\n                                    amount =\n                                      (Iou:Amount with\n                                         value = 99.9900000000; currency = \"USD\");\n                                    viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    82:1-82:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:79:5:\n  0: exercise of Transfer in Iou:Iou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-05e8b107'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Iou:77:14)\n  #0:0\n  │   disclosed to (since): 'Alice-2d0cd0f1' (0), 'Bank-05e8b107' (0)\n  └─> 'Bank-05e8b107' creates Iou:Iou\n                      with\n                        payer = 'Bank-05e8b107';\n                        owner = 'Alice-2d0cd0f1';\n                        amount =\n                          (Iou:Amount with\n                             value = 100.0000000000; currency = \"USD\");\n                        viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    96:1-96:29\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:91:17:\n  0: exercise of Transfer in Iou:Iou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-901d787a'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Iou:89:14)\n  #0:0\n  │   disclosed to (since): 'Alice-40bcf2e7' (0), 'Bank-901d787a' (0)\n  └─> 'Bank-901d787a' creates Iou:Iou\n                      with\n                        payer = 'Bank-901d787a';\n                        owner = 'Alice-40bcf2e7';\n                        amount =\n                          (Iou:Amount with\n                             value = 100.0000000000; currency = \"USD\");\n                        viewers = []\u001b[0m\nFile:     ./Iou.daml\nHidden:   no\nRange:    82:1-82:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Iou:79:5:\n  0: exercise of Transfer in Iou:Iou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-05e8b107'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Iou:77:14)\n  #0:0\n  │   disclosed to (since): 'Alice-2d0cd0f1' (0), 'Bank-05e8b107' (0)\n  └─> 'Bank-05e8b107' creates Iou:Iou\n                      with\n                        payer = 'Bank-05e8b107';\n                        owner = 'Alice-2d0cd0f1';\n                        amount =\n                          (Iou:Amount with\n                             value = 100.0000000000; currency = \"USD\");\n                        viewers = []\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 5,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "Paint.daml:painterOffers": true,
+        "Paint.daml:davidOffersAndAliceAccepts": true,
+        "Paint.daml:painterOffersAndAliceAccepts": true,
+        "./Iou.daml:bankIssuesIouToAlice": true,
+        "./Iou.daml:davidsBankIssuesIouToDavid": true,
+        "./Iou.daml:aliceTransfersIouToBob": true,
+        "./Iou.daml:aliceTransfersAndBobCallsIou": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T11:12:52.304706+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-163212/canton_____wr720n6s/community/common/src/main/daml/CantonExamples/Paint.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 9,
+    "bytes_scanned": 10275,
+    "elapsed_seconds": 0.005,
+    "repo_copy_digest": "f45b8c9883cc887a13aa6f5cb71c993a544b51f0f07b571fcb81f04f45d383fd",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "canton/community/common/src/main/daml/CantonExamples/Paint.daml",
+      "path_in_copy": "community/common/src/main/daml/CantonExamples/Paint.daml",
+      "original": "-- Copyright (c) 2026 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\n-- architecture-handbook-entry-begin: PaintDaml\nmodule Paint where\n\nimport Daml.Script\nimport Iou\n\ntemplate PaintHouse\n  with\n    painter: Party\n    houseOwner: Party\n  where\n    signatory painter, houseOwner\n\ntemplate OfferToPaintHouseByPainter\n  with\n    houseOwner: Party\n    painter: Party\n    bank: Party\n    amount: Amount\n  where\n    signatory painter\n    observer houseOwner\n\n    choice AcceptByOwner : ContractId Iou\n      with\n        iouId : ContractId Iou\n      controller houseOwner\n      do\n        iouId2 <- exercise iouId Transfer with newOwner = painter\n        paint <- create $ PaintHouse with painter; houseOwner\n        return iouId2\n-- architecture-handbook-entry-end: PaintDaml\n\ntemplate OfferToPaintHouseByOwner\n  with\n    houseOwner: Party\n    painter: Party\n    bank: Party\n    iouId: ContractId Iou\n  where\n    signatory houseOwner\n    observer painter\n\n    choice AcceptByPainter : ContractId Iou\n      controller painter\n        do\n          iouId2 <- exercise iouId Transfer with newOwner = painter\n          paint <- create $ PaintHouse with painter; houseOwner\n          return iouId2\n\npainterOffers =\n  script do\n    bank <- allocateParty \"Bank\"\n    alice <- allocateParty \"Alice\"\n    painter <- allocateParty \"Painter\"\n    let price = Amount {value = 100.0; currency = \"USD\"}\n    iouId <- submit bank do\n        createCmd $ Iou with payer = bank; owner = alice; amount = price; viewers = []\n    offerId <- submit painter do\n        createCmd $ OfferToPaintHouseByPainter with painter = painter; houseOwner = alice; bank = bank; amount = price\n    pure ()\n\n-- BEGIN_PAINT_OFFER_SCENARIO_SNIPPET\n\npainterOffersAndAliceAccepts = painterOffersAndHouseOwnerAccepts \"Painter\" \"Alice\" \"Bank\"\n\npainterOffersAndHouseOwnerAccepts painter houseOwner bank =\n  script do\n    painter <- allocateParty painter\n    houseOwner <- allocateParty houseOwner\n    bank <- allocateParty bank\n    let price = Amount {value = 100.0; currency = \"USD\"}\n    iouId <- submit bank do\n        createCmd $ Iou with payer = bank; owner = houseOwner; amount = price; viewers = []\n    offerId <- submit painter do\n        createCmd $ OfferToPaintHouseByPainter with\n          painter = painter; houseOwner = houseOwner; bank = bank; amount = price\n    painterIouId <- submit houseOwner do\n      exerciseCmd offerId AcceptByOwner with iouId\n    submit painter do\n      exerciseCmd painterIouId Call\n\n-- END_PAINT_OFFER_SCENARIO_SNIPPET\n\ndavidOffersAndAliceAccepts =\n  painterOffersAndHouseOwnerAccepts \"David\" \"Alice\" \"DavidsBank\"\n",
+      "generated": "module Paint where\n\nimport Daml.Script\nimport Iou\n\ntestAmountAndIssuance = script do\n  bank <- allocateParty \"AmountBank\"\n  alice <- allocateParty \"AmountAlice\"\n  let zero = Amount {value = 0.0; currency = \"EUR\"}\n  let negative = Amount {value = -0.01; currency = \"EUR\"}\n  assert (amountAsText zero == \"0.0EUR\")\n  assert (amountAsText (Amount {value = 12.5; currency = \"USD\"}) == \"12.5USD\")\n  submitMustFail bank do\n    createCmd $ Iou with payer = bank; owner = alice; amount = negative; viewers = []\n  submitMustFail alice do\n    createCmd $ Iou with payer = bank; owner = alice; amount = zero; viewers = []\n  iouId <- submit bank do\n    createCmd $ Iou with payer = bank; owner = alice; amount = zero; viewers = []\n  found <- queryContractId alice iouId\n  case found of\n    None -> abort \"Owner cannot see issued IOU\"\n    Some iou -> do\n      assert (iou.payer == bank)\n      assert (iou.owner == alice)\n      assert (iou.amount == zero)\n      assert (iou.viewers == [])\n\ntestShareAndVisibility = script do\n  bank <- allocateParty \"ShareBank\"\n  alice <- allocateParty \"ShareAlice\"\n  bob <- allocateParty \"ShareBob\"\n  carol <- allocateParty \"ShareCarol\"\n  let amount = Amount {value = 37.25; currency = \"CHF\"}\n  iouId <- submit bank do\n    createCmd $ Iou with payer = bank; owner = alice; amount; viewers = []\n  before <- queryContractId bob iouId\n  assert (before == None)\n  submitMustFail bob do exerciseCmd iouId Share with viewer = bob\n  submitMustFail bank do exerciseCmd iouId Share with viewer = bob\n  sharedId <- submit alice do exerciseCmd iouId Share with viewer = bob\n  archived <- queryContractId bank iouId\n  assert (archived == None)\n  bobView <- queryContractId bob sharedId\n  case bobView of\n    None -> abort \"Shared viewer cannot see IOU\"\n    Some iou -> do\n      assert (iou.payer == bank)\n      assert (iou.owner == alice)\n      assert (iou.amount == amount)\n      assert (iou.viewers == [bob])\n  submitMustFail bob do exerciseCmd sharedId Share with viewer = carol\n  sharedAgainId <- submit alice do exerciseCmd sharedId Share with viewer = carol\n  bobAgain <- queryContractId bob sharedAgainId\n  case bobAgain of\n    None -> abort \"Sharing again removed prior viewer\"\n    Some iou -> assert (iou.viewers == [carol, bob])\n  carolView <- queryContractId carol sharedAgainId\n  case carolView of\n    None -> abort \"New viewer cannot see IOU\"\n    Some iou -> assert (iou.viewers == [carol, bob])\n\ntestTransferAndCall = script do\n  bank <- allocateParty \"TransferBank\"\n  alice <- allocateParty \"TransferAlice\"\n  bob <- allocateParty \"TransferBob\"\n  carol <- allocateParty \"TransferCarol\"\n  let amount = Amount {value = 99.99; currency = \"USD\"}\n  iouId <- submit bank do\n    createCmd $ Iou with payer = bank; owner = alice; amount; viewers = [carol]\n  initialViewer <- queryContractId carol iouId\n  case initialViewer of\n    None -> abort \"Initial viewer cannot see IOU\"\n    Some iou -> assert (iou.viewers == [carol])\n  submitMustFail bank do exerciseCmd iouId Transfer with newOwner = bob\n  submitMustFail carol do exerciseCmd iouId Transfer with newOwner = bob\n  submitMustFail bob do exerciseCmd iouId Transfer with newOwner = bob\n  transferredId <- submit alice do exerciseCmd iouId Transfer with newOwner = bob\n  oldId <- queryContractId bank iouId\n  assert (oldId == None)\n  formerOwner <- queryContractId alice transferredId\n  assert (formerOwner == None)\n  formerViewer <- queryContractId carol transferredId\n  assert (formerViewer == None)\n  newOwnerView <- queryContractId bob transferredId\n  case newOwnerView of\n    None -> abort \"New owner cannot see transferred IOU\"\n    Some iou -> do\n      assert (iou.payer == bank)\n      assert (iou.owner == bob)\n      assert (iou.amount == amount)\n      assert (iou.viewers == [])\n  submitMustFail alice do exerciseCmd transferredId Call\n  submitMustFail bank do exerciseCmd transferredId Call\n  cashId <- submit bob do exerciseCmd transferredId Call\n  consumed <- queryContractId bank transferredId\n  assert (consumed == None)\n  payerCash <- queryContractId bank cashId\n  case payerCash of\n    None -> abort \"Payer cannot see cash request\"\n    Some cash -> do\n      assert (cash.payer == bank)\n      assert (cash.owner == bob)\n      assert (cash.amount == amount)\n  ownerCash <- queryContractId bob cashId\n  case ownerCash of\n    None -> abort \"Owner cannot see cash request\"\n    Some cash -> assert (cash.amount == amount)\n  submitMustFail bob do exerciseCmd transferredId Call\n\ntestCallWithoutTransfer = script do\n  bank <- allocateParty \"CallBank\"\n  alice <- allocateParty \"CallAlice\"\n  viewer <- allocateParty \"CallViewer\"\n  let amount = Amount {value = 10.0; currency = \"GBP\"}\n  iouId <- submit bank do\n    createCmd $ Iou with payer = bank; owner = alice; amount; viewers = [viewer]\n  submitMustFail viewer do exerciseCmd iouId Call\n  cashId <- submit alice do exerciseCmd iouId Call\n  invisible <- queryContractId viewer cashId\n  assert (invisible == None)\n  cash <- queryContractId alice cashId\n  case cash of\n    None -> abort \"Calling owner cannot see cash request\"\n    Some request -> do\n      assert (request.payer == bank)\n      assert (request.owner == alice)\n      assert (request.amount == amount)\n",
+      "captured_at_utc": "2026-10-02T14:36:03.978821+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-163212/canton_____wr720n6s",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added four Daml Script tests in `community/common/src/main/daml/CantonExamples/Paint.daml:6`. They cover amount validation and formatting, issuance authorization, viewer visibility, Share and Transfer behavior, Call results, and rejected unauthorized exercises.\n\nAll four tests pass against the current implementation.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 115.11206308298279,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 238036,
+      "output_tokens": 5898,
+      "cached_input_tokens": 218954
+    },
+    "usage_by_thread": {
+      "01a0fd07-b24e-7fa2-87eb-3351310fd167": {
+        "usage": {
+          "input_tokens": 238036,
+          "output_tokens": 5898,
+          "cached_input_tokens": 218954
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.1409348,
+    "input_usd": 0.038164,
+    "cached_input_usd": 0.043790800000000005,
+    "output_usd": 0.05898,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [
+      {
+        "id": "call_oIOn57c9gUdW2157xFBMV3YQ",
+        "command": "/usr/bin/bash -lc \"rg -n 'submitMustFail|queryContractId|query @|assertMsg' --glob '*.daml' /workspace/community | head -90; rg -n 'DAML_VERSION|daml test|daml build' community/common -g 'README*' -g '*.sh' -g 'Makefile' | head -50; printenv DAML_VERSION; ls -a community/common/src/main/daml/CantonExamples | head\"",
+        "matched": "printenv"
+      }
+    ],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790951540.295,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951544.846,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951551.167,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951553.935,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951575.209,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951582.112,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951585.063,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951599.295,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951602.853,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951606.501,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951609.285,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951617.278,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951624.828,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951631.265,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951633.511,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951636.733,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951642.202,
+          "client": "10.219.87.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "community/common/src/main/daml/CantonExamples/Paint.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

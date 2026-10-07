@@ -153,11 +153,8 @@ def cleanup_stale_daml_docker_resources(
     docker_bin: str,
     container_image: str,
     egress_proxy_image: str,
-    enabled: bool,
     stale_after_seconds: int,
 ) -> None:
-    if not enabled:
-        return
     if stale_after_seconds <= 0:
         raise ValueError("stale_after_seconds must be > 0")
 

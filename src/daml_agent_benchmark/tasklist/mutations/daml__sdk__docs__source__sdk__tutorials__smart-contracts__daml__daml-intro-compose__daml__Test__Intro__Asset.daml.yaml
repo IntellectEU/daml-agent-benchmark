@@ -1,0 +1,130 @@
+task: daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml
+notes: ""
+mutations:
+  - id: cancel-approval-controlled-by-new-owner
+    source: real-bug
+    commit: 1a84c007e5aa2978f68730c82021485cddb42b3f
+    kind: authorization
+    reason: TransferApproval_Cancel is controlled by the new owner instead of the asset's current owner, so the owner can no longer withdraw an approved transfer.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      @@ -118,7 +118,7 @@ template TransferApproval
+       
+           choice TransferApproval_Cancel
+               : ()
+      -        controller asset.owner
+      +        controller newOwner
+               do
+                 return ()
+       
+  - id: accept-keeps-old-owner
+    source: llm
+    target_script: test_asset
+    kind: field
+    reason: TransferProposal_Accept creates the asset without handing it to the new owner.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      @@ -92,8 +92,7 @@ template TransferProposal
+               : ContractId Asset
+               controller asset.issuer, newOwner
+               do
+      -          create asset with
+      -            owner = newOwner
+      +          create asset
+       
+           choice TransferProposal_Cancel
+               : ContractId Asset
+  - id: propose-transfer-to-self
+    source: llm
+    target_script: test_asset
+    kind: field
+    reason: ProposeTransfer records the current owner as the new owner.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      @@ -69,7 +69,7 @@ template Asset
+             do
+               create TransferProposal with
+                 asset = this
+      -          newOwner
+      +          newOwner = owner
+       
+           choice  SetObservers
+             : ContractId Asset
+  - id: ensure-allows-zero
+    source: llm
+    target_script: test_split
+    kind: validation
+    reason: The positive-quantity invariant is weakened to non-negative.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      @@ -19,7 +19,7 @@ template Asset
+           observers : [Party]
+         where
+           signatory issuer, owner
+      -    ensure quantity > 0.0
+      +    ensure quantity >= 0.0
+       
+           observer observers
+       -- ASSET_END
+  - id: split-controlled-by-issuer
+    source: llm
+    target_script: test_split
+    kind: authorization
+    reason: Split is controlled by the issuer instead of the owner.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      @@ -30,7 +30,7 @@ template Asset
+             : SplitResult
+             with
+               splitQuantity : Decimal
+      -      controller owner
+      +      controller issuer
+             do
+               splitAsset <- create this with
+                 quantity = splitQuantity
+  - id: merge-controlled-by-issuer
+    source: llm
+    target_script: test_merge
+    kind: authorization
+    reason: Merge is controlled by the issuer instead of the owner.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      @@ -44,7 +44,7 @@ template Asset
+             : ContractId Asset
+             with
+               otherCid : ContractId Asset
+      -      controller owner
+      +      controller issuer
+             do
+               other <- fetch otherCid
+               assertMsg
+  - id: merge-ignores-other-quantity
+    source: llm
+    target_script: test_merge
+    kind: arithmetic
+    reason: Merge keeps the quantity of this asset instead of adding the other's.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml
+      @@ -58,7 +58,7 @@ template Asset
+                 (symbol == other.symbol)
+               archive otherCid
+               create this with
+      -          quantity = quantity + other.quantity
+      +          quantity = quantity
+       -- MERGE_SPLIT_END
+       
+           choice ProposeTransfer

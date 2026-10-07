@@ -1,0 +1,60 @@
+task: ex-models/chess/daml/Tests/Chess.daml
+notes: "testEnum only exercises Types (not an implementation file of this task), so it has no mutations. All mutations target testFoolsMate, the only script exercising Chess.daml."
+mutations:
+  - id: winner-opponent
+    source: llm
+    target_script: testFoolsMate
+    kind: field
+    reason: The winner recorded in the Result is the opponent of the player who made the winning move.
+    patch: |
+      diff --git a/chess/daml/Chess.daml b/chess/daml/Chess.daml
+      index a3f88ac..dbc596d 100644
+      --- a/chess/daml/Chess.daml
+      +++ b/chess/daml/Chess.daml
+      @@ -51,7 +51,7 @@ template Game
+               do
+                 case tryMove state move of
+                   Winner _ -> do
+      -              win <- create Result with winner = Some player; game = this
+      +              win <- create Result with winner = Some opponent; game = this
+                     return (Left win)
+                   Error e -> abort e
+                   NewState ns -> do
+  - id: state-not-updated
+    source: llm
+    target_script: testFoolsMate
+    kind: field
+    reason: The new Game contract is created from this without applying the new state returned by tryMove.
+    patch: |
+      diff --git a/chess/daml/Chess.daml b/chess/daml/Chess.daml
+      index a3f88ac..25498a2 100644
+      --- a/chess/daml/Chess.daml
+      +++ b/chess/daml/Chess.daml
+      @@ -55,7 +55,7 @@ template Game
+                     return (Left win)
+                   Error e -> abort e
+                   NewState ns -> do
+      -              newGame <- create this with state = ns
+      +              newGame <- create this
+                     return (Right newGame)
+       
+             ClaimDraw : ContractId Result
+  - id: player-swapped
+    source: llm
+    target_script: testFoolsMate
+    kind: branch
+    reason: The Game's current player is looked up with the colours swapped, so the wrong party controls the move.
+    patch: |
+      diff --git a/chess/daml/Chess.daml b/chess/daml/Chess.daml
+      index a3f88ac..d07b1eb 100644
+      --- a/chess/daml/Chess.daml
+      +++ b/chess/daml/Chess.daml
+      @@ -41,7 +41,7 @@ template Game
+           signatory gameId.white, gameId.black
+       
+           let
+      -      player = if state.player == White then gameId.white else gameId.black
+      +      player = if state.player == White then gameId.black else gameId.white
+             opponent = if state.player == White then gameId.black else gameId.white
+       
+           controller player can

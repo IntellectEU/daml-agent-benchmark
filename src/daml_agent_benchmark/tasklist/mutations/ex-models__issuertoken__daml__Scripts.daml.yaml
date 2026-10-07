@@ -1,0 +1,60 @@
+task: ex-models/issuertoken/daml/Scripts.daml
+notes: "The ground-truth file has a single script, setup, which walks the whole flow; every mutation targets it."
+mutations:
+  - id: ensure-no-upper-bound
+    source: llm
+    target_script: setup
+    kind: validation
+    reason: The ensure clause on Wallet drops the upper bound, so a wallet can hold more tokens than its maxTokens.
+    patch: |
+      diff --git a/issuertoken/daml/Main.daml b/issuertoken/daml/Main.daml
+      index 8590218..0bb5a9f 100644
+      --- a/issuertoken/daml/Main.daml
+      +++ b/issuertoken/daml/Main.daml
+      @@ -15,7 +15,7 @@ template Wallet
+           maxTokens: Int
+           -- name: String -- This could be added to differentiate Tokens.
+         where
+      -    ensure tokens >= 0 && tokens <= maxTokens
+      +    ensure tokens >= 0
+           signatory issuer
+           observer owner
+       
+  - id: credit-subtracts
+    source: llm
+    target_script: setup
+    kind: arithmetic
+    reason: TransferTokens subtracts the quantity from the receiving wallet instead of adding it.
+    patch: |
+      diff --git a/issuertoken/daml/Main.daml b/issuertoken/daml/Main.daml
+      index 8590218..73e669a 100644
+      --- a/issuertoken/daml/Main.daml
+      +++ b/issuertoken/daml/Main.daml
+      @@ -40,7 +40,7 @@ template Wallet
+                 remainder <- create this with tokens = tokens - quantity
+                 toWallet <- fetch toWalletId
+                 _ <- exercise toWalletId Archive
+      -          quotient <- create toWallet with tokens = toWallet.tokens + quantity
+      +          quotient <- create toWallet with tokens = toWallet.tokens - quantity
+                 return (remainder, quotient)
+       
+             -- Delegates to `TransferTokens` with the requested quantity.
+  - id: investor-cap-from-issuer
+    source: llm
+    target_script: setup
+    kind: field
+    reason: AuthorizeInvestor gives the new wallet the issuer's own maxTokens instead of the requested maxTokens'.
+    patch: |
+      diff --git a/issuertoken/daml/Main.daml b/issuertoken/daml/Main.daml
+      index 8590218..1d5e105 100644
+      --- a/issuertoken/daml/Main.daml
+      +++ b/issuertoken/daml/Main.daml
+      @@ -31,7 +31,7 @@ template Wallet
+                   owner = investor
+                   issuer
+                   tokens = 0
+      -            maxTokens = maxTokens'
+      +            maxTokens = maxTokens
+       
+             -- Transfer tokens to another wallet, returning the updated source and target wallets.
+             TransferTokens: (ContractId Wallet, ContractId Wallet)

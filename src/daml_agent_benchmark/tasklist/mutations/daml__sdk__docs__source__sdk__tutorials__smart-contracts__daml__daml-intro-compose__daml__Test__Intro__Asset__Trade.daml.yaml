@@ -1,0 +1,39 @@
+task: daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset/Trade.daml
+notes: ""
+mutations:
+  - id: settle-controller-base-owner
+    source: llm
+    target_script: test_trade
+    kind: authorization
+    reason: The settle choice is controlled by the owner of the base asset (the trade's proposer) instead of the owner of the quote asset who is meant to accept it.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml
+      index 32e3bb8..8f537c7 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml
+      @@ -34,7 +34,7 @@ template Trade
+             with
+               quoteAssetCid : ContractId Asset
+               baseApprovalCid : ContractId TransferApproval
+      -      controller quoteAsset.owner
+      +      controller baseAsset.owner
+             do
+               fetchedBaseAsset <- fetch baseAssetCid
+               assertMsg
+  - id: settle-returns-swapped
+    source: llm
+    target_script: test_trade
+    kind: field
+    reason: The choice returns the transferred contract ids in the wrong order relative to its declared (base, quote) result.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml
+      index 32e3bb8..2a06bd9 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Trade.daml
+      @@ -56,5 +56,5 @@ template Trade
+                 quoteApprovalCid TransferApproval_Transfer with
+                   assetCid = quoteAssetCid
+       
+      -        return (transferredBaseCid, transferredQuoteCid)
+      +        return (transferredQuoteCid, transferredBaseCid)
+       -- TRADE_SETTLE_END

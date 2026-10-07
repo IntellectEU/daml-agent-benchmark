@@ -1,0 +1,640 @@
+{
+  "task_id": "ex-models/chess/daml/Tests/Chess.daml",
+  "task_safe_name": "ex-models__chess__daml__Tests__Chess.daml",
+  "test_file": "ex-models/chess/daml/Tests/Chess.daml",
+  "impl_files": [
+    "ex-models/chess/daml/Chess.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.434538+00:00",
+  "started_at_utc": "2026-10-02T16:50:28.182225+00:00",
+  "finished_at_utc": "2026-10-02T16:53:38.954732+00:00",
+  "live_updated_at_utc": "2026-10-02T16:53:38.954732+00:00",
+  "repo_copy": "261002-180850/ex-models_____bino9eba",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Tests/Chess.daml:testProposalAcceptance": true,
+      "daml/Tests/Chess.daml:testMoveTurnsAndState": true,
+      "daml/Tests/Chess.daml:testForfeit": true,
+      "daml/Tests/Chess.daml:testDrawProposal": true,
+      "daml/Tests/Chess.daml:testBlackProposalAndAgreedDraw": true,
+      "daml/Tests/Chess.daml:testClaimThreefoldDraw": true,
+      "daml/Tests/Chess.daml:testKingCaptureResult": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "winner-opponent",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Tests/Chess.daml:testProposalAcceptance": true,
+            "daml/Tests/Chess.daml:testMoveTurnsAndState": true,
+            "daml/Tests/Chess.daml:testForfeit": true,
+            "daml/Tests/Chess.daml:testDrawProposal": true,
+            "daml/Tests/Chess.daml:testBlackProposalAndAgreedDraw": true,
+            "daml/Tests/Chess.daml:testClaimThreefoldDraw": true,
+            "daml/Tests/Chess.daml:testKingCaptureResult": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:53:01.22 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: b3:ac:d1:bc:df:e7:2e:76'. Ignoring it.\n\n2026-10-02 16:53:08.59 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Failure, expected Some 'Alice' == Some 'Bob'\" }\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    143:1-143:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "state-not-updated",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Tests/Chess.daml:testProposalAcceptance": true,
+            "daml/Tests/Chess.daml:testMoveTurnsAndState": false,
+            "daml/Tests/Chess.daml:testForfeit": false,
+            "daml/Tests/Chess.daml:testDrawProposal": true,
+            "daml/Tests/Chess.daml:testBlackProposalAndAgreedDraw": true,
+            "daml/Tests/Chess.daml:testClaimThreefoldDraw": false,
+            "daml/Tests/Chess.daml:testKingCaptureResult": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:53:16.04 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: d4:76:6d:89:dc:08:05:77'. Ignoring it.\n\n2026-10-02 16:53:22.96 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Failure, expected White == Black\" }\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    44:1-44:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    85:1-85:12\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Tests.Chess:105:13:\n  0: exercise of Forfeit in Chess:Game at DA.Internal.Template.Functions:216:3\n  failed due to a missing authorization from 'Alice1'\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Forfeit on #6:1 (Chess:Game)\n  with\n  Sub-transactions:\n  0\n  └─> 'Alice1' exercises Forfeit on #6:1 (Chess:Game)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Init:26:11)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'Alice' (0), 'Bob' (0)\n  └─> create Chess:GameProposal\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  proposer = 'Alice'\n\n  TX 1 1970-01-01T00:00:00Z (Init:31:11)\n  #1:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> 'Bob' exercises StartGame on #0:0 (Chess:GameProposal)\n  with\n  children:\n  #1:1\n  │ consumed by: #3:0\n  │ referenced by #3:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'Bob'} readAs: {} (Tests.Chess:88:3)\n\n  TX 3 1970-01-01T00:00:00Z (Tests.Chess:90:13)\n  #3:0\n  │ known to (since): 'Alice' (3), 'Bob' (3)\n  └─> 'Alice' exercises Forfeit on #1:1 (Chess:Game)\n  with\n  children:\n  #3:1\n  │ known to (since): 'Alice' (3), 'Bob' (3)\n  └─> create Chess:Result\n  with\n  game =\n  (Chess:Game with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = []));\n  winner = some 'Bob'\n\n  TX 4 1970-01-01T00:00:00Z (Init:26:11)\n  #4:0\n  │ consumed by: #5:0\n  │ referenced by #5:0\n  │ known to (since): 'Alice1' (4), 'Bob1' (4)\n  └─> create Chess:GameProposal\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice1'; black = 'Bob1');\n  proposer = 'Alice1'\n\n  TX 5 1970-01-01T00:00:00Z (Init:31:11)\n  #5:0\n  │ known to (since): 'Alice1' (5), 'Bob1' (5)\n  └─> 'Bob1' exercises StartGame on #4:0 (Chess:GameProposal)\n  with\n  children:\n  #5:1\n  │ consumed by: #6:0\n  │ referenced by #6:0\n  │ known to (since): 'Alice1' (5), 'Bob1' (5)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice1'; black = 'Bob1');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\n\n  TX 6 1970-01-01T00:00:00Z (Tests.Chess:99:15)\n  #6:0\n  │ known to (since): 'Alice1' (6), 'Bob1' (6)\n  └─> 'Alice1' exercises Move on #5:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:D2;\n  to = Types:Coord:D4;\n  promote = none;\n  check = none)\n  children:\n  #6:1\n  │ known to (since): 'Alice1' (6), 'Bob1' (6)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice1'; black = 'Bob1');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\u001b[0m\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    143:1-143:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Tests.Chess:15:19:\n  0: exercise of Move in Chess:Game at DA.Internal.Template.Functions:216:3\n  failed due to a missing authorization from 'Alice'\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Move on #2:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:E7;\n  to = Types:Coord:E6;\n  promote = none;\n  check = none)\n  Sub-transactions:\n  0\n  └─> 'Alice' exercises Move on #2:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:E7;\n  to = Types:Coord:E6;\n  promote = none;\n  check = none)\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Init:26:11)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'Alice' (0), 'Bob' (0)\n  └─> create Chess:GameProposal\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  proposer = 'Alice'\n\n  TX 1 1970-01-01T00:00:00Z (Init:31:11)\n  #1:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> 'Bob' exercises StartGame on #0:0 (Chess:GameProposal)\n  with\n  children:\n  #1:1\n  │ consumed by: #2:0\n  │ referenced by #2:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\n\n  TX 2 1970-01-01T00:00:00Z (Tests.Chess:15:19)\n  #2:0\n  │ known to (since): 'Alice' (2), 'Bob' (2)\n  └─> 'Alice' exercises Move on #1:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:G2;\n  to = Types:Coord:G4;\n  promote = none;\n  check = none)\n  children:\n  #2:1\n  │ known to (since): 'Alice' (2), 'Bob' (2)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\u001b[0m\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    196:1-196:23\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Tests.Chess:15:19:\n  0: exercise of Move in Chess:Game at DA.Internal.Template.Functions:216:3\n  failed due to a missing authorization from 'Alice'\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Move on #2:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:A7;\n  to = Types:Coord:A5;\n  promote = none;\n  check = none)\n  Sub-transactions:\n  0\n  └─> 'Alice' exercises Move on #2:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:A7;\n  to = Types:Coord:A5;\n  promote = none;\n  check = none)\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Init:26:11)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'Alice' (0), 'Bob' (0)\n  └─> create Chess:GameProposal\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  proposer = 'Alice'\n\n  TX 1 1970-01-01T00:00:00Z (Init:31:11)\n  #1:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> 'Bob' exercises StartGame on #0:0 (Chess:GameProposal)\n  with\n  children:\n  #1:1\n  │ consumed by: #2:0\n  │ referenced by #2:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\n\n  TX 2 1970-01-01T00:00:00Z (Tests.Chess:15:19)\n  #2:0\n  │ known to (since): 'Alice' (2), 'Bob' (2)\n  └─> 'Alice' exercises Move on #1:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:A2;\n  to = Types:Coord:A4;\n  promote = none;\n  check = none)\n  children:\n  #2:1\n  │ known to (since): 'Alice' (2), 'Bob' (2)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\u001b[0m\n"
+        }
+      },
+      {
+        "id": "player-swapped",
+        "source": "llm",
+        "kind": "branch",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Tests/Chess.daml:testProposalAcceptance": true,
+            "daml/Tests/Chess.daml:testMoveTurnsAndState": false,
+            "daml/Tests/Chess.daml:testForfeit": false,
+            "daml/Tests/Chess.daml:testDrawProposal": true,
+            "daml/Tests/Chess.daml:testBlackProposalAndAgreedDraw": true,
+            "daml/Tests/Chess.daml:testClaimThreefoldDraw": false,
+            "daml/Tests/Chess.daml:testKingCaptureResult": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:53:31.41 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: b2:a2:17:92:47:fa:d0:b6'. Ignoring it.\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    44:1-44:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Tests.Chess:48:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Move on #1:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:E2;\n  to = Types:Coord:E4;\n  promote = none;\n  check = none)\n  Sub-transactions:\n  0\n  └─> 'Bob' exercises Move on #1:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:E2;\n  to = Types:Coord:E4;\n  promote = none;\n  check = none)\n  children:\n  1\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:Black;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E4;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = true),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves =\n  [(Types:ChessMove with\n  from = Types:Coord:E2;\n  to = Types:Coord:E4;\n  promote = none;\n  check = none)])\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Init:26:11)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'Alice' (0), 'Bob' (0)\n  └─> create Chess:GameProposal\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  proposer = 'Alice'\n\n  TX 1 1970-01-01T00:00:00Z (Init:31:11)\n  #1:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> 'Bob' exercises StartGame on #0:0 (Chess:GameProposal)\n  with\n  children:\n  #1:1\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\u001b[0m\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    85:1-85:12\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Tests.Chess:88:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Forfeit on #1:1 (Chess:Game)\n  with\n  Sub-transactions:\n  0\n  └─> 'Bob' exercises Forfeit on #1:1 (Chess:Game)\n  with\n  children:\n  1\n  └─> create Chess:Result\n  with\n  game =\n  (Chess:Game with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = []));\n  winner = some 'Bob'\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Init:26:11)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'Alice' (0), 'Bob' (0)\n  └─> create Chess:GameProposal\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  proposer = 'Alice'\n\n  TX 1 1970-01-01T00:00:00Z (Init:31:11)\n  #1:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> 'Bob' exercises StartGame on #0:0 (Chess:GameProposal)\n  with\n  children:\n  #1:1\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\u001b[0m\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    143:1-143:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Tests.Chess:15:19:\n  0: exercise of Move in Chess:Game at DA.Internal.Template.Functions:216:3\n  failed due to a missing authorization from 'Bob'\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Move on #1:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:G2;\n  to = Types:Coord:G4;\n  promote = none;\n  check = none)\n  Sub-transactions:\n  0\n  └─> 'Bob' exercises Move on #1:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:G2;\n  to = Types:Coord:G4;\n  promote = none;\n  check = none)\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Init:26:11)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'Alice' (0), 'Bob' (0)\n  └─> create Chess:GameProposal\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  proposer = 'Alice'\n\n  TX 1 1970-01-01T00:00:00Z (Init:31:11)\n  #1:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> 'Bob' exercises StartGame on #0:0 (Chess:GameProposal)\n  with\n  children:\n  #1:1\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\u001b[0m\nFile:     daml/Tests/Chess.daml\nHidden:   no\nRange:    196:1-196:23\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Tests.Chess:15:19:\n  0: exercise of Move in Chess:Game at DA.Internal.Template.Functions:216:3\n  failed due to a missing authorization from 'Bob'\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Move on #1:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:A2;\n  to = Types:Coord:A4;\n  promote = none;\n  check = none)\n  Sub-transactions:\n  0\n  └─> 'Bob' exercises Move on #1:1 (Chess:Game)\n  with\n  move =\n  (Types:ChessMove with\n  from = Types:Coord:A2;\n  to = Types:Coord:A4;\n  promote = none;\n  check = none)\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Init:26:11)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'Alice' (0), 'Bob' (0)\n  └─> create Chess:GameProposal\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  proposer = 'Alice'\n\n  TX 1 1970-01-01T00:00:00Z (Init:31:11)\n  #1:0\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> 'Bob' exercises StartGame on #0:0 (Chess:GameProposal)\n  with\n  children:\n  #1:1\n  │ known to (since): 'Alice' (1), 'Bob' (1)\n  └─> create Chess:Game\n  with\n  gameId =\n  (Types:GameId with\n  ref = \"game\"; white = 'Alice'; black = 'Bob');\n  state =\n  (Types:GameState with\n  player = Types:Player:White;\n  pieces =\n  [(Types:Piece with\n  coord = Types:Coord:A2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H2;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D1;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E1;\n  tp = Types:PieceType:King;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F1;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G1;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H1;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:White;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H7;\n  tp = Types:PieceType:Pawn;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:A8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:B8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:C8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:D8;\n  tp = Types:PieceType:Queen;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:E8;\n  tp = Types:PieceType:King;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:F8;\n  tp = Types:PieceType:Bishop;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:G8;\n  tp = Types:PieceType:Knight;\n  owner = Types:Player:Black;\n  moved = false),\n  (Types:Piece with\n  coord = Types:Coord:H8;\n  tp = Types:PieceType:Rook;\n  owner = Types:Player:Black;\n  moved = false)];\n  everCheck =\n  (DA.Types:Tuple2@40f452260bef3f29dede136108fc08a88d5a5250310281067087da6f0baddff7 with\n  _1 = false; _2 = false);\n  moves = [])\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 3,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Tests/Chess.daml:testEnum": true,
+        "daml/Tests/Chess.daml:testFoolsMate": true,
+        "daml/Init.daml:initData": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:49:50.850996+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/ex-models_____bino9eba/chess/daml/Tests/Chess.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 19,
+    "bytes_scanned": 34335,
+    "elapsed_seconds": 0.012,
+    "repo_copy_digest": "6f6d136712ad738b83f2efc5d276183f5c30d3ed936286e5e25115e5707cd12f",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "ex-models/chess/daml/Tests/Chess.daml",
+      "path_in_copy": "chess/daml/Tests/Chess.daml",
+      "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Tests.Chess where\n\nimport DA.Assert\nimport Daml.Script\n\nimport Chess\nimport Init\nimport Types\n\ntype ResultOrNextGame = Either (ContractId Result) (ContractId Game)\n\ntakeMove : Script ResultOrNextGame\n  -> (Party, Coord, Coord)\n  -> Script ResultOrNextGame\ntakeMove seg (player, from, to) = do\n  eg <- seg\n  case eg of\n    Left _ -> abort \"Can't continue won game\"\n    Right g -> submit player do\n      exerciseCmd g Move with\n        move = ChessMove with\n                          from\n                          to\n                          promote = None\n                          check = None\n\ntestEnum = script do\n  let lst = [0..63]\n  let coords = [A1 .. H8]\n  lst === fmap fromEnum coords\n\ntestFoolsMate = script do\n  InitData {..} <- initData\n\n  let\n    moves = [\n      (white, G2, G4),\n      (black, E7, E6),\n      (white, F2, F4),\n      (black, D8, H4),\n      (white, E1, F2),\n      (black, H4, F2)\n      ]\n  game <- foldl takeMove (return $ Right game) moves\n\n  Some win <- case game of\n    Right _ -> abort \"Should be a win\"\n    Left win -> queryContractId black win\n\n  win.winner === Some black",
+      "generated": "module Tests.Chess where\n\nimport DA.Assert\nimport Daml.Script\n\nimport Chess\nimport Init\nimport qualified Rules.Data\nimport Types\n\ntakeMove current (party, from, to) = do\n  outcome <- current\n  case outcome of\n    Left result -> return (Left result)\n    Right game -> submit party do\n      exerciseCmd game Move with\n        move = ChessMove with\n          from\n          to\n          promote = None\n          check = None\n\ntestProposalAcceptance = script do\n  white <- allocateParty \"ProposalWhite\"\n  black <- allocateParty \"ProposalBlack\"\n  let gameId = GameId with ref = \"invitation\"; white; black\n\n  proposal <- submit white do\n    createCmd GameProposal with gameId; proposer = white\n  submitMustFail white do\n    exerciseCmd proposal StartGame\n  game <- submit black do\n    exerciseCmd proposal StartGame\n  Some started <- queryContractId white game\n  started.gameId === gameId\n  started.state.player === White\n  length started.state.pieces === 32\n  started.state.everCheck === (False, False)\n  started.state.moves === []\n  started.state === Rules.Data.initState ()\n  archived <- queryContractId white proposal\n  archived === None\n\ntestMoveTurnsAndState = script do\n  InitData {..} <- initData\n  let gameId = GameId with ref = \"game\"; white; black\n  let whiteMove = ChessMove with from = E2; to = E4; promote = None; check = None\n  submitMustFail black do\n    exerciseCmd game Move with move = whiteMove\n  submitMustFail white do\n    exerciseCmd game Move with\n      move = ChessMove with from = E2; to = E5; promote = None; check = None\n\n  first <- submit white do\n    exerciseCmd game Move with move = whiteMove\n  next <- case first of\n    Left _ -> abort \"Opening move must continue the game\"\n    Right next -> return next\n  Some position <- queryContractId black next\n  position.gameId === gameId\n  position.state.player === Black\n  position.state.moves === [whiteMove]\n  submitMustFail black do\n    exerciseCmd next ClaimDraw\n  assert (elem (Piece E4 Pawn White True) position.state.pieces)\n  assert (not (elem (Piece E2 Pawn White False) position.state.pieces))\n  old <- queryContractId white game\n  old === None\n\n  submitMustFail white do\n    exerciseCmd next Move with move = whiteMove\n  submitMustFail black do\n    exerciseCmd next Move with move = whiteMove\n  let blackMove = ChessMove with from = E7; to = E5; promote = None; check = None\n  second <- submit black do\n    exerciseCmd next Move with move = blackMove\n  case second of\n    Left _ -> abort \"Second opening move must continue the game\"\n    Right next -> do\n      Some position <- queryContractId white next\n      position.state.player === White\n      position.state.moves === [blackMove, whiteMove]\n      assert (elem (Piece E5 Pawn Black True) position.state.pieces)\n\ntestForfeit = script do\n  InitData {..} <- initData\n  let gameId = GameId with ref = \"game\"; white; black\n  submitMustFail black do\n    exerciseCmd game Forfeit\n  result <- submit white do\n    exerciseCmd game Forfeit\n  Some outcome <- queryContractId black result\n  outcome.winner === Some black\n  outcome.game.gameId === gameId\n  old <- queryContractId white game\n  old === None\n\n  InitData {white = otherWhite, black = otherBlack, game = otherGame} <- initData\n  advanced <- submit otherWhite do\n    exerciseCmd otherGame Move with\n      move = ChessMove with from = D2; to = D4; promote = None; check = None\n  current <- case advanced of\n    Left _ -> abort \"Opening move must continue the game\"\n    Right current -> return current\n  result <- submit otherBlack do\n    exerciseCmd current Forfeit\n  Some outcome <- queryContractId otherWhite result\n  outcome.winner === Some otherWhite\n  outcome.game.state.player === Black\n\ntestDrawProposal = script do\n  InitData {..} <- initData\n  let gameId = GameId with ref = \"game\"; white; black\n  submitMustFail white do\n    exerciseCmd game ClaimDraw\n  submitMustFail black do\n    exerciseCmd game ClaimDraw\n\n  proposal <- submit white do\n    createCmd DrawProposal with gameId; proposer = white\n  submitMustFail white do\n    exerciseCmd proposal AcceptDraw with game\n\n  let otherId = gameId with ref = \"another match\"\n  otherProposal <- submit white do\n    createCmd GameProposal with gameId = otherId; proposer = white\n  otherGame <- submit black do\n    exerciseCmd otherProposal StartGame\n  submitMustFail black do\n    exerciseCmd proposal AcceptDraw with game = otherGame\n  Some _ <- queryContractId white otherGame\n\n  result <- submit black do\n    exerciseCmd proposal AcceptDraw with game\n  Some outcome <- queryContractId white result\n  outcome.winner === None\n  outcome.game.gameId === gameId\n  old <- queryContractId white game\n  old === None\n  archived <- queryContractId white proposal\n  archived === None\n\ntestKingCaptureResult = script do\n  InitData {..} <- initData\n  let gameId = GameId with ref = \"game\"; white; black\n  let opening = [\n        (white, G2, G4),\n        (black, E7, E6),\n        (white, F2, F4),\n        (black, D8, H4),\n        (white, E1, F2)\n        ]\n  position <- foldl takeMove (return (Right game)) opening\n  current <- case position of\n    Left _ -> abort \"Expected a live game before king capture\"\n    Right current -> return current\n  finish <- submit black do\n    exerciseCmd current Move with\n      move = ChessMove with from = H4; to = F2; promote = None; check = None\n  case finish of\n    Right _ -> abort \"Capturing the king must end the game\"\n    Left result -> do\n      Some outcome <- queryContractId white result\n      outcome.winner === Some black\n      outcome.game.gameId === gameId\n      outcome.game.state.player === Black\n      old <- queryContractId white current\n      old === None\n\ntestBlackProposalAndAgreedDraw = script do\n  white <- allocateParty \"ReverseWhite\"\n  black <- allocateParty \"ReverseBlack\"\n  let gameId = GameId with ref = \"reverse\"; white; black\n  invitation <- submit black do\n    createCmd GameProposal with gameId; proposer = black\n  submitMustFail black do\n    exerciseCmd invitation StartGame\n  game <- submit white do\n    exerciseCmd invitation StartGame\n  Some started <- queryContractId black game\n  started.gameId === gameId\n  started.state.player === White\n\n  proposal <- submit black do\n    createCmd DrawProposal with gameId; proposer = black\n  submitMustFail black do\n    exerciseCmd proposal AcceptDraw with game\n  draw <- submit white do\n    exerciseCmd proposal AcceptDraw with game\n  Some outcome <- queryContractId black draw\n  outcome.winner === None\n  outcome.game.state === started.state\n  archived <- queryContractId black game\n  archived === None\n\ntestClaimThreefoldDraw = script do\n  InitData {..} <- initData\n  let moves = [\n        (white, A2, A4),\n        (black, A7, A5),\n        (white, A1, A3),\n        (black, A8, A6),\n        (white, A3, A1),\n        (black, A6, A8),\n        (white, A1, A3),\n        (black, A8, A6),\n        (white, A3, A1),\n        (black, A6, A8),\n        (white, A1, A3),\n        (black, A8, A6),\n        (white, A3, A1),\n        (black, A6, A8)\n        ]\n  position <- foldl takeMove (return (Right game)) moves\n  current <- case position of\n    Left _ -> abort \"Repeated moves must leave a live game\"\n    Right current -> return current\n  submitMustFail black do\n    exerciseCmd current ClaimDraw\n  result <- submit white do\n    exerciseCmd current ClaimDraw\n  Some outcome <- queryContractId black result\n  outcome.winner === None\n  outcome.game.state.player === White\n  outcome.game.state.moves === reverse (map (\\(_, from, to) -> ChessMove from to None None) moves)\n  archived <- queryContractId white current\n  archived === None\n",
+      "captured_at_utc": "2026-10-02T16:53:38.942589+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/ex-models_____bino9eba",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added Daml Script tests in `chess/daml/Tests/Chess.daml:1` covering proposals, turn enforcement, move state, forfeits, agreed and claimed draws, and king-capture results. The file also provides the `takeMove` helper used by the existing suites.\n\nAll tests pass with `daml test`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 131.00799370801542,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 250881,
+      "output_tokens": 5970,
+      "cached_input_tokens": 225182
+    },
+    "usage_by_thread": {
+      "01a0fd86-435c-7452-8cff-910165388d47": {
+        "usage": {
+          "input_tokens": 250881,
+          "output_tokens": 5970,
+          "cached_input_tokens": 225182
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.15613439999999998,
+    "input_usd": 0.051397999999999985,
+    "cached_input_usd": 0.0450364,
+    "output_usd": 0.0597,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790959832.632,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959835.136,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959837.524,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959840.862,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959844.492,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959861.489,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959867.198,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959879.944,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959887.691,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959891.548,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959910.631,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959922.871,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959940.597,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959954.571,
+          "client": "10.219.155.66",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "chess/daml/Tests/Chess.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

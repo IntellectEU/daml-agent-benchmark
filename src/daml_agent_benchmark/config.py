@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import asdict, dataclass, field, fields, replace
+from enum import StrEnum
 from types import SimpleNamespace
 from urllib.parse import urlsplit
 
@@ -37,6 +38,16 @@ class McpServer:
     bearer_token_env: str | None = None  # the host environment variable that holds its token
 
 
+class TaskKindName(StrEnum):
+    IMPLEMENTATION = "implementation"  # the implementation is blanked and the agent writes it
+    TEST_GENERATION = "test_generation"  # the test file is blanked and the agent writes tests
+
+
+class TaskSet(StrEnum):
+    ALL = "all"
+    ONE_PER_REPO = "one_per_repo"
+
+
 @dataclass
 class ExperimentConfig:
     # fmt: off
@@ -59,36 +70,34 @@ class ExperimentConfig:
     task_docs_dir: str | None           = None  # Directory of Daml docs JSON files; the ones matching the task's SDK are copied into the copy.
     run_tasks_in_parallel: bool         = True
     max_parallel_tasks: int | None      = None
-    task_set: str                       = "all"  # "all" or "one_per_repo"; ignored when `tasks` is set.
+    task_set: TaskSet                   = TaskSet.ALL  # Ignored when `tasks` is set.
     tasks_per_repo: int | None          = None  # Cap on tasks taken from each repository; ignored when `tasks` is set.
     tasks: list[str] | None             = None
-    eval_in_container: bool             = True  # Run final build/test eval inside the Linux container (host macOS can't run old SDKs, e.g. ex-models 1.16).
     ground_truth_control: bool          = False  # Build+test the unblanked copy before the agent runs; a failing ground truth is an infra error, not a model failure. Cached per copy content.
     max_task_runtime_seconds: int       = 120
     run_name: str | None                = None
+    # What the agent writes: the implementation files, graded by the task's tests, or the test
+    # file, graded by the mutants its tests catch. One kind per run.
+    task_kind: TaskKindName             = TaskKindName.IMPLEMENTATION
+    # For quick test-generation runs: grade only each task's first N mutants, in file order. A capped run is not a baseline.
+    max_mutants_per_task: int | None    = None
     # fmt: on
 
-    def merge(
-        self,
-        *overrides: SimpleNamespace,
-        allow_unknown_keys: bool = False,
-    ) -> "ExperimentConfig":
-        """Merge experiment overrides while rejecting stale/non-experiment keys by default."""
+    def __post_init__(self) -> None:
+        # An experiment file names these as strings; an unknown one fails here.
+        self.task_kind = TaskKindName(self.task_kind)
+        self.task_set = TaskSet(self.task_set)
+
+    def merge(self, *overrides: SimpleNamespace) -> "ExperimentConfig":
+        """Merge experiment overrides, rejecting keys that are not experiment config fields."""
         valid_keys = {field.name for field in fields(self)}
         values = dict(self.__dict__)
-        extra_values: dict[str, object] = {}
         for namespace in overrides:
             for key, value in vars(namespace).items():
                 if key not in valid_keys:
-                    if not allow_unknown_keys:
-                        raise ValueError(f"Unknown experiment config key: {key}")
-                    extra_values[key] = value
-                    continue
+                    raise ValueError(f"Unknown experiment config key: {key}")
                 values[key] = value
-        result = replace(self, **values)
-        for key, value in extra_values.items():
-            setattr(result, key, value)
-        return result
+        return replace(self, **values)
 
 
 def build_config_dump(config: ExperimentConfig) -> dict[str, object]:

@@ -21,18 +21,19 @@ from daml_agent_benchmark.tasklist_catalog import repo_root_for_path
 from daml_agent_benchmark.workspace_audit import hash_tree, no_ignore, remove_added_files
 
 
-def grade_task(test_file_path: str, impl_files: list[str]) -> Grade:
+def grade_task(test_file_path: str, impl_files: list[str], lint_files: list[str]) -> Grade:
     """The three-stage verdict on what the agent wrote.
 
-    1. Syntax check the implementation files
-    2. Build the package
+    1. Syntax check `lint_files`; when the list is empty, the stage passes without a check
+       (test files are not linted, see `TestGenerationKind.grade`)
+    2. Build the package holding the implementation files
     3. Run the test file
 
     Each stage runs only if the one before it passed, so a compile error leaves the test
     stage unrun rather than failed. An unrun stage is recorded as False, so a reader needs
     the stage before it to tell "failed" from "never ran".
     """
-    syntax_passed, syntax_error = grading.syntax_check(impl_files)
+    syntax_passed, syntax_error = grading.syntax_check(lint_files) if lint_files else (True, None)
 
     compile_passed = False
     compile_error = None
@@ -65,17 +66,13 @@ def grade_task(test_file_path: str, impl_files: list[str]) -> Grade:
     )
 
 
-def grade_in_environment(config: ExperimentConfig, test_file_path: str, impl_files: list[str]) -> Grade:
-    """Grade where the experiment says to grade: on this host, or inside the eval container.
+def grade_in_environment(test_file_path: str, impl_files: list[str], lint_files: list[str]) -> Grade:
+    """Grade inside the eval container.
 
-    Old-SDK repositories do not build the same way on a developer machine as they do in the
-    container, so an experiment that wants comparable numbers across repositories runs the
-    build and the tests in the container. The repository root is mounted at the identical
-    path it has on the host, so paths in the record mean the same thing either way.
+    Old-SDK repositories do not build on a developer machine, so the build and the tests
+    always run in the container. The repository root is mounted at the identical path it
+    has on the host, so paths in the record mean the same thing either way.
     """
-    if not config.eval_in_container:
-        return grade_task(test_file_path, impl_files)
-
     from daml_agent_benchmark.repos.build import eval_in_container as run_eval_in_container
 
     mount_root = repo_root_for_path(impl_files[0])
@@ -85,7 +82,7 @@ def grade_in_environment(config: ExperimentConfig, test_file_path: str, impl_fil
         docker_bin=CONTAINER_DOCKER_BIN,
         env=task_container_env(mount_root),
     ):
-        return grade_task(test_file_path, impl_files)
+        return grade_task(test_file_path, impl_files, lint_files)
 
 
 _GROUND_TRUTH_CONTROL_CACHE_LOCK = threading.Lock()
@@ -98,7 +95,6 @@ def _ground_truth_control_cache_path() -> Path:
 
 
 def run_ground_truth_control(
-    config: ExperimentConfig,
     *,
     task_id: str,
     repo_copy_test_file: str,
@@ -113,7 +109,7 @@ def run_ground_truth_control(
     and skips the agent run. Results are cached by copy's content, eval image and
     grading version, so repeated runs over an unchanged benchmark pay the build once.
     """
-    image_id = container_image_id(CONTAINER_IMAGE) if config.eval_in_container else "host"
+    image_id = container_image_id(CONTAINER_IMAGE)
     cache_key = hashlib.sha256(
         f"{task_id}\0{repo_copy_digest}\0{image_id}\0{GRADING_VERSION}".encode("utf-8")
     ).hexdigest()
@@ -127,20 +123,7 @@ def run_ground_truth_control(
 
     print(f"{log_prefix}ground-truth control: building and testing the unblanked copy", flush=True)
     started = time()
-    if config.eval_in_container:
-        from daml_agent_benchmark.repos.build import eval_in_container as run_eval_in_container
-
-        mount_root = repo_root_for_path(repo_copy_impl_files[0])
-        container_env = task_container_env(mount_root)
-        with run_eval_in_container(
-            mount_root,
-            CONTAINER_IMAGE,
-            docker_bin=CONTAINER_DOCKER_BIN,
-            env=container_env,
-        ):
-            grade = grade_task(repo_copy_test_file, repo_copy_impl_files)
-    else:
-        grade = grade_task(repo_copy_test_file, repo_copy_impl_files)
+    grade = grade_in_environment(repo_copy_test_file, repo_copy_impl_files, repo_copy_impl_files)
 
     control = GroundTruthControl(
         grade=grade,
@@ -170,14 +153,16 @@ def verify_copy(
     repo_copy_dir: str,
     repo_copy_test_file: str,
     repo_copy_impl_files: list[str],
+    repo_copy_answer_files: list[str],
     pruned_archives: list[dict],
     log_prefix: str,
 ) -> tuple[RepoCopyIntegrity, GroundTruthControl | None, Finding | None]:
     """Whether this copy is fit to measure an agent on, checked before the agent sees it.
 
     Two things have to hold. The copy must not contain the answer anywhere but in the files
-    the agent is asked to write, or the measurement is meaningless. And the task must build
-    and pass its own tests in this environment, or a failure says nothing about the agent.
+    the agent is asked to write, `repo_copy_answer_files`, or the measurement is meaningless.
+    And the task must build and pass its own tests in this environment, or a failure says
+    nothing about the agent.
 
     The scan runs while the ground truth is still in the copy, which is the only moment it
     can. The control build then writes DARs and interface files that hold the compiled
@@ -193,7 +178,7 @@ def verify_copy(
         The report carries the detail a failure message needs; the record is what the task
         keeps. Both are wanted, and the scan is expensive, so it runs once for the two.
         """
-        scan = scan_repo_copy_integrity(repo_copy_dir, repo_copy_impl_files)
+        scan = scan_repo_copy_integrity(repo_copy_dir, repo_copy_answer_files)
         return scan, RepoCopyIntegrity.from_scan(scan, pruned_archives)
 
     scan, integrity = scan_copy()
@@ -211,7 +196,6 @@ def verify_copy(
 
     pre_control_hashes = hash_tree(repo_copy_dir, ignore=no_ignore)
     control = run_ground_truth_control(
-        config,
         task_id=task_id,
         repo_copy_test_file=repo_copy_test_file,
         repo_copy_impl_files=repo_copy_impl_files,

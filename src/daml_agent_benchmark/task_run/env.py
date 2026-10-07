@@ -18,7 +18,6 @@ from daml_agent_benchmark.config import (
     secret_env_names,
 )
 from daml_agent_benchmark.constants import (
-    CODEX_AUTH_MODE,
     CODEX_BIN,
     CODEX_EXTRA_ARGS,
     CONTAINER_DOCKER_BIN,
@@ -122,37 +121,32 @@ def _apply_codex_auth_env(env: dict[str, str], config: ExperimentConfig) -> dict
     each allowed MCP server's token from its `bearer_token_env`. A missing one fails
     the run before any task starts.
     """
-    auth_mode = CODEX_AUTH_MODE
-    if auth_mode == "chatgpt":
-        return env
-    if auth_mode == "api_key":
-        key_env = config.provider_api_key_env
-        api_key = (env.get(key_env) or "").strip()
-        if not api_key:
+    key_env = config.provider_api_key_env
+    api_key = (env.get(key_env) or "").strip()
+    if not api_key:
+        raise ValueError(
+            f"The model provider's API key is missing: set the environment variable {key_env} "
+            f"(named by the experiment setting provider_api_key_env) before starting the run."
+        )
+    env[key_env] = api_key
+    if config.provider_requires_openai_auth:
+        # Codex authenticates from CODEX_API_KEY in its environment, so no auth.json
+        # has to be placed where the agent can read it. The key's own variable stays
+        # set for the proxy-compatible model provider, whose env_key names it.
+        env["CODEX_API_KEY"] = api_key
+    else:
+        # Codex reads the key from the provider's env_key alone, so no copy of it,
+        # nor any other codex credential, goes into the container.
+        env.pop("CODEX_API_KEY", None)
+    for server in config.mcp_servers:
+        if server.bearer_token_env and not (env.get(server.bearer_token_env) or "").strip():
             raise ValueError(
-                f"The model provider's API key is missing: set the environment variable {key_env} "
-                f"(named by the experiment setting provider_api_key_env) before starting the run."
+                f"The token of MCP server {server.name!r} is missing: set the environment variable "
+                f"{server.bearer_token_env} before starting the run."
             )
-        env[key_env] = api_key
-        if config.provider_requires_openai_auth:
-            # Codex authenticates from CODEX_API_KEY in its environment, so no auth.json
-            # has to be placed where the agent can read it. The key's own variable stays
-            # set for the proxy-compatible model provider, whose env_key names it.
-            env["CODEX_API_KEY"] = api_key
-        else:
-            # Codex reads the key from the provider's env_key alone, so no copy of it,
-            # nor any other codex credential, goes into the container.
-            env.pop("CODEX_API_KEY", None)
-        for server in config.mcp_servers:
-            if server.bearer_token_env and not (env.get(server.bearer_token_env) or "").strip():
-                raise ValueError(
-                    f"The token of MCP server {server.name!r} is missing: set the environment variable "
-                    f"{server.bearer_token_env} before starting the run."
-                )
-        # The container wrapper passes exactly these secrets into the container.
-        env["CONTAINER_AGENT_EVAL_SECRET_ENV_NAMES"] = "\n".join(secret_env_names(config))
-        return env
-    raise ValueError(f"Unsupported CODEX_AUTH_MODE={auth_mode!r}; expected 'api_key' or 'chatgpt'")
+    # The container wrapper passes exactly these secrets into the container.
+    env["CONTAINER_AGENT_EVAL_SECRET_ENV_NAMES"] = "\n".join(secret_env_names(config))
+    return env
 
 
 def _build_codex_env(codex_bin: str, config: ExperimentConfig) -> dict[str, str]:
@@ -194,8 +188,6 @@ def ensure_codex_auth_ready(codex_bin: str, config: ExperimentConfig) -> None:
     at run level: each task's codex home is generated from code and holds no
     credential file.
     """
-    if CODEX_AUTH_MODE != "api_key":
-        raise ValueError("CODEX_AUTH_MODE must be 'api_key': a task runs non-interactively.")
     _build_codex_env(codex_bin, config)
 
 

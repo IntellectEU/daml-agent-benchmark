@@ -1,0 +1,90 @@
+task: ex-models/governance/daml/Test.daml
+notes: ''
+mutations:
+- id: vote-recorded-inverted
+  source: llm
+  target_script: voteCreateConstitution'
+  kind: field
+  reason: the vote is stored negated when prepended to the vote list
+  patch: |
+    diff --git a/governance/daml/Governance.daml b/governance/daml/Governance.daml
+    --- a/governance/daml/Governance.daml
+    +++ b/governance/daml/Governance.daml
+    @@ -127,5 +127,5 @@ template Ballot
+           do
+             assertMsg "Voter not added" $ S.member voter voters
+             assertMsg "Voter already voted" $ not $ S.member voter voted
+    -        create this with voted = S.insert voter voted; votes = accept :: votes
+    +        create this with voted = S.insert voter voted; votes = not accept :: votes
+             pure ()
+- id: nays-count-yays
+  source: llm
+  target_script: voteCreateConstitution'
+  kind: branch
+  reason: the nay count copies the yay filter
+  patch: |
+    diff --git a/governance/daml/Governance.daml b/governance/daml/Governance.daml
+    --- a/governance/daml/Governance.daml
+    +++ b/governance/daml/Governance.daml
+    @@ -114,7 +114,7 @@ template Ballot
+           do
+             assertMsg "All voters must vote" $ S.size voters == length votes
+             let yays = length $ L.filter (\v -> v) votes
+    -        let nays = length $ L.filter (\v -> not v) votes
+    +        let nays = length $ L.filter (\v -> v) votes
+             assertMsg "Cannot decide on tie" $ yays /= nays
+             let accept = yays > nays
+             execute accept proposal
+- id: add-replaces-voters
+  source: llm
+  target_script: voteCreateConstitution'
+  kind: field
+  reason: Add rebuilds the voter set from scratch instead of extending it
+  patch: "diff --git a/governance/daml/Governance.daml b/governance/daml/Governance.daml\n\
+    --- a/governance/daml/Governance.daml\n+++ b/governance/daml/Governance.daml\n\
+    @@ -106,7 +106,7 @@ template Ballot\n       with voter : Party\n       controller\
+    \ government\n       do\n-        create this with voters = S.insert voter voters\n\
+    +        create this with voters = S.singleton voter\n         pure ()\n \n  \
+    \   choice Decide : DecisionOutcome\n"
+- id: update-text-ignored
+  source: llm
+  target_script: voteUpdateConstitutionText'
+  kind: field
+  reason: UpdateText recreates the contract without applying newText
+  patch: "diff --git a/governance/daml/Governance.daml b/governance/daml/Governance.daml\n\
+    --- a/governance/daml/Governance.daml\n+++ b/governance/daml/Governance.daml\n\
+    @@ -43,7 +43,7 @@ template Constitution\n     choice UpdateText : ContractId Constitution\n\
+    \       with newText : Text\n       controller government, citizens\n-      do\
+    \ create this with text = newText\n+      do create this\n \n template ConstitutionV2\n\
+    \   with\n"
+- id: upgrade-version-not-bumped
+  source: llm
+  target_script: voteUpgradeConstitution'
+  kind: arithmetic
+  reason: the V2 contract copies the version instead of incrementing it
+  patch: "diff --git a/governance/daml/Governance.daml b/governance/daml/Governance.daml\n\
+    --- a/governance/daml/Governance.daml\n+++ b/governance/daml/Governance.daml\n\
+    @@ -81,7 +81,7 @@ template ConstituationUpgrade\n       controller government,\
+    \ citizens\n       do\n         constitution <- fetch constitutionId\n-      \
+    \  let constitutionV2 = ConstitutionV2 with government; citizens; text = constitution.text;\
+    \ version = constitution.version + 1\n+        let constitutionV2 = ConstitutionV2\
+    \ with government; citizens; text = constitution.text; version = constitution.version\n\
+    \         archive constitutionId\n         create constitutionV2\n \n"
+- id: ballot-controller-citizens
+  source: llm
+  target_script: createNewBallotOffConstitution'
+  kind: authorization
+  reason: CreateBallot also requires the citizens as controllers
+  patch: |
+    diff --git a/governance/daml/Governance.daml b/governance/daml/Governance.daml
+    --- a/governance/daml/Governance.daml
+    +++ b/governance/daml/Governance.daml
+    @@ -63,7 +63,7 @@ template ConstitutionV2
+           with
+             name : Text
+             proposal : Proposal
+    -      controller government
+    +      controller government, citizens
+           do
+             let ballot = Ballot with government; name; proposal; voters = citizens; voted = S.empty; votes = []
+             create ballot

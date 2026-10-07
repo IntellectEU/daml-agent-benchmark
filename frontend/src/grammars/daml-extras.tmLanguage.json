@@ -1,0 +1,26 @@
+{
+  "comment": "Scopes that the Daml extension's grammar leaves out, injected into it outside comments, strings, pragmas and module headers: Daml keywords it misses, ledger actions and common standard library and Daml Script functions, the template variables, and capitalised names in expressions.",
+  "name": "daml-extras",
+  "scopeName": "daml-extras.injection",
+  "injectTo": ["source.daml"],
+  "injectionSelector": "source.daml -comment -string -meta.preprocessor -meta.import -meta.declaration.module",
+  "repository": {},
+  "patterns": [
+    {
+      "match": "(?<![\\w'.])(implements|requires)(?![\\w'])",
+      "name": "keyword.other.daml-extras"
+    },
+    {
+      "match": "(?<![\\w'.])(this|self)(?![\\w'])",
+      "name": "variable.language.daml-extras"
+    },
+    {
+      "match": "(?<![\\w'.])(create|createAndExercise|exercise|exerciseByKey|fetch|fetchByKey|lookupByKey|visibleByKey|archive|toInterface|toInterfaceContractId|fromInterface|fromInterfaceContractId|coerceContractId|view|getTime|assert|assertMsg|abort|error|debug|return|pure|mapA|mapA_|forA|forA_|when|unless|otherwise|submit|submitMustFail|submitMulti|submitMultiMustFail|allocateParty|allocatePartyWithHint|script|query|queryContractId)(?![\\w'])",
+      "name": "support.function.daml-extras"
+    },
+    {
+      "match": "(?<![\\w'.])[A-Z][\\w']*",
+      "name": "entity.name.type.constructor.daml-extras"
+    }
+  ]
+}

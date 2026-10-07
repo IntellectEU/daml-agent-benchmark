@@ -15,6 +15,7 @@ import type {
   AgentMatrixResponse,
   AgentMatrixRunItem,
   AgentTaskCell,
+  AgentTaskKind,
   AgentTaskStatusCode,
 } from './types'
 
@@ -22,9 +23,12 @@ const { Text } = Typography
 
 const PIN_STORAGE_KEY = 'daml_agent_benchmark_pins'
 const PACKAGE_TASKS_ONLY_KEY = 'daml_agent_benchmark_package_tasks_only'
+const TASK_KIND_KEY = 'daml_agent_benchmark_task_kind'
+const FIT_TASKS_KEY = 'daml_agent_benchmark_fit_tasks'
 
 // What the page shows until the first matrix response arrives.
 const EMPTY_MATRIX: AgentMatrixResponse = {
+  task_kind: 'implementation',
   task_ids: [],
   task_header_colors: {},
   task_flags: {},
@@ -46,6 +50,8 @@ const ACTIONS_WIDTH = 84
 const SELECTION_WIDTH = 46
 const TASK_COL_MIN_WIDTH = 20
 const TASK_COL_MAX_WIDTH = 32
+// Fitted to the width, a task column can shrink to a sliver of its colour.
+const TASK_COL_FIT_MIN_WIDTH = 3
 // Every fixed column but the outcome columns, which come and go with the runs shown.
 const FIXED_COLUMNS_BASE_WIDTH =
   PIN_WIDTH + RUN_NAME_WIDTH + CREATED_WIDTH + TASK_TOTAL_WIDTH + TEST_SCRIPTS_WIDTH + DURATION_WIDTH + COST_WIDTH +
@@ -107,8 +113,15 @@ function runCostSplit(row: AgentMatrixRunItem): { fresh: number; cached: number;
 }
 
 // Test scripts passed over all tasks. A run whose tasks report no scripts counts tasks instead.
+// For a test-generation run: the mutants its tests caught, over all its tasks' mutants.
 function runTestScripts(row: AgentMatrixRunItem): { passed: number; total: number } {
   const cells = Object.values(row.task_statuses)
+  if (row.task_kind === 'test_generation') {
+    return {
+      passed: cells.reduce((acc, cell) => acc + (cell.mutants?.caught ?? 0), 0),
+      total: cells.reduce((acc, cell) => acc + (cell.mutants?.total ?? 0), 0),
+    }
+  }
   const passed = cells.reduce((acc, cell) => acc + cell.tests_succeeded, 0)
   const total = cells.reduce((acc, cell) => acc + cell.tests_total, 0)
   if (total > 0) return { passed, total }
@@ -309,6 +322,35 @@ export function AgentPage() {
       // Nothing to remember it in; the toggle just resets on the next load.
     }
   }, [packageTasksOnly])
+  const [taskKind, setTaskKind] = useState<AgentTaskKind>(() => {
+    try {
+      return window.localStorage.getItem(TASK_KIND_KEY) === 'test_generation' ? 'test_generation' : 'implementation'
+    } catch {
+      return 'implementation'
+    }
+  })
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(TASK_KIND_KEY, taskKind)
+    } catch {
+      // Nothing to remember it in; the page opens on implementation runs next time.
+    }
+  }, [taskKind])
+  const isTestGeneration = taskKind === 'test_generation'
+  const [fitTasks, setFitTasks] = useState<boolean>(() => {
+    try {
+      return window.localStorage.getItem(FIT_TASKS_KEY) === '1'
+    } catch {
+      return false
+    }
+  })
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(FIT_TASKS_KEY, fitTasks ? '1' : '0')
+    } catch {
+      // Nothing to remember it in; the toggle just resets on the next load.
+    }
+  }, [fitTasks])
   const [loading, setLoading] = useState(false)
   const [viewMode, setViewMode] = useState<AgentViewMode>('status')
   const [runSort, setRunSort] = useState<{ key: string; order: SortOrder }>({
@@ -352,7 +394,7 @@ export function AgentPage() {
   const loadMatrix = useCallback(async (options?: { suppressError?: boolean }): Promise<boolean> => {
     setLoading(true)
     try {
-      const res = await fetchAgentMatrix({ includeArchived })
+      const res = await fetchAgentMatrix({ includeArchived, kind: taskKind })
       setMatrix(res)
       setSelectedRunIds((prev) => prev.filter((id) => res.items.some((run) => run.run_id === id)))
       return true
@@ -365,7 +407,7 @@ export function AgentPage() {
     } finally {
       setLoading(false)
     }
-  }, [includeArchived])
+  }, [includeArchived, taskKind])
 
   useEffect(() => {
     void loadMatrix()
@@ -427,12 +469,15 @@ export function AgentPage() {
 
   const taskColumnWidth = useMemo(() => {
     if (taskIds.length === 0) return TASK_COL_MAX_WIDTH
+    const minWidth = fitTasks ? TASK_COL_FIT_MIN_WIDTH : TASK_COL_MIN_WIDTH
     const available = tableContainerWidth > 0
-      ? Math.max(tableContainerWidth - fixedColumnsWidth, TASK_COL_MIN_WIDTH * taskIds.length)
+      ? Math.max(tableContainerWidth - fixedColumnsWidth, minWidth * taskIds.length)
       : TASK_COL_MAX_WIDTH * taskIds.length
     const raw = Math.floor(available / taskIds.length)
-    return Math.max(TASK_COL_MIN_WIDTH, Math.min(TASK_COL_MAX_WIDTH, raw))
-  }, [fixedColumnsWidth, tableContainerWidth, taskIds.length])
+    return Math.max(minWidth, Math.min(TASK_COL_MAX_WIDTH, raw))
+  }, [fitTasks, fixedColumnsWidth, tableContainerWidth, taskIds.length])
+  // Columns narrower than their contents show only their colour; the tooltips stay.
+  const taskColumnsCompact = taskColumnWidth < TASK_COL_MIN_WIDTH
   const tableScrollX = fixedColumnsWidth + taskIds.length * taskColumnWidth
 
   async function onDeleteSelected(): Promise<void> {
@@ -577,11 +622,17 @@ export function AgentPage() {
         undefined,
         'run-col-group-end'
       ),
-      figureColumn('tests', TEST_SCRIPTS_WIDTH, RUN_COLUMN_META.tests, (row) => {
+      figureColumn('tests', TEST_SCRIPTS_WIDTH, isTestGeneration ? RUN_COLUMN_META.mutants : RUN_COLUMN_META.tests, (row) => {
         const { passed, total } = runTestScripts(row)
         if (total === 0) return <span className="run-col-muted">—</span>
+        const tg = row.summary.test_generation
+        const title = isTestGeneration
+          ? `${passed} of ${total} mutants caught. Real bugs caught: ${tg.real_bugs_caught} of ${tg.real_bugs_total}. ` +
+            `Test files passing on the correct code: ${tg.tests_pass_on_correct_code} of ${row.summary.gradable_tasks}.` +
+            (tg.mutants_capped ? ' Capped run: some tasks graded only their first mutants, so this is not comparable to a full run.' : '')
+          : `${passed} of ${total} test scripts`
         return (
-          <Tooltip title={`${passed} of ${total} test scripts`} mouseEnterDelay={0.15} mouseLeaveDelay={0}>
+          <Tooltip title={title} mouseEnterDelay={0.15} mouseLeaveDelay={0}>
             <div className="run-col-share">
               <span>{passed}/{total}</span>
               <small>{Math.round((100 * passed) / total)}%</small>
@@ -734,7 +785,7 @@ export function AgentPage() {
             overlayClassName="agent-matrix-header-tooltip"
           >
             <div className="agent-matrix-header">
-              {taskHeaderLabel(taskId)}
+              {taskColumnsCompact ? null : taskHeaderLabel(taskId)}
             </div>
           </Tooltip>
         ),
@@ -751,7 +802,7 @@ export function AgentPage() {
             style.backgroundColor = getCostColor(cell.usd_cost)
           }
           return {
-            className: `agent-matrix-status-cell ${statusCellClass(cell)}`,
+            className: `agent-matrix-status-cell ${statusCellClass(cell)}${isFirstTask ? ' agent-matrix-status-cell-start' : ''}`,
             style,
           }
         },
@@ -789,14 +840,31 @@ export function AgentPage() {
 
             content = (
               <Tooltip title={tooltipTitle} mouseEnterDelay={0} mouseLeaveDelay={0.1}>
-                {displayCost}
+                {taskColumnsCompact ? <span className="agent-matrix-compact-fill" /> : displayCost}
+              </Tooltip>
+            )
+          } else if (cell?.mutants && cell.mutants.skipped === null) {
+            // A test-generation task whose tests passed on the correct code: how many mutants they caught.
+            const { caught, built, total } = cell.mutants
+            const note = built < total ? ` (${built} of ${total} built: a capped run)` : ''
+            content = (
+              <Tooltip title={`${caught} of ${total} mutants caught${note} · click to open the task`} mouseEnterDelay={0.15} mouseLeaveDelay={0}>
+                {taskColumnsCompact ? (
+                  <span className="agent-matrix-compact-fill" style={shadeStyle('good', total ? caught / total : 0)} />
+                ) : (
+                  <span className="agent-matrix-catch" style={shadeStyle('good', total ? caught / total : 0)}>
+                    <span>{caught}</span>
+                    <span className="agent-matrix-catch-total">{total}</span>
+                  </span>
+                )}
               </Tooltip>
             )
           } else {
             const emoji = statusEmoji(cell)
+            const skipped = cell?.mutants?.skipped
             content = (
-              <Tooltip title={statusTitle} mouseEnterDelay={0.15} mouseLeaveDelay={0}>
-                <span className="agent-matrix-emoji">{emoji}</span>
+              <Tooltip title={skipped ? `${statusTitle}. No mutant built: ${skipped}` : statusTitle} mouseEnterDelay={0.15} mouseLeaveDelay={0}>
+                {taskColumnsCompact ? <span className="agent-matrix-compact-fill" /> : <span className="agent-matrix-emoji">{emoji}</span>}
               </Tooltip>
             )
           }
@@ -821,11 +889,13 @@ export function AgentPage() {
     deletingRunId,
     getCostColor,
     isPinned,
+    isTestGeneration,
     onCopyRunId,
     onDeleteRow,
     runScales,
     runSort,
     taskColumnWidth,
+    taskColumnsCompact,
     taskHeaderColors,
     taskIds,
     togglePin,
@@ -862,6 +932,35 @@ export function AgentPage() {
               <span className="label-wrap">
                 Package tasks only <Switch checked={packageTasksOnly} onChange={setPackageTasksOnly} />
               </span>
+            </Tooltip>
+          )}
+          <Tooltip
+            title="Shrink the task columns until every task fits the window. Columns too narrow for their contents show only their colour; hover a cell for its details."
+            mouseEnterDelay={0.15}
+            mouseLeaveDelay={0}
+          >
+            <span className="label-wrap">
+              Fit tasks to width <Switch checked={fitTasks} onChange={setFitTasks} />
+            </span>
+          </Tooltip>
+          <span className="label-wrap">
+            Tasks:
+            <Radio.Group
+              value={taskKind}
+              onChange={(e) => setTaskKind(e.target.value)}
+              size="small"
+              optionType="button"
+              buttonStyle="solid"
+              style={{ marginLeft: 8 }}
+              options={[
+                { value: 'implementation', label: 'Implementation' },
+                { value: 'test_generation', label: 'Test generation' },
+              ]}
+            />
+          </span>
+          {isTestGeneration && (
+            <Tooltip title="Every task's seeded bugs, their patches, and the original tests' scripts they break" mouseEnterDelay={0.15} mouseLeaveDelay={0}>
+              <Button href="#mutations">Mutation catalogue →</Button>
             </Tooltip>
           )}
           <span className="label-wrap">
@@ -901,7 +1000,7 @@ export function AgentPage() {
       </Card>
 
       <Card title="Runs by task">
-        <div ref={tableContainerRef}>
+        <div ref={tableContainerRef} className={taskColumnsCompact ? 'agent-matrix-compact' : undefined}>
           <Table<AgentMatrixRunItem>
             rowKey="run_id"
             dataSource={rowsForDisplay}
@@ -915,6 +1014,7 @@ export function AgentPage() {
             }}
             pagination={{ pageSize: PAGE_SIZE, showSizeChanger: true, pageSizeOptions: PAGE_SIZE_OPTIONS }}
             onChange={onRunTableChange}
+            showSorterTooltip={{ target: 'sorter-icon' }}
             scroll={{ x: tableScrollX }}
             size="small"
           />

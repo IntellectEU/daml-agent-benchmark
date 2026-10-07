@@ -1,0 +1,657 @@
+{
+  "task_id": "splice/daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml",
+  "task_safe_name": "splice__daml__splice-dso-governance-test__daml__Splice__Scripts__TestOnboarding.daml",
+  "test_file": "splice/daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml",
+  "impl_files": [
+    "splice/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T14:32:12.439353+00:00",
+  "started_at_utc": "2026-10-02T14:37:15.319586+00:00",
+  "finished_at_utc": "2026-10-02T14:46:03.479364+00:00",
+  "live_updated_at_utc": "2026-10-02T14:46:03.479364+00:00",
+  "repo_copy": "261002-163212/splice_____5804cj68",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedExpiry": true,
+      "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedPastExpiry": true,
+      "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestExpiry": true,
+      "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestPastExpiry": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "request-expire-inverted",
+        "source": "llm",
+        "kind": "time",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedExpiry": true,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedPastExpiry": true,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestExpiry": false,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestPastExpiry": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 14:43:48.52 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 2a:36:0e:3f:cc:8d:b8:1b'. Ignoring it.\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    12:1-12:28\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:39:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd)\n    with\n  Sub-transactions:\n     0\n     └─> 'dso-40b5f04b' exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'sponsor-fb9a0f58'} readAs:\n                                              {} (Splice.Scripts.TestOnboarding:28:3)\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'candidate-9cefe94d'} readAs:\n                                                {} (Splice.Scripts.TestOnboarding:29:3)\n  \n  TX 2 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:30:10)\n  #2:0\n  │   consumed by: #3:0\n  │   referenced by #3:0\n  │   disclosed to (since): 'candidate-9cefe94d' (2),\n                            'dso-40b5f04b' (2)\n  └─> 'dso-40b5f04b' creates Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd\n                     with\n                       candidateName = \"candidate\";\n                       candidateParty = 'candidate-9cefe94d';\n                       candidateParticipantId = \"participant::candidate\";\n                       token = \"signed-token\";\n                       sponsor = 'sponsor-fb9a0f58';\n                       dso = 'dso-40b5f04b';\n                       expiresAt = 1970-01-01T01:00:00Z\n  \n  TX 3 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:39:3)\n  #3:0\n  │   disclosed to (since): 'candidate-9cefe94d' (3),\n                            'dso-40b5f04b' (3)\n  └─> 'dso-40b5f04b' exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd)\u001b[0m\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    12:1-12:28\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:39:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd)\n    with\n  Sub-transactions:\n     0\n     └─> 'dso-40b5f04b' exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'sponsor-fb9a0f58'} readAs:\n                                              {} (Splice.Scripts.TestOnboarding:28:3)\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'candidate-9cefe94d'} readAs:\n                                                {} (Splice.Scripts.TestOnboarding:29:3)\n  \n  TX 2 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:30:10)\n  #2:0\n  │   consumed by: #3:0\n  │   referenced by #3:0\n  │   disclosed to (since): 'candidate-9cefe94d' (2),\n                            'dso-40b5f04b' (2)\n  └─> 'dso-40b5f04b' creates Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd\n                     with\n                       candidateName = \"candidate\";\n                       candidateParty = 'candidate-9cefe94d';\n                       candidateParticipantId = \"participant::candidate\";\n                       token = \"signed-token\";\n                       sponsor = 'sponsor-fb9a0f58';\n                       dso = 'dso-40b5f04b';\n                       expiresAt = 1970-01-01T01:00:00Z\n  \n  TX 3 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:39:3)\n  #3:0\n  │   disclosed to (since): 'candidate-9cefe94d' (3),\n                            'dso-40b5f04b' (3)\n  └─> 'dso-40b5f04b' exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd)\u001b[0m\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    52:1-52:32\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:65:39:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: The requirement 'Onboarding has expired' was not met.\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingRequest_Expire on #0:0 (Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd)\n    with\n  Sub-transactions:\n     0\n     └─> 'dso-2d0cd0f1' exercises SvOnboardingRequest_Expire on #0:0 (Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:64:10)\n  #0:0\n  │   disclosed to (since): 'candidate-501c9270' (0),\n                            'dso-2d0cd0f1' (0)\n  └─> 'dso-2d0cd0f1' creates Splice.SvOnboarding:SvOnboardingRequest@e57ca5818c995e0c3349f5b8522dd18acf86050684510a35dd432bca9942edfd\n                     with\n                       candidateName = \"candidate\";\n                       candidateParty = 'candidate-501c9270';\n                       candidateParticipantId = \"participant\";\n                       token = \"token\";\n                       sponsor = 'dso-2d0cd0f1';\n                       dso = 'dso-2d0cd0f1';\n                       expiresAt = 1969-12-31T23:59:59Z\u001b[0m\n"
+        }
+      },
+      {
+        "id": "confirmed-expire-inverted",
+        "source": "llm",
+        "kind": "time",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedExpiry": false,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedPastExpiry": false,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestExpiry": true,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestPastExpiry": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 14:44:33.88 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 5e:46:83:a1:c2:19:65:31'. Ignoring it.\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    70:1-70:30\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:95:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0)\n    with\n  Sub-transactions:\n     0\n     └─> 'dso-d4d95138' exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'candidate-9b3970be'} readAs:\n                                                {} (Splice.Scripts.TestOnboarding:85:3)\n  \n  TX 1 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:86:10)\n  #1:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'candidate-9b3970be' (1),\n                            'dso-d4d95138' (1)\n  └─> 'dso-d4d95138' creates Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0\n                     with\n                       svParty = 'candidate-9b3970be';\n                       svName = \"candidate\";\n                       svRewardWeight = 42;\n                       svParticipantId = \"participant::candidate\";\n                       reason = \"approved\";\n                       dso = 'dso-d4d95138';\n                       expiresAt = 1970-01-01T01:00:00Z\n  \n  TX 2 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:95:3)\n  #2:0\n  │   disclosed to (since): 'candidate-9b3970be' (2),\n                            'dso-d4d95138' (2)\n  └─> 'dso-d4d95138' exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0)\u001b[0m\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    70:1-70:30\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:95:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0)\n    with\n  Sub-transactions:\n     0\n     └─> 'dso-d4d95138' exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'candidate-9b3970be'} readAs:\n                                                {} (Splice.Scripts.TestOnboarding:85:3)\n  \n  TX 1 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:86:10)\n  #1:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'candidate-9b3970be' (1),\n                            'dso-d4d95138' (1)\n  └─> 'dso-d4d95138' creates Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0\n                     with\n                       svParty = 'candidate-9b3970be';\n                       svName = \"candidate\";\n                       svRewardWeight = 42;\n                       svParticipantId = \"participant::candidate\";\n                       reason = \"approved\";\n                       dso = 'dso-d4d95138';\n                       expiresAt = 1970-01-01T01:00:00Z\n  \n  TX 2 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:95:3)\n  #2:0\n  │   disclosed to (since): 'candidate-9b3970be' (2),\n                            'dso-d4d95138' (2)\n  └─> 'dso-d4d95138' exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0)\u001b[0m\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    108:1-108:34\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:121:41:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: The requirement 'SV candidate confirmation has expired' was not met.\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingConfirmed_Expire on #0:0 (Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0)\n    with\n  Sub-transactions:\n     0\n     └─> 'dso-1df42503' exercises SvOnboardingConfirmed_Expire on #0:0 (Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:120:10)\n  #0:0\n  │   disclosed to (since): 'candidate-c812a76d' (0),\n                            'dso-1df42503' (0)\n  └─> 'dso-1df42503' creates Splice.SvOnboarding:SvOnboardingConfirmed@8710fdf9eacd9b081adc82f18515a29623803f74e545898dde0a45f8265abad0\n                     with\n                       svParty = 'candidate-c812a76d';\n                       svName = \"candidate\";\n                       svRewardWeight = 1;\n                       svParticipantId = \"participant\";\n                       reason = \"approved\";\n                       dso = 'dso-1df42503';\n                       expiresAt = 1969-12-31T23:59:59Z\u001b[0m\n"
+        }
+      },
+      {
+        "id": "request-expire-controller-candidate",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedExpiry": true,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedPastExpiry": true,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestExpiry": false,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestPastExpiry": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 14:45:10.55 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 61:55:01:e0:28:a2:29:a6'. Ignoring it.\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    12:1-12:28\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:45:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T01:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38)\n    with\n  Sub-transactions:\n     0\n     └─> 'candidate-9cefe94d' exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'sponsor-fb9a0f58'} readAs:\n                                              {} (Splice.Scripts.TestOnboarding:28:3)\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'candidate-9cefe94d'} readAs:\n                                                {} (Splice.Scripts.TestOnboarding:29:3)\n  \n  TX 2 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:30:10)\n  #2:0\n  │   consumed by: #7:0\n  │   referenced by #7:0\n  │   disclosed to (since): 'candidate-9cefe94d' (2),\n                            'dso-40b5f04b' (2)\n  └─> 'dso-40b5f04b' creates Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38\n                     with\n                       candidateName = \"candidate\";\n                       candidateParty = 'candidate-9cefe94d';\n                       candidateParticipantId = \"participant::candidate\";\n                       token = \"signed-token\";\n                       sponsor = 'sponsor-fb9a0f58';\n                       dso = 'dso-40b5f04b';\n                       expiresAt = 1970-01-01T01:00:00Z\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'dso-40b5f04b'} readAs:\n                                          {} (Splice.Scripts.TestOnboarding:39:3)\n  \n  pass 4 3599s\n  \n  TX 5 1970-01-01T00:59:59Z\n     mustFailAt actAs: {'dso-40b5f04b'} readAs:\n                                          {} (Splice.Scripts.TestOnboarding:43:3)\n  \n  pass 6 1s\n  \n  TX 7 1970-01-01T01:00:00Z (Splice.Scripts.TestOnboarding:45:3)\n  #7:0\n  │   disclosed to (since): 'candidate-9cefe94d' (7),\n                            'dso-40b5f04b' (7)\n  └─> 'candidate-9cefe94d' exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38)\u001b[0m\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    12:1-12:28\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:45:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T01:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38)\n    with\n  Sub-transactions:\n     0\n     └─> 'candidate-9cefe94d' exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'sponsor-fb9a0f58'} readAs:\n                                              {} (Splice.Scripts.TestOnboarding:28:3)\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'candidate-9cefe94d'} readAs:\n                                                {} (Splice.Scripts.TestOnboarding:29:3)\n  \n  TX 2 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:30:10)\n  #2:0\n  │   consumed by: #7:0\n  │   referenced by #7:0\n  │   disclosed to (since): 'candidate-9cefe94d' (2),\n                            'dso-40b5f04b' (2)\n  └─> 'dso-40b5f04b' creates Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38\n                     with\n                       candidateName = \"candidate\";\n                       candidateParty = 'candidate-9cefe94d';\n                       candidateParticipantId = \"participant::candidate\";\n                       token = \"signed-token\";\n                       sponsor = 'sponsor-fb9a0f58';\n                       dso = 'dso-40b5f04b';\n                       expiresAt = 1970-01-01T01:00:00Z\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'dso-40b5f04b'} readAs:\n                                          {} (Splice.Scripts.TestOnboarding:39:3)\n  \n  pass 4 3599s\n  \n  TX 5 1970-01-01T00:59:59Z\n     mustFailAt actAs: {'dso-40b5f04b'} readAs:\n                                          {} (Splice.Scripts.TestOnboarding:43:3)\n  \n  pass 6 1s\n  \n  TX 7 1970-01-01T01:00:00Z (Splice.Scripts.TestOnboarding:45:3)\n  #7:0\n  │   disclosed to (since): 'candidate-9cefe94d' (7),\n                            'dso-40b5f04b' (7)\n  └─> 'candidate-9cefe94d' exercises SvOnboardingRequest_Expire on #2:0 (Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38)\u001b[0m\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    52:1-52:32\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:65:39:\n  0: exercise of SvOnboardingRequest_Expire in Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38 at DA.Internal.Template.Functions:247:3\n     failed due to a missing authorization from 'candidate-501c9270'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:64:10)\n  #0:0\n  │   disclosed to (since): 'candidate-501c9270' (0),\n                            'dso-2d0cd0f1' (0)\n  └─> 'dso-2d0cd0f1' creates Splice.SvOnboarding:SvOnboardingRequest@b702fe9b0598f04e9419b83be923fc474bc132525217e7c6a5be33a4899a0d38\n                     with\n                       candidateName = \"candidate\";\n                       candidateParty = 'candidate-501c9270';\n                       candidateParticipantId = \"participant\";\n                       token = \"token\";\n                       sponsor = 'dso-2d0cd0f1';\n                       dso = 'dso-2d0cd0f1';\n                       expiresAt = 1969-12-31T23:59:59Z\u001b[0m\n"
+        }
+      },
+      {
+        "id": "confirmed-expire-controller-sv",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedExpiry": false,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingConfirmedPastExpiry": false,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestExpiry": true,
+            "daml/Splice/Scripts/TestOnboarding.daml:testOnboardingRequestPastExpiry": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 14:45:47.39 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: ab:a5:dc:02:85:0c:92:99'. Ignoring it.\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    70:1-70:30\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:101:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T01:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e)\n    with\n  Sub-transactions:\n     0\n     └─> 'candidate-9b3970be' exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'candidate-9b3970be'} readAs:\n                                                {} (Splice.Scripts.TestOnboarding:85:3)\n  \n  TX 1 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:86:10)\n  #1:0\n  │   consumed by: #6:0\n  │   referenced by #6:0\n  │   disclosed to (since): 'candidate-9b3970be' (1),\n                            'dso-d4d95138' (1)\n  └─> 'dso-d4d95138' creates Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e\n                     with\n                       svParty = 'candidate-9b3970be';\n                       svName = \"candidate\";\n                       svRewardWeight = 42;\n                       svParticipantId = \"participant::candidate\";\n                       reason = \"approved\";\n                       dso = 'dso-d4d95138';\n                       expiresAt = 1970-01-01T01:00:00Z\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'dso-d4d95138'} readAs:\n                                          {} (Splice.Scripts.TestOnboarding:95:3)\n  \n  pass 3 3599s\n  \n  TX 4 1970-01-01T00:59:59Z\n     mustFailAt actAs: {'dso-d4d95138'} readAs:\n                                          {} (Splice.Scripts.TestOnboarding:99:3)\n  \n  pass 5 1s\n  \n  TX 6 1970-01-01T01:00:00Z (Splice.Scripts.TestOnboarding:101:3)\n  #6:0\n  │   disclosed to (since): 'candidate-9b3970be' (6),\n                            'dso-d4d95138' (6)\n  └─> 'candidate-9b3970be' exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e)\u001b[0m\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    70:1-70:30\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:101:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T01:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e)\n    with\n  Sub-transactions:\n     0\n     └─> 'candidate-9b3970be' exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'candidate-9b3970be'} readAs:\n                                                {} (Splice.Scripts.TestOnboarding:85:3)\n  \n  TX 1 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:86:10)\n  #1:0\n  │   consumed by: #6:0\n  │   referenced by #6:0\n  │   disclosed to (since): 'candidate-9b3970be' (1),\n                            'dso-d4d95138' (1)\n  └─> 'dso-d4d95138' creates Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e\n                     with\n                       svParty = 'candidate-9b3970be';\n                       svName = \"candidate\";\n                       svRewardWeight = 42;\n                       svParticipantId = \"participant::candidate\";\n                       reason = \"approved\";\n                       dso = 'dso-d4d95138';\n                       expiresAt = 1970-01-01T01:00:00Z\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'dso-d4d95138'} readAs:\n                                          {} (Splice.Scripts.TestOnboarding:95:3)\n  \n  pass 3 3599s\n  \n  TX 4 1970-01-01T00:59:59Z\n     mustFailAt actAs: {'dso-d4d95138'} readAs:\n                                          {} (Splice.Scripts.TestOnboarding:99:3)\n  \n  pass 5 1s\n  \n  TX 6 1970-01-01T01:00:00Z (Splice.Scripts.TestOnboarding:101:3)\n  #6:0\n  │   disclosed to (since): 'candidate-9b3970be' (6),\n                            'dso-d4d95138' (6)\n  └─> 'candidate-9b3970be' exercises SvOnboardingConfirmed_Expire on #1:0 (Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e)\u001b[0m\nFile:     daml/Splice/Scripts/TestOnboarding.daml\nHidden:   no\nRange:    108:1-108:34\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Splice.Scripts.TestOnboarding:121:41:\n  0: exercise of SvOnboardingConfirmed_Expire in Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e at DA.Internal.Template.Functions:247:3\n     failed due to a missing authorization from 'candidate-c812a76d'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Splice.Scripts.TestOnboarding:120:10)\n  #0:0\n  │   disclosed to (since): 'candidate-c812a76d' (0),\n                            'dso-1df42503' (0)\n  └─> 'dso-1df42503' creates Splice.SvOnboarding:SvOnboardingConfirmed@a3c25a7df19a706ec4517c3230c03f0016683897283bbb47ef190a807d5fbc1e\n                     with\n                       svParty = 'candidate-c812a76d';\n                       svName = \"candidate\";\n                       svRewardWeight = 1;\n                       svParticipantId = \"participant\";\n                       reason = \"approved\";\n                       dso = 'dso-1df42503';\n                       expiresAt = 1969-12-31T23:59:59Z\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 4,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Splice/Scripts/TestOnboarding.daml:testBootstrapMainNetWithNonZeroRound": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testBootstrapDevNetWithNonZeroRound": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testOnboardValidator": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testSvOnboardingRequestExpiry": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testSvNameUniquenessNotInDevNet": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testSvOnboardingRequestArchiveWhenSvIsAlreadyAddedAsSV": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testSvOverwriteInDevNet": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:test_MergeValidatorLicense": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testSvOnboardingConfirmedExpiry": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testSvReonboarding": true,
+        "daml/Splice/Scripts/TestOnboarding.daml:testSvOnboarding": true,
+        "daml/Splice/Scripts/DsoTestUtils.daml:initDevNet": true,
+        "daml/Splice/Scripts/DsoTestUtils.daml:initMainNet": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": false,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-10-02T14:39:31.449711+00:00",
+    "build_outputs_removed": 993
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-163212/splice_____5804cj68/daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 3587,
+    "bytes_scanned": 162995253,
+    "elapsed_seconds": 11.037,
+    "repo_copy_digest": "38d378ee29337a93f8fa3a5d6ef72e94c0f459fe96484f2e215fa81a19e9f4dd",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "splice/daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml",
+      "path_in_copy": "daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml",
+      "original": "-- Copyright (c) 2024 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Splice.Scripts.TestOnboarding where\n\nimport DA.Assert\nimport DA.Foldable (forA_)\nimport DA.Optional (fromSome)\nimport qualified DA.Map as Map\nimport Daml.Script\nimport DA.Time\nimport DA.List\n\nimport Splice.ValidatorLicense\n\nimport Splice.CometBft\nimport Splice.DsoRules\nimport Splice.DSO.DecentralizedSynchronizer\nimport Splice.SvOnboarding\n\nimport Splice.Scripts.Util\nimport Splice.Scripts.DsoTestUtils\nimport Splice.AmuletRules (AmuletRules)\nimport Splice.Types\n\n\ntestOnboardValidator : Script ()\ntestOnboardValidator = do\n  (app, dso, (_, sv2, _, _)) <- initMainNet\n\n  -- a new validator prepares his participant\n  v1 <- allocateParty \"v1\"\n\n  now <- getTime\n\n  -- sv2 (not the DSO delegate) onboards the new validator\n  onboardValidator app sv2 \"v1\" v1\n\n  -- v1 received a validator license\n  [(validatorLicenseCid, validatorLicense)] <- queryFilter @ValidatorLicense dso (\\license -> license.validator == v1)\n  validatorLicense === ValidatorLicense with\n    validator = v1\n    sponsor = sv2\n    dso\n    faucetState = None\n    metadata = Some ValidatorLicenseMetadata with\n      version = \"0.1.0\"\n      contactPoint = \"v1@example.com\"\n      lastUpdatedAt = now\n    lastActiveAt = Some now\n\n  -- so v1 is onboarded!\n\n  -- v1 can update its version and contact point\n\n  -- fails without advancing the time\n  submitMultiMustFail [v1] [dso] $ exerciseCmd validatorLicenseCid ValidatorLicense_UpdateMetadata with\n    version = \"0.2.0\"\n    contactPoint = \"v1@example2.com\"\n\n  passTime (hours 1)\n  metadataUpdateTime <- getTime\n\n  -- works after advancing time\n  submitMulti [v1] [dso] $ exerciseCmd validatorLicenseCid ValidatorLicense_UpdateMetadata with\n    version = \"0.2.0\"\n    contactPoint = \"v1@example2.com\"\n\n  -- license is updated\n  [(validatorLicenseCid, validatorLicense)] <- queryFilter @ValidatorLicense dso (\\license -> license.validator == v1)\n  validatorLicense === ValidatorLicense with\n    validator = v1\n    sponsor = sv2\n    dso\n    faucetState = None\n    metadata = Some ValidatorLicenseMetadata with\n      lastUpdatedAt = metadataUpdateTime\n      version = \"0.2.0\"\n      contactPoint = \"v1@example2.com\"\n    lastActiveAt = Some metadataUpdateTime\n\n\n  -- activity cannot be reported without advancing time\n  submitMultiMustFail [v1] [dso] $ exerciseCmd validatorLicenseCid ValidatorLicense_ReportActive\n\n  passTime (hours 1)\n  now <- getTime\n\n  submitMulti [v1] [dso] $ exerciseCmd validatorLicenseCid ValidatorLicense_ReportActive\n  [(_, validatorLicense)] <- queryFilter @ValidatorLicense dso (\\license -> license.validator == v1)\n  validatorLicense === ValidatorLicense with\n    validator = v1\n    sponsor = sv2\n    dso\n    faucetState = None\n    metadata = Some ValidatorLicenseMetadata with\n      lastUpdatedAt = metadataUpdateTime\n      version = \"0.2.0\"\n      contactPoint = \"v1@example2.com\"\n    lastActiveAt = Some now\n  pure ()\n\ntestSvOnboarding : Script ()\ntestSvOnboarding = do\n  (app, dso, (_, sv2, sv3, sv4)) <- initMainNet\n  -- we now have enough SVs to achieve BFT for f = 1\n\n  -- a new sv prepares his participant\n  svX <- allocateParty \"svX\"\n\n  -- we can't test token validity in Daml (it's a JWT)\n  let token = \"mock-token\"\n\n  -- sv2 (not the DSO delegate) initiates the onboarding of the new sv\n  svSubmits app sv2 $ \\cid -> exerciseCmd cid $\n    DsoRules_StartSvOnboarding \"svX\" svX \"svX-participant-id\" token sv2\n\n  -- an onboarding request for svX has been created\n  [(_, svOnboardingRequest)] <- query @SvOnboardingRequest dso\n  svOnboardingRequest === SvOnboardingRequest with\n    candidateName = \"svX\"\n    candidateParty = svX\n    candidateParticipantId = \"svX-participant-id\"\n    token\n    sponsor = sv2\n    dso\n    expiresAt = svOnboardingRequest.expiresAt\n\n  -- svX collects three confirmations which is enough to onboard him\n  [(dsoRulesCid, _)] <- query @DsoRules dso\n  forA_ [sv2, sv3, sv4] $ \\sv ->\n    submitMulti [sv] [dso] $ exerciseCmd dsoRulesCid DsoRules_ConfirmAction with\n      confirmer = sv\n      action = ARC_DsoRules with\n        dsoAction = SRARC_ConfirmSvOnboarding $ DsoRules_ConfirmSvOnboarding with\n          newSvParty = svX\n          newSvName = \"svX\"\n          newParticipantId = \"svX-participant-id\"\n          reason = \"because\"\n          newSvRewardWeight = 19 -- we use 19 as a dummy reward weight for testing\n  executeAllConfirmedActions app\n\n  -- svX is now a confirmed SV\n  [(svOnboardingConfirmedCid, svOnboardingConfirmed)] <- query @SvOnboardingConfirmed dso\n  svOnboardingConfirmed === SvOnboardingConfirmed with\n    svParty = svX\n    svName = \"svX\"\n    svParticipantId = \"svX-participant-id\"\n    reason = \"because\"\n    svRewardWeight = 19\n    dso\n    expiresAt = svOnboardingConfirmed.expiresAt\n\n  -- once svX becomes able to read as DSO party (e.g., after party migration to svX's participant)...\n  [(dsoRulesCid, _)] <- query @DsoRules dso\n\n  -- it gets the open mining rounds, so that it can set it's own `joinedAsOfRound` in a cheat-resistant way\n  [(earliestRoundCid, earliestRound), (middleRoundCid, _), (latestRoundCid, _)] <- getActiveOpenRoundsSorted app\n\n  [(amuletRulesCid, _)] <- query @AmuletRules dso\n\n  -- the rounds need to be passed in the correct order\n  submitMultiMustFail [svX] [dso] $ exerciseCmd dsoRulesCid DsoRules_AddConfirmedSv with\n    sv = svX\n    svOnboardingConfirmedCid\n    earliestRoundCid = latestRoundCid\n    middleRoundCid\n    latestRoundCid = earliestRoundCid\n    amuletRulesCid\n  submitMultiMustFail [svX] [dso] $ exerciseCmd dsoRulesCid DsoRules_AddConfirmedSv with\n    sv = svX\n    svOnboardingConfirmedCid\n    earliestRoundCid\n    middleRoundCid = earliestRoundCid\n    latestRoundCid = earliestRoundCid\n    amuletRulesCid\n\n  -- onboarding fails if the time expired\n  now <- getTime\n  setTime svOnboardingConfirmed.expiresAt\n\n  submitMultiMustFail [svX] [dso] $ exerciseCmd dsoRulesCid DsoRules_AddConfirmedSv with\n    sv = svX\n    svOnboardingConfirmedCid\n    earliestRoundCid\n    middleRoundCid\n    latestRoundCid\n    amuletRulesCid\n\n  -- reset the time to now\n  setTime now\n\n  -- svX completes its own onboarding by adding itself to the DsoRules\n  submitMulti [svX] [dso] $ exerciseCmd dsoRulesCid DsoRules_AddConfirmedSv with\n    sv = svX\n    svOnboardingConfirmedCid\n    earliestRoundCid\n    middleRoundCid\n    latestRoundCid\n    amuletRulesCid\n\n  checkSvContractInvariants app\n\n  [(_, dsoRules)] <- query @DsoRules dso\n  case Map.lookup svX dsoRules.svs of\n    None -> fail \"svX is not an SV\"\n    Some info ->\n      -- the new sv joined in the earliest open round\n      info.joinedAsOfRound === earliestRound.round\n  now <- getTime\n  -- now that svX is a sv it can set its CometBFT config to become a CometBFT  validator\n  -- TODO(M3-59): add negative tests for limits enforced on config values (manual testing showed they work)\n  let cometBftConfig = CometBftConfig with\n        nodes = Map.fromList\n          [ ( \"svX-node-id-1\"\n            , CometBftNodeConfig with\n                validatorPubKey = \"==base-64-validator-pub-key-1\"\n                votingPower = 0\n            )\n          , ( \"svX-node-id-2\"\n            , CometBftNodeConfig with\n                validatorPubKey = \"==base-64-validator-pub-key-1\"\n                votingPower = 1\n            )\n          ]\n        governanceKeys = [GovernanceKeyConfig with pubKey = \"==base-64-pubKey-1\"]\n        sequencingKeys = []\n\n  let sequencerConfig = Some SequencerConfig with\n        migrationId = 0\n        sequencerId = \"sequencer-id\"\n        url = \"sequencer.address:1234\"\n        availableAfter = Some now\n\n  let mediatorConfig = Some MediatorConfig with\n        mediatorId = \"mediator-id\"\n\n  let scanConfig = Some ScanConfig with\n        publicUrl = \"https://scan1234.example.com\"\n\n  let newNodeConfig = SynchronizerNodeConfig with\n        cometBft = cometBftConfig\n        sequencer = sequencerConfig\n        mediator = mediatorConfig\n        scan = scanConfig\n        legacySequencerConfig = None\n\n  setSynchronizerNodeConfig app svX dsoRules.config.decentralizedSynchronizer.lastSynchronizerId newNodeConfig\n\n  -- check that the config was actually set\n  (_, nodeState) <- getSvNodeState app svX\n  let actualConfig =\n        Map.lookup dsoRules.config.decentralizedSynchronizer.lastSynchronizerId nodeState.state.synchronizerNodes\n  actualConfig === Some newNodeConfig\n\n  pure ()\n\n\ntestSvOnboardingRequestExpiry : Script ()\ntestSvOnboardingRequestExpiry = do\n  (app, _, (sv1, sv2, _, _)) <- initMainNet\n\n  -- a new sv prepares his participant\n  svX <- allocateParty \"svX\"\n\n  -- we can't test token validity in Daml (it's a JWT)\n  let token = \"mock-token\"\n\n  -- sv2 (not the DSO delegate) initiates the onboarding of the new sv\n  result <- svSubmits app sv2 $ \\cid -> exerciseCmd cid $\n    DsoRules_StartSvOnboarding \"svX\" svX \"svX-participant-id\" token sv2\n  let svOnboardingRequestCid = result.onboardingRequest\n\n  -- DSO delegate tries to expire the onboarding, but it's too early\n  dsoDelegateSubmitsMustFail app $ \\cid -> exerciseCmd cid $\n    DsoRules_ExpireSvOnboardingRequest svOnboardingRequestCid (Some sv1)\n\n  -- wait for the onboarding to expire\n  passTime (hours 25)\n\n  -- DSO delegate expires the onboarding\n  dsoDelegateSubmits app $ \\cid -> exerciseCmd cid $\n    DsoRules_ExpireSvOnboardingRequest svOnboardingRequestCid (Some sv1)\n\n  pure ()\n\n\ntestSvOnboardingRequestArchiveWhenSvIsAlreadyAddedAsSV : Script ()\ntestSvOnboardingRequestArchiveWhenSvIsAlreadyAddedAsSV = do\n  (app, dso, (sv1, sv2, _, _)) <- initMainNet\n\n  -- a new sv prepares his participant\n  svX <- allocateParty \"svX\"\n\n  -- we can't test token validity in Daml (it's a JWT)\n  let token = \"mock-token\"\n\n  -- sv2 (not the DSO delegate) initiates the onboarding of the new sv\n  onboardingResult <- svSubmits app sv2 $ \\cid -> exerciseCmd cid $\n    DsoRules_StartSvOnboarding \"svX\" svX \"svx-participant-id\" token sv2\n  let svOnboardingRequestCid = onboardingResult.onboardingRequest\n\n  [(dsoRulesCid, _)] <- query @DsoRules dso\n\n  -- DSO delegate cannot archive the onboarding as svX is not yet added as sv\n  dsoDelegateSubmitsMustFail app $ \\cid -> exerciseCmd cid $\n    DsoRules_ArchiveSvOnboardingRequest svOnboardingRequestCid (Some sv1)\n\n  -- create a SvOnboardingConfirmed contract\n  submit dso $ exerciseCmd dsoRulesCid $ DsoRules_AddSv with\n    newSvParty = svX\n    newSvName = \"svX\"\n    newSvRewardWeight = 19\n    newSvParticipantId = \"svX-participant-id\"\n    joinedAsOfRound = (Round 3)\n\n  -- DSO delegate can archive the onboarding as svX is added as sv\n  dsoDelegateSubmits app $ \\cid -> exerciseCmd cid $\n    DsoRules_ArchiveSvOnboardingRequest svOnboardingRequestCid (Some sv1)\n\n  -- check status report invaraints\n  checkSvContractInvariants app\n\n\ntestSvOnboardingConfirmedExpiry : Script ()\ntestSvOnboardingConfirmedExpiry = do\n  (app, dso, (sv1, sv2, sv3, sv4)) <- initMainNet\n\n  -- a new sv prepares his participant\n  svX <- allocateParty \"svX\"\n\n  -- svX collects three confirmations which is enough to onboard him\n  [(dsoRulesCid, _)] <- query @DsoRules dso\n  forA_ [sv2, sv3, sv4] $ \\sv ->\n    submitMulti [sv] [dso] $ exerciseCmd dsoRulesCid DsoRules_ConfirmAction with\n      confirmer = sv\n      action = ARC_DsoRules with\n        dsoAction = SRARC_ConfirmSvOnboarding $ DsoRules_ConfirmSvOnboarding with\n          newSvParty = svX\n          newSvName = \"svX\"\n          newParticipantId = \"svX-participant-id\"\n          newSvRewardWeight = 19\n          reason = \"because\"\n\n  executeAllConfirmedActions app\n\n  [(svOnboardingConfirmedCid, _)] <- query @SvOnboardingConfirmed dso\n\n  -- DSO delegate tries to expire the confirmation but it's too early\n  dsoDelegateSubmitsMustFail app $ \\cid -> exerciseCmd cid $\n    DsoRules_ExpireSvOnboardingConfirmed svOnboardingConfirmedCid (Some sv1)\n\n  -- wait for the confirmation to expire\n  passTime (hours 25)\n\n  -- DSO delegate expires the confirmation\n  _ <- dsoDelegateSubmits app $ \\cid -> exerciseCmd cid $\n    DsoRules_ExpireSvOnboardingConfirmed with\n        cid = svOnboardingConfirmedCid\n        sv = Some sv1\n\n  [(_, dsoRules)] <- query @DsoRules dso\n  Map.keys (dsoRules.offboardedSvs) === [svX]\n\n\ntestSvNameUniquenessNotInDevNet : Script ()\ntestSvNameUniquenessNotInDevNet = do\n  -- When it is not in devnet, a new SV party cannot dynamically replace an existing SV party for the same SV name.\n  (_, dso, (_, sv2, _, _)) <- initMainNet\n\n  [(dsoRulesCid, dsoRules)] <- query @DsoRules dso\n\n  (fromSome (Map.lookup sv2 dsoRules.svs)).name === \"sv2\"\n\n  svX <- allocateParty \"svX\"\n  submitMustFail dso $ exerciseCmd dsoRulesCid $ DsoRules_AddSv svX \"sv2\" 19 \"sv2-participant-id\" (Round 3)\n\n\ntestSvOverwriteInDevNet : Script ()\ntestSvOverwriteInDevNet = do\n  (app, dso, (sv1, sv2, _, _)) <- initDevNet\n\n  [(dsoRulesCid, dsoRules)] <- query @DsoRules dso\n\n  (fromSome (Map.lookup sv1 dsoRules.svs)).name === \"sv1\"\n  (fromSome (Map.lookup sv2 dsoRules.svs)).name === \"sv2\"\n  svX <- allocateParty \"svX\"\n\n  -- overwriting existing sv successfully (using a new participant node)\n  submit dso $ exerciseCmd dsoRulesCid $ DsoRules_AddSv svX \"sv2\" 19 \"svX-participant-id\" (Round 3)\n\n  [(_, dsoRules)] <- query @DsoRules app.dso\n  dsoRules.offboardedSvs === Map.fromList [(sv2, OffboardedSvInfo \"sv2\" \"sv2-participant-id\")]\n\n  svX2 <- allocateParty \"svX2\"\n\n  [(dsoRulesCid, _)] <- query @DsoRules app.dso\n\n  -- overwriting existing sv again\n  submit dso $ exerciseCmd dsoRulesCid $ DsoRules_AddSv svX2 \"sv2\" 19 \"svX2-participant-id\" (Round 3)\n\n  [(_, dsoRules)] <- query @DsoRules app.dso\n  dsoRules.offboardedSvs === Map.fromList\n    [ (sv2, OffboardedSvInfo \"sv2\" \"sv2-participant-id\")\n    , (svX, OffboardedSvInfo \"sv2\" \"svX-participant-id\")\n    ]\n\n  -- status reports are OK\n  checkSvContractInvariants app\n\n  pure ()\n\ntestSvReonboarding : Script ()\ntestSvReonboarding = do\n  (app, dso, (sv1, sv2, sv3, sv4)) <- initMainNet\n\n  [(_, dsoRules)] <- query @DsoRules dso\n\n  Map.keys dsoRules.svs === [sv1, sv2, sv3, sv4]\n\n  initiateAndAcceptVote app [sv1, sv2, sv3] $\n    ARC_DsoRules with\n      dsoAction = SRARC_OffboardSv DsoRules_OffboardSv with\n        sv = sv4\n  passTime (dsoRules.config.voteRequestTimeout)\n  executeAllDefinitiveVotes app\n\n  [(_, dsoRules)] <- query @DsoRules dso\n  Map.keys dsoRules.svs === [sv1, sv2, sv3]\n  Map.keys dsoRules.offboardedSvs === [sv4]\n  checkSvContractInvariants app\n\n  -- reonboard sv4\n  let token = \"mock-token\"\n  sv4New <- allocateParty \"sv4New\"\n\n  svSubmits app sv1 $ \\cid -> exerciseCmd cid $\n    DsoRules_StartSvOnboarding \"sv4\" sv4New \"sv4New-participant-id\" token sv1\n  forA_ [sv1,sv2,sv3] $ \\sv ->\n    svSubmits app sv $ \\cid -> exerciseCmd cid $ DsoRules_ConfirmAction with\n      confirmer = sv\n      action = ARC_DsoRules with\n        dsoAction = SRARC_ConfirmSvOnboarding $ DsoRules_ConfirmSvOnboarding with\n          newSvParty = sv4New\n          newSvName = \"sv4\"\n          newParticipantId = \"sv4New-participant-id\"\n          reason = \"because the sv4 owner still has the right to operate a node\"\n          newSvRewardWeight = 19 -- we use 19 as a dummy reward weight for testing\n  executeAllConfirmedActions app\n  [(svOnboardingConfirmedCid, _)] <- query @SvOnboardingConfirmed dso\n\n  [(earliestRoundCid, _), (middleRoundCid, _), (latestRoundCid, _)] <- getActiveOpenRoundsSorted app\n\n  [(amuletRulesCid, _)] <- query @AmuletRules dso\n  [(dsoRulesCid, _)] <- query @DsoRules dso\n\n  submitMulti [sv4New] [dso] $ exerciseCmd dsoRulesCid DsoRules_AddConfirmedSv with\n    sv = sv4New\n    svOnboardingConfirmedCid\n    earliestRoundCid\n    middleRoundCid\n    latestRoundCid\n    amuletRulesCid\n\n  [(_, dsoRules)] <- query @DsoRules dso\n\n  Map.keys dsoRules.svs === [sv1, sv2, sv3, sv4New]\n  -- sv4 remaines offboarded\n  Map.keys dsoRules.offboardedSvs === [sv4]\n\n  -- check status reports\n  checkSvContractInvariants app\n\n  pure ()\n\n-- Ensure that duplicated ValidatorLicence contracts are merged\ntest_MergeValidatorLicense : Script ()\ntest_MergeValidatorLicense = do\n  (_, dso, (sv1, sv2, _, _)) <- initDevNet\n\n  -- a new validator prepares his participant\n  v1 <- allocateParty \"v1\"\n  now <- getTime\n\n  validatorLicense1Cid <- submit dso $ createCmd ValidatorLicense with\n    validator = v1\n    sponsor = sv1\n    dso\n    faucetState = Some FaucetState with\n      firstReceivedFor = Round 0\n      lastReceivedFor = Round 1\n      numCouponsMissed = 0\n    metadata = Some ValidatorLicenseMetadata with\n      version = \"0.1.0\"\n      contactPoint = \"v1@example.com\"\n      lastUpdatedAt = now\n    lastActiveAt = Some now\n\n  validatorLicense2Cid <- submit dso $ createCmd ValidatorLicense with\n    validator = v1\n    sponsor = sv2\n    dso\n    faucetState = Some FaucetState with\n      firstReceivedFor = Round 0\n      lastReceivedFor = Round 2\n      numCouponsMissed = 0\n    metadata = Some ValidatorLicenseMetadata with\n      version = \"0.1.0\"\n      contactPoint = \"v1@example.com\"\n      lastUpdatedAt = now\n    lastActiveAt = Some now\n\n  -- there are two validator licenses for v1\n  validatorLicenses <- queryFilter @ValidatorLicense dso (\\license -> license.validator == v1)\n  length validatorLicenses === 2\n\n  -- the license with the highest lastReceivedFor is kept\n  [(rulesCid, _)] <- query @DsoRules dso\n  DsoRules_MergeValidatorLicenseResult validatorLicenseCid3 <- submitMulti [sv1] [dso] $ exerciseCmd rulesCid (DsoRules_MergeValidatorLicense [validatorLicense1Cid, validatorLicense2Cid] (Some sv1))\n  validatorLicenses <- queryFilter @ValidatorLicense dso (\\license -> license.validator == v1)\n  length validatorLicenses === 1\n  (head validatorLicenses)._2.faucetState === Some FaucetState with\n    firstReceivedFor = Round 0\n    lastReceivedFor = Round 2\n    numCouponsMissed = 0\n\n  -- we can't merge a single contract\n  submitMultiMustFail [sv1] [dso] $ exerciseCmd rulesCid (DsoRules_MergeValidatorLicense [validatorLicenseCid3] (Some sv1))\n\n  -- we can't merge contracts for different validator names\n  [(validatorLicenseSv2Cid, _)] <- queryFilter @ValidatorLicense dso (\\license -> license.validator == sv2)\n  submitMultiMustFail [sv1] [dso] $ exerciseCmd rulesCid (DsoRules_MergeValidatorLicense [validatorLicenseCid3, validatorLicenseSv2Cid] (Some sv1))\n\n  pure()\n\ntestBootstrapDevNetWithNonZeroRound : Script ()\ntestBootstrapDevNetWithNonZeroRound = do\n  (app, _, _) <- initDecentralizedSynchronizerWithNonZeroRound True 34\n  [(_, earliestRound), (_, middleRound), (_, latestRound)] <- getActiveOpenRoundsSorted app\n  earliestRound.round === Round 34\n  middleRound.round === Round 35\n  latestRound.round === Round 36\n  pure ()\n\ntestBootstrapMainNetWithNonZeroRound : Script ()\ntestBootstrapMainNetWithNonZeroRound = do\n  (app, _, _) <- initDecentralizedSynchronizerWithNonZeroRound False 34\n  [(_, earliestRound), (_, middleRound), (_, latestRound)] <- getActiveOpenRoundsSorted app\n  earliestRound.round === Round 34\n  middleRound.round === Round 35\n  latestRound.round === Round 36\n  pure ()\n",
+      "generated": "module Splice.Scripts.TestOnboarding where\n\nimport DA.Assert\nimport DA.Time\nimport Daml.Script\n\nimport Splice.SvOnboarding\nimport Splice.Types\nimport Splice.Util\n\ntestOnboardingRequestExpiry : Script ()\ntestOnboardingRequestExpiry = do\n  dso <- allocateParty \"dso\"\n  candidate <- allocateParty \"candidate\"\n  sponsor <- allocateParty \"sponsor\"\n  outsider <- allocateParty \"outsider\"\n  now <- getTime\n  let expiresAt = addRelTime now (hours 1)\n  let request = SvOnboardingRequest with\n        candidateName = \"candidate\"\n        candidateParty = candidate\n        candidateParticipantId = \"participant::candidate\"\n        token = \"signed-token\"\n        sponsor\n        dso\n        expiresAt\n\n  submitMustFail sponsor $ createCmd request\n  submitMustFail candidate $ createCmd request\n  cid <- submit dso $ createCmd request\n  Some visibleToCandidate <- queryContractId @SvOnboardingRequest candidate cid\n  visibleToCandidate === request\n  Some visibleToDso <- queryContractId @SvOnboardingRequest dso cid\n  visibleToDso === request\n  [] <- query @SvOnboardingRequest sponsor\n  [] <- query @SvOnboardingRequest outsider\n  (contractGroupId request : ForDso) === ForDso with dso\n\n  submitMustFail dso $ exerciseCmd cid SvOnboardingRequest_Expire\n  Some stillActive <- queryContractId @SvOnboardingRequest dso cid\n  stillActive === request\n  setTime (addRelTime expiresAt (negate (seconds 1)))\n  submitMustFail dso $ exerciseCmd cid SvOnboardingRequest_Expire\n  setTime expiresAt\n  submitMustFail candidate $ exerciseCmd cid SvOnboardingRequest_Expire\n  submitMustFail sponsor $ exerciseCmd cid SvOnboardingRequest_Expire\n  SvOnboardingRequest_ExpireResult <- submit dso $ exerciseCmd cid SvOnboardingRequest_Expire\n  None <- queryContractId @SvOnboardingRequest dso cid\n  submitMustFail dso $ exerciseCmd cid SvOnboardingRequest_Expire\n\ntestOnboardingRequestPastExpiry : Script ()\ntestOnboardingRequestPastExpiry = do\n  dso <- allocateParty \"dso\"\n  candidate <- allocateParty \"candidate\"\n  now <- getTime\n  let request = SvOnboardingRequest with\n        candidateName = \"candidate\"\n        candidateParty = candidate\n        candidateParticipantId = \"participant\"\n        token = \"token\"\n        sponsor = dso\n        dso\n        expiresAt = addRelTime now (negate (seconds 1))\n  cid <- submit dso $ createCmd request\n  SvOnboardingRequest_ExpireResult <- submit dso $ exerciseCmd cid SvOnboardingRequest_Expire\n  None <- queryContractId @SvOnboardingRequest candidate cid\n  pure ()\n\ntestOnboardingConfirmedExpiry : Script ()\ntestOnboardingConfirmedExpiry = do\n  dso <- allocateParty \"dso\"\n  candidate <- allocateParty \"candidate\"\n  other <- allocateParty \"other\"\n  now <- getTime\n  let expiresAt = addRelTime now (hours 1)\n  let confirmation = SvOnboardingConfirmed with\n        svParty = candidate\n        svName = \"candidate\"\n        svRewardWeight = 42\n        svParticipantId = \"participant::candidate\"\n        reason = \"approved\"\n        dso\n        expiresAt\n\n  submitMustFail candidate $ createCmd confirmation\n  cid <- submit dso $ createCmd confirmation\n  Some visibleToCandidate <- queryContractId @SvOnboardingConfirmed candidate cid\n  visibleToCandidate === confirmation\n  Some visibleToDso <- queryContractId @SvOnboardingConfirmed dso cid\n  visibleToDso === confirmation\n  [] <- query @SvOnboardingConfirmed other\n  (contractGroupId confirmation : ForDso) === ForDso with dso\n  (contractGroupId confirmation : ForOwner) === ForOwner with dso; owner = candidate\n\n  submitMustFail dso $ exerciseCmd cid SvOnboardingConfirmed_Expire\n  Some stillActive <- queryContractId @SvOnboardingConfirmed dso cid\n  stillActive === confirmation\n  setTime (addRelTime expiresAt (negate (seconds 1)))\n  submitMustFail dso $ exerciseCmd cid SvOnboardingConfirmed_Expire\n  setTime expiresAt\n  submitMustFail candidate $ exerciseCmd cid SvOnboardingConfirmed_Expire\n  submitMustFail other $ exerciseCmd cid SvOnboardingConfirmed_Expire\n  SvOnboardingConfirmed_ExpireResult <- submit dso $ exerciseCmd cid SvOnboardingConfirmed_Expire\n  None <- queryContractId @SvOnboardingConfirmed dso cid\n  submitMustFail dso $ exerciseCmd cid SvOnboardingConfirmed_Expire\n\ntestOnboardingConfirmedPastExpiry : Script ()\ntestOnboardingConfirmedPastExpiry = do\n  dso <- allocateParty \"dso\"\n  candidate <- allocateParty \"candidate\"\n  now <- getTime\n  let confirmation = SvOnboardingConfirmed with\n        svParty = candidate\n        svName = \"candidate\"\n        svRewardWeight = 1\n        svParticipantId = \"participant\"\n        reason = \"approved\"\n        dso\n        expiresAt = addRelTime now (negate (seconds 1))\n  cid <- submit dso $ createCmd confirmation\n  SvOnboardingConfirmed_ExpireResult <- submit dso $ exerciseCmd cid SvOnboardingConfirmed_Expire\n  None <- queryContractId @SvOnboardingConfirmed candidate cid\n  pure ()\n",
+      "captured_at_utc": "2026-10-02T14:46:03.467740+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-163212/splice_____5804cj68",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added four Daml Script tests in `daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml:1`. They cover both onboarding templates’ creation authority, visibility, checked-fetch group IDs, expiry boundaries, controller authority, and archival.\n\nAll four scripts pass against the current implementation.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 166.5207002920215,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 257349,
+      "output_tokens": 5458,
+      "cached_input_tokens": 230997
+    },
+    "usage_by_thread": {
+      "01a0fd0e-9994-7060-8f5b-c9e08ab141b2": {
+        "usage": {
+          "input_tokens": 257349,
+          "output_tokens": 5458,
+          "cached_input_tokens": 230997
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.1534834,
+    "input_usd": 0.052704,
+    "cached_input_usd": 0.0461994,
+    "output_usd": 0.054580000000000004,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790951990.128,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951993.473,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951996.508,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790951999.679,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952002.573,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952008.115,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952010.859,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952025.993,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952048.827,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952051.484,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952062.376,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952094.025,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952117.884,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790952139.059,
+          "client": "10.219.79.114",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

@@ -63,9 +63,9 @@
     "repo_copy_digest": "ce2949218cbffae7b2f089d220607da45e986c74f65811645efb83bea2c25936",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "splice/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml",
+      "answer_file": "splice/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml",
       "path_in_copy": "daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml",
       "original": "-- Copyright (c) 2024 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Splice.ValidatorOnboarding where\n\nimport DA.Assert\n\nimport Splice.Util\n\ndata ValidatorOnboarding_MatchResult = ValidatorOnboarding_MatchResult with\n    usedSecret : ContractId UsedSecret\n\ndata ValidatorOnboarding_ExpireResult = ValidatorOnboarding_ExpireResult\n\n-- | Template used by a sponsoring SV node to keep track of the onboarding of a validator candidate.\n-- We use a secret for authenticating the candidate once he has set up his participant.\n-- The secret should be unique, contain at least 256-bits of entropy,\n-- and be communicated to the candidate via a secure off-ledger channel.\n-- Once the candidate has set up his participants, he contacts the SV node via an API call\n-- and presents his secret, which triggers the SV node to add him as a validator\n-- (as a separate on-ledger action for reducing coupling with the DSO governance contracts).\ntemplate ValidatorOnboarding with\n    sv : Party                  -- ^ The SV node sponsoring this onboarding.\n    candidateSecret : Text      -- ^ The unique secret given to the candidate.\n    expiresAt : Time            -- ^ Can be used by the SV for time-bounding the offer.\n  where\n    signatory sv\n\n    -- Archive the offer if the right secret was provided, noting which validator (party) used it.\n    choice ValidatorOnboarding_Match: ValidatorOnboarding_MatchResult\n      with\n        providedSecret : Text\n        validator : Party\n      controller sv\n      do\n        assertWithinDeadline \"ValidatorOnboarding.expiresAt\" expiresAt\n        require \"provided secret matches the stored secret\" (providedSecret == candidateSecret)\n        usedSecret <- create UsedSecret with\n          secret = candidateSecret\n          ..\n        return ValidatorOnboarding_MatchResult with ..\n\n    -- Archive if we are past the `expiresAt`.\n    choice ValidatorOnboarding_Expire : ValidatorOnboarding_ExpireResult\n      controller sv\n      do\n        assertDeadlineExceeded \"ValidatorOnboarding.expiresAt\" expiresAt\n        pure ValidatorOnboarding_ExpireResult\n\n\n-- | Template used by a sponsoring SV node for enforcing that an onboarding secret is used only once.\ntemplate UsedSecret with\n    sv : Party                  -- ^ The SV node that sponsored the onboarding.\n    secret : Text               -- ^ An onboarding secret.\n    validator : Party           -- ^ The validator that onboarded using the secret.\n  where\n    signatory sv\n",
       "generated": "module Splice.ValidatorOnboarding where\n\ntemplate ValidatorOnboarding with\n    sv : Party\n    secret : Text\n    expiresAt : Time\n  where\n    signatory sv\n\n    choice ValidatorOnboarding_Match : ContractId UsedSecret\n      with\n        presentedSecret : Text\n        validator : Party\n      controller sv\n      do\n        now <- getTime\n        assert (now < expiresAt)\n        assert (presentedSecret == secret)\n        create UsedSecret with sv; secret; validator\n\n    choice ValidatorOnboarding_Expire : ()\n      controller sv\n      do\n        now <- getTime\n        assert (now >= expiresAt)\n\ntemplate UsedSecret with\n    sv : Party\n    secret : Text\n    validator : Party\n  where\n    signatory sv\n",
@@ -284,13 +284,13 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml",
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

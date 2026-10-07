@@ -1,0 +1,751 @@
+{
+  "task_id": "canton/community/common/src/main/daml/CantonExamples/SafePaint.daml",
+  "task_safe_name": "canton__community__common__src__main__daml__CantonExamples__SafePaint.daml",
+  "test_file": "canton/community/common/src/main/daml/CantonExamples/SafePaint.daml",
+  "impl_files": [
+    "canton/community/common/src/main/daml/CantonExamples/LockIou.daml",
+    "canton/community/common/src/main/daml/CantonExamples/Iou.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.426241+00:00",
+  "started_at_utc": "2026-10-02T16:22:03.246501+00:00",
+  "finished_at_utc": "2026-10-02T16:25:51.416197+00:00",
+  "live_updated_at_utc": "2026-10-02T16:25:51.416197+00:00",
+  "repo_copy": "261002-180850/canton_____ljqhx5_f",
+  "findings": [
+    {
+      "flag": "suspicious_commands",
+      "detail": "commands referencing the environment, API key or OpenAI API: ['env']"
+    }
+  ],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "SafePaint.daml:testLockedIouDirectAndRepeatedAssignment": true,
+      "SafePaint.daml:testLockableDirectCall": true,
+      "SafePaint.daml:testLockableAssignAndCall": true,
+      "SafePaint.daml:testIouTransferAndShare": true,
+      "SafePaint.daml:testIouIssueAndCall": true,
+      "SafePaint.daml:testAmountAsText": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "transfer-keeps-owner",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "SafePaint.daml:testLockedIouDirectAndRepeatedAssignment": false,
+            "SafePaint.daml:testLockableDirectCall": true,
+            "SafePaint.daml:testLockableAssignAndCall": false,
+            "SafePaint.daml:testIouTransferAndShare": true,
+            "SafePaint.daml:testIouIssueAndCall": true,
+            "SafePaint.daml:testAmountAsText": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "\n2026-10-02 16:24:58.12 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 75:be:95:ef:37:4d:cc:ed'. Ignoring it.\nFile:     SafePaint.daml\nHidden:   no\nRange:    147:1-147:41\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:152:13)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'Alice-1df42503' (0),\n                            'Bank-4f1df03a' (0), 'Bob-c812a76d' (0)\n  └─> 'Bank-4f1df03a' creates LockIou:LockedIou\n                      with\n                        payer = 'Bank-4f1df03a';\n                        owner = 'Alice-1df42503';\n                        beneficiary = 'Bob-c812a76d';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Carol-40b5f04b'} readAs: {} (SafePaint:154:3)\n  \n  TX 2 1970-01-01T00:00:00Z (SafePaint:155:15)\n  #2:0\n  │   disclosed to (since): 'Alice-1df42503' (2),\n                            'Bank-4f1df03a' (2), 'Bob-c812a76d' (2)\n  └─> 'Alice-1df42503' exercises Transfer on #0:0 (LockIou:LockedIou)\n      children:\n      #2:1\n      │   disclosed to (since): 'Alice-1df42503' (2),\n                                'Bank-4f1df03a' (2), 'Bob-c812a76d' (2)\n      └─> 'Bank-4f1df03a' creates LockIou:LockableIou\n                          with\n                            payer = 'Bank-4f1df03a';\n                            owner = 'Alice-1df42503';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\u001b[0m\nFile:     SafePaint.daml\nHidden:   no\nRange:    84:1-84:26\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:89:15)\n  #0:0\n  │   consumed by: #3:0\n  │   referenced by #3:0\n  │   disclosed to (since): 'Alice-901d787a' (0), 'Bank-025c8f5f' (0)\n  └─> 'Bank-025c8f5f' creates LockIou:LockableIou\n                      with\n                        payer = 'Bank-025c8f5f';\n                        owner = 'Alice-901d787a';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Other-49310e6c'} readAs: {} (SafePaint:91:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Bank-025c8f5f'} readAs: {} (SafePaint:92:3)\n  \n  TX 3 1970-01-01T00:00:00Z (SafePaint:93:13)\n  #3:0\n  │   disclosed to (since): 'Alice-901d787a' (3), 'Bank-025c8f5f' (3)\n  └─> 'Alice-901d787a' exercises Assign on #0:0 (LockIou:LockableIou)\n                       with\n                         beneficiary = 'Bob-40bcf2e7'\n      children:\n      #3:1\n      │   consumed by: #7:0\n      │   referenced by #7:0\n      │   disclosed to (since): 'Alice-901d787a' (3),\n                                'Bank-025c8f5f' (3), 'Bob-40bcf2e7' (3)\n      └─> 'Bank-025c8f5f' creates LockIou:LockedIou\n                          with\n                            payer = 'Bank-025c8f5f';\n                            owner = 'Alice-901d787a';\n                            beneficiary = 'Bob-40bcf2e7';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-901d787a'} readAs: {} (SafePaint:104:3)\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Bob-40bcf2e7'} readAs: {} (SafePaint:105:3)\n  \n  TX 6 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Other-49310e6c'} readAs: {} (SafePaint:106:3)\n  \n  TX 7 1970-01-01T00:00:00Z (SafePaint:107:17)\n  #7:0\n  │   disclosed to (since): 'Alice-901d787a' (7),\n                            'Bank-025c8f5f' (7), 'Bob-40bcf2e7' (7)\n  └─> 'Alice-901d787a' exercises Transfer on #3:1 (LockIou:LockedIou)\n      children:\n      #7:1\n      │   disclosed to (since): 'Alice-901d787a' (7),\n                                'Bank-025c8f5f' (7), 'Bob-40bcf2e7' (7)\n      └─> 'Bank-025c8f5f' creates LockIou:LockableIou\n                          with\n                            payer = 'Bank-025c8f5f';\n                            owner = 'Alice-901d787a';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\u001b[0m\nFile:     SafePaint.daml\nHidden:   no\nRange:    147:1-147:41\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:152:13)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'Alice-1df42503' (0),\n                            'Bank-4f1df03a' (0), 'Bob-c812a76d' (0)\n  └─> 'Bank-4f1df03a' creates LockIou:LockedIou\n                      with\n                        payer = 'Bank-4f1df03a';\n                        owner = 'Alice-1df42503';\n                        beneficiary = 'Bob-c812a76d';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Carol-40b5f04b'} readAs: {} (SafePaint:154:3)\n  \n  TX 2 1970-01-01T00:00:00Z (SafePaint:155:15)\n  #2:0\n  │   disclosed to (since): 'Alice-1df42503' (2),\n                            'Bank-4f1df03a' (2), 'Bob-c812a76d' (2)\n  └─> 'Alice-1df42503' exercises Transfer on #0:0 (LockIou:LockedIou)\n      children:\n      #2:1\n      │   disclosed to (since): 'Alice-1df42503' (2),\n                                'Bank-4f1df03a' (2), 'Bob-c812a76d' (2)\n      └─> 'Bank-4f1df03a' creates LockIou:LockableIou\n                          with\n                            payer = 'Bank-4f1df03a';\n                            owner = 'Alice-1df42503';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\u001b[0m\n"
+        }
+      },
+      {
+        "id": "call-controller-payer",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "SafePaint.daml:testLockedIouDirectAndRepeatedAssignment": true,
+            "SafePaint.daml:testLockableDirectCall": false,
+            "SafePaint.daml:testLockableAssignAndCall": false,
+            "SafePaint.daml:testIouTransferAndShare": true,
+            "SafePaint.daml:testIouIssueAndCall": true,
+            "SafePaint.daml:testAmountAsText": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "\n2026-10-02 16:25:18.26 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 46:8b:78:23:8b:21:78:8a'. Ignoring it.\nFile:     SafePaint.daml\nHidden:   no\nRange:    129:1-129:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at SafePaint:136:11:\n  0: exercise of Call in LockIou:LockableIou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-05e8b107'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:133:15)\n  #0:0\n  │   disclosed to (since): 'Alice-2d0cd0f1' (0), 'Bank-05e8b107' (0)\n  └─> 'Bank-05e8b107' creates LockIou:LockableIou\n                      with\n                        payer = 'Bank-05e8b107';\n                        owner = 'Alice-2d0cd0f1';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Bob-501c9270'} readAs: {} (SafePaint:135:3)\u001b[0m\nFile:     SafePaint.daml\nHidden:   no\nRange:    84:1-84:26\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at SafePaint:118:11:\n  0: exercise of Call in LockIou:LockableIou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-025c8f5f'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:89:15)\n  #0:0\n  │   consumed by: #3:0\n  │   referenced by #3:0\n  │   disclosed to (since): 'Alice-901d787a' (0), 'Bank-025c8f5f' (0)\n  └─> 'Bank-025c8f5f' creates LockIou:LockableIou\n                      with\n                        payer = 'Bank-025c8f5f';\n                        owner = 'Alice-901d787a';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Other-49310e6c'} readAs: {} (SafePaint:91:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Bank-025c8f5f'} readAs: {} (SafePaint:92:3)\n  \n  TX 3 1970-01-01T00:00:00Z (SafePaint:93:13)\n  #3:0\n  │   disclosed to (since): 'Alice-901d787a' (3), 'Bank-025c8f5f' (3)\n  └─> 'Alice-901d787a' exercises Assign on #0:0 (LockIou:LockableIou)\n                       with\n                         beneficiary = 'Bob-40bcf2e7'\n      children:\n      #3:1\n      │   consumed by: #7:0\n      │   referenced by #7:0\n      │   disclosed to (since): 'Alice-901d787a' (3),\n                                'Bank-025c8f5f' (3), 'Bob-40bcf2e7' (3)\n      └─> 'Bank-025c8f5f' creates LockIou:LockedIou\n                          with\n                            payer = 'Bank-025c8f5f';\n                            owner = 'Alice-901d787a';\n                            beneficiary = 'Bob-40bcf2e7';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-901d787a'} readAs: {} (SafePaint:104:3)\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Bob-40bcf2e7'} readAs: {} (SafePaint:105:3)\n  \n  TX 6 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Other-49310e6c'} readAs: {} (SafePaint:106:3)\n  \n  TX 7 1970-01-01T00:00:00Z (SafePaint:107:17)\n  #7:0\n  │   disclosed to (since): 'Alice-901d787a' (7),\n                            'Bank-025c8f5f' (7), 'Bob-40bcf2e7' (7)\n  └─> 'Alice-901d787a' exercises Transfer on #3:1 (LockIou:LockedIou)\n      children:\n      #7:1\n      │   disclosed to (since): 'Alice-901d787a' (7),\n                                'Bank-025c8f5f' (7), 'Bob-40bcf2e7' (7)\n      └─> 'Bank-025c8f5f' creates LockIou:LockableIou\n                          with\n                            payer = 'Bank-025c8f5f';\n                            owner = 'Bob-40bcf2e7';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\n  \n  TX 8 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-901d787a'} readAs: {} (SafePaint:117:3)\u001b[0m\nFile:     SafePaint.daml\nHidden:   no\nRange:    129:1-129:23\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at SafePaint:136:11:\n  0: exercise of Call in LockIou:LockableIou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-05e8b107'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:133:15)\n  #0:0\n  │   disclosed to (since): 'Alice-2d0cd0f1' (0), 'Bank-05e8b107' (0)\n  └─> 'Bank-05e8b107' creates LockIou:LockableIou\n                      with\n                        payer = 'Bank-05e8b107';\n                        owner = 'Alice-2d0cd0f1';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Bob-501c9270'} readAs: {} (SafePaint:135:3)\u001b[0m\n"
+        }
+      },
+      {
+        "id": "assign-controller-payer",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "SafePaint.daml:testLockedIouDirectAndRepeatedAssignment": false,
+            "SafePaint.daml:testLockableDirectCall": true,
+            "SafePaint.daml:testLockableAssignAndCall": false,
+            "SafePaint.daml:testIouTransferAndShare": true,
+            "SafePaint.daml:testIouIssueAndCall": true,
+            "SafePaint.daml:testAmountAsText": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "\n2026-10-02 16:25:38.56 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 41:d0:c8:96:4f:11:9e:1b'. Ignoring it.\nFile:     SafePaint.daml\nHidden:   no\nRange:    147:1-147:41\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at SafePaint:164:18:\n  0: exercise of Assign in LockIou:LockableIou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-4f1df03a'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:152:13)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'Alice-1df42503' (0),\n                            'Bank-4f1df03a' (0), 'Bob-c812a76d' (0)\n  └─> 'Bank-4f1df03a' creates LockIou:LockedIou\n                      with\n                        payer = 'Bank-4f1df03a';\n                        owner = 'Alice-1df42503';\n                        beneficiary = 'Bob-c812a76d';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Carol-40b5f04b'} readAs: {} (SafePaint:154:3)\n  \n  TX 2 1970-01-01T00:00:00Z (SafePaint:155:15)\n  #2:0\n  │   disclosed to (since): 'Alice-1df42503' (2),\n                            'Bank-4f1df03a' (2), 'Bob-c812a76d' (2)\n  └─> 'Alice-1df42503' exercises Transfer on #0:0 (LockIou:LockedIou)\n      children:\n      #2:1\n      │   disclosed to (since): 'Alice-1df42503' (2),\n                                'Bank-4f1df03a' (2), 'Bob-c812a76d' (2)\n      └─> 'Bank-4f1df03a' creates LockIou:LockableIou\n                          with\n                            payer = 'Bank-4f1df03a';\n                            owner = 'Bob-c812a76d';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-1df42503'} readAs: {} (SafePaint:163:3)\u001b[0m\nFile:     SafePaint.daml\nHidden:   no\nRange:    84:1-84:26\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at SafePaint:92:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises Assign on #0:0 (LockIou:LockableIou)\n    with\n      beneficiary = 'Bob-40bcf2e7'\n  Sub-transactions:\n     0\n     └─> 'Bank-025c8f5f' exercises Assign on #0:0 (LockIou:LockableIou)\n                         with\n                           beneficiary = 'Bob-40bcf2e7'\n         children:\n         1\n         └─> 'Bank-025c8f5f' creates LockIou:LockedIou\n                             with\n                               payer = 'Bank-025c8f5f';\n                               owner = 'Alice-901d787a';\n                               beneficiary = 'Bob-40bcf2e7';\n                               amount =\n                                 (Iou:Amount with\n                                    value = 125.5000000000; currency = \"USD\")\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:89:15)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'Alice-901d787a' (0), 'Bank-025c8f5f' (0)\n  └─> 'Bank-025c8f5f' creates LockIou:LockableIou\n                      with\n                        payer = 'Bank-025c8f5f';\n                        owner = 'Alice-901d787a';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Other-49310e6c'} readAs: {} (SafePaint:91:3)\n  \n  TX 2 1970-01-01T00:00:00Z (SafePaint:92:3)\n  #2:0\n  │   disclosed to (since): 'Alice-901d787a' (2), 'Bank-025c8f5f' (2)\n  └─> 'Bank-025c8f5f' exercises Assign on #0:0 (LockIou:LockableIou)\n                      with\n                        beneficiary = 'Bob-40bcf2e7'\n      children:\n      #2:1\n      │   disclosed to (since): 'Alice-901d787a' (2),\n                                'Bank-025c8f5f' (2), 'Bob-40bcf2e7' (2)\n      └─> 'Bank-025c8f5f' creates LockIou:LockedIou\n                          with\n                            payer = 'Bank-025c8f5f';\n                            owner = 'Alice-901d787a';\n                            beneficiary = 'Bob-40bcf2e7';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\u001b[0m\nFile:     SafePaint.daml\nHidden:   no\nRange:    147:1-147:41\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at SafePaint:164:18:\n  0: exercise of Assign in LockIou:LockableIou at DA.Internal.Template.Functions:221:18\n     failed due to a missing authorization from 'Bank-4f1df03a'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (SafePaint:152:13)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'Alice-1df42503' (0),\n                            'Bank-4f1df03a' (0), 'Bob-c812a76d' (0)\n  └─> 'Bank-4f1df03a' creates LockIou:LockedIou\n                      with\n                        payer = 'Bank-4f1df03a';\n                        owner = 'Alice-1df42503';\n                        beneficiary = 'Bob-c812a76d';\n                        amount =\n                          (Iou:Amount with\n                             value = 125.5000000000; currency = \"USD\")\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Carol-40b5f04b'} readAs: {} (SafePaint:154:3)\n  \n  TX 2 1970-01-01T00:00:00Z (SafePaint:155:15)\n  #2:0\n  │   disclosed to (since): 'Alice-1df42503' (2),\n                            'Bank-4f1df03a' (2), 'Bob-c812a76d' (2)\n  └─> 'Alice-1df42503' exercises Transfer on #0:0 (LockIou:LockedIou)\n      children:\n      #2:1\n      │   disclosed to (since): 'Alice-1df42503' (2),\n                                'Bank-4f1df03a' (2), 'Bob-c812a76d' (2)\n      └─> 'Bank-4f1df03a' creates LockIou:LockableIou\n                          with\n                            payer = 'Bank-4f1df03a';\n                            owner = 'Bob-c812a76d';\n                            amount =\n                              (Iou:Amount with\n                                 value = 125.5000000000; currency = \"USD\")\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-1df42503'} readAs: {} (SafePaint:163:3)\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 3,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "SafePaint.daml:safePainterOffersAndAliceAccepts": true,
+        "SafePaint.daml:safePainterOffersAndAliceAcceptsWithCarol": true,
+        "SafePaint.daml:safeTwoPainterOffers": true,
+        "./Iou.daml:bankIssuesIouToAlice": true,
+        "./Iou.daml:davidsBankIssuesIouToDavid": true,
+        "./Iou.daml:aliceTransfersIouToBob": true,
+        "./Iou.daml:aliceTransfersAndBobCallsIou": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T11:12:52.864794+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/canton_____ljqhx5_f/community/common/src/main/daml/CantonExamples/SafePaint.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 9,
+    "bytes_scanned": 10051,
+    "elapsed_seconds": 0.013,
+    "repo_copy_digest": "f45b8c9883cc887a13aa6f5cb71c993a544b51f0f07b571fcb81f04f45d383fd",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "canton/community/common/src/main/daml/CantonExamples/SafePaint.daml",
+      "path_in_copy": "community/common/src/main/daml/CantonExamples/SafePaint.daml",
+      "original": "-- Copyright (c) 2026 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\n{-# LANGUAGE ApplicativeDo #-}\nmodule SafePaint where\n\nimport Daml.Script\nimport LockIou\nimport Iou (Amount(..))\n\ndata SafePaintIds = SafePaintIds {iouId: ContractId LockIou.LockableIou; paintId: ContractId PaintHouse}\n\ntemplate PaintHouse\n  with\n    painter: Party\n    beneficiary: Party\n  where\n    signatory painter, beneficiary\n\ntemplate SafeOfferToPaintHouse\n  with\n    beneficiary: Party\n    painter: Party\n  where\n    signatory painter\n    observer beneficiary\n\n    choice SafeAccept : SafePaintIds\n      with\n        iouId : ContractId LockIou.LockedIou\n      controller beneficiary\n        do\n          iouId2 <- exercise iouId LockIou.Transfer\n          paint <- create $ PaintHouse with painter; beneficiary\n          return $ SafePaintIds {iouId = iouId2; paintId = paint}\n\nsafePainterOffersAndAliceAccepts =\n  script do\n    bank <- allocateParty \"Bank\"\n    alice <- allocateParty \"Alice\"\n    bob <- allocateParty \"Bob\"\n    iouId <- submit bank $ do\n        -- Creating an IOU also for Bob such that this transaction lands on the synchronizer where Bob is hosted too\n        createCmd $ LockIou.LockableIou with payer = bank; owner = bob; amount = Amount {value = 1.0; currency = \"USD\"}\n        iouId <- createCmd $ LockIou.LockableIou with payer = bank; owner = alice; amount = Amount {value = 100.0; currency = \"USD\"}\n        pure iouId\n    offerId <- submit bob do\n        createCmd $ SafeOfferToPaintHouse with painter = bob; beneficiary = alice\n    lockedIouId <- submit alice do\n        exerciseCmd iouId LockIou.Assign with beneficiary = bob\n    inp <- submit alice do exerciseCmd offerId SafeAccept with iouId = lockedIouId\n    submit bob do exerciseCmd inp.iouId LockIou.Call\n\nsafePainterOffersAndAliceAcceptsWithCarol =\n  script do\n    bank <- allocateParty \"Bank\"\n    alice <- allocateParty \"Alice\"\n    carol <- allocateParty \"Carol\"\n    iouId <- submit bank do\n        -- Creating an IOU also for Carol such that this transaction lands on the synchronizer where Carol is hosted too\n        createCmd $ LockIou.LockableIou with payer = bank; owner = carol; amount = Amount {value = 1.0; currency = \"USD\"}\n        iouId <- createCmd $ LockIou.LockableIou with payer = bank; owner = alice; amount = Amount {value = 100.0; currency = \"USD\"}\n        pure iouId\n    offerId <- submit carol do\n        createCmd $ SafeOfferToPaintHouse with painter = carol; beneficiary = alice\n    lockedIouId <- submit alice do\n        exerciseCmd iouId LockIou.Assign with beneficiary = carol\n    inp <- submit alice do exerciseCmd offerId SafeAccept with iouId = lockedIouId\n    submit carol do exerciseCmd inp.iouId LockIou.Call\n\nsafeTwoPainterOffers =\n  script do\n    safePainterOffersAndAliceAccepts\n    safePainterOffersAndAliceAcceptsWithCarol\n",
+      "generated": "module SafePaint where\n\nimport Daml.Script\nimport Iou\nimport qualified LockIou as Lock\n\nusd : Amount\nusd = Amount with value = 125.50; currency = \"USD\"\n\ntestIouIssueAndCall = script do\n  bank <- allocateParty \"Bank\"\n  alice <- allocateParty \"Alice\"\n  stranger <- allocateParty \"Stranger\"\n  submitMustFail bank do\n    createCmd $ Iou with payer = bank; owner = alice; amount = (Amount with value = -0.01; currency = \"USD\"); viewers = []\n  iou <- submit bank do\n    createCmd $ Iou with payer = bank; owner = alice; amount = (Amount with value = 0.0; currency = \"EUR\"); viewers = []\n  submitMustFail stranger do exerciseCmd iou Call\n  submitMustFail bank do exerciseCmd iou Call\n  cash <- submit alice do exerciseCmd iou Call\n  cashData <- queryContractId alice cash\n  case cashData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == alice)\n      assert (data_.amount == Amount with value = 0.0; currency = \"EUR\")\n  found <- queryContractId alice iou\n  assert (found == None)\n  submitMustFail alice do exerciseCmd iou Call\n\ntestIouTransferAndShare = script do\n  bank <- allocateParty \"Bank\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  carol <- allocateParty \"Carol\"\n  dave <- allocateParty \"Dave\"\n  iou <- submit bank do\n    createCmd $ Iou with payer = bank; owner = alice; amount = usd; viewers = [carol]\n  found <- queryContractId carol iou\n  assert (found /= None)\n  found <- queryContractId dave iou\n  assert (found == None)\n  submitMustFail bob do exerciseCmd iou Share with viewer = dave\n  shared <- submit alice do exerciseCmd iou Share with viewer = dave\n  found <- queryContractId alice iou\n  assert (found == None)\n  sharedData <- queryContractId dave shared\n  case sharedData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == alice)\n      assert (data_.amount == usd)\n      assert (data_.viewers == [dave, carol])\n  found <- queryContractId carol shared\n  assert (found /= None)\n  submitMustFail bob do exerciseCmd shared Transfer with newOwner = bob\n  transferred <- submit alice do exerciseCmd shared Transfer with newOwner = bob\n  found <- queryContractId alice shared\n  assert (found == None)\n  transferredData <- queryContractId bob transferred\n  case transferredData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == bob)\n      assert (data_.amount == usd)\n      assert (data_.viewers == [])\n  found <- queryContractId carol transferred\n  assert (found == None)\n  found <- queryContractId dave transferred\n  assert (found == None)\n  submitMustFail alice do exerciseCmd transferred Call\n  cash <- submit bob do exerciseCmd transferred Call\n  cashData <- queryContractId bob cash\n  case cashData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == bob)\n      assert (data_.amount == usd)\n\ntestLockableAssignAndCall = script do\n  bank <- allocateParty \"Bank\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  other <- allocateParty \"Other\"\n  lockable <- submit bank do\n    createCmd $ Lock.LockableIou with payer = bank; owner = alice; amount = usd\n  submitMustFail other do exerciseCmd lockable Lock.Assign with beneficiary = bob\n  submitMustFail bank do exerciseCmd lockable Lock.Assign with beneficiary = bob\n  locked <- submit alice do exerciseCmd lockable Lock.Assign with beneficiary = bob\n  found <- queryContractId alice lockable\n  assert (found == None)\n  lockedData <- queryContractId bob locked\n  case lockedData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == alice)\n      assert (data_.beneficiary == bob)\n      assert (data_.amount == usd)\n  submitMustFail alice do exerciseCmd lockable Lock.Call\n  submitMustFail bob do exerciseCmd locked Lock.Transfer\n  submitMustFail other do exerciseCmd locked Lock.Transfer\n  reassigned <- submit alice do exerciseCmd locked Lock.Transfer\n  found <- queryContractId alice locked\n  assert (found == None)\n  reassignedData <- queryContractId bob reassigned\n  case reassignedData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == bob)\n      assert (data_.amount == usd)\n  submitMustFail alice do exerciseCmd reassigned Lock.Call\n  cash <- submit bob do exerciseCmd reassigned Lock.Call\n  cashData <- queryContractId bob cash\n  case cashData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == bob)\n      assert (data_.amount == usd)\n  found <- queryContractId bob reassigned\n  assert (found == None)\n\ntestLockableDirectCall = script do\n  bank <- allocateParty \"Bank\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  lockable <- submit bank do\n    createCmd $ Lock.LockableIou with payer = bank; owner = alice; amount = usd\n  submitMustFail bob do exerciseCmd lockable Lock.Call\n  cash <- submit alice do exerciseCmd lockable Lock.Call\n  cashData <- queryContractId alice cash\n  case cashData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == alice)\n      assert (data_.amount == usd)\n  found <- queryContractId alice lockable\n  assert (found == None)\n\ntestLockedIouDirectAndRepeatedAssignment = script do\n  bank <- allocateParty \"Bank\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  carol <- allocateParty \"Carol\"\n  locked <- submit bank do\n    createCmd $ Lock.LockedIou with payer = bank; owner = alice; beneficiary = bob; amount = usd\n  submitMustFail carol do exerciseCmd locked Lock.Transfer\n  lockable <- submit alice do exerciseCmd locked Lock.Transfer\n  lockableData <- queryContractId bob lockable\n  case lockableData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == bob)\n      assert (data_.amount == usd)\n  submitMustFail alice do exerciseCmd lockable Lock.Assign with beneficiary = carol\n  lockedAgain <- submit bob do exerciseCmd lockable Lock.Assign with beneficiary = carol\n  lockedAgainData <- queryContractId carol lockedAgain\n  case lockedAgainData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == bob)\n      assert (data_.beneficiary == carol)\n      assert (data_.amount == usd)\n  submitMustFail carol do exerciseCmd lockedAgain Lock.Transfer\n  finalIou <- submit bob do exerciseCmd lockedAgain Lock.Transfer\n  finalData <- queryContractId carol finalIou\n  case finalData of\n    None -> assert False\n    Some data_ -> do\n      assert (data_.payer == bank)\n      assert (data_.owner == carol)\n      assert (data_.amount == usd)\n\ntestAmountAsText = script do\n  assert (amountAsText usd == show usd.value <> \"USD\")\n  assert (amountAsText (Amount with value = 0.0; currency = \"EUR\") == show (0.0 : Decimal) <> \"EUR\")\n",
+      "captured_at_utc": "2026-10-02T16:25:51.397773+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/canton_____ljqhx5_f",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added six Daml Script tests in `community/common/src/main/daml/CantonExamples/SafePaint.daml:1`. They cover IOU amount validation, sharing and visibility, transfers, calls, lock assignment and reassignment, authorization failures, contract consumption, and amount formatting.\n\nAll six tests pass with `dpm damlc test --files SafePaint.daml`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 145.54915866599185,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 450634,
+      "output_tokens": 7116,
+      "cached_input_tokens": 422730
+    },
+    "usage_by_thread": {
+      "01a0fd6c-3ee0-70b3-b2c7-b348251b27eb": {
+        "usage": {
+          "input_tokens": 450634,
+          "output_tokens": 7116,
+          "cached_input_tokens": 422730
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.211514,
+    "input_usd": 0.055808,
+    "cached_input_usd": 0.084546,
+    "output_usd": 0.07116,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [
+      {
+        "id": "call_0mbM0TvkQTSlm2jJpcICypqm",
+        "command": "/usr/bin/bash -lc \"type -a apply_patch || true; ls /usr/local/bin/*patch* /opt/*/*patch* 2>/dev/null || :; rg -n 'sdk-version|DAML_VERSION' community/common/src/main/daml -g daml.yaml | head; env | rg '(DAML|DPM|PATH)'\"",
+        "matched": "env"
+      }
+    ],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790958127.389,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958130.555,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958136.938,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958140.879,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958147.585,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958161.824,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958166.612,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958179.427,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958182.414,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958186.068,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958188.859,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958191.38,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958194.477,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958203.647,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958206.289,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958213.535,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958216.792,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958223.078,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958240.141,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958242.829,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958249.206,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958257.659,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958263.74,
+          "client": "10.219.149.194",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "community/common/src/main/daml/CantonExamples/SafePaint.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

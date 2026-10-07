@@ -75,16 +75,16 @@
     "repo_copy_digest": "f45b8c9883cc887a13aa6f5cb71c993a544b51f0f07b571fcb81f04f45d383fd",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "canton/community/common/src/main/daml/CantonExamples/LockIou.daml",
+      "answer_file": "canton/community/common/src/main/daml/CantonExamples/LockIou.daml",
       "path_in_copy": "community/common/src/main/daml/CantonExamples/LockIou.daml",
       "original": "-- Copyright (c) 2026 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule LockIou where\n\nimport Iou (GetCash(..), Amount)\n\ntemplate LockableIou\n  with\n    payer: Party\n    owner: Party\n    amount: Amount\n  where\n    signatory payer\n    observer owner\n\n    choice Assign : ContractId LockedIou\n      with\n        beneficiary: Party\n      controller owner\n        do\n          create LockedIou with payer; owner; beneficiary; amount\n\n    choice Call : ContractId GetCash\n      controller owner\n        do\n          create GetCash with payer; owner; amount\n\ntemplate LockedIou\n  with\n    payer: Party\n    owner: Party\n    beneficiary: Party\n    amount: Amount\n  where\n    signatory payer\n    observer beneficiary, owner\n\n    choice Transfer : ContractId LockableIou\n      controller owner\n        do\n          create LockableIou with payer; owner = beneficiary; amount\n",
       "generated": "module LockIou where\n\nimport Iou (Amount)\n\ntemplate LockableIou\n  with\n    payer: Party\n    owner: Party\n    amount: Amount\n  where\n    signatory payer\n    observer owner\n\n    choice Assign : ContractId LockedIou\n      with beneficiary: Party\n      controller owner\n      do\n        create LockedIou with payer; owner; amount; beneficiary\n\n    choice Call : Amount\n      controller owner\n      do\n        pure amount\n\ntemplate LockedIou\n  with\n    payer: Party\n    owner: Party\n    amount: Amount\n    beneficiary: Party\n  where\n    signatory payer\n    observer owner, beneficiary\n\n    choice Transfer : ContractId LockableIou\n      controller owner\n      do\n        create LockableIou with payer; owner = beneficiary; amount\n",
       "captured_at_utc": "2026-09-25T11:16:02.616609+00:00"
     },
     {
-      "impl_file": "canton/community/common/src/main/daml/CantonExamples/Iou.daml",
+      "answer_file": "canton/community/common/src/main/daml/CantonExamples/Iou.daml",
       "path_in_copy": "community/common/src/main/daml/CantonExamples/Iou.daml",
       "original": "-- Copyright (c) 2026 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\n-- architecture-handbook-entry-begin: IouDaml\nmodule Iou where\n\nimport Daml.Script\n\ndata Amount = Amount {value: Decimal; currency: Text} deriving (Eq, Ord, Show)\n\namountAsText (amount : Amount) : Text = show amount.value <> amount.currency\n\ntemplate Iou\n  with\n    payer: Party\n    owner: Party\n    amount: Amount\n    viewers: [Party]\n  where\n\n    ensure (amount.value >= 0.0)\n\n    signatory payer\n    observer owner\n    observer viewers\n\n    choice Call : ContractId GetCash\n      controller owner\n      do\n        create GetCash with payer; owner; amount\n\n    choice Transfer : ContractId Iou\n      with\n        newOwner: Party\n      controller owner\n      do\n        create this with owner = newOwner; viewers = []\n\n    choice Share : ContractId Iou\n      with\n        viewer : Party\n      controller owner\n        do\n          create this with viewers = (viewer :: viewers)\n-- architecture-handbook-entry-end: IouDaml\n\ntemplate GetCash\n  with\n    payer: Party\n    owner: Party\n    amount: Amount\n  where\n    signatory payer, owner\n\ntemplate Dummy\n  with\n    party: Party\n  where\n    signatory party\n\nissue owner payer =\n  script do\n    payer <- allocateParty payer\n    owner <- allocateParty owner\n    submit payer do\n        createCmd $ Iou with payer = payer; owner = owner; amount = Amount {value = 100.0; currency = \"USD\"}; viewers = []\n\nbankIssuesIouToAlice = issue \"Alice\" \"Bank\"\n\ndavidsBankIssuesIouToDavid = issue \"David\" \"DavidsBank\"\n\ntransfer owner newOwner payer =\n  script do\n    payer <- allocateParty payer\n    owner <- allocateParty owner\n    newOwner <- allocateParty newOwner\n    iouId <- submit payer do\n        createCmd $ Iou with payer = payer; owner = owner; amount = Amount {value = 100.0; currency = \"USD\"}; viewers = []\n    submit owner do\n        exerciseCmd iouId Transfer with newOwner = newOwner\n\naliceTransfersIouToBob = transfer \"Alice\" \"Bob\" \"Bank\"\n\ntransferAndCall owner newOwner payer =\n  script do\n    payer <- allocateParty payer\n    owner <- allocateParty owner\n    newOwner <- allocateParty newOwner\n    iouId <- submit payer do\n        createCmd $ Iou with payer = payer; owner = owner; amount = Amount {value = 100.0; currency = \"USD\"}; viewers = []\n    newIouId <- submit owner do\n        exerciseCmd iouId Transfer with newOwner = newOwner\n    submit newOwner do\n        exerciseCmd newIouId Call\n\naliceTransfersAndBobCallsIou = transferAndCall \"Alice\" \"Bob\" \"Bank\"\n",
       "generated": "module Iou where\n\ndata Amount = Amount {value: Decimal, currency: Text} deriving (Eq, Show)\n\ntemplate Iou\n  with\n    payer: Party\n    owner: Party\n    amount: Amount\n    viewers: [Party]\n  where\n    signatory payer\n    observer owner, viewers\n\n    choice Transfer : ContractId Iou\n      with newOwner: Party\n      controller owner\n      do\n        create this with owner = newOwner\n\n    choice Call : Amount\n      controller owner\n      do\n        pure amount\n",
@@ -449,7 +449,7 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "community/common/src/main/daml/CantonExamples/Iou.daml",
           "kind": "modified"
@@ -459,7 +459,7 @@
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

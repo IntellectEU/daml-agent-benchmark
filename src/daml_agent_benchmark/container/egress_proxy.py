@@ -13,7 +13,6 @@ from time import time
 
 from daml_agent_benchmark.constants import (
     CONTAINER_DOCKER_BIN,
-    CONTAINER_EGRESS_PROXY_AUTO_BUILD_IMAGE,
     CONTAINER_EGRESS_PROXY_DOCKERFILE,
     CONTAINER_EGRESS_PROXY_IMAGE,
     CONTAINER_EGRESS_PROXY_PORT,
@@ -116,11 +115,6 @@ def ensure_egress_proxy_image() -> None:
     image = CONTAINER_EGRESS_PROXY_IMAGE
     if docker_image_exists(CONTAINER_DOCKER_BIN, image):
         return
-    if not CONTAINER_EGRESS_PROXY_AUTO_BUILD_IMAGE:
-        raise RuntimeError(
-            f"Egress proxy image not found: {image}. "
-            "Enable `CONTAINER_EGRESS_PROXY_AUTO_BUILD_IMAGE=True` or build it manually."
-        )
     dockerfile = _resolve_egress_proxy_dockerfile()
     cmd = [
         CONTAINER_DOCKER_BIN,

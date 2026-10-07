@@ -1,0 +1,58 @@
+task: splice/daml/splice-amulet-name-service-test/daml/Splice/Scripts/TestAmuletConversionRateFeed.daml
+notes: The test file has a single script, testAmuletConversionRateFeed, so every mutation targets it.
+mutations:
+  - id: rate-not-updated
+    source: llm
+    target_script: testAmuletConversionRateFeed
+    kind: field
+    reason: The update recreates the feed from the old contract but forgets to set the new conversion rate, so the published rate never changes.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml b/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      index 7a03e54..93b68ad 100644
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      @@ -64,7 +64,6 @@ template AmuletConversionRateFeed
+                    with
+                      beneficiaries = markerContext.beneficiaries
+                cid <- create this with
+      -           amuletConversionRate
+                  nextUpdateAfter = Some newNextUpdateAfter
+                pure AmuletConversionRateFeed_UpdateResult { cid }
+       
+  - id: rate-limit-check-dropped
+    source: llm
+    target_script: testAmuletConversionRateFeed
+    kind: validation
+    reason: The check that the previous nextUpdateAfter deadline has passed is left out, so the publisher can update the feed as often as it likes.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml b/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      index 7a03e54..1913358 100644
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      @@ -53,7 +53,6 @@ template AmuletConversionRateFeed
+             controller publisher
+             do amuletRules <- fetchPublicReferenceData (ForDso dso) amuletRulesCid (AmuletRules_Fetch publisher)
+                currentConfig <- getValueAsOfLedgerTime amuletRules.configSchedule
+      -         forA_ nextUpdateAfter $ assertDeadlineExceeded "nextUpdateAfter"
+                -- We use a rate limit of 0.5 ticks to avoid increasingly lagging behind rounds as your update will
+                -- always be slightly slower than the minimum rate limit.
+                -- we add one extra microseconds so now + 5 minutes is allowed and the caller does not need to add the microsecond
+  - id: min-interval-off-by-one
+    source: llm
+    target_script: testAmuletConversionRateFeed
+    kind: arithmetic
+    reason: The extra microsecond in the minimum-interval calculation is subtracted instead of added, so an update at exactly half a tick is rejected.
+    patch: |
+      diff --git a/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml b/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      index 7a03e54..2024e3f 100644
+      --- a/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      +++ b/daml/splice-amulet-name-service/daml/Splice/Ans/AmuletConversionRateFeed.daml
+      @@ -57,7 +57,7 @@ template AmuletConversionRateFeed
+                -- We use a rate limit of 0.5 ticks to avoid increasingly lagging behind rounds as your update will
+                -- always be slightly slower than the minimum rate limit.
+                -- we add one extra microseconds so now + 5 minutes is allowed and the caller does not need to add the microsecond
+      -         assertWithinDeadline "newNextUpdateAfter - 0.5 tickDuration" (newNextUpdateAfter `addRelTime` convertMicrosecondsToRelTime (- (convertRelTimeToMicroseconds currentConfig.tickDuration) / 2 + 1))
+      +         assertWithinDeadline "newNextUpdateAfter - 0.5 tickDuration" (newNextUpdateAfter `addRelTime` convertMicrosecondsToRelTime (- (convertRelTimeToMicroseconds currentConfig.tickDuration) / 2 - 1))
+                forA_ markerContextO $ \markerContext -> do
+                  _ <- fetchCheckedInterface ForOwner{dso, owner = publisher} markerContext.featuredAppRightCid
+                  exercise markerContext.featuredAppRightCid Api.FeaturedAppRight_CreateActivityMarker

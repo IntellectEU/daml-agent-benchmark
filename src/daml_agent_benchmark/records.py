@@ -33,6 +33,7 @@ from typing import Any, NewType
 from daml_agent_benchmark.egress_audit import summarize_egress_events
 from daml_agent_benchmark.locations import locations
 from daml_agent_benchmark.tasklist_catalog import repo_relative_id
+from daml_agent_benchmark.mutations.model import MutationKind, MutationSource
 from daml_agent_benchmark.workspace_audit import ChangeKind, classify_workspace_changes
 
 
@@ -98,12 +99,33 @@ def _decode(hint: Any, value: Any) -> Any:
         return {k: _decode(item, v) for k, v in value.items()}
     if isinstance(hint, type):
         if issubclass(hint, Record):
-            return hint.from_record(value)
+            return _record_class(hint, value).from_record(value)
         if issubclass(hint, StrEnum):
             return hint(value)
         if hint is datetime:
             return datetime.fromisoformat(value)
     return value
+
+
+def _record_class(base: type, record: dict) -> type:
+    """The class a record of the declared type `base` decodes to.
+
+    JSON holds no class names, so a field declared as a record class may hold that class or
+    any subclass of it. The subclass is the one whose fields are exactly the record's keys.
+    Two classes with the same fields would be one class in two names, so that is an error.
+    When nothing matches, `base` is returned and its own decoding reports the mismatch.
+    """
+    classes, pending = [base], list(base.__subclasses__())
+    while pending:
+        cls = pending.pop()
+        classes.append(cls)
+        pending += cls.__subclasses__()
+    if len(classes) == 1:
+        return base
+    matches = [cls for cls in classes if {f.name for f in fields(cls)} == set(record)]
+    if len(matches) > 1:
+        raise ValueError(f"{sorted(c.__name__ for c in matches)} have the same fields, so a record cannot tell them apart")
+    return matches[0] if matches else base
 
 
 class Record:
@@ -174,7 +196,7 @@ class TaskFlag(StrEnum):
     SUSPICIOUS_COMMANDS = "suspicious_commands"
     BLOCKED_EGRESS = "blocked_egress"
     WORKSPACE_AUDIT_MISSING = "workspace_audit_missing"
-    TEST_FILE_CHANGED = "test_file_changed"
+    PROTECTED_FILE_CHANGED = "protected_file_changed"  # the agent edited a file grading takes from the pristine copy
     NON_TARGET_SOURCE_CHANGES = "non_target_source_changes"
     REPO_COPY_PARTIAL_MATCH = "repo_copy_partial_match"
     USAGE_UNKNOWN = "usage_unknown"
@@ -198,7 +220,7 @@ _SEVERITY = {
     TaskFlag.SUSPICIOUS_COMMANDS: Severity.WARNING,
     TaskFlag.BLOCKED_EGRESS: Severity.WARNING,
     TaskFlag.WORKSPACE_AUDIT_MISSING: Severity.WARNING,
-    TaskFlag.TEST_FILE_CHANGED: Severity.WARNING,
+    TaskFlag.PROTECTED_FILE_CHANGED: Severity.WARNING,
     TaskFlag.NON_TARGET_SOURCE_CHANGES: Severity.WARNING,
     TaskFlag.REPO_COPY_PARTIAL_MATCH: Severity.WARNING,
     TaskFlag.USAGE_UNKNOWN: Severity.WARNING,
@@ -339,17 +361,21 @@ class FileChange(Record):
 class WorkspaceAudit(Record):
     """Every file the agent changed in its container, sorted by what the change means.
 
-    Grading reads only the implementation files, so none of this can change a score. It
-    can make a transcript misleading: an agent that weakens the test and reports success
+    Grading reads only the answer files the agent wrote, so none of this can change a score.
+    It can make a transcript misleading: an agent that weakens the test and reports success
     looks like an ordinary failure to a reader. `available` is False when the container
     wrapper never delivered its report; an absent report never reads as clean.
+
+    The target files are the ones the task asked the agent to write: the implementation
+    files, or in a test-generation task the test file. The protected files are the other side,
+    which grading takes from the pristine host copy: the test file, or the implementation files.
     """
 
     available: bool  # the wrapper delivered its report; False means the buckets say nothing
     # The target files, which is the work the agent was asked to do.
-    impl_changes: list[FileChange]
-    # The test, which grading takes from the pristine host copy whatever the agent did to it.
-    test_file_changes: list[FileChange]
+    target_file_changes: list[FileChange]
+    # The protected files, which grading takes from the pristine host copy whatever the agent did to them.
+    protected_file_changes: list[FileChange]
     # Other source files: not graded, but they change what a build or test in the container meant.
     source_changes_outside_targets: list[FileChange]
     # What `daml build` writes. The agent compiling its own work is not tampering.
@@ -359,13 +385,15 @@ class WorkspaceAudit(Record):
     other_changes: list[FileChange]  # everything else
 
     def tamper_suspected(self) -> bool:
-        return bool(self.test_file_changes or self.source_changes_outside_targets)
+        return bool(self.protected_file_changes or self.source_changes_outside_targets)
 
     @classmethod
-    def from_changes(cls, changes: list[dict] | None, impl_rel_paths: list[str], test_rel_path: str) -> WorkspaceAudit:
+    def from_changes(
+        cls, changes: list[dict] | None, answer_rel_paths: list[str], protected_rel_paths: list[str]
+    ) -> WorkspaceAudit:
         names = (
-            "impl_changes",
-            "test_file_changes",
+            "target_file_changes",
+            "protected_file_changes",
             "source_changes_outside_targets",
             "build_outputs",
             "codex_home_changes",
@@ -373,7 +401,7 @@ class WorkspaceAudit(Record):
         )
         if changes is None:
             return cls(available=False, **{name: [] for name in names})
-        buckets = classify_workspace_changes(changes, impl_rel_paths, test_rel_path)
+        buckets = classify_workspace_changes(changes, answer_rel_paths, protected_rel_paths)
         return cls(
             available=True,
             **{name: [FileChange(path=c["path"], kind=ChangeKind(c["kind"])) for c in buckets[name]] for name in names},
@@ -425,7 +453,7 @@ class ForbiddenToolCall(Record):
     query: str | None  # the search terms, for a web search
     server: str | None  # the server, for an MCP call
     tool: str | None  # the tool it named
-    event_type: ItemEvent | None  # the first event that reported it, nearly always `item.started`
+    event_type: ItemEvent  # the first event that reported it, nearly always `item.started`
 
 
 @dataclass(frozen=True)
@@ -435,7 +463,7 @@ class AllowedMcpToolCall(Record):
     id: str | None  # codex's item id, so several events about one call collapse to one record
     server: str  # the allowed server, by the name the experiment gave it
     tool: str | None  # the tool it named
-    event_type: ItemEvent | None  # the first event that reported it, nearly always `item.started`
+    event_type: ItemEvent  # the first event that reported it, nearly always `item.started`
 
 
 @dataclass(frozen=True)
@@ -526,6 +554,59 @@ class Grade(Record):
 
 
 @dataclass(frozen=True)
+class MutantResult(Record):
+    """One mutant and what the agent's test file did on it."""
+
+    id: str  # the mutation's id in the task's mutation file
+    source: MutationSource  # written by a model, or a fix from the repository's history undone
+    kind: MutationKind  # the mutation's descriptive label; never part of a score
+    grade: Grade  # the agent's test file run on the mutant, its own scripts only
+
+
+@dataclass(frozen=True)
+class TestGenerationGrade(Grade):
+    """The agent's test file on the correct implementation, and on each mutant.
+
+    The inherited fields grade the test file on the correct code, keeping only the scripts in
+    the agent's own file. The mutants are built only when all of those pass: a test file that
+    fails on correct code catches nothing, and `why_no_mutants` says why none ran.
+    """
+
+    mutants: list[MutantResult]  # in the mutation file's order
+    mutants_total: int  # the task's mutations; more than `len(mutants)` when a run caps them or builds none
+    real_bugs_total: int  # how many of the task's mutations are real bugs, built or not
+
+    __test__ = False  # not a pytest test class, whatever its name
+
+    def passes_on_correct_code(self) -> bool:
+        return self.why_no_mutants() is None
+
+    def why_no_mutants(self) -> str | None:
+        """Why no mutant was built, or None when they were: the agent's test file must compile,
+        have scripts, and pass all of them on the correct implementation first."""
+        if not self.compile_passed or (not self.test_results and self.tests_error):
+            return "the test file does not compile"
+        if not self.test_results:
+            return "the test file has no scripts"
+        failing = sorted(script for script, passed in self.test_results.items() if not passed)
+        if failing:
+            return f"scripts fail on the correct implementation: {failing}"
+        return None
+
+    def caught(self, mutant: MutantResult) -> bool:
+        """A script that passed on the correct code fails on the mutant, or the tests no longer compile against it."""
+        if not mutant.grade.compile_passed or not mutant.grade.test_results:
+            return True
+        return any(not mutant.grade.test_results.get(script, False) for script, passed in self.test_results.items() if passed)
+
+    def caught_count(self) -> int:
+        return sum(1 for m in self.mutants if self.caught(m))
+
+    def real_bugs(self) -> list[MutantResult]:
+        return [m for m in self.mutants if m.source is MutationSource.REAL_BUG]
+
+
+@dataclass(frozen=True)
 class GroundTruthControl(Record):
     """Whether the unblanked copy builds and passes its own tests in this environment."""
 
@@ -578,10 +659,10 @@ class RepoCopyIntegrity(Record):
 
 
 @dataclass(frozen=True)
-class ImplFileSnapshot(Record):
-    """One implementation file before the task blanked it and after the agent wrote it."""
+class AnswerFileSnapshot(Record):
+    """One answer file before the task blanked it and after the agent wrote it."""
 
-    impl_file: RepoPath  # the file in its source repository
+    answer_file: RepoPath  # the file in its source repository
     path_in_copy: str  # where it sat in the copy the agent worked in
     original: str | None  # the ground truth, as it was before the task blanked the file
     generated: str | None  # what the agent left in its place
@@ -611,7 +692,7 @@ class TaskResult(Record):
     grade: Grade | None  # what the agent's files did: syntax, compile, tests
     ground_truth_control: GroundTruthControl | None  # the same grading run against the original files
     repo_copy_integrity: RepoCopyIntegrity | None  # the scan showing the copy did not contain the answer
-    impl_file_snapshots: list[ImplFileSnapshot]  # each implementation file before the task and after the agent
+    answer_file_snapshots: list[AnswerFileSnapshot]  # each answer file before the task and after the agent
     attempts: AttemptResult | None  # what the agent did, with any cut-short attempt's audit folded in
 
     def flags(self) -> list[TaskFlag]:
@@ -698,6 +779,41 @@ class RunResult(Record):
     def agent_wall_seconds(self) -> float:
         return sum(a.wall_seconds for a in self.attempted())
 
+    # --- Test generation: every number below counts only gradable test-generation tasks.
+
+    def test_generation_grades(self) -> list[TestGenerationGrade]:
+        return [t.grade for t in self.gradable() if isinstance(t.grade, TestGenerationGrade)]
+
+    def mutants_total(self) -> int:
+        """Every mutant of the graded tasks, whether or not it was built."""
+        return sum(g.mutants_total for g in self.test_generation_grades())
+
+    def mutants_caught(self) -> int:
+        return sum(g.caught_count() for g in self.test_generation_grades())
+
+    def mutant_catch_rate(self) -> float:
+        """The headline: of all mutants, the share caught by test files that pass on the correct code."""
+        return self.mutants_caught() / self.mutants_total() if self.mutants_total() else 0.0
+
+    def mean_task_catch_rate(self) -> float:
+        """The same share per task, averaged, so that every task weighs the same."""
+        rates = [g.caught_count() / g.mutants_total for g in self.test_generation_grades() if g.mutants_total]
+        return sum(rates) / len(rates) if rates else 0.0
+
+    def tests_pass_on_correct_code(self) -> int:
+        return sum(1 for g in self.test_generation_grades() if g.passes_on_correct_code())
+
+    def real_bugs_caught(self) -> tuple[int, int]:
+        """Real-bug mutants caught, out of all the graded tasks' real-bug mutants."""
+        grades = self.test_generation_grades()
+        caught = sum(1 for g in grades for m in g.real_bugs() if g.caught(m))
+        return caught, sum(g.real_bugs_total for g in grades)
+
+    def mutants_capped(self) -> bool:
+        """Whether some task whose mutants were built graded fewer than it has: a capped
+        development run, whose catch rate is not comparable to a full one."""
+        return any(g.passes_on_correct_code() and len(g.mutants) < g.mutants_total for g in self.test_generation_grades())
+
     def wall_seconds(self) -> float | None:
         """How long the run's tasks were in flight: the union of each task's queued-to-finished span.
 
@@ -771,6 +887,17 @@ class RunResult(Record):
                 "unattributed_request_count": len(self.unattributed_egress()),
             },
             "flagged": {flag.value: ids for flag, ids in self.flagged().items()},
+            # Zero for an implementation run, whose tasks have no mutants.
+            "test_generation": {
+                "mutants_caught": self.mutants_caught(),
+                "mutants_total": self.mutants_total(),
+                "mutant_catch_rate": self.mutant_catch_rate(),
+                "mean_task_catch_rate": self.mean_task_catch_rate(),
+                "tests_pass_on_correct_code": self.tests_pass_on_correct_code(),
+                "real_bugs_caught": self.real_bugs_caught()[0],
+                "real_bugs_total": self.real_bugs_caught()[1],
+                "mutants_capped": self.mutants_capped(),
+            },
         }
 
     # The run record lists its tasks by path; each task is its own file.
@@ -819,11 +946,6 @@ class RunResult(Record):
 
 def run_egress_path(run_dir: Path) -> Path:
     return run_dir / "egress_events.json"
-
-
-def task_file_name(task_id: str) -> str:
-    """A task id as a file name. A task id is a path, and its separators cannot be in one."""
-    return task_id.replace("\\", "__").replace("/", "__")
 
 
 def task_record_path(run_dir: Path, task_safe_name: str) -> Path:

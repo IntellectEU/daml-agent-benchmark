@@ -1,0 +1,98 @@
+task: canton/community/common/src/main/daml/CantonExamples/Paint.daml
+notes: Only Iou.daml is an implementation file. davidOffersAndAliceAccepts runs the same flow as painterOffersAndAliceAccepts, so no distinct mutation targets it.
+mutations:
+  - id: iou-signatory-owner
+    source: llm
+    target_script: painterOffers
+    kind: authorization
+    reason: The Iou is made signed by the owner instead of the payer, mixing up who issues it.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/Iou.daml b/community/common/src/main/daml/CantonExamples/Iou.daml
+      index b685659..9ecb906 100644
+      --- a/community/common/src/main/daml/CantonExamples/Iou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/Iou.daml
+      @@ -20,7 +20,7 @@ template Iou
+       
+           ensure (amount.value >= 0.0)
+       
+      -    signatory payer
+      +    signatory owner
+           observer owner
+           observer viewers
+       
+  - id: iou-ensure-inverted
+    source: llm
+    target_script: painterOffers
+    kind: validation
+    reason: The non-negative amount check is inverted so only negative amounts are accepted.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/Iou.daml b/community/common/src/main/daml/CantonExamples/Iou.daml
+      index b685659..f3a384e 100644
+      --- a/community/common/src/main/daml/CantonExamples/Iou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/Iou.daml
+      @@ -18,7 +18,7 @@ template Iou
+           viewers: [Party]
+         where
+       
+      -    ensure (amount.value >= 0.0)
+      +    ensure (amount.value < 0.0)
+       
+           signatory payer
+           observer owner
+  - id: transfer-keeps-owner
+    source: llm
+    target_script: painterOffersAndAliceAccepts
+    kind: field
+    reason: Transfer forgets to set the new owner in the recreated contract.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/Iou.daml b/community/common/src/main/daml/CantonExamples/Iou.daml
+      index b685659..6afdbff 100644
+      --- a/community/common/src/main/daml/CantonExamples/Iou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/Iou.daml
+      @@ -34,7 +34,7 @@ template Iou
+               newOwner: Party
+             controller owner
+             do
+      -        create this with owner = newOwner; viewers = []
+      +        create this with viewers = []
+       
+           choice Share : ContractId Iou
+             with
+  - id: call-controller-payer
+    source: llm
+    target_script: painterOffersAndAliceAccepts
+    kind: authorization
+    reason: Call is controlled by the payer instead of the owner holding the Iou.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/Iou.daml b/community/common/src/main/daml/CantonExamples/Iou.daml
+      index b685659..5d2b51a 100644
+      --- a/community/common/src/main/daml/CantonExamples/Iou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/Iou.daml
+      @@ -25,7 +25,7 @@ template Iou
+           observer viewers
+       
+           choice Call : ContractId GetCash
+      -      controller owner
+      +      controller payer
+             do
+               create GetCash with payer; owner; amount
+       
+  - id: transfer-controller-payer
+    source: llm
+    target_script: painterOffersAndAliceAccepts
+    kind: authorization
+    reason: Transfer is controlled by the payer instead of the current owner.
+    patch: |
+      diff --git a/community/common/src/main/daml/CantonExamples/Iou.daml b/community/common/src/main/daml/CantonExamples/Iou.daml
+      index b685659..edc8038 100644
+      --- a/community/common/src/main/daml/CantonExamples/Iou.daml
+      +++ b/community/common/src/main/daml/CantonExamples/Iou.daml
+      @@ -32,7 +32,7 @@ template Iou
+           choice Transfer : ContractId Iou
+             with
+               newOwner: Party
+      -      controller owner
+      +      controller payer
+             do
+               create this with owner = newOwner; viewers = []
+       

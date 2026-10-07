@@ -13,6 +13,7 @@ import os
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -28,20 +29,21 @@ from daml_agent_benchmark.records import (
     LiveState,
     Grade,
     RunResult,
+    TestGenerationGrade,
     Severity,
     TaskFlag,
     TaskResult,
     TokenUsage,
     read_task_result,
     resolve_repo_relative,
-    task_file_name,
     task_live_events_path,
 )
-from daml_agent_benchmark.locations import locations
+from daml_agent_benchmark.config import TaskKindName
+from daml_agent_benchmark.locations import locations, task_file_name
 
 ARCHIVE_DIR_NAME = "z_archive"
 MATRIX_CACHE_FILENAME = "matrix_overview.json"
-MATRIX_CACHE_SCHEMA_VERSION = 10
+MATRIX_CACHE_SCHEMA_VERSION = 12
 # A task whose live snapshot has not moved for this long is not running any more.
 LIVE_STALE_SECONDS = int(os.getenv("AGENT_LIVE_STALE_SECONDS", "1800"))
 
@@ -124,40 +126,40 @@ def find_run_dir(run_id: str) -> RunDir | None:
 class RunConfig:
     """The bits of a run's config the dashboard reads."""
 
-    billed_by_api_key: bool
     stale_seconds: int
     model: str  # the model the run's agent used, for pricing a task still running
+    task_kind: TaskKindName  # what the run's agents wrote
 
     @classmethod
     def load(cls, run_dir: Path) -> RunConfig:
-        """What the page needs from the run's config, which the runner writes at the start of every run.
-
-        A run that authenticated with a subscription had no tokens billed, so its
-        recorded cost is notional and the page withholds it.
-        """
+        """What the page needs from the run's config, which the runner writes at the start of every run."""
         config = json.loads((run_dir / "config.json").read_text(encoding="utf-8"))
         timeout = config["max_task_runtime_seconds"]
         # A task is stale once it has been silent for about twice its own timeout.
         stale = int(max(180, min(3600, timeout * 2))) if timeout else LIVE_STALE_SECONDS
         return cls(
-            billed_by_api_key=config["codex_auth_mode"] != "chatgpt",
             stale_seconds=stale,
             model=config["codex_model"],
+            task_kind=TaskKindName(config["task_kind"]),
         )
 
 
 # --- One task, as a cell of the matrix -------------------------------------------------
 
-STATUS_QUEUED = "queued"
-STATUS_RUNNING = "running"
-STATUS_SUCCESS = "success"
-STATUS_USAGE_LIMIT = "usage_limit"
-STATUS_TESTS_FAILED = "tests_failed"
-STATUS_BUILD_FAILED = "build_failed"
-STATUS_PARSE_FAILED = "parse_failed"
-STATUS_INFRA_FAILED = "infra_failed"
-STATUS_SECURITY_VIOLATION = "security_violation"
-STATUS_OTHER_ERROR = "other_error"
+
+class CellStatus(StrEnum):
+    """The one word the matrix shows for a task."""
+
+    QUEUED = "queued"
+    RUNNING = "running"
+    SUCCESS = "success"
+    USAGE_LIMIT = "usage_limit"
+    TESTS_FAILED = "tests_failed"
+    BUILD_FAILED = "build_failed"
+    PARSE_FAILED = "parse_failed"
+    INFRA_FAILED = "infra_failed"
+    SECURITY_VIOLATION = "security_violation"
+    OTHER_ERROR = "other_error"
 
 
 def _is_stale(task: TaskResult, *, stale_seconds: int) -> bool:
@@ -170,30 +172,30 @@ def _is_stale(task: TaskResult, *, stale_seconds: int) -> bool:
     return (datetime.now(timezone.utc) - updated).total_seconds() >= stale_seconds
 
 
-def _task_status(task: TaskResult, *, stale_seconds: int) -> str:
+def _task_status(task: TaskResult, *, stale_seconds: int) -> CellStatus:
     """The one word the matrix shows for a task."""
     if task.live_state is LiveState.QUEUED:
         # Waiting for a worker. Its snapshot is written once and never moves, so the
         # staleness rule below would read it as an error.
-        return STATUS_QUEUED
+        return CellStatus.QUEUED
     if task.finished_at_utc is None and task.attempts is None:
-        return STATUS_OTHER_ERROR if _is_stale(task, stale_seconds=stale_seconds) else STATUS_RUNNING
+        return CellStatus.OTHER_ERROR if _is_stale(task, stale_seconds=stale_seconds) else CellStatus.RUNNING
     if any(f.flag.severity is Severity.SECURITY for f in task.findings):
-        return STATUS_SECURITY_VIOLATION
+        return CellStatus.SECURITY_VIOLATION
     if task.attempts is not None and task.attempts.quota_limit_detected:
-        return STATUS_USAGE_LIMIT
+        return CellStatus.USAGE_LIMIT
     if any(f.flag.severity is Severity.INFRA for f in task.findings):
-        return STATUS_INFRA_FAILED
+        return CellStatus.INFRA_FAILED
     grade = task.grade
     if grade is None:
-        return STATUS_OTHER_ERROR
+        return CellStatus.OTHER_ERROR
     if grade.tests_passed:
-        return STATUS_SUCCESS
+        return CellStatus.SUCCESS
     if grade.compile_passed:
-        return STATUS_TESTS_FAILED
+        return CellStatus.TESTS_FAILED
     if not grade.syntax_passed and _PARSER_ERROR_RE.search(grade.syntax_error or ""):
-        return STATUS_PARSE_FAILED
-    return STATUS_BUILD_FAILED
+        return CellStatus.PARSE_FAILED
+    return CellStatus.BUILD_FAILED
 
 
 def _scripts_in_test_file(grade: Grade, test_file: str) -> int:
@@ -255,14 +257,14 @@ def _task_cell(task: TaskResult, *, config: RunConfig, run_dir: Path) -> dict[st
     costs: dict[str, float | None] = {"input_cost": None, "cached_input_cost": None, "output_cost": None}
     usd_cost = None
     lower_bound = bool(attempt and not attempt.usage_complete)
-    if attempt is not None and config.billed_by_api_key:
+    if attempt is not None:
         usd_cost = attempt.usd_cost
         costs = {
             "input_cost": attempt.input_usd,
             "cached_input_cost": attempt.cached_input_usd,
             "output_cost": attempt.output_usd,
         }
-    elif status == STATUS_RUNNING and config.billed_by_api_key:
+    elif status is CellStatus.RUNNING:
         live_path = task_live_events_path(run_dir, task.task_safe_name)
         requests = _request_token_usages(live_path) if live_path.exists() else []
         if requests:
@@ -274,9 +276,18 @@ def _task_cell(task: TaskResult, *, config: RunConfig, run_dir: Path) -> dict[st
                 usd_cost = cost.total
                 costs = {"input_cost": cost.input, "cached_input_cost": cost.cached_input, "output_cost": cost.output}
             lower_bound = True
+    mutants = None
+    if isinstance(grade, TestGenerationGrade):
+        mutants = {
+            "caught": grade.caught_count(),
+            "built": len(grade.mutants),
+            "total": grade.mutants_total,
+            "skipped": grade.why_no_mutants(),
+        }
     return {
         "task_id": task.task_id,
         "status_code": status,
+        "mutants": mutants,
         "timed_out": bool(attempt and attempt.timed_out),
         "tests_succeeded": tests_succeeded,
         "tests_total": tests_total,
@@ -290,15 +301,6 @@ def _task_cell(task: TaskResult, *, config: RunConfig, run_dir: Path) -> dict[st
 
 
 # --- One run, as a row of the matrix ---------------------------------------------------
-
-
-def run_summary(run: RunResult, *, config: RunConfig) -> dict[str, Any]:
-    """The run's own numbers, with the cost withheld when nothing was billed for them."""
-    summary = run.summary()
-    if not config.billed_by_api_key:
-        # A subscription run's tokens are not billed, so a cost would be made up.
-        summary["total_usd_cost"] = None
-    return summary
 
 
 def _summary_with_cell_costs(summary: dict[str, Any], cells: dict[str, dict[str, Any]]) -> dict[str, Any]:
@@ -326,7 +328,8 @@ def _matrix_item(run_dir: RunDir, run: RunResult, *, config: RunConfig) -> dict[
     return {
         "run_id": run_dir.run_id,
         "archived": run_dir.archived,
-        "summary": _summary_with_cell_costs(run_summary(run, config=config), cells),
+        "task_kind": config.task_kind,
+        "summary": _summary_with_cell_costs(run.summary(), cells),
         "task_statuses": cells,
         "status_counts": counts,
     }
@@ -416,24 +419,24 @@ def _live_events(run_dir: Path, task: TaskResult) -> list[dict[str, Any]]:
         return [json.loads(line) for line in handle if line.strip()]
 
 
-def _impl_file_views(task: TaskResult) -> list[dict[str, Any]]:
-    """Each implementation file before and after the agent wrote it.
+def _answer_file_views(task: TaskResult) -> list[dict[str, Any]]:
+    """Each answer file before and after the agent wrote it.
 
     The snapshot holds both. When its original text is missing, the file on this machine
     stands in, since that is what the copy was made from, and the view says which of the
     two it is showing.
     """
     views = []
-    for snapshot in task.impl_file_snapshots:
+    for snapshot in task.answer_file_snapshots:
         original = snapshot.original
         source = "snapshot"
         if original is None:
-            path = resolve_repo_relative(snapshot.impl_file)
+            path = resolve_repo_relative(snapshot.answer_file)
             original = path.read_text(encoding="utf-8", errors="replace") if path.exists() else None
             source = "current_source" if original is not None else "missing"
         views.append(
             {
-                "impl_file": snapshot.impl_file,
+                "answer_file": snapshot.answer_file,
                 "path_in_copy": snapshot.path_in_copy,
                 "original_text": original,
                 "generated_text": snapshot.generated,
@@ -461,14 +464,13 @@ def _event_costs(run_dir: Path, task: TaskResult, live_events: list[dict[str, An
     """What each event of the task cost, split from its requests.
 
     A finished task is priced for the model its attempt used, a running one for the model
-    its run is configured with. A run billed to a subscription gets token figures only, as
-    in the matrix.
+    its run is configured with.
     """
     config = RunConfig.load(run_dir)
     attempt = task.attempts
     events = (attempt.stdout_events or []) if attempt is not None else live_events
     model = attempt.model if attempt is not None else config.model
-    return event_costs(events, model if config.billed_by_api_key else None).to_record()
+    return event_costs(events, model).to_record()
 
 
 def task_detail(run_dir: RunDir, task_id: str) -> dict[str, Any] | None:
@@ -492,8 +494,33 @@ def task_detail(run_dir: RunDir, task_id: str) -> dict[str, Any] | None:
         "cell": _task_cell(task, config=RunConfig.load(run_dir.path), run_dir=run_dir.path),
         "live_events": live_events,
         "event_costs": _event_costs(run_dir.path, task, live_events),
-        "impl_file_views": _impl_file_views(task),
+        "answer_file_views": _answer_file_views(task),
+        "mutant_matrix": _mutant_matrix(task.grade) if isinstance(task.grade, TestGenerationGrade) else None,
         "terminal_log": _terminal_log(run_dir.path, task),
+    }
+
+
+def _mutant_matrix(grade: TestGenerationGrade) -> dict[str, Any]:
+    """The agent's scripts against the correct code and each mutant: one row per mutant,
+    one column per script, and whether each mutant was caught."""
+    scripts = sorted(grade.test_results)
+    return {
+        "scripts": scripts,
+        "correct": {script: grade.test_results[script] for script in scripts},
+        "skipped": grade.why_no_mutants(),
+        "total": grade.mutants_total,
+        "rows": [
+            {
+                "id": m.id,
+                "source": m.source.value,
+                "kind": m.kind,
+                "caught": grade.caught(m),
+                # None when the test file no longer built against the mutant.
+                "results": {s: m.grade.test_results.get(s) for s in scripts} if m.grade.compile_passed and m.grade.test_results else None,
+                "error": None if m.grade.compile_passed and m.grade.test_results else (m.grade.syntax_error or m.grade.compile_error or m.grade.tests_error),
+            }
+            for m in grade.mutants
+        ],
     }
 
 

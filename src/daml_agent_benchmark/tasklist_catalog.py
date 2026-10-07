@@ -23,17 +23,24 @@ import importlib.util
 import os
 import sys
 from dataclasses import dataclass
+from enum import StrEnum
 from functools import cache
 from collections import Counter
 from pathlib import Path
 
 import yaml
 
-from daml_agent_benchmark.config import ExperimentConfig
+from daml_agent_benchmark.config import ExperimentConfig, TaskKindName, TaskSet
 from daml_agent_benchmark.constants import REPO_COPY_DIR_SPLITTER
+from daml_agent_benchmark.mutations.model import load_mutations
 from daml_agent_benchmark.locations import PACKAGE_TASKLIST_DIR, configure, locations
 from daml_agent_benchmark.repos.registry import handler_for
 from daml_agent_benchmark.repos.sdk_version import resolve_daml_sdk_version
+
+
+class BuildTool(StrEnum):
+    DAML = "daml"
+    DPM = "dpm"
 
 
 @dataclass(frozen=True)
@@ -42,7 +49,7 @@ class Repo:
     url: str | None
     commit: str | None
     license: str | None
-    build_tool: str
+    build_tool: BuildTool
 
     @property
     def root(self) -> Path:
@@ -136,7 +143,9 @@ def load_repos() -> dict[str, Repo]:
         for name, r in raw.items():
             if name in repos:
                 raise KeyError(f"repository {name!r} is declared twice, in {path.parent} and earlier")
-            repos[name] = Repo(name=name, url=r["url"], commit=r["commit"], license=r["license"], build_tool=r["build_tool"])
+            repos[name] = Repo(
+                name=name, url=r["url"], commit=r["commit"], license=r["license"], build_tool=BuildTool(r["build_tool"])
+            )
     return repos
 
 
@@ -255,9 +264,17 @@ def get_selected_tasks(config: ExperimentConfig) -> dict[str, list[str]]:
     """Which tasks a run covers, as a map from each test file to its implementation files.
 
     `config.tasks` names them outright. Otherwise `config.task_set` takes all of them or
-    one per repository, and `config.tasks_per_repo` caps how many come from each.
+    one per repository, and `config.tasks_per_repo` caps how many come from each. A
+    test-generation run takes only the tasks that have mutations, since a task without any
+    cannot grade the agent's tests.
     """
     available = {test_file: impl_files for test_file, impl_files in impl_files_by_test_file().items() if impl_files}
+    if config.task_kind is TaskKindName.TEST_GENERATION:
+        without = {t for t in available if not load_mutations(repo_relative_id(t))}
+        named = [t for t in config.tasks or [] if _resolve_task_key(t, available) in without]
+        if named:
+            raise ValueError(f"task(s) without mutations cannot run as test generation: {named}")
+        available = {t: impls for t, impls in available.items() if t not in without}
     filtered = available
 
     if config.tasks is not None:
@@ -280,12 +297,7 @@ def get_selected_tasks(config: ExperimentConfig) -> dict[str, list[str]]:
             raise ValueError(f"Unknown task id(s): {missing}")
         return {test_file: available[test_file] for test_file in resolved_test_files}
 
-    if config.task_set == "one_per_repo":
-        per_repo = 1
-    elif config.task_set == "all":
-        per_repo = config.tasks_per_repo
-    else:
-        raise ValueError(f"Unknown task_set: {config.task_set}")
+    per_repo = 1 if config.task_set is TaskSet.ONE_PER_REPO else config.tasks_per_repo
 
     ordered = sorted(filtered.items(), key=lambda item: item[0])
     if per_repo is None:

@@ -8,14 +8,16 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "typecheck": "tsc -b --noEmit",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test tests/diffView.test.mjs tests/highlighter.test.mjs"
   },
   "dependencies": {
     "antd": "^5.27.1",
     "axios": "^1.11.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-syntax-highlighter": "^16.1.1"
+    "react-syntax-highlighter": "^16.1.1",
+    "shiki": "4.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

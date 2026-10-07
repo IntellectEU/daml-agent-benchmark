@@ -1,0 +1,129 @@
+task: ex-models/tic-tac-toe/daml/Test.daml
+notes: ""
+mutations:
+  - id: win-checked-for-wrong-player
+    source: llm
+    target_script: nestedCase
+    kind: branch
+    reason: After a move the win check is run for the player who did not just move.
+    patch: |
+      diff --git a/tic-tac-toe/daml/TicTacToe.daml b/tic-tac-toe/daml/TicTacToe.daml
+      --- a/tic-tac-toe/daml/TicTacToe.daml
+      +++ b/tic-tac-toe/daml/TicTacToe.daml
+      @@ -72,7 +72,7 @@ template Game
+                 assert $ isNone $ findIndex (\m -> m.x == x && m.y == y) moves
+                 let other = if current == player1 then player2 else player1
+                 let game = this with moves = move :: moves; current = other
+      -          if hasWon game current then
+      +          if hasWon game other then
+                   do
+                     result <- create Result with player1; player2; outcome = Winner current; moves = game.moves; size
+                     pure $ Left result
+  - id: winner-is-loser
+    source: llm
+    target_script: assertEachStep
+    kind: field
+    reason: The Result records the player who is about to move next as winner instead of the one who just won.
+    patch: |
+      diff --git a/tic-tac-toe/daml/TicTacToe.daml b/tic-tac-toe/daml/TicTacToe.daml
+      --- a/tic-tac-toe/daml/TicTacToe.daml
+      +++ b/tic-tac-toe/daml/TicTacToe.daml
+      @@ -74,7 +74,7 @@ template Game
+                 let game = this with moves = move :: moves; current = other
+                 if hasWon game current then
+                   do
+      -              result <- create Result with player1; player2; outcome = Winner current; moves = game.moves; size
+      +              result <- create Result with player1; player2; outcome = Winner other; moves = game.moves; size
+                     pure $ Left result
+                 else if length moves == size * size then
+                   do
+  - id: columns-checked-as-rows
+    source: llm
+    target_script: eitherMonad
+    kind: branch
+    reason: The column check was copy-pasted from the row check and still tests the same coordinate, so one direction is never detected.
+    patch: |
+      diff --git a/tic-tac-toe/daml/TicTacToe.daml b/tic-tac-toe/daml/TicTacToe.daml
+      --- a/tic-tac-toe/daml/TicTacToe.daml
+      +++ b/tic-tac-toe/daml/TicTacToe.daml
+      @@ -14,7 +14,7 @@ hasWon : Game -> Party -> Bool
+       hasWon game player =
+         let
+           moves = filter (\m -> m.player == player) game.moves
+      -    hasAllHorizontal i = count (\m -> m.x == i) moves == game.size
+      +    hasAllHorizontal i = count (\m -> m.y == i) moves == game.size
+           hasAllVertical i = count (\m -> m.y == i) moves == game.size
+           hasAllDiagonal i = count (\m -> m.y == i && m.x == i) moves == game.size
+           hasAllCounterDiagonal i = count (\m -> m.y == i && m.x == game.size - 1 - i) moves == game.size
+  - id: turn-never-passes
+    source: llm
+    target_script: nestedCase
+    kind: field
+    reason: The next game keeps the same current player instead of handing the turn to the other player.
+    patch: |
+      diff --git a/tic-tac-toe/daml/TicTacToe.daml b/tic-tac-toe/daml/TicTacToe.daml
+      --- a/tic-tac-toe/daml/TicTacToe.daml
+      +++ b/tic-tac-toe/daml/TicTacToe.daml
+      @@ -71,7 +71,7 @@ template Game
+                 assert $ y >= 0 && y < size
+                 assert $ isNone $ findIndex (\m -> m.x == x && m.y == y) moves
+                 let other = if current == player1 then player2 else player1
+      -          let game = this with moves = move :: moves; current = other
+      +          let game = this with moves = move :: moves; current = current
+                 if hasWon game current then
+                   do
+                     result <- create Result with player1; player2; outcome = Winner current; moves = game.moves; size
+  - id: move-not-recorded
+    source: llm
+    target_script: assertEachStep
+    kind: field
+    reason: The new game is created with the old move list, so the played move is lost.
+    patch: |
+      diff --git a/tic-tac-toe/daml/TicTacToe.daml b/tic-tac-toe/daml/TicTacToe.daml
+      --- a/tic-tac-toe/daml/TicTacToe.daml
+      +++ b/tic-tac-toe/daml/TicTacToe.daml
+      @@ -71,7 +71,7 @@ template Game
+                 assert $ y >= 0 && y < size
+                 assert $ isNone $ findIndex (\m -> m.x == x && m.y == y) moves
+                 let other = if current == player1 then player2 else player1
+      -          let game = this with moves = move :: moves; current = other
+      +          let game = this with moves = moves; current = other
+                 if hasWon game current then
+                   do
+                     result <- create Result with player1; player2; outcome = Winner current; moves = game.moves; size
+  - id: invite-accepted-by-inviter
+    source: llm
+    target_script: monadicBind
+    kind: authorization
+    reason: The Accept choice is controlled by the inviting player instead of the invited one.
+    patch: |
+      diff --git a/tic-tac-toe/daml/TicTacToe.daml b/tic-tac-toe/daml/TicTacToe.daml
+      --- a/tic-tac-toe/daml/TicTacToe.daml
+      +++ b/tic-tac-toe/daml/TicTacToe.daml
+      @@ -45,7 +45,7 @@ template GameInvite
+           size : Int
+         where
+           signatory player1
+      -    controller player2 can
+      +    controller player1 can
+             Accept : ContractId Game
+               do
+                 create Game with player1; player2; current = player1; moves = []; size
+  - id: wrong-first-player
+    source: llm
+    target_script: eitherMonad
+    kind: field
+    reason: Accepting an invite makes the second player the first to move instead of the inviter.
+    patch: |
+      diff --git a/tic-tac-toe/daml/TicTacToe.daml b/tic-tac-toe/daml/TicTacToe.daml
+      --- a/tic-tac-toe/daml/TicTacToe.daml
+      +++ b/tic-tac-toe/daml/TicTacToe.daml
+      @@ -48,7 +48,7 @@ template GameInvite
+           controller player2 can
+             Accept : ContractId Game
+               do
+      -          create Game with player1; player2; current = player1; moves = []; size
+      +          create Game with player1; player2; current = player2; moves = []; size
+       
+       template Game
+         with

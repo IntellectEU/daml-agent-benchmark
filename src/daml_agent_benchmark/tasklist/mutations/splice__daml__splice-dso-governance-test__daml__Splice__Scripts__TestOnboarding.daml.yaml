@@ -1,0 +1,79 @@
+task: splice/daml/splice-dso-governance-test/daml/Splice/Scripts/TestOnboarding.daml
+notes: The implementation file holds only two expiry choices (SvOnboardingRequest_Expire and SvOnboardingConfirmed_Expire), so only the two expiry scripts have mutations. Other scripts only create the contracts through DsoRules. Making the choices nonconsuming, and dropping the expiry check (which is the same mistake as inverting it), were not kept.
+mutations:
+  - id: request-expire-inverted
+    source: llm
+    target_script: testSvOnboardingRequestExpiry
+    kind: time
+    reason: The comparison against expiresAt is written the wrong way round, so an onboarding request can only be expired before its deadline.
+    patch: |
+      diff --git a/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml b/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      index 6584666..011e8a2 100644
+      --- a/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      +++ b/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      @@ -31,7 +31,7 @@ template SvOnboardingRequest with
+             controller dso
+             do
+               now <- getTime
+      -        require "Onboarding has expired" (now >= expiresAt)
+      +        require "Onboarding has expired" (now <= expiresAt)
+               pure SvOnboardingRequest_ExpireResult
+       
+       -- | A confirmation for approval of a candidate SV.
+  - id: confirmed-expire-inverted
+    source: llm
+    target_script: testSvOnboardingConfirmedExpiry
+    kind: time
+    reason: The comparison against expiresAt is written the wrong way round, so a confirmation can only be expired before its deadline.
+    patch: |
+      diff --git a/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml b/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      index 6584666..499d0ae 100644
+      --- a/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      +++ b/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      @@ -54,7 +54,7 @@ template SvOnboardingConfirmed with
+             controller dso
+             do
+               now <- getTime
+      -        require "SV candidate confirmation has expired" (now >= expiresAt)
+      +        require "SV candidate confirmation has expired" (now <= expiresAt)
+               pure SvOnboardingConfirmed_ExpireResult
+       
+       
+  - id: request-expire-controller-candidate
+    source: llm
+    target_script: testSvOnboardingRequestExpiry
+    kind: authorization
+    reason: The controller of the expire choice is the candidate, an observer of the request, instead of the DSO party that signs it.
+    patch: |
+      diff --git a/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml b/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      index 6584666..a4cdb5f 100644
+      --- a/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      +++ b/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      @@ -28,7 +28,7 @@ template SvOnboardingRequest with
+       
+           -- Archive if we are past the `expiresAt`.
+           choice SvOnboardingRequest_Expire : SvOnboardingRequest_ExpireResult
+      -      controller dso
+      +      controller candidateParty
+             do
+               now <- getTime
+               require "Onboarding has expired" (now >= expiresAt)
+  - id: confirmed-expire-controller-sv
+    source: llm
+    target_script: testSvOnboardingConfirmedExpiry
+    kind: authorization
+    reason: The controller of the expire choice is the SV being onboarded instead of the DSO party.
+    patch: |
+      diff --git a/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml b/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      index 6584666..0d13881 100644
+      --- a/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      +++ b/daml/splice-dso-governance/daml/Splice/SvOnboarding.daml
+      @@ -51,7 +51,7 @@ template SvOnboardingConfirmed with
+       
+           -- Archive if we are past the `expiresAt`.
+           choice SvOnboardingConfirmed_Expire : SvOnboardingConfirmed_ExpireResult
+      -      controller dso
+      +      controller svParty
+             do
+               now <- getTime
+               require "SV candidate confirmation has expired" (now >= expiresAt)

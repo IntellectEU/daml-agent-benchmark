@@ -28,7 +28,6 @@ from daml_agent_benchmark.records import AttemptResult, EgressSummary, RuntimeId
 from daml_agent_benchmark.constants import (
     CODEX_APP_SERVER_EXPERIMENTAL_API,
     CODEX_APPROVAL_POLICY,
-    CODEX_EVENT_VERBOSITY,
     CODEX_HEARTBEAT_INTERVAL_SECONDS,
     CODEX_POST_COMPLETION_WAIT_SECONDS,
     CODEX_SANDBOX,
@@ -37,7 +36,6 @@ from daml_agent_benchmark.constants import (
     WRAPPER_PATH,
 )
 from daml_agent_benchmark.task_run.impl_sync import ImplSyncWatcher
-from daml_agent_benchmark.task_run.events import clip_text
 from daml_agent_benchmark.repos.repo_copy import strip_ansi_codes
 from daml_agent_benchmark.run_files import now_utc_iso
 from daml_agent_benchmark.task_run.env import is_container_codex_runner, resolve_container_export_timeout_seconds
@@ -140,7 +138,7 @@ class AppServerRunner:
         prompt: str,
         timeout_seconds: int,
         copyback_rel_paths: list[str],
-        test_rel_path: str,
+        protected_rel_paths: list[str],
         log_prefix: str = "",
         task_log_path: Path | None = None,
         live_stdout_events_path: Path | None = None,
@@ -153,10 +151,9 @@ class AppServerRunner:
         self.prompt = prompt
         self.timeout_seconds = timeout_seconds
         self.allowed_impl_rel_paths = set(sanitize_copyback_rel_paths(copyback_rel_paths))
-        self.test_rel_path = test_rel_path
+        self.protected_rel_paths = protected_rel_paths
         self.allowed_impl_rel_paths_sorted = sorted(self.allowed_impl_rel_paths)
 
-        self.event_verbosity = CODEX_EVENT_VERBOSITY.lower()
         self.show_heartbeat = CODEX_SHOW_HEARTBEAT
         self.heartbeat_interval_seconds = CODEX_HEARTBEAT_INTERVAL_SECONDS
         if self.heartbeat_interval_seconds <= 0:
@@ -304,8 +301,7 @@ class AppServerRunner:
         """Process one stdout line: response, server request, or notification."""
         self.stdout_lines.append(line)
         stripped = line.strip()
-        if self.event_verbosity == "raw":
-            self.logger.log(f"[codex-json] {stripped}")
+        self.logger.log(f"[codex-json] {stripped}")
         if not stripped.startswith("{"):
             return
         try:
@@ -421,10 +417,6 @@ class AppServerRunner:
         self.stdout_events.append(event_record)
         self.logger.write_live_event(event_record)
 
-        if self.event_verbosity == "summary":
-            self._log_event_summary(canonical_event)
-        elif self.event_verbosity == "verbose":
-            self._log_event_verbose(canonical_event)
         self._update_completion(canonical_event)
 
     def _update_completion(self, canonical_event: dict) -> None:
@@ -569,90 +561,6 @@ class AppServerRunner:
             return
         self._terminate_then_kill()
 
-    def _format_cmd_output(self, output: str | None, max_chars: int = 400) -> str:
-        """Normalize command output text into one clipped, single-line string."""
-        text = (output or "").strip().replace("\n", " ")
-        return clip_text(text, max_chars)
-
-    def _rel_for_log(self, path: str | None) -> str:
-        """Render path relative to repository copy's root when possible for concise logs."""
-        if not path:
-            return ""
-        try:
-            path_obj = Path(path)
-            repo_copy_obj = Path(self.repo_copy_root)
-            return str(path_obj.relative_to(repo_copy_obj))
-        except Exception:
-            return path
-
-    def _log_event_summary(self, event: dict) -> None:
-        """Emit compact human-readable summary logs for canonical events."""
-        etype = event.get("type")
-        if etype in {"thread.started", "turn.started", "turn.completed", "turn.failed", "error"}:
-            self.logger.log(f"[codex] {etype}")
-            return
-        if etype not in {"item.started", "item.completed", "item.updated"}:
-            return
-
-        item = event.get("item") or {}
-        item_type = item.get("type")
-        if item_type == "command_execution":
-            command = clip_text(item.get("command") or "", 220)
-            if etype == "item.started":
-                self.logger.log(f"[cmd:start] {command}")
-            elif etype == "item.completed":
-                exit_code = item.get("exit_code")
-                self.logger.log(f"[cmd:done exit={exit_code}] {command}")
-                output = self._format_cmd_output(item.get("aggregated_output"), 320)
-                if output:
-                    self.logger.log(f"[cmd:out] {output}")
-            return
-        if item_type == "reasoning" and etype == "item.completed":
-            text = self._format_cmd_output(item.get("text"), 280)
-            if text:
-                self.logger.log(f"[reasoning] {text}")
-            return
-        if item_type == "file_change" and etype == "item.completed":
-            changes = item.get("changes") or []
-            rendered = []
-            for change in changes[:5]:
-                kind = change.get("kind", "?")
-                rendered.append(f"{kind} {self._rel_for_log(change.get('path'))}")
-            if rendered:
-                self.logger.log(f"[file_change] {'; '.join(rendered)}")
-            else:
-                self.logger.log("[file_change]")
-            return
-        if item_type == "todo_list" and etype == "item.completed":
-            items = item.get("items") or []
-            done = sum(1 for item in items if item.get("completed"))
-            self.logger.log(f"[todo] {done}/{len(items)} complete")
-            return
-        if item_type == "agent_message" and etype == "item.completed":
-            text = clip_text((item.get("text") or "").replace("\n", " "), 200)
-            if text:
-                self.logger.log(f"[codex] agent_message: {text}")
-
-    def _log_event_verbose(self, event: dict) -> None:
-        """Emit verbose logs for canonical events, including full item payloads."""
-        etype = event.get("type") or "unknown"
-        if etype != "item.completed":
-            self.logger.log(f"[codex] {etype}")
-            return
-        item = event.get("item") or {}
-        item_type = item.get("type") or "unknown"
-        self.logger.log(f"[codex] item.completed ({item_type})")
-        if item_type == "agent_message":
-            text = (item.get("text") or "").strip()
-            if text:
-                self.logger.log(f"[codex-message] {text}")
-            return
-        try:
-            item_dump = json.dumps(item, ensure_ascii=False)
-        except TypeError:
-            item_dump = str(item)
-        self.logger.log(f"[codex-item] {clip_text(item_dump, 6000)}")
-
     def _build_result(self) -> AttemptResult:
         """What the agent did, assembled from the run's artifacts once the process has ended."""
         stdout_text = "".join(self.stdout_lines)
@@ -696,7 +604,7 @@ class AppServerRunner:
             ),
             runtime_identity=self.runtime_identity,
             workspace_audit=WorkspaceAudit.from_changes(
-                workspace_changes, self.allowed_impl_rel_paths_sorted, self.test_rel_path
+                workspace_changes, self.allowed_impl_rel_paths_sorted, self.protected_rel_paths
             ),
         )
 
@@ -725,7 +633,7 @@ def run_app_server_attempt(
     prompt: str,
     timeout_seconds: int,
     copyback_rel_paths: list[str],
-    test_rel_path: str,
+    protected_rel_paths: list[str],
     log_prefix: str = "",
     task_log_path: Path | None = None,
     live_stdout_events_path: Path | None = None,
@@ -738,7 +646,7 @@ def run_app_server_attempt(
         prompt=prompt,
         timeout_seconds=timeout_seconds,
         copyback_rel_paths=copyback_rel_paths,
-        test_rel_path=test_rel_path,
+        protected_rel_paths=protected_rel_paths,
         log_prefix=log_prefix,
         task_log_path=task_log_path,
         live_stdout_events_path=live_stdout_events_path,

@@ -82,16 +82,16 @@
     "repo_copy_digest": "6f6d136712ad738b83f2efc5d276183f5c30d3ed936286e5e25115e5707cd12f",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "ex-models/chess/daml/Rules/Move.daml",
+      "answer_file": "ex-models/chess/daml/Rules/Move.daml",
       "path_in_copy": "chess/daml/Rules/Move.daml",
       "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Rules.Move where\n\nimport DA.Foldable\nimport DA.Map as M\nimport DA.Optional\n\nimport Types\n\nimport Rules.EnPassant\nimport Rules.Data\nimport Rules.Path\nimport Rules.Promotion\nimport Rules.Util\n\n-- | Helper function to apply a simple chess move to\nsimpleMove : MoveData -> E StateMap\nsimpleMove md = do\n  capture <- checkCapture md\n  newType <- checkPromotion md\n  let\n    target = fromOptional md.to capture\n    isCapture = isSome capture\n  movePath <- path md.piece.tp md.state.player isCapture md.from md.to\n\n  forA_ movePath (\\c -> assertMsg \"Path blocked\" (isNone $ M.lookup c md.stateMap))\n\n  return $\n    M.insert md.to\n      (movePiece md.move.to md.piece) with tp = newType\n      (M.delete target\n        (M.delete md.from md.stateMap))\n\n\n-- | Checks whether a chess move is a capture, ie whether an opponent\n-- | piece gets taken. Fails if the `to` field has piece by the player\ncheckCapture : MoveData -> E Capture\ncheckCapture md = do\n  -- Which piece may the player be trying to take?\n  tgt <- target md\n  let\n    tgtPiece = M.lookup tgt md.stateMap\n    tgtCoord = fmap coord tgtPiece\n    toOwner = do\n      piece <- M.lookup md.to md.stateMap\n      return piece.owner\n\n  assertMsg \"Can't capture own piece\" (toOwner /= Some md.state.player)\n  return $ fmap toIntCoord tgtCoord\n",
       "generated": "module Rules.Move where\n\nimport DA.Foldable\nimport DA.Map as M\nimport DA.Optional\n\nimport Types\nimport Rules.Data\nimport Rules.EnPassant\nimport Rules.Path\nimport Rules.Promotion\nimport Rules.Util\n\ncheckCapture : MoveData -> E (Optional IntCoord)\ncheckCapture md = do\n  let destination = M.lookup md.to md.stateMap\n  captureCoord <- if md.piece.tp == Pawn && md.from._1 /= md.to._1 && isNone destination\n    then target md\n    else return md.to\n  case M.lookup captureCoord md.stateMap of\n    None -> return None\n    Some piece -> do\n      assertMsg \"Cannot capture own piece\" (piece.owner /= md.piece.owner)\n      return (Some captureCoord)\n\nsimpleMove : MoveData -> E StateMap\nsimpleMove md = do\n  capture <- checkCapture md\n  movePath <- path md.piece.tp md.piece.owner (isSome capture) md.from md.to\n  forA_ movePath (\\coord -> assertMsg \"Path blocked\" (isNone $ M.lookup coord md.stateMap))\n  pieceType <- checkPromotion md\n  let movedPiece = (movePiece md.move.to md.piece) with tp = pieceType\n      withoutSource = M.delete md.from md.stateMap\n      withoutCapture = case capture of\n        None -> withoutSource\n        Some coord -> M.delete coord withoutSource\n  return $ M.insert md.to movedPiece withoutCapture\n",
       "captured_at_utc": "2026-09-25T15:53:41.876590+00:00"
     },
     {
-      "impl_file": "ex-models/chess/daml/Rules/Path.daml",
+      "answer_file": "ex-models/chess/daml/Rules/Path.daml",
       "path_in_copy": "chess/daml/Rules/Path.daml",
       "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Rules.Path where\n\nimport Types\n\nimport Rules.Data\nimport Rules.Util\n\n-- | Path of move: Bool is EnPassant\npath : PieceType -> Player -> Bool -> IntCoord -> IntCoord -> E [IntCoord]\npath _ _ _ i1 i2\n  | i1 == i2 = abort \"Null move is not valid\"\npath Pawn White True i1 i2 = do\n  assertMsg \"Invalid move\" (i1._2 + 1 == i2._2 && colD i1 i2 == 1)\n  return []\npath Pawn White False (c1,1) (c2,3) = do    -- can move pawn 2 spaces if on home row.\n  assertMsg \"Invalid move\" (c1 == c2)\n  return [(c1,2)]\npath Pawn White False (c1,r1) (c2,r2) = do  -- can move pawn 1 space\n  assertMsg \"Invalid move\" (c1 == c2       && r2 == r1 + 1)\n  return []\npath Rook _ _ i1@(c1, r1) i2@(c2, r2) = do  -- can move rook along straight paths\n  assertMsg \"Invalid move\" (r1 == r2 || c1 == c2)\n  pathBetween i1 i2\npath Knight _ _ i1 i2 = do                  -- can move Knight 1 & 2 spaces.\n  assertMsg \"Invalid move\" ((colD i1 i2, rowD i1 i2) `elem` [(1, 2), (2, 1)])\n  return []\npath Bishop _ _ i1 i2 = do                  -- can move Bishop the same distance along row and col\n    assertMsg \"Invalid move\" (colD i1 i2 == rowD i1 i2)\n    pathBetween i1 i2\npath Queen _ _ i1 i2 = pathBetween i1 i2    -- can move Queen only if there's path.\npath King _ _ i1 i2 = do                    -- can move King only 1 space\n  assertMsg \"Invalid move\" (colD i1 i2 <= 1 && rowD i1 i2 <= 1)\n  return []\npath Pawn Black a i1 i2 =\n  do\n    p <- path Pawn White a (flipRow i1) (flipRow i2)\n    return (map flipRow p)",
       "generated": "module Rules.Path where\n\nimport Types\nimport Rules.Data\nimport Rules.Util\n\npath : PieceType -> Player -> Bool -> IntCoord -> IntCoord -> E [IntCoord]\npath pieceType player capture from to\n  | from == to = Left \"Null move is not valid\"\n  | otherwise = case pieceType of\n      Pawn ->\n        let direction = if player == White then 1 else -1\n            startRow = if player == White then 1 else 6\n            rowChange = to._2 - from._2\n        in if capture && colD from to == 1 && rowChange == direction\n          then Right []\n          else if not capture && from._1 == to._1 && rowChange == direction\n            then Right []\n            else if not capture && from._1 == to._1 && from._2 == startRow\n                && rowChange == 2 * direction\n              then Right [(from._1, from._2 + direction)]\n              else Left \"Invalid move\"\n      Rook -> if from._1 == to._1 || from._2 == to._2\n        then pathBetween from to\n        else Left \"Invalid move\"\n      Knight -> if (colD from to == 1 && rowD from to == 2)\n          || (colD from to == 2 && rowD from to == 1)\n        then Right []\n        else Left \"Invalid move\"\n      Bishop -> if colD from to == rowD from to\n        then pathBetween from to\n        else Left \"Invalid move\"\n      Queen -> pathBetween from to\n      King -> if colD from to <= 1 && rowD from to <= 1\n        then Right []\n        else Left \"Invalid move\"\n",
@@ -293,7 +293,7 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "chess/daml/Rules/Move.daml",
           "kind": "modified"
@@ -303,7 +303,7 @@
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

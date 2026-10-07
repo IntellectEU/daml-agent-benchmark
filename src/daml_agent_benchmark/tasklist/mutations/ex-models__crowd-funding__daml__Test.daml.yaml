@@ -1,0 +1,133 @@
+task: ex-models/crowd-funding/daml/Test.daml
+notes: ""
+mutations:
+  - id: claim-threshold-strict
+    source: llm
+    target_script: validClaim
+    kind: branch
+    reason: The funding goal check uses a strict comparison, so a campaign that raised exactly its threshold cannot be claimed.
+    patch: |
+      diff --git a/crowd-funding/daml/CrowdFunding.daml b/crowd-funding/daml/CrowdFunding.daml
+      index c0d1670..4c2a6f2 100644
+      --- a/crowd-funding/daml/CrowdFunding.daml
+      +++ b/crowd-funding/daml/CrowdFunding.daml
+      @@ -28,7 +28,7 @@ template Campaign
+               do
+                 now <- getTime
+                 assertMsg "Can only claim after deadline" $ now >= deadline
+      -          assertMsg "Can only claim if raised more than threshold" $ raised >= threshold
+      +          assertMsg "Can only claim if raised more than threshold" $ raised > threshold
+                 unlockedIous <- mapA (\i -> exercise i Unlock) ious
+                 mapA (\i -> exercise i Transfer with newOwner = originator) unlockedIous
+       
+  - id: claim-threshold-unchecked
+    source: llm
+    target_script: invalidClaim
+    kind: validation
+    reason: The check that the raised amount reaches the threshold is left out of Claim, so an underfunded campaign can be claimed.
+    patch: |
+      diff --git a/crowd-funding/daml/CrowdFunding.daml b/crowd-funding/daml/CrowdFunding.daml
+      index c0d1670..32eae4c 100644
+      --- a/crowd-funding/daml/CrowdFunding.daml
+      +++ b/crowd-funding/daml/CrowdFunding.daml
+      @@ -28,7 +28,6 @@ template Campaign
+               do
+                 now <- getTime
+                 assertMsg "Can only claim after deadline" $ now >= deadline
+      -          assertMsg "Can only claim if raised more than threshold" $ raised >= threshold
+                 unlockedIous <- mapA (\i -> exercise i Unlock) ious
+                 mapA (\i -> exercise i Transfer with newOwner = originator) unlockedIous
+       
+  - id: pledge-raised-not-updated
+    source: llm
+    target_script: validClaim
+    kind: field
+    reason: Pledge recreates the campaign with the old raised total instead of adding the pledged amount.
+    patch: |
+      diff --git a/crowd-funding/daml/CrowdFunding.daml b/crowd-funding/daml/CrowdFunding.daml
+      index c0d1670..a48bb4d 100644
+      --- a/crowd-funding/daml/CrowdFunding.daml
+      +++ b/crowd-funding/daml/CrowdFunding.daml
+      @@ -44,7 +44,7 @@ template Campaign
+               iou <- fetch iouId
+               assert $ iou.amount > 0.0
+               lockedIou <- exercise iouId Lock with newLocker = originator
+      -        create this with ious = lockedIou :: ious; raised = raised + iou.amount
+      +        create this with ious = lockedIou :: ious; raised = raised
+       
+           choice Reclaim : [ContractId Iou]
+             with backer : Party
+  - id: reclaim-threshold-inclusive
+    source: llm
+    target_script: invalidReclaim
+    kind: branch
+    reason: Reclaim allows refunds when the raised amount equals the threshold, treating a fully funded campaign as failed.
+    patch: |
+      diff --git a/crowd-funding/daml/CrowdFunding.daml b/crowd-funding/daml/CrowdFunding.daml
+      index c0d1670..c1793bb 100644
+      --- a/crowd-funding/daml/CrowdFunding.daml
+      +++ b/crowd-funding/daml/CrowdFunding.daml
+      @@ -53,7 +53,7 @@ template Campaign
+               now <- getTime
+               assert $ elem backer backers
+               assertMsg "Can only reclaim after deadline" $ now >= deadline
+      -        assertMsg "Can only reclaim if raised less than threshold" $ raised < threshold
+      +        assertMsg "Can only reclaim if raised less than threshold" $ raised <= threshold
+               mapA (\i -> exercise i Unlock) ious
+       
+       template BackerInvite
+  - id: reclaim-backer-check-inverted
+    source: llm
+    target_script: validReclaim
+    kind: validation
+    reason: The membership check in Reclaim is inverted, so only non-backers may reclaim.
+    patch: |
+      diff --git a/crowd-funding/daml/CrowdFunding.daml b/crowd-funding/daml/CrowdFunding.daml
+      index c0d1670..097294b 100644
+      --- a/crowd-funding/daml/CrowdFunding.daml
+      +++ b/crowd-funding/daml/CrowdFunding.daml
+      @@ -51,7 +51,7 @@ template Campaign
+             controller backer
+             do
+               now <- getTime
+      -        assert $ elem backer backers
+      +        assert $ not (elem backer backers)
+               assertMsg "Can only reclaim after deadline" $ now >= deadline
+               assertMsg "Can only reclaim if raised less than threshold" $ raised < threshold
+               mapA (\i -> exercise i Unlock) ious
+  - id: unlock-guard-inverted
+    source: llm
+    target_script: validReclaim
+    kind: validation
+    reason: The guard in Unlock is inverted, so only an Iou that is not locked can be unlocked.
+    patch: |
+      diff --git a/crowd-funding/daml/Iou.daml b/crowd-funding/daml/Iou.daml
+      index 971cbe9..eb94acf 100644
+      --- a/crowd-funding/daml/Iou.daml
+      +++ b/crowd-funding/daml/Iou.daml
+      @@ -28,5 +28,5 @@ template Iou
+           controller locker can
+             Unlock : ContractId Iou
+               do
+      -          assert $ owner /= locker
+      +          assert $ owner == locker
+                 create this with locker = owner
+  - id: claim-deadline-strict
+    source: llm
+    target_script: validClaim
+    kind: time
+    reason: Claim requires the ledger time to be strictly after the deadline, so it fails at the deadline itself.
+    patch: |
+      diff --git a/crowd-funding/daml/CrowdFunding.daml b/crowd-funding/daml/CrowdFunding.daml
+      index c0d1670..484e507 100644
+      --- a/crowd-funding/daml/CrowdFunding.daml
+      +++ b/crowd-funding/daml/CrowdFunding.daml
+      @@ -27,7 +27,7 @@ template Campaign
+             Claim : [ContractId Iou]
+               do
+                 now <- getTime
+      -          assertMsg "Can only claim after deadline" $ now >= deadline
+      +          assertMsg "Can only claim after deadline" $ now > deadline
+                 assertMsg "Can only claim if raised more than threshold" $ raised >= threshold
+                 unlockedIous <- mapA (\i -> exercise i Unlock) ious
+                 mapA (\i -> exercise i Transfer with newOwner = originator) unlockedIous

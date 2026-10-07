@@ -1,0 +1,55 @@
+task: ex-models/chess/daml/Tests/Draw.daml
+notes: "testFiftyMove has no mutations of its own: ClaimDraw is controlled by the player to move, so its submitMustFail checks are vacuous and the final claim succeeds through the threefold-repetition rule (the rook shuffles repeat positions long before 50 idle moves), so any change to the fifty-move rule survives."
+mutations:
+  - id: increment-keeps-only-current-position
+    source: real-bug
+    commit: 77b0e1f9de12cbbf0a6c374de76a11cfaebd7b89
+    target_script: testThreeRepeat
+    kind: lookup
+    reason: increment filters the position list with == instead of /=, so recording a position drops the counts of every other position.
+    patch: |
+      diff --git a/chess/daml/Rules/Draw.daml b/chess/daml/Rules/Draw.daml
+      --- a/chess/daml/Rules/Draw.daml
+      +++ b/chess/daml/Rules/Draw.daml
+      @@ -66,7 +66,7 @@ moveFn move eds = do
+       increment : (Ord a) => a -> [(a, Int)] -> [(a, Int)]
+       increment k list =
+         let
+      -    filtered = L.filter (\(a, _) -> a /= k) list
+      +    filtered = L.filter (\(a, _) -> a == k) list
+           elem = find (\(a, _) -> a == k) list
+         in case elem of
+             None -> (k, 1) :: filtered
+  - id: threefold-needs-four
+    source: llm
+    target_script: testThreeRepeat
+    kind: arithmetic
+    reason: the repetition threshold is written as four occurrences instead of three, so the threefold rule fires one repetition late.
+    patch: |
+      diff --git a/chess/daml/Rules/Draw.daml b/chess/daml/Rules/Draw.daml
+      --- a/chess/daml/Rules/Draw.daml
+      +++ b/chess/daml/Rules/Draw.daml
+      @@ -30,7 +30,7 @@ checkDraw : [ChessMove] -> E Bool
+       checkDraw moves = do
+         fds <- efds
+         let maxRepeats = maximum $ map snd fds.stateCounts
+      -  return (maxRepeats >= 3 || fds.idleMoves >= 50)
+      +  return (maxRepeats >= 4 || fds.idleMoves >= 50)
+         where
+           is = initState ()
+       
+  - id: increment-existing-count-not-bumped
+    source: llm
+    target_script: testThreeRepeat
+    kind: arithmetic
+    reason: when a position is seen again the stored count is re-inserted unchanged instead of incremented.
+    patch: |
+      diff --git a/chess/daml/Rules/Draw.daml b/chess/daml/Rules/Draw.daml
+      --- a/chess/daml/Rules/Draw.daml
+      +++ b/chess/daml/Rules/Draw.daml
+      @@ -70,4 +70,4 @@ increment k list =
+           elem = find (\(a, _) -> a == k) list
+         in case elem of
+             None -> (k, 1) :: filtered
+      -      Some (_, i) -> (k, i + 1) :: filtered
+      +      Some (_, i) -> (k, i) :: filtered

@@ -1,0 +1,148 @@
+task: ex-models/chess/daml/Tests/Rules.daml
+notes: |
+  Only testPawnPath, testRookPath, testKnightPath, testBishopPath, testQueenPath, testKingPath, testFoolsMateInner and testBlocked exercise Move.daml or Path.daml. initStateMap, initStateWin, testIntCoord, testCheckWin and testPathBetween exercise only Data.daml, Main.daml and Util.daml, which are not implementation files, so they get no mutations.
+mutations:
+  - id: pawn-single-step-any-forward
+    source: llm
+    target_script: testPawnPath
+    kind: arithmetic
+    reason: The one-square pawn advance accepts any forward distance because the equality on the row was written as an inequality.
+    patch: |
+      diff --git a/chess/daml/Rules/Path.daml b/chess/daml/Rules/Path.daml
+      --- a/chess/daml/Rules/Path.daml
+      +++ b/chess/daml/Rules/Path.daml
+      @@ -19,7 +19,7 @@ path Pawn White False (c1,1) (c2,3) = do    -- can move pawn 2 spaces if on home
+         assertMsg "Invalid move" (c1 == c2)
+         return [(c1,2)]
+       path Pawn White False (c1,r1) (c2,r2) = do  -- can move pawn 1 space
+      -  assertMsg "Invalid move" (c1 == c2       && r2 == r1 + 1)
+      +  assertMsg "Invalid move" (c1 == c2       && r2 > r1)
+         return []
+       path Rook _ _ i1@(c1, r1) i2@(c2, r2) = do  -- can move rook along straight paths
+         assertMsg "Invalid move" (r1 == r2 || c1 == c2)
+  - id: pawn-double-step-wrong-square
+    source: llm
+    target_script: testPawnPath
+    kind: field
+    reason: The intermediate square returned for a two-square pawn advance is the wrong row.
+    patch: |
+      diff --git a/chess/daml/Rules/Path.daml b/chess/daml/Rules/Path.daml
+      --- a/chess/daml/Rules/Path.daml
+      +++ b/chess/daml/Rules/Path.daml
+      @@ -17,7 +17,7 @@ path Pawn White True i1 i2 = do
+         return []
+       path Pawn White False (c1,1) (c2,3) = do    -- can move pawn 2 spaces if on home row.
+         assertMsg "Invalid move" (c1 == c2)
+      -  return [(c1,2)]
+      +  return [(c1,3)]
+       path Pawn White False (c1,r1) (c2,r2) = do  -- can move pawn 1 space
+         assertMsg "Invalid move" (c1 == c2       && r2 == r1 + 1)
+         return []
+  - id: rook-needs-both-axes
+    source: llm
+    target_script: testRookPath
+    kind: branch
+    reason: A rook move must stay on a straight line, but the condition requires the same row and the same column.
+    patch: |
+      diff --git a/chess/daml/Rules/Path.daml b/chess/daml/Rules/Path.daml
+      --- a/chess/daml/Rules/Path.daml
+      +++ b/chess/daml/Rules/Path.daml
+      @@ -22,7 +22,7 @@ path Pawn White False (c1,r1) (c2,r2) = do  -- can move pawn 1 space
+         assertMsg "Invalid move" (c1 == c2       && r2 == r1 + 1)
+         return []
+       path Rook _ _ i1@(c1, r1) i2@(c2, r2) = do  -- can move rook along straight paths
+      -  assertMsg "Invalid move" (r1 == r2 || c1 == c2)
+      +  assertMsg "Invalid move" (r1 == r2 && c1 == c2)
+         pathBetween i1 i2
+       path Knight _ _ i1 i2 = do                  -- can move Knight 1 & 2 spaces.
+         assertMsg "Invalid move" ((colD i1 i2, rowD i1 i2) `elem` [(1, 2), (2, 1)])
+  - id: knight-missing-shape
+    source: llm
+    target_script: testKnightPath
+    kind: arithmetic
+    reason: The set of legal knight displacements lists (1, 2) and a second, wrong shape instead of (2, 1).
+    patch: |
+      diff --git a/chess/daml/Rules/Path.daml b/chess/daml/Rules/Path.daml
+      --- a/chess/daml/Rules/Path.daml
+      +++ b/chess/daml/Rules/Path.daml
+      @@ -25,7 +25,7 @@ path Rook _ _ i1@(c1, r1) i2@(c2, r2) = do  -- can move rook along straight path
+         assertMsg "Invalid move" (r1 == r2 || c1 == c2)
+         pathBetween i1 i2
+       path Knight _ _ i1 i2 = do                  -- can move Knight 1 & 2 spaces.
+      -  assertMsg "Invalid move" ((colD i1 i2, rowD i1 i2) `elem` [(1, 2), (2, 1)])
+      +  assertMsg "Invalid move" ((colD i1 i2, rowD i1 i2) `elem` [(1, 2), (2, 2)])
+         return []
+       path Bishop _ _ i1 i2 = do                  -- can move Bishop the same distance along row and col
+           assertMsg "Invalid move" (colD i1 i2 == rowD i1 i2)
+  - id: bishop-distance-inequality
+    source: llm
+    target_script: testBishopPath
+    kind: branch
+    reason: The bishop diagonal check uses <= instead of ==, so a move with fewer columns than rows is accepted.
+    patch: |
+      diff --git a/chess/daml/Rules/Path.daml b/chess/daml/Rules/Path.daml
+      --- a/chess/daml/Rules/Path.daml
+      +++ b/chess/daml/Rules/Path.daml
+      @@ -28,7 +28,7 @@ path Knight _ _ i1 i2 = do                  -- can move Knight 1 & 2 spaces.
+         assertMsg "Invalid move" ((colD i1 i2, rowD i1 i2) `elem` [(1, 2), (2, 1)])
+         return []
+       path Bishop _ _ i1 i2 = do                  -- can move Bishop the same distance along row and col
+      -    assertMsg "Invalid move" (colD i1 i2 == rowD i1 i2)
+      +    assertMsg "Invalid move" (colD i1 i2 <= rowD i1 i2)
+           pathBetween i1 i2
+       path Queen _ _ i1 i2 = pathBetween i1 i2    -- can move Queen only if there's path.
+       path King _ _ i1 i2 = do                    -- can move King only 1 space
+  - id: king-two-squares
+    source: llm
+    target_script: testKingPath
+    kind: arithmetic
+    reason: The king step limit allows two squares instead of one.
+    patch: |
+      diff --git a/chess/daml/Rules/Path.daml b/chess/daml/Rules/Path.daml
+      --- a/chess/daml/Rules/Path.daml
+      +++ b/chess/daml/Rules/Path.daml
+      @@ -32,7 +32,7 @@ path Bishop _ _ i1 i2 = do                  -- can move Bishop the same distance
+           pathBetween i1 i2
+       path Queen _ _ i1 i2 = pathBetween i1 i2    -- can move Queen only if there's path.
+       path King _ _ i1 i2 = do                    -- can move King only 1 space
+      -  assertMsg "Invalid move" (colD i1 i2 <= 1 && rowD i1 i2 <= 1)
+      +  assertMsg "Invalid move" (colD i1 i2 <= 2 && rowD i1 i2 <= 2)
+         return []
+       path Pawn Black a i1 i2 =
+         do
+  - id: capture-flag-inverted
+    source: llm
+    target_script: testFoolsMateInner
+    kind: branch
+    reason: The capture flag handed to the path rule is negated, so non-captures are validated as captures and the reverse.
+    patch: |
+      diff --git a/chess/daml/Rules/Move.daml b/chess/daml/Rules/Move.daml
+      --- a/chess/daml/Rules/Move.daml
+      +++ b/chess/daml/Rules/Move.daml
+      @@ -23,7 +23,7 @@ simpleMove md = do
+         let
+           target = fromOptional md.to capture
+           isCapture = isSome capture
+      -  movePath <- path md.piece.tp md.state.player isCapture md.from md.to
+      +  movePath <- path md.piece.tp md.state.player (not isCapture) md.from md.to
+       
+         forA_ movePath (\c -> assertMsg "Path blocked" (isNone $ M.lookup c md.stateMap))
+       
+  - id: path-check-dropped
+    source: llm
+    target_script: testBlocked
+    kind: validation
+    reason: The check that every square on the path is empty was left out.
+    patch: |
+      diff --git a/chess/daml/Rules/Move.daml b/chess/daml/Rules/Move.daml
+      --- a/chess/daml/Rules/Move.daml
+      +++ b/chess/daml/Rules/Move.daml
+      @@ -25,8 +25,6 @@ simpleMove md = do
+           isCapture = isSome capture
+         movePath <- path md.piece.tp md.state.player isCapture md.from md.to
+       
+      -  forA_ movePath (\c -> assertMsg "Path blocked" (isNone $ M.lookup c md.stateMap))
+      -
+         return $
+           M.insert md.to
+             (movePiece md.move.to md.piece) with tp = newType

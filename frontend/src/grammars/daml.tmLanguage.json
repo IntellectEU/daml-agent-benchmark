@@ -1,0 +1,647 @@
+{
+  "fileTypes": [
+    "daml"
+  ],
+  "keyEquivalent": "^~H",
+  "name": "daml",
+  "patterns": [
+    {
+      "name": "block.daml",
+      "contentName": "block.daml",
+      "begin": "\\{-@",
+      "end": "@-\\}",
+      "patterns": [
+        {
+          "include": "$self"
+        }
+      ]
+    },
+    {
+      "captures": {
+        "3": {
+          "name": "entity.name.namespace"
+        }
+      },
+      "comment": "In case this regex seems unusual for an infix operator, note that daml allows any ordinary function application (elem 4 [1..10]) to be rewritten as an infix expression (4 `elem` [1..10]).",
+      "match": "(`)(([\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}'\\.]*)\\.)?[\\p{Ll}_][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*(`)",
+      "name": "keyword.operator.function.infix.daml"
+    },
+    {
+      "match": "\\(\\s*\\)",
+      "name": "constant.language.unit.daml"
+    },
+    {
+      "match": "\\[\\s*\\]",
+      "name": "constant.language.empty-list.daml"
+    },
+    {
+      "begin": "\\b(module)(\\b(?!'))",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "end": "\\b(where)(\\b(?!'))",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "name": "meta.declaration.module.daml",
+      "patterns": [
+        {
+          "include": "#module_name"
+        },
+        {
+          "include": "#module_exports"
+        },
+        {
+          "match": "[a-z]+",
+          "name": "invalid"
+        }
+      ]
+    },
+    {
+      "begin": "\\b(class)(\\b(?!'))",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "end": "(\\b(where)(\\b(?!')))|(?=^\\S)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "name": "meta.declaration.class.daml",
+      "patterns": [
+        {
+          "include": "#type_signature"
+        }
+      ]
+    },
+    {
+      "match": "(?x)\n\t\t\t\t\\b(data|newtype)\n\t\t\t\t\\s+\n\t\t\t\t([\\p{Lu}\\p{Lt}][\\w\\p{Nd}_']*)\n\t\t\t\t((?:\\s+[\\p{Ll}][\\w\\p{Nd}_']*)*?)\n\t\t\t\t\\s+\n\t\t\t\t(where(?:\\b(?!'))|=|$)\n\t\t\t",
+      "captures": {
+        "1": {
+          "name": "keyword.other.daml"
+        },
+        "2": {
+          "name": "storage.type.daml"
+        },
+        "3": {
+          "patterns": [
+            {
+              "match": "'*[\\p{Ll}][\\w\\p{Nd}_']*",
+              "name": "variable.other.generic-type.daml"
+            }
+          ]
+        },
+        "4": {
+          "name": "keyword.other.daml"
+        }
+      }
+    },
+    {
+      "match": "(?x)\n\t\t\t\t\\b(type)\n\t\t\t\t\\s+\n\t\t\t\t([^=]*)\n\t\t\t\t(?:\n\t\t\t\t\t\\s+\n\t\t\t\t\t(=)\n\t\t\t\t\t(.*)\n\t\t\t\t)?\\s*$\n\t\t\t",
+      "captures": {
+        "1": {
+          "name": "keyword.other.daml"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#type_signature"
+            }
+          ]
+        },
+        "3": {
+          "name": "keyword.other.daml"
+        },
+        "4": {
+          "patterns": [
+            {
+              "include": "#type_signature"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "begin": "\\b(instance)(\\b(?!'))",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "end": "(\\b(where)(\\b(?!'))|(?=^\\S))",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "name": "meta.declaration.instance.daml",
+      "patterns": [
+        {
+          "include": "#type_signature"
+        }
+      ]
+    },
+    {
+      "begin": "\\b(import)(\\b(?!'))",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "end": "($|;|(?=--))",
+      "name": "meta.import.daml",
+      "patterns": [
+        {
+          "match": "(qualified|as|hiding)",
+          "name": "keyword.other.daml"
+        },
+        {
+          "include": "#module_name"
+        },
+        {
+          "include": "#module_exports"
+        }
+      ]
+    },
+    {
+      "begin": "(deriving)\\s*\\(",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "end": "\\)",
+      "name": "meta.deriving.daml",
+      "patterns": [
+        {
+          "include": "#derivings"
+        }
+      ]
+    },
+    {
+      "comment": "When contoller is used without choice",
+      "match": "^(?:\\s*)([\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*(?!\\.)\\b)(?:\\s*)(\\:)(?:\\s*)",
+      "captures": {
+        "1": {
+          "name": "storage.type.daml"
+        },
+        "2": {
+          "name": "keyword.other.single-colon.daml"
+        },
+        "3": {
+          "name": "storage.type.daml"
+        }
+      },
+      "name": "meta.type-declaration.daml"
+    },
+    {
+      "comment": "Handling choice and the scope of rest of the line",
+      "match": "(?x)(choice) (?:\\s+) (\\b[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*(?!\\.)\\b) (?:\\s*) (\\:) ([\\W*\\w]*) (with$)",
+      "captures": {
+        "1": {
+          "name": "keyword.other.daml"
+        },
+        "2": {
+          "name": "storage.type.daml"
+        },
+        "3": {
+          "name": "keyword.other.single-colon.daml"
+        },
+        "4": {
+          "name": "storage.type.daml"
+        },
+        "5": {
+          "name": "keyword.other.daml"
+        }
+      },
+      "name": "meta.type-declaration.daml"
+    },
+    {
+      "match": "(deriving)\\s+([\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*)",
+      "captures": {
+        "1": {
+          "name": "keyword.other.daml"
+        },
+        "2": {
+          "name": "entity.other.inherited-class.daml"
+        }
+      },
+      "name": "meta.deriving.daml"
+    },
+    {
+      "match": "(?x)\\b\n\t\t\t( deriving\n\t\t\t| where\n\t\t\t| type([\\t ]+(family|role))\n\t\t\t| let\n\t\t\t| in\n\t\t\t| default\n\t\t\t| with\n\t\t\t| choice\n\t\t\t| template\n\t\t\t| interface\n\t\t\t| key\n\t\t\t| maintainer\n\t\t\t| exception\n\t\t\t| for\n\t\t\t| viewtype\n\t\t\t)(\\b(?!'))\n\t\t\t",
+      "name": "keyword.other.daml"
+    },
+    {
+      "match": "\\binfix[lr]?(\\b(?!'))",
+      "name": "keyword.operator.daml"
+    },
+    {
+      "match": "\\b(m?agreement|controller|can|ensure|signatory|nonconsuming|observer|preconsuming|postconsuming|message)(\\b(?!'))",
+      "name": "keyword.other.daml"
+    },
+    {
+      "match": "\\b(do|if|then|else|case|of|try|catch)(\\b(?!'))",
+      "name": "keyword.control.daml"
+    },
+    {
+      "include": "#numeric_literals"
+    },
+    {
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.preprocessor.c"
+        }
+      },
+      "comment": "In addition to daml's \"native\" syntax, GHC permits the C preprocessor to be run on a source file.",
+      "match": "^\\s*(#)\\s*\\w+",
+      "name": "meta.preprocessor.c"
+    },
+    {
+      "include": "#pragma"
+    },
+    {
+      "include": "#string_literal"
+    },
+    {
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.string.begin.daml"
+        },
+        "2": {
+          "name": "constant.character.escape.daml"
+        },
+        "3": {
+          "name": "constant.character.escape.octal.daml"
+        },
+        "4": {
+          "name": "constant.character.escape.hexadecimal.daml"
+        },
+        "5": {
+          "name": "constant.character.escape.control.daml"
+        },
+        "6": {
+          "name": "punctuation.definition.string.end.daml"
+        }
+      },
+      "match": "(?x)\n\t\t\t(')\n\t\t\t(?:\n\t\t\t\t[\\ -\\[\\]-~]\t\t\t\t\t\t\t\t# Basic Char\n\t\t\t  | (\\\\(?:NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE\n\t\t\t\t\t|DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS\n\t\t\t\t\t|US|SP|DEL|[abfnrtv\\\\\\\"'\\&]))\t\t# Escapes\n\t\t\t  | (\\\\o[0-7]+)\t\t\t\t\t\t\t\t# Octal Escapes\n\t\t\t  | (\\\\x[0-9A-Fa-f]+)\t\t\t\t\t\t# Hexadecimal Escapes\n\t\t\t  | (\\^[A-Z@\\[\\]\\\\\\^_])\t\t\t\t\t\t# Control Chars\n\t\t\t)\n\t\t\t(')\n\t\t\t",
+      "name": "string.quoted.single.daml"
+    },
+    {
+      "begin": "(?x)^\n                (?<fn>\n                  (?:\n                    [\\p{Ll}_][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']* |\n                    \\(\n                      (?!--+\\))\n                      (?:\n                        (?![(),;\\[\\]`{}_\"'])[\\p{S}\\p{P}]\n                      )+\n                    \\)\n                  )\n                  (?:\\s*,\\s*\\g<fn>)?\n                )\n                \\s*(:)",
+      "beginCaptures": {
+        "2": {
+          "patterns": [
+            {
+              "match": "[\\p{Ll}_][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*",
+              "name": "source.daml"
+            },
+            {
+              "include": "#infix_op"
+            }
+          ]
+        },
+        "3": {
+          "name": "keyword.other.single-colon.daml"
+        }
+      },
+      "name": "meta.function.type-declaration.daml",
+      "patterns": [
+        {
+          "include": "#type_signature"
+        }
+      ],
+      "end": "(?=(<\\-)|(^(\\1)?[^\\s]|}))"
+    },
+    {
+      "include": "#qualifier"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#infix_op"
+    },
+    {
+      "comment": "We treat :: as cons. It's important this definition precede the rule for : (and that rule precede the one for arbitrary operators).",
+      "match": "(::|∷)",
+      "name": "keyword.operator.daml"
+    },
+    {
+      "begin": "(:)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.single-colon.daml"
+        }
+      },
+      "end": "(?=\\)|$|,|}|\\b(in|then|else|of|with)\\b(?!')|(?<![\\p{S}\\p{P}&&[^(),;\\[\\]`{}_\"']])(?:(\\\\|<\\-|=))([(),;\\[\\]`{}_\"']|[^\\p{S}\\p{P}]))",
+      "patterns": [
+        {
+          "include": "#type_signature"
+        }
+      ],
+      "name": "meta.type-declaration.daml"
+    },
+    {
+      "comment": "In case this regex seems overly general, note that daml permits the definition of new operators which can be nearly any string of punctuation characters, such as $%^&*.",
+      "match": "[\\p{S}\\p{P}&&[^(),;\\[\\]`{}_\"']]+",
+      "name": "keyword.operator.daml"
+    },
+    {
+      "match": ",",
+      "name": "punctuation.separator.comma.daml"
+    }
+  ],
+  "repository": {
+    "block_comment": {
+      "applyEndPatternLast": true,
+      "begin": "\\{-(?!#)",
+      "captures": {
+        "0": {
+          "name": "punctuation.definition.comment.daml"
+        }
+      },
+      "end": "-\\}",
+      "name": "comment.block.daml",
+      "patterns": [
+        {
+          "include": "#block_comment"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "begin": "^\\s*(--\\s+\\|)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.daml"
+            }
+          },
+          "end": "(?=^(?!\\s*--\\s))",
+          "name": "comment.block.documentation.daml"
+        },
+        {
+          "applyEndPatternLast": true,
+          "begin": "\\{-\\|",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.daml"
+            }
+          },
+          "end": "-\\}",
+          "name": "comment.block.documentation.daml",
+          "patterns": [
+            {
+              "include": "#block_comment"
+            }
+          ]
+        },
+        {
+          "begin": "(^[ \\t]+)?(?=--+(?![\\p{S}\\p{P}&&[^(),;\\[\\]`{}_\"']]))",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.daml"
+            }
+          },
+          "comment": "Operators may begin with '--' as long as they are not entirely composed of '-' characters. This means comments can't be immediately followed by an allowable operator character.",
+          "end": "(?!\\G)",
+          "patterns": [
+            {
+              "begin": "--",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.comment.daml"
+                }
+              },
+              "end": "\\n",
+              "name": "comment.line.double-dash.daml"
+            }
+          ]
+        },
+        {
+          "include": "#block_comment"
+        }
+      ]
+    },
+    "derivings": {
+      "patterns": [
+        {
+          "match": "\\b[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*",
+          "name": "entity.other.inherited-class.daml"
+        },
+        {
+          "begin": "\\(",
+          "end": "\\)",
+          "patterns": [
+            {
+              "include": "#derivings"
+            }
+          ]
+        }
+      ]
+    },
+    "infix_op": {
+      "comment": "An operator cannot be composed entirely of '-' characters; instead, it should be matched as a comment.",
+      "match": "(\\((?!--+\\))[\\p{S}\\p{P}&&[^(),;\\[\\]`{}_\"']]+\\)|\\(,+\\))",
+      "name": "entity.name.function.infix.daml"
+    },
+    "module_exports": {
+      "begin": "\\(",
+      "end": "\\)",
+      "name": "meta.declaration.exports.daml",
+      "patterns": [
+        {
+          "match": "\\b[\\p{Ll}_][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*",
+          "name": "entity.name.function.daml"
+        },
+        {
+          "match": "\\b[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*",
+          "name": "storage.type.daml"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.comma.daml"
+        },
+        {
+          "include": "#infix_op"
+        },
+        {
+          "comment": "So named because I don't know what to call this.",
+          "match": "\\(.*?\\)",
+          "name": "meta.other.unknown.daml"
+        },
+        {
+          "include": "#comments"
+        }
+      ]
+    },
+    "module_name": {
+      "match": "(?<conid>[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*(\\.\\g<conid>)?)",
+      "name": "entity.name.namespace"
+    },
+    "pragma": {
+      "begin": "\\{-#",
+      "end": "#-\\}",
+      "name": "meta.preprocessor.daml",
+      "patterns": [
+        {
+          "match": "\\b(LANGUAGE|OPTIONS_GHC|INCLUDE|WARNING|DEPRECATED|MINIMAL|UNPACK|NOUNPACK|SOURCE|OVERLAPPING|OVERLAPPABLE|OVERLAPS|INCOHERENT|INLINE|NOINLINE|INLINABLE|CONLIKE|LINE|RULES|SPECIALIZE|SPECIALISE)\\b",
+          "name": "keyword.other.preprocessor.daml"
+        }
+      ]
+    },
+    "qualifier": {
+      "match": "\\b[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*(?=\\.)\\b",
+      "name": "meta.import.qualifier.daml"
+    },
+    "type_signature": {
+      "patterns": [
+        {
+          "match": "\\(\\s*\\)",
+          "name": "support.constant.unit.daml"
+        },
+        {
+          "begin": "\\(",
+          "end": "\\)",
+          "patterns": [
+            {
+              "match": ","
+            },
+            {
+              "include": "#type_signature"
+            }
+          ]
+        },
+        {
+          "match": "\\(\\s*([\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*)\\s+([\\p{Ll}_][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*)\\)\\s*(=>|⇒)",
+          "captures": {
+            "1": {
+              "name": "entity.other.inherited-class.daml"
+            },
+            "2": {
+              "name": "variable.other.generic-type.daml"
+            },
+            "3": {
+              "name": "keyword.other.big-arrow.daml"
+            }
+          },
+          "name": "meta.class-constraint.daml"
+        },
+        {
+          "include": "#pragma"
+        },
+        {
+          "match": "->|→",
+          "name": "keyword.other.arrow.daml"
+        },
+        {
+          "match": "\\b(forall|∀)(\\b(?!'))",
+          "name": "keyword.other.forall.daml"
+        },
+        {
+          "match": "=>|⇒",
+          "name": "keyword.other.big-arrow.daml"
+        },
+        {
+          "match": "\\b[\\p{Ll}_][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*",
+          "name": "source.daml"
+        },
+        {
+          "match": "\\b[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*(?!\\.)\\b",
+          "name": "storage.type.daml"
+        },
+        {
+          "match": "\\b[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Nd}']*(?=\\.)",
+          "name": "entity.name.namespace"
+        },
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#string_literal"
+        },
+        {
+          "include": "#integer_literal"
+        }
+      ]
+    },
+    "string_literal": {
+      "begin": "\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.daml"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.daml"
+        }
+      },
+      "name": "string.quoted.double.daml",
+      "patterns": [
+        {
+          "match": "\\\\(NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE|DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS|US|SP|DEL|[abfnrtv\\\\\\\"'\\&])",
+          "name": "constant.character.escape.daml"
+        },
+        {
+          "match": "\\\\o[0-7]+|\\\\x[0-9A-Fa-f]+|\\\\[0-9]+",
+          "name": "constant.character.escape.octal.daml"
+        },
+        {
+          "match": "\\\\\\^[A-Z@\\[\\]\\\\\\^_]",
+          "name": "constant.character.escape.control.daml"
+        },
+        {
+          "begin": "\\\\\\s",
+          "beginCaptures": {
+            "0": {
+              "name": "constant.character.escape.begin.daml"
+            }
+          },
+          "end": "\\\\",
+          "endCaptures": {
+            "0": {
+              "name": "constant.character.escape.end.daml"
+            }
+          },
+          "patterns": [
+            {
+              "match": "\\S+",
+              "name": "invalid.illegal.character-not-allowed-here.daml"
+            }
+          ]
+        }
+      ]
+    },
+    "integer_literals": {
+      "comment": "Floats are decimal or hexadecimal",
+      "match": "\\b([0-9](_*[0-9])*\\.[0-9](_*[0-9])*(_*[eE][-+]?[0-9](_*[0-9])*)?|[0-9](_*[0-9])*_*[eE][-+]?[0-9](_*[0-9])*|0[xX]_*[0-9a-fA-F](_*[0-9a-fA-F])*\\.[0-9a-fA-F](_*[0-9a-fA-F])*(_*[pP][-+]?[0-9](_*[0-9])*)?|0[xX]_*[0-9a-fA-F](_*[0-9a-fA-F])*_*[pP][-+]?[0-9](_*[0-9])*)\\b",
+      "name": "constant.numeric.float.daml"
+    },
+    "float_literals": {
+      "match": "\\b([0-9](_*[0-9])*|0([xX]_*[0-9a-fA-F](_*[0-9a-fA-F])*|[oO]_*[0-7](_*[0-7])*|[bB]_*[01](_*[01])*))\\b",
+      "name": "constant.numeric.daml"
+    },
+    "numeric_literals": {
+      "patterns": [
+        {
+          "include": "#integer_literals"
+        },
+        {
+          "include": "#float_literals"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.daml",
+  "uuid": "5C034675-1F6D-497E-8073-369D37E2FD7D"
+}

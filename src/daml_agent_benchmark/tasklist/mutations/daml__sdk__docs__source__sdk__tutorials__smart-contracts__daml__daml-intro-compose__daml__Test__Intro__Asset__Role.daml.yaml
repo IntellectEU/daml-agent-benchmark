@@ -1,0 +1,41 @@
+task: daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset/Role.daml
+notes: The only script in the ground-truth file is test_issuance; setupRoles is a fixture that test_issuance uses.
+mutations:
+  - id: issue-controller-owner
+    source: llm
+    target_script: test_issuance
+    kind: authorization
+    reason: The Issue_Asset choice is controlled by the holder instead of the issuer, so the issuer can no longer issue assets.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml
+      index d25dcda..ce8d219 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml
+      @@ -39,7 +39,7 @@ template AssetHolder
+             with
+               symbol : Text
+               quantity : Decimal
+      -      controller issuer
+      +      controller owner
+             do
+               create Asset with
+                 issuer
+  - id: issue-owner-is-issuer
+    source: llm
+    target_script: test_issuance
+    kind: field
+    reason: The issued asset is created with the issuer as owner instead of the holder's owner.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml
+      index d25dcda..daf3027 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset/Role.daml
+      @@ -43,7 +43,7 @@ template AssetHolder
+             do
+               create Asset with
+                 issuer
+      -          owner
+      +          owner = issuer
+                 symbol
+                 quantity
+                 observers = []

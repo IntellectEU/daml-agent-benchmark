@@ -1,0 +1,769 @@
+{
+  "task_id": "ex-models/crowd-funding/daml/Test.daml",
+  "task_safe_name": "ex-models__crowd-funding__daml__Test.daml",
+  "test_file": "ex-models/crowd-funding/daml/Test.daml",
+  "impl_files": [
+    "ex-models/crowd-funding/daml/CrowdFunding.daml",
+    "ex-models/crowd-funding/daml/Iou.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.436285+00:00",
+  "started_at_utc": "2026-10-02T16:53:57.315331+00:00",
+  "finished_at_utc": "2026-10-02T16:58:52.720908+00:00",
+  "live_updated_at_utc": "2026-10-02T16:58:52.720908+00:00",
+  "repo_copy": "261002-180850/ex-models_____fgvjwgaf",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Test.daml:emptyCampaignBoundaries": true,
+      "daml/Test.daml:reclaimBelowThreshold": true,
+      "daml/Test.daml:claimAboveThreshold": true,
+      "daml/Test.daml:iouChoices": true,
+      "daml/Test.daml:invitationAndPledges": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "claim-threshold-strict",
+        "source": "llm",
+        "kind": "branch",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:emptyCampaignBoundaries": false,
+            "daml/Test.daml:reclaimBelowThreshold": true,
+            "daml/Test.daml:claimAboveThreshold": true,
+            "daml/Test.daml:iouChoices": true,
+            "daml/Test.daml:invitationAndPledges": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:57:31.85 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 52:76:00:e8:35:fa:0d:13'. Ignoring it.\nFile:     daml/Test.daml\nHidden:   no\nRange:    44:3-44:78\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00a8d5faef71ea0cb60f05a493fcbf4f1559c111b78652dabb929bc17d4dc99432) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    54:3-54:54\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(002f4ebb73a20fe102c7a752445daf67c0dcf2c04115bc57c4926622dfc578bc32) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    60:1-60:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:115:14:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Can only claim if raised more than threshold\"\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Claim on #23:4 (CrowdFunding:Campaign)\n  with\n  Sub-transactions:\n  0\n  └─> 'originator' exercises Claim on #23:4 (CrowdFunding:Campaign)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:68:3)\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = [];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 2 1970-01-01T00:00:00Z (Test:17:3)\n  #2:0\n  │ consumed by: #17:2\n  │ referenced by #17:1, #17:2\n  │ known to (since): 'originator' (17), 'alice' (2), 'issuer' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:74:3)\n\n  TX 4 1970-01-01T00:00:00Z (Test:75:17)\n  #4:0\n  │ known to (since): 'originator' (4)\n  └─> 'originator' exercises Invite on #1:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  children:\n  #4:1\n  │ consumed by: #7:0\n  │ referenced by #7:0\n  │ known to (since): 'originator' (4), 'alice' (4)\n  └─> create CrowdFunding:BackerInvite\n  with\n  project =\n  (CrowdFunding:Campaign with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = [];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000);\n  backer = 'alice'\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:76:3)\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:77:3)\n\n  TX 7 1970-01-01T00:00:00Z (Test:78:14)\n  #7:0\n  │ known to (since): 'alice' (7), 'originator' (7)\n  └─> 'alice' exercises Accept on #4:1 (CrowdFunding:BackerInvite)\n  with\n  children:\n  #7:1\n  │ consumed by: #17:0\n  │ referenced by #17:0\n  │ known to (since): 'alice' (7), 'originator' (7)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 8 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:79:3)\n\n  TX 9 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'stranger'} readAs: {} (Test:83:3)\n\n  TX 10 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:84:3)\n\n  TX 11 1970-01-01T00:00:00Z (Test:17:3)\n  #11:0\n  │ known to (since): 'alice' (11), 'issuer' (11)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 0.0000000000;\n  currency = \"USD\"\n\n  TX 12 1970-01-01T00:00:00Z (Test:17:3)\n  #12:0\n  │ known to (since): 'alice' (12), 'issuer' (12)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = -1.0000000000;\n  currency = \"USD\"\n\n  TX 13 1970-01-01T00:00:00Z (Test:87:23)\n  #13:0\n  │ known to (since): 'alice' (13), 'issuer' (13),\n  'originator' (13)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  TX 14 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:90:3)\n\n  TX 15 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:91:3)\n\n  TX 16 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:92:3)\n\n  TX 17 1970-01-01T00:00:00Z (Test:93:14)\n  #17:0\n  │ known to (since): 'alice' (17), 'originator' (17)\n  └─> 'alice' exercises Pledge on #7:1 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #2:0\n  children:\n  #17:1\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> fetch #2:0 (Iou:Iou)\n\n  #17:2\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> 'alice' exercises Lock on #2:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #17:3\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  #17:4\n  │ consumed by: #19:0\n  │ referenced by #19:0\n  │ known to (since): 'alice' (17), 'originator' (17)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 18 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:98:3)\n\n  TX 19 1970-01-01T00:00:00Z (Test:99:20)\n  #19:0\n  │ known to (since): 'alice' (19), 'originator' (19)\n  └─> 'originator' exercises Invite on #17:4 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'\n  children:\n  #19:1\n  │ consumed by: #20:0\n  │ referenced by #20:0\n  │ known to (since): 'alice' (19), 'originator' (19), 'bob' (19)\n  └─> create CrowdFunding:BackerInvite\n  with\n  project =\n  (CrowdFunding:Campaign with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000);\n  backer = 'bob'\n\n  TX 20 1970-01-01T00:00:00Z (Test:100:11)\n  #20:0\n  │ known to (since): 'alice' (20), 'bob' (20), 'originator' (20)\n  └─> 'bob' exercises Accept on #19:1 (CrowdFunding:BackerInvite)\n  with\n  children:\n  #20:1\n  │ consumed by: #23:0\n  │ referenced by #23:0\n  │ known to (since): 'alice' (20), 'bob' (20), 'originator' (20)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['bob', 'alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 21 1970-01-01T00:00:00Z (Test:17:3)\n  #21:0\n  │ consumed by: #23:2\n  │ referenced by #23:1, #23:2\n  │ known to (since): 'alice' (23), 'originator' (23), 'bob' (21),\n  'issuer' (21)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  TX 22 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:104:3)\n\n  TX 23 1970-01-01T00:00:00Z (Test:105:19)\n  #23:0\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23)\n  └─> 'bob' exercises Pledge on #20:1 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'; iouId = #21:0\n  children:\n  #23:1\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> fetch #21:0 (Iou:Iou)\n\n  #23:2\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> 'bob' exercises Lock on #21:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #23:3\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'originator';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  #23:4\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['bob', 'alice'];\n  ious = [#23:3, #17:3];\n  raised = 10.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 24 1970-01-01T00:00:00Z (Test:17:3)\n  #24:0\n  │ known to (since): 'alice' (24), 'issuer' (24)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 1.0000000000;\n  currency = \"USD\"\n\n  TX 25 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:109:3)\n\n  TX 26 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:110:3)\n\n  pass 27 60s\n\n  TX 28 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:112:3)\n\n  TX 29 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:113:3)\n\n  TX 30 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:114:3)\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    141:15-141:76\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00b6f07e09752685affe90a34e03ad572b41c3c423279c05ee23d294f425b56eab) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer,\n  originator). Use of divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    148:1-148:24\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:159:14:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Can only claim if raised more than threshold\"\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Claim on #0:0 (CrowdFunding:Campaign)\n  with\n  Sub-transactions:\n  0\n  └─> 'originator' exercises Claim on #0:0 (CrowdFunding:Campaign)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ known to (since): 'alice' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 0.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ known to (since): 'alice' (1), 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 1.0000000000\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:155:3)\n\n  pass 3 60s\n\n  TX 4 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:157:3)\n\n  TX 5 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:158:3)\u001b[0m\n"
+        }
+      },
+      {
+        "id": "claim-threshold-unchecked",
+        "source": "llm",
+        "kind": "validation",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:emptyCampaignBoundaries": false,
+            "daml/Test.daml:reclaimBelowThreshold": false,
+            "daml/Test.daml:claimAboveThreshold": true,
+            "daml/Test.daml:iouChoices": true,
+            "daml/Test.daml:invitationAndPledges": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:57:46.15 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 4e:da:18:51:24:5d:b1:8a'. Ignoring it.\nFile:     daml/Test.daml\nHidden:   no\nRange:    44:3-44:78\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00a8d5faef71ea0cb60f05a493fcbf4f1559c111b78652dabb929bc17d4dc99432) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    54:3-54:54\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(002f4ebb73a20fe102c7a752445daf67c0dcf2c04115bc57c4926622dfc578bc32) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    121:1-121:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:137:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:01:01Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Transfer on #8:4 (Iou:Iou)\n  with\n  newOwner = 'originator'\n  Sub-transactions:\n  0\n  └─> 'originator' exercises Claim on #4:4 (CrowdFunding:Campaign)\n  with\n  children:\n  1\n  └─> 'originator' exercises Unlock on #4:3 (Iou:Iou)\n  with\n  children:\n  2\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  3\n  └─> 'originator' exercises Unlock on #3:3 (Iou:Iou)\n  with\n  children:\n  4\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  5\n  └─> 'bob' exercises Transfer on #8:2 (Iou:Iou)\n  with\n  newOwner = 'originator'\n  children:\n  6\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'originator';\n  locker = 'originator';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  7\n  └─> 'alice' exercises Transfer on #8:4 (Iou:Iou)\n  with\n  newOwner = 'originator'\n  children:\n  8\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'originator';\n  locker = 'originator';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ consumed by: #3:0\n  │ referenced by #3:0\n  │ known to (since): 'alice' (0), 'bob' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:17:3)\n  #1:0\n  │ consumed by: #3:2\n  │ referenced by #3:1, #3:2\n  │ known to (since): 'bob' (3), 'originator' (3), 'alice' (1),\n  'issuer' (1)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  TX 2 1970-01-01T00:00:00Z (Test:17:3)\n  #2:0\n  │ consumed by: #4:2\n  │ referenced by #4:1, #4:2\n  │ known to (since): 'alice' (4), 'originator' (4), 'bob' (2),\n  'issuer' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z (Test:132:11)\n  #3:0\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3)\n  └─> 'alice' exercises Pledge on #0:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #1:0\n  children:\n  #3:1\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> fetch #1:0 (Iou:Iou)\n\n  #3:2\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> 'alice' exercises Lock on #1:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #3:3\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  #3:4\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [#3:3];\n  raised = 3.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 4 1970-01-01T00:00:00Z (Test:133:12)\n  #4:0\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4)\n  └─> 'bob' exercises Pledge on #3:4 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'; iouId = #2:0\n  children:\n  #4:1\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> fetch #2:0 (Iou:Iou)\n\n  #4:2\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> 'bob' exercises Lock on #2:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #4:3\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'originator';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  #4:4\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [#4:3, #3:3];\n  raised = 5.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:134:3)\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:135:3)\n\n  pass 7 61s\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    148:1-148:24\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:158:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Claim on #1:0 (CrowdFunding:Campaign)\n  with\n  Sub-transactions:\n  0\n  └─> 'originator' exercises Claim on #1:0 (CrowdFunding:Campaign)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ known to (since): 'alice' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 0.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ known to (since): 'alice' (1), 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 1.0000000000\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:155:3)\n\n  pass 3 60s\n\n  TX 4 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:157:3)\u001b[0m\n"
+        }
+      },
+      {
+        "id": "pledge-raised-not-updated",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:emptyCampaignBoundaries": true,
+            "daml/Test.daml:reclaimBelowThreshold": true,
+            "daml/Test.daml:claimAboveThreshold": false,
+            "daml/Test.daml:iouChoices": true,
+            "daml/Test.daml:invitationAndPledges": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:57:59.69 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 78:47:67:8b:78:37:c3:ad'. Ignoring it.\n\n2026-10-02 16:58:05.52 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\n\n2026-10-02 16:58:05.65 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Test.daml\nHidden:   no\nRange:    44:3-44:78\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00a8d5faef71ea0cb60f05a493fcbf4f1559c111b78652dabb929bc17d4dc99432) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    54:3-54:54\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(002f4ebb73a20fe102c7a752445daf67c0dcf2c04115bc57c4926622dfc578bc32) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    60:1-60:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    141:15-141:76\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00b6f07e09752685affe90a34e03ad572b41c3c423279c05ee23d294f425b56eab) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer,\n  originator). Use of divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    165:1-165:20\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "reclaim-threshold-inclusive",
+        "source": "llm",
+        "kind": "branch",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:emptyCampaignBoundaries": false,
+            "daml/Test.daml:reclaimBelowThreshold": true,
+            "daml/Test.daml:claimAboveThreshold": true,
+            "daml/Test.daml:iouChoices": true,
+            "daml/Test.daml:invitationAndPledges": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:58:11.36 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 4c:51:00:2a:59:48:2d:48'. Ignoring it.\nFile:     daml/Test.daml\nHidden:   no\nRange:    44:3-44:78\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00a8d5faef71ea0cb60f05a493fcbf4f1559c111b78652dabb929bc17d4dc99432) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    54:3-54:54\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(002f4ebb73a20fe102c7a752445daf67c0dcf2c04115bc57c4926622dfc578bc32) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    60:1-60:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:114:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Unlock on #17:3 (Iou:Iou)\n  with\n  Sub-transactions:\n  0\n  └─> 'alice' exercises Reclaim on #23:4 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  children:\n  1\n  └─> 'originator' exercises Unlock on #23:3 (Iou:Iou)\n  with\n  children:\n  2\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  3\n  └─> 'originator' exercises Unlock on #17:3 (Iou:Iou)\n  with\n  children:\n  4\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:68:3)\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = [];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 2 1970-01-01T00:00:00Z (Test:17:3)\n  #2:0\n  │ consumed by: #17:2\n  │ referenced by #17:1, #17:2\n  │ known to (since): 'originator' (17), 'alice' (2), 'issuer' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:74:3)\n\n  TX 4 1970-01-01T00:00:00Z (Test:75:17)\n  #4:0\n  │ known to (since): 'originator' (4)\n  └─> 'originator' exercises Invite on #1:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  children:\n  #4:1\n  │ consumed by: #7:0\n  │ referenced by #7:0\n  │ known to (since): 'originator' (4), 'alice' (4)\n  └─> create CrowdFunding:BackerInvite\n  with\n  project =\n  (CrowdFunding:Campaign with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = [];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000);\n  backer = 'alice'\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:76:3)\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:77:3)\n\n  TX 7 1970-01-01T00:00:00Z (Test:78:14)\n  #7:0\n  │ known to (since): 'alice' (7), 'originator' (7)\n  └─> 'alice' exercises Accept on #4:1 (CrowdFunding:BackerInvite)\n  with\n  children:\n  #7:1\n  │ consumed by: #17:0\n  │ referenced by #17:0\n  │ known to (since): 'alice' (7), 'originator' (7)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 8 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:79:3)\n\n  TX 9 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'stranger'} readAs: {} (Test:83:3)\n\n  TX 10 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:84:3)\n\n  TX 11 1970-01-01T00:00:00Z (Test:17:3)\n  #11:0\n  │ known to (since): 'alice' (11), 'issuer' (11)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 0.0000000000;\n  currency = \"USD\"\n\n  TX 12 1970-01-01T00:00:00Z (Test:17:3)\n  #12:0\n  │ known to (since): 'alice' (12), 'issuer' (12)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = -1.0000000000;\n  currency = \"USD\"\n\n  TX 13 1970-01-01T00:00:00Z (Test:87:23)\n  #13:0\n  │ known to (since): 'alice' (13), 'issuer' (13),\n  'originator' (13)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  TX 14 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:90:3)\n\n  TX 15 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:91:3)\n\n  TX 16 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:92:3)\n\n  TX 17 1970-01-01T00:00:00Z (Test:93:14)\n  #17:0\n  │ known to (since): 'alice' (17), 'originator' (17)\n  └─> 'alice' exercises Pledge on #7:1 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #2:0\n  children:\n  #17:1\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> fetch #2:0 (Iou:Iou)\n\n  #17:2\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> 'alice' exercises Lock on #2:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #17:3\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  #17:4\n  │ consumed by: #19:0\n  │ referenced by #19:0\n  │ known to (since): 'alice' (17), 'originator' (17)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 18 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:98:3)\n\n  TX 19 1970-01-01T00:00:00Z (Test:99:20)\n  #19:0\n  │ known to (since): 'alice' (19), 'originator' (19)\n  └─> 'originator' exercises Invite on #17:4 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'\n  children:\n  #19:1\n  │ consumed by: #20:0\n  │ referenced by #20:0\n  │ known to (since): 'alice' (19), 'originator' (19), 'bob' (19)\n  └─> create CrowdFunding:BackerInvite\n  with\n  project =\n  (CrowdFunding:Campaign with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000);\n  backer = 'bob'\n\n  TX 20 1970-01-01T00:00:00Z (Test:100:11)\n  #20:0\n  │ known to (since): 'alice' (20), 'bob' (20), 'originator' (20)\n  └─> 'bob' exercises Accept on #19:1 (CrowdFunding:BackerInvite)\n  with\n  children:\n  #20:1\n  │ consumed by: #23:0\n  │ referenced by #23:0\n  │ known to (since): 'alice' (20), 'bob' (20), 'originator' (20)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['bob', 'alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 21 1970-01-01T00:00:00Z (Test:17:3)\n  #21:0\n  │ consumed by: #23:2\n  │ referenced by #23:1, #23:2\n  │ known to (since): 'alice' (23), 'originator' (23), 'bob' (21),\n  'issuer' (21)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  TX 22 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:104:3)\n\n  TX 23 1970-01-01T00:00:00Z (Test:105:19)\n  #23:0\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23)\n  └─> 'bob' exercises Pledge on #20:1 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'; iouId = #21:0\n  children:\n  #23:1\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> fetch #21:0 (Iou:Iou)\n\n  #23:2\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> 'bob' exercises Lock on #21:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #23:3\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'originator';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  #23:4\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['bob', 'alice'];\n  ious = [#23:3, #17:3];\n  raised = 10.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 24 1970-01-01T00:00:00Z (Test:17:3)\n  #24:0\n  │ known to (since): 'alice' (24), 'issuer' (24)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 1.0000000000;\n  currency = \"USD\"\n\n  TX 25 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:109:3)\n\n  TX 26 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:110:3)\n\n  pass 27 60s\n\n  TX 28 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:112:3)\n\n  TX 29 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:113:3)\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    141:15-141:76\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00b6f07e09752685affe90a34e03ad572b41c3c423279c05ee23d294f425b56eab) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer,\n  originator). Use of divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    148:1-148:24\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:157:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Reclaim on #0:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  Sub-transactions:\n  0\n  └─> 'alice' exercises Reclaim on #0:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ known to (since): 'alice' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 0.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ known to (since): 'alice' (1), 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 1.0000000000\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:155:3)\n\n  pass 3 60s\u001b[0m\n"
+        }
+      },
+      {
+        "id": "reclaim-backer-check-inverted",
+        "source": "llm",
+        "kind": "validation",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:emptyCampaignBoundaries": false,
+            "daml/Test.daml:reclaimBelowThreshold": false,
+            "daml/Test.daml:claimAboveThreshold": true,
+            "daml/Test.daml:iouChoices": true,
+            "daml/Test.daml:invitationAndPledges": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:58:23.08 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 86:7f:b6:15:15:c7:43:c6'. Ignoring it.\nFile:     daml/Test.daml\nHidden:   no\nRange:    44:3-44:78\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00a8d5faef71ea0cb60f05a493fcbf4f1559c111b78652dabb929bc17d4dc99432) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    54:3-54:54\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(002f4ebb73a20fe102c7a752445daf67c0dcf2c04115bc57c4926622dfc578bc32) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    121:1-121:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:141:15:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Assertion failed\"\n\n  Ledger time: 1970-01-01T00:01:01Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Reclaim on #4:4 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  Sub-transactions:\n  0\n  └─> 'alice' exercises Reclaim on #4:4 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ consumed by: #3:0\n  │ referenced by #3:0\n  │ known to (since): 'alice' (0), 'bob' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:17:3)\n  #1:0\n  │ consumed by: #3:2\n  │ referenced by #3:1, #3:2\n  │ known to (since): 'bob' (3), 'originator' (3), 'alice' (1),\n  'issuer' (1)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  TX 2 1970-01-01T00:00:00Z (Test:17:3)\n  #2:0\n  │ consumed by: #4:2\n  │ referenced by #4:1, #4:2\n  │ known to (since): 'alice' (4), 'originator' (4), 'bob' (2),\n  'issuer' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z (Test:132:11)\n  #3:0\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3)\n  └─> 'alice' exercises Pledge on #0:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #1:0\n  children:\n  #3:1\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> fetch #1:0 (Iou:Iou)\n\n  #3:2\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> 'alice' exercises Lock on #1:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #3:3\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  #3:4\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [#3:3];\n  raised = 3.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 4 1970-01-01T00:00:00Z (Test:133:12)\n  #4:0\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4)\n  └─> 'bob' exercises Pledge on #3:4 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'; iouId = #2:0\n  children:\n  #4:1\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> fetch #2:0 (Iou:Iou)\n\n  #4:2\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> 'bob' exercises Lock on #2:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #4:3\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'originator';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  #4:4\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [#4:3, #3:3];\n  raised = 5.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:134:3)\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:135:3)\n\n  pass 7 61s\n\n  TX 8 1970-01-01T00:01:01Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:137:3)\n\n  TX 9 1970-01-01T00:01:01Z\n  mustFailAt actAs: {'stranger'} readAs: {} (Test:138:3)\n\n  TX 10 1970-01-01T00:01:01Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:139:3)\n\n  TX 11 1970-01-01T00:01:01Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:140:3)\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    148:1-148:24\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:161:16:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Assertion failed\"\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Reclaim on #1:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  Sub-transactions:\n  0\n  └─> 'alice' exercises Reclaim on #1:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ consumed by: #6:0\n  │ referenced by #6:0\n  │ known to (since): 'alice' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 0.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ known to (since): 'alice' (1), 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 1.0000000000\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:155:3)\n\n  pass 3 60s\n\n  TX 4 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:157:3)\n\n  TX 5 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:158:3)\n\n  TX 6 1970-01-01T00:01:00Z (Test:159:14)\n  #6:0\n  │ known to (since): 'alice' (6), 'originator' (6)\n  └─> 'originator' exercises Claim on #0:0 (CrowdFunding:Campaign)\n  with\u001b[0m\n"
+        }
+      },
+      {
+        "id": "unlock-guard-inverted",
+        "source": "llm",
+        "kind": "validation",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:emptyCampaignBoundaries": true,
+            "daml/Test.daml:reclaimBelowThreshold": false,
+            "daml/Test.daml:claimAboveThreshold": false,
+            "daml/Test.daml:iouChoices": false,
+            "daml/Test.daml:invitationAndPledges": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:58:34.93 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 32:00:62:48:bf:7b:cd:e5'. Ignoring it.\nFile:     daml/Test.daml\nHidden:   no\nRange:    35:1-35:11\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:51:15:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Assertion failed\"\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Unlock on #4:1 (Iou:Iou)\n  with\n  Sub-transactions:\n  0\n  └─> 'alice' exercises Unlock on #4:1 (Iou:Iou)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:39:3)\n\n  TX 1 1970-01-01T00:00:00Z (Test:17:3)\n  #1:0\n  │ consumed by: #2:0\n  │ referenced by #2:0\n  │ known to (since): 'alice' (1), 'issuer' (1)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 7.0000000000;\n  currency = \"USD\"\n\n  TX 2 1970-01-01T00:00:00Z (Test:41:18)\n  #2:0\n  │ known to (since): 'alice' (2), 'issuer' (2)\n  └─> 'alice' exercises Transfer on #1:0 (Iou:Iou)\n  with\n  newOwner = 'bob'\n  children:\n  #2:1\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'alice' (2), 'issuer' (2), 'bob' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 7.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:44:3)\n\n  TX 4 1970-01-01T00:00:00Z (Test:45:13)\n  #4:0\n  │ known to (since): 'bob' (4), 'issuer' (4)\n  └─> 'bob' exercises Lock on #2:1 (Iou:Iou)\n  with\n  newLocker = 'alice'\n  children:\n  #4:1\n  │ known to (since): 'bob' (4), 'issuer' (4), 'alice' (4)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'alice';\n  amount = 7.0000000000;\n  currency = \"USD\"\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:48:3)\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:49:3)\n\n  TX 7 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:50:3)\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    60:1-60:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:115:14:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Assertion failed\"\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Unlock on #23:3 (Iou:Iou)\n  with\n  Sub-transactions:\n  0\n  └─> 'originator' exercises Claim on #23:4 (CrowdFunding:Campaign)\n  with\n  children:\n  1\n  └─> 'originator' exercises Unlock on #23:3 (Iou:Iou)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:68:3)\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = [];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 2 1970-01-01T00:00:00Z (Test:17:3)\n  #2:0\n  │ consumed by: #17:2\n  │ referenced by #17:1, #17:2\n  │ known to (since): 'originator' (17), 'alice' (2), 'issuer' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:74:3)\n\n  TX 4 1970-01-01T00:00:00Z (Test:75:17)\n  #4:0\n  │ known to (since): 'originator' (4)\n  └─> 'originator' exercises Invite on #1:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  children:\n  #4:1\n  │ consumed by: #7:0\n  │ referenced by #7:0\n  │ known to (since): 'originator' (4), 'alice' (4)\n  └─> create CrowdFunding:BackerInvite\n  with\n  project =\n  (CrowdFunding:Campaign with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = [];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000);\n  backer = 'alice'\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:76:3)\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:77:3)\n\n  TX 7 1970-01-01T00:00:00Z (Test:78:14)\n  #7:0\n  │ known to (since): 'alice' (7), 'originator' (7)\n  └─> 'alice' exercises Accept on #4:1 (CrowdFunding:BackerInvite)\n  with\n  children:\n  #7:1\n  │ consumed by: #17:0\n  │ referenced by #17:0\n  │ known to (since): 'alice' (7), 'originator' (7)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 8 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:79:3)\n\n  TX 9 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'stranger'} readAs: {} (Test:83:3)\n\n  TX 10 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:84:3)\n\n  TX 11 1970-01-01T00:00:00Z (Test:17:3)\n  #11:0\n  │ known to (since): 'alice' (11), 'issuer' (11)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 0.0000000000;\n  currency = \"USD\"\n\n  TX 12 1970-01-01T00:00:00Z (Test:17:3)\n  #12:0\n  │ known to (since): 'alice' (12), 'issuer' (12)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = -1.0000000000;\n  currency = \"USD\"\n\n  TX 13 1970-01-01T00:00:00Z (Test:87:23)\n  #13:0\n  │ known to (since): 'alice' (13), 'issuer' (13),\n  'originator' (13)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  TX 14 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:90:3)\n\n  TX 15 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:91:3)\n\n  TX 16 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:92:3)\n\n  TX 17 1970-01-01T00:00:00Z (Test:93:14)\n  #17:0\n  │ known to (since): 'alice' (17), 'originator' (17)\n  └─> 'alice' exercises Pledge on #7:1 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #2:0\n  children:\n  #17:1\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> fetch #2:0 (Iou:Iou)\n\n  #17:2\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> 'alice' exercises Lock on #2:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #17:3\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  #17:4\n  │ consumed by: #19:0\n  │ referenced by #19:0\n  │ known to (since): 'alice' (17), 'originator' (17)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 18 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:98:3)\n\n  TX 19 1970-01-01T00:00:00Z (Test:99:20)\n  #19:0\n  │ known to (since): 'alice' (19), 'originator' (19)\n  └─> 'originator' exercises Invite on #17:4 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'\n  children:\n  #19:1\n  │ consumed by: #20:0\n  │ referenced by #20:0\n  │ known to (since): 'alice' (19), 'originator' (19), 'bob' (19)\n  └─> create CrowdFunding:BackerInvite\n  with\n  project =\n  (CrowdFunding:Campaign with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000);\n  backer = 'bob'\n\n  TX 20 1970-01-01T00:00:00Z (Test:100:11)\n  #20:0\n  │ known to (since): 'alice' (20), 'bob' (20), 'originator' (20)\n  └─> 'bob' exercises Accept on #19:1 (CrowdFunding:BackerInvite)\n  with\n  children:\n  #20:1\n  │ consumed by: #23:0\n  │ referenced by #23:0\n  │ known to (since): 'alice' (20), 'bob' (20), 'originator' (20)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['bob', 'alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 21 1970-01-01T00:00:00Z (Test:17:3)\n  #21:0\n  │ consumed by: #23:2\n  │ referenced by #23:1, #23:2\n  │ known to (since): 'alice' (23), 'originator' (23), 'bob' (21),\n  'issuer' (21)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  TX 22 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:104:3)\n\n  TX 23 1970-01-01T00:00:00Z (Test:105:19)\n  #23:0\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23)\n  └─> 'bob' exercises Pledge on #20:1 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'; iouId = #21:0\n  children:\n  #23:1\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> fetch #21:0 (Iou:Iou)\n\n  #23:2\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> 'bob' exercises Lock on #21:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #23:3\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'originator';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  #23:4\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['bob', 'alice'];\n  ious = [#23:3, #17:3];\n  raised = 10.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 24 1970-01-01T00:00:00Z (Test:17:3)\n  #24:0\n  │ known to (since): 'alice' (24), 'issuer' (24)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 1.0000000000;\n  currency = \"USD\"\n\n  TX 25 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:109:3)\n\n  TX 26 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:110:3)\n\n  pass 27 60s\n\n  TX 28 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:112:3)\n\n  TX 29 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:113:3)\n\n  TX 30 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:114:3)\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    121:1-121:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:141:15:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Assertion failed\"\n\n  Ledger time: 1970-01-01T00:01:01Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Unlock on #4:3 (Iou:Iou)\n  with\n  Sub-transactions:\n  0\n  └─> 'alice' exercises Reclaim on #4:4 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  children:\n  1\n  └─> 'originator' exercises Unlock on #4:3 (Iou:Iou)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ consumed by: #3:0\n  │ referenced by #3:0\n  │ known to (since): 'alice' (0), 'bob' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:17:3)\n  #1:0\n  │ consumed by: #3:2\n  │ referenced by #3:1, #3:2\n  │ known to (since): 'bob' (3), 'originator' (3), 'alice' (1),\n  'issuer' (1)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  TX 2 1970-01-01T00:00:00Z (Test:17:3)\n  #2:0\n  │ consumed by: #4:2\n  │ referenced by #4:1, #4:2\n  │ known to (since): 'alice' (4), 'originator' (4), 'bob' (2),\n  'issuer' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z (Test:132:11)\n  #3:0\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3)\n  └─> 'alice' exercises Pledge on #0:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #1:0\n  children:\n  #3:1\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> fetch #1:0 (Iou:Iou)\n\n  #3:2\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> 'alice' exercises Lock on #1:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #3:3\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3),\n  'issuer' (3)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  #3:4\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'alice' (3), 'bob' (3), 'originator' (3)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [#3:3];\n  raised = 3.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 4 1970-01-01T00:00:00Z (Test:133:12)\n  #4:0\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4)\n  └─> 'bob' exercises Pledge on #3:4 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'; iouId = #2:0\n  children:\n  #4:1\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> fetch #2:0 (Iou:Iou)\n\n  #4:2\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> 'bob' exercises Lock on #2:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #4:3\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4),\n  'issuer' (4)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'originator';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  #4:4\n  │ known to (since): 'alice' (4), 'bob' (4), 'originator' (4)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice', 'bob'];\n  ious = [#4:3, #3:3];\n  raised = 5.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:134:3)\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:135:3)\n\n  pass 7 61s\n\n  TX 8 1970-01-01T00:01:01Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:137:3)\n\n  TX 9 1970-01-01T00:01:01Z\n  mustFailAt actAs: {'stranger'} readAs: {} (Test:138:3)\n\n  TX 10 1970-01-01T00:01:01Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:139:3)\n\n  TX 11 1970-01-01T00:01:01Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:140:3)\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    165:1-165:20\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:179:14:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Assertion failed\"\n\n  Ledger time: 1970-01-01T00:01:01Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Unlock on #4:3 (Iou:Iou)\n  with\n  Sub-transactions:\n  0\n  └─> 'originator' exercises Claim on #4:4 (CrowdFunding:Campaign)\n  with\n  children:\n  1\n  └─> 'originator' exercises Unlock on #4:3 (Iou:Iou)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ consumed by: #3:0\n  │ referenced by #3:0\n  │ known to (since): 'alice' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 5.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:17:3)\n  #1:0\n  │ consumed by: #3:2\n  │ referenced by #3:1, #3:2\n  │ known to (since): 'originator' (3), 'alice' (1), 'issuer' (1)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  TX 2 1970-01-01T00:00:00Z (Test:17:3)\n  #2:0\n  │ consumed by: #4:2\n  │ referenced by #4:1, #4:2\n  │ known to (since): 'originator' (4), 'alice' (2), 'issuer' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z (Test:174:11)\n  #3:0\n  │ known to (since): 'alice' (3), 'originator' (3)\n  └─> 'alice' exercises Pledge on #0:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #1:0\n  children:\n  #3:1\n  │ known to (since): 'alice' (3), 'originator' (3), 'issuer' (3)\n  └─> fetch #1:0 (Iou:Iou)\n\n  #3:2\n  │ known to (since): 'alice' (3), 'originator' (3), 'issuer' (3)\n  └─> 'alice' exercises Lock on #1:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #3:3\n  │ known to (since): 'alice' (3), 'originator' (3), 'issuer' (3)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 3.0000000000;\n  currency = \"USD\"\n\n  #3:4\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'alice' (3), 'originator' (3)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#3:3];\n  raised = 3.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 5.0000000000\n\n  TX 4 1970-01-01T00:00:00Z (Test:175:12)\n  #4:0\n  │ known to (since): 'alice' (4), 'originator' (4)\n  └─> 'alice' exercises Pledge on #3:4 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #2:0\n  children:\n  #4:1\n  │ known to (since): 'alice' (4), 'originator' (4), 'issuer' (4)\n  └─> fetch #2:0 (Iou:Iou)\n\n  #4:2\n  │ known to (since): 'alice' (4), 'originator' (4), 'issuer' (4)\n  └─> 'alice' exercises Lock on #2:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #4:3\n  │ known to (since): 'alice' (4), 'originator' (4), 'issuer' (4)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  #4:4\n  │ known to (since): 'alice' (4), 'originator' (4)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#4:3, #3:3];\n  raised = 7.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 5.0000000000\n\n  pass 5 61s\u001b[0m\n"
+        }
+      },
+      {
+        "id": "claim-deadline-strict",
+        "source": "llm",
+        "kind": "time",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:emptyCampaignBoundaries": false,
+            "daml/Test.daml:reclaimBelowThreshold": true,
+            "daml/Test.daml:claimAboveThreshold": true,
+            "daml/Test.daml:iouChoices": true,
+            "daml/Test.daml:invitationAndPledges": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:58:46.67 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: bc:b9:22:15:74:da:09:f7'. Ignoring it.\nFile:     daml/Test.daml\nHidden:   no\nRange:    44:3-44:78\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00a8d5faef71ea0cb60f05a493fcbf4f1559c111b78652dabb929bc17d4dc99432) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    54:3-54:54\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(002f4ebb73a20fe102c7a752445daf67c0dcf2c04115bc57c4926622dfc578bc32) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer). Use of\n  divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    60:1-60:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:115:14:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Can only claim after deadline\"\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Claim on #23:4 (CrowdFunding:Campaign)\n  with\n  Sub-transactions:\n  0\n  └─> 'originator' exercises Claim on #23:4 (CrowdFunding:Campaign)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:68:3)\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ consumed by: #4:0\n  │ referenced by #4:0\n  │ known to (since): 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = [];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 2 1970-01-01T00:00:00Z (Test:17:3)\n  #2:0\n  │ consumed by: #17:2\n  │ referenced by #17:1, #17:2\n  │ known to (since): 'originator' (17), 'alice' (2), 'issuer' (2)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:74:3)\n\n  TX 4 1970-01-01T00:00:00Z (Test:75:17)\n  #4:0\n  │ known to (since): 'originator' (4)\n  └─> 'originator' exercises Invite on #1:0 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'\n  children:\n  #4:1\n  │ consumed by: #7:0\n  │ referenced by #7:0\n  │ known to (since): 'originator' (4), 'alice' (4)\n  └─> create CrowdFunding:BackerInvite\n  with\n  project =\n  (CrowdFunding:Campaign with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = [];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000);\n  backer = 'alice'\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:76:3)\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:77:3)\n\n  TX 7 1970-01-01T00:00:00Z (Test:78:14)\n  #7:0\n  │ known to (since): 'alice' (7), 'originator' (7)\n  └─> 'alice' exercises Accept on #4:1 (CrowdFunding:BackerInvite)\n  with\n  children:\n  #7:1\n  │ consumed by: #17:0\n  │ referenced by #17:0\n  │ known to (since): 'alice' (7), 'originator' (7)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 8 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:79:3)\n\n  TX 9 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'stranger'} readAs: {} (Test:83:3)\n\n  TX 10 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:84:3)\n\n  TX 11 1970-01-01T00:00:00Z (Test:17:3)\n  #11:0\n  │ known to (since): 'alice' (11), 'issuer' (11)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 0.0000000000;\n  currency = \"USD\"\n\n  TX 12 1970-01-01T00:00:00Z (Test:17:3)\n  #12:0\n  │ known to (since): 'alice' (12), 'issuer' (12)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = -1.0000000000;\n  currency = \"USD\"\n\n  TX 13 1970-01-01T00:00:00Z (Test:87:23)\n  #13:0\n  │ known to (since): 'alice' (13), 'issuer' (13),\n  'originator' (13)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 2.0000000000;\n  currency = \"USD\"\n\n  TX 14 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:90:3)\n\n  TX 15 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:91:3)\n\n  TX 16 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:92:3)\n\n  TX 17 1970-01-01T00:00:00Z (Test:93:14)\n  #17:0\n  │ known to (since): 'alice' (17), 'originator' (17)\n  └─> 'alice' exercises Pledge on #7:1 (CrowdFunding:Campaign)\n  with\n  backer = 'alice'; iouId = #2:0\n  children:\n  #17:1\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> fetch #2:0 (Iou:Iou)\n\n  #17:2\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> 'alice' exercises Lock on #2:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #17:3\n  │ known to (since): 'alice' (17), 'originator' (17),\n  'issuer' (17)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'originator';\n  amount = 4.0000000000;\n  currency = \"USD\"\n\n  #17:4\n  │ consumed by: #19:0\n  │ referenced by #19:0\n  │ known to (since): 'alice' (17), 'originator' (17)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 18 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:98:3)\n\n  TX 19 1970-01-01T00:00:00Z (Test:99:20)\n  #19:0\n  │ known to (since): 'alice' (19), 'originator' (19)\n  └─> 'originator' exercises Invite on #17:4 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'\n  children:\n  #19:1\n  │ consumed by: #20:0\n  │ referenced by #20:0\n  │ known to (since): 'alice' (19), 'originator' (19), 'bob' (19)\n  └─> create CrowdFunding:BackerInvite\n  with\n  project =\n  (CrowdFunding:Campaign with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000);\n  backer = 'bob'\n\n  TX 20 1970-01-01T00:00:00Z (Test:100:11)\n  #20:0\n  │ known to (since): 'alice' (20), 'bob' (20), 'originator' (20)\n  └─> 'bob' exercises Accept on #19:1 (CrowdFunding:BackerInvite)\n  with\n  children:\n  #20:1\n  │ consumed by: #23:0\n  │ referenced by #23:0\n  │ known to (since): 'alice' (20), 'bob' (20), 'originator' (20)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['bob', 'alice'];\n  ious = [#17:3];\n  raised = 4.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 21 1970-01-01T00:00:00Z (Test:17:3)\n  #21:0\n  │ consumed by: #23:2\n  │ referenced by #23:1, #23:2\n  │ known to (since): 'alice' (23), 'originator' (23), 'bob' (21),\n  'issuer' (21)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'bob';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  TX 22 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:104:3)\n\n  TX 23 1970-01-01T00:00:00Z (Test:105:19)\n  #23:0\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23)\n  └─> 'bob' exercises Pledge on #20:1 (CrowdFunding:Campaign)\n  with\n  backer = 'bob'; iouId = #21:0\n  children:\n  #23:1\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> fetch #21:0 (Iou:Iou)\n\n  #23:2\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> 'bob' exercises Lock on #21:0 (Iou:Iou)\n  with\n  newLocker = 'originator'\n  children:\n  #23:3\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23),\n  'issuer' (23)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'bob';\n  locker = 'originator';\n  amount = 6.0000000000;\n  currency = \"USD\"\n\n  #23:4\n  │ known to (since): 'alice' (23), 'bob' (23), 'originator' (23)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['bob', 'alice'];\n  ious = [#23:3, #17:3];\n  raised = 10.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 10.0000000000\n\n  TX 24 1970-01-01T00:00:00Z (Test:17:3)\n  #24:0\n  │ known to (since): 'alice' (24), 'issuer' (24)\n  └─> create Iou:Iou\n  with\n  issuer = 'issuer';\n  owner = 'alice';\n  locker = 'alice';\n  amount = 1.0000000000;\n  currency = \"USD\"\n\n  TX 25 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:109:3)\n\n  TX 26 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:110:3)\n\n  pass 27 60s\n\n  TX 28 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:112:3)\n\n  TX 29 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'bob'} readAs: {} (Test:113:3)\n\n  TX 30 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:114:3)\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    141:15-141:76\nSource:   Script\nSeverity: DsWarning\nMessage: \n  \u001b[0;93mTried to fetch or exercise -homePackageId-:Iou:Iou contract\n  ContractId(00b6f07e09752685affe90a34e03ad572b41c3c423279c05ee23d294f425b56eab) but none of the\n  reading parties actAs = Set(alice), readAs = Set() are a stakeholder TreeSet(bob, issuer,\n  originator). Use of divulged contracts is deprecated and incompatible with pruning\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    148:1-148:24\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:159:14:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Can only claim after deadline\"\n\n  Ledger time: 1970-01-01T00:01:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Claim on #0:0 (CrowdFunding:Campaign)\n  with\n  Sub-transactions:\n  0\n  └─> 'originator' exercises Claim on #0:0 (CrowdFunding:Campaign)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:10:3)\n  #0:0\n  │ known to (since): 'alice' (0), 'originator' (0)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 0.0000000000\n\n  TX 1 1970-01-01T00:00:00Z (Test:10:3)\n  #1:0\n  │ known to (since): 'alice' (1), 'originator' (1)\n  └─> create CrowdFunding:Campaign\n  with\n  originator = 'originator';\n  name = \"Garden\";\n  description = \"Community garden\";\n  backers = ['alice'];\n  ious = [];\n  raised = 0.0000000000;\n  deadline = 1970-01-01T00:01:00Z;\n  threshold = 1.0000000000\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:155:3)\n\n  pass 3 60s\n\n  TX 4 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:157:3)\n\n  TX 5 1970-01-01T00:01:00Z\n  mustFailAt actAs: {'originator'} readAs: {} (Test:158:3)\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 7,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Test.daml:invalidClaim": true,
+        "daml/Test.daml:invalidReclaim": true,
+        "daml/Test.daml:validClaim": true,
+        "daml/Test.daml:validReclaim": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:53:59.471141+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/ex-models_____fgvjwgaf/crowd-funding/daml/Test.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 5,
+    "bytes_scanned": 4446,
+    "elapsed_seconds": 0.002,
+    "repo_copy_digest": "309fee1bf9e202f1d66f02248e4272d23f2903163747e7ca2f605a58f54c3919",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "ex-models/crowd-funding/daml/Test.daml",
+      "path_in_copy": "crowd-funding/daml/Test.daml",
+      "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Test where\n\nimport DA.Action\nimport DA.Date\nimport DA.Time\nimport DA.List\nimport Daml.Script\nimport CrowdFunding\nimport Iou\n\ndata Fixture = Fixture with\n  o : Party\n  a : Party\n  b : Party\n  c : Party\n  projectId : ContractId Campaign\n\nsetupFixture : Decimal -> Decimal -> Decimal -> Decimal -> Script Fixture\nsetupFixture amountA amountB amountC threshold =\n  do\n    i <- allocateParty \"Issuer\"\n    o <- allocateParty \"Originator\"\n    a <- allocateParty \"A\"\n    b <- allocateParty \"B\"\n    c <- allocateParty \"C\"\n    \n    submit i do createCmd Iou with issuer = i; owner = a; locker = a; amount = amountA; currency = \"USD\"\n    submit i do createCmd Iou with issuer = i; owner = b; locker = b; amount = amountB; currency = \"USD\"\n    submit i do createCmd Iou with issuer = i; owner = c; locker = c; amount = amountC; currency = \"USD\"\n\n    projectId <- submit o do\n      createCmd Campaign with\n        originator = o\n        name = \"MyProject\"\n        description = \"A test project\"\n        backers = []\n        ious = []\n        raised = 0.0\n        deadline = time (date 1970 Jan 2) 0 0 0\n        threshold\n\n    let backers = [a,b,c]\n\n    -- | exercise Invite then Accept for each of the backers \n    projectId <- foldlA (\\projectId backer -> do \n      inviteId <- submit o do exerciseCmd projectId Invite with ..\n      submit backer do exerciseCmd inviteId Accept\n      ) projectId backers\n    \n    -- | exercise Pledge for each of the backers respective Ious\n    projectId <- foldlA (\\projectId backer -> do\n      iouId <- fst . head <$> queryFilter @Iou backer (\\Iou{..} -> owner == backer)\n      submit backer do exerciseCmd projectId Pledge with ..\n      ) projectId backers\n\n    pure Fixture with ..\n\nvalidClaim = script do\n  Fixture{..} <- setupFixture 50.0 25.0 25.0 100.0\n  setTime (time (date 1970 Jan 2) 0 0 0)\n  submit o do exerciseCmd projectId Claim\n\nvalidReclaim = script do\n  Fixture{..} <- setupFixture 49.0 25.0 25.0 100.0\n  setTime (time (date 1970 Jan 2) 0 0 0)\n  submit a do exerciseCmd projectId Reclaim with backer = a\n\ninvalidClaim = script do\n  Fixture{..} <- setupFixture 49.0 25.0 25.0 100.0\n  setTime (time (date 1970 Jan 2) 0 0 0)\n  submitMustFail o do exerciseCmd projectId Claim\n\ninvalidReclaim = script do\n  Fixture{..} <- setupFixture 50.0 25.0 25.0 100.0\n  setTime (time (date 1970 Jan 2) 0 0 0)\n  submitMustFail a do exerciseCmd projectId Reclaim with backer = a\n",
+      "generated": "module Test where\n\nimport CrowdFunding\nimport Iou\nimport Daml.Script\nimport DA.Time (addRelTime, seconds)\n\nmakeCampaign : Party -> [Party] -> Time -> Decimal -> Script (ContractId Campaign)\nmakeCampaign originator backers deadline threshold =\n  submitMulti (originator :: backers) [] do\n    createCmd Campaign with\n      originator; name = \"Garden\"; description = \"Community garden\"\n      backers; ious = []; raised = 0.0; deadline; threshold\n\nmakeIou : Party -> Party -> Decimal -> Script (ContractId Iou)\nmakeIou issuer owner amount =\n  submit issuer do\n    createCmd Iou with issuer; owner; locker = owner; amount; currency = \"USD\"\n\nreadIou : Party -> ContractId Iou -> Script Iou\nreadIou reader contractId = do\n  result <- queryContractId reader contractId\n  case result of\n    Some iou -> pure iou\n    None -> abort \"IOU missing\"\n\nreadCampaign : Party -> ContractId Campaign -> Script Campaign\nreadCampaign reader contractId = do\n  result <- queryContractId reader contractId\n  case result of\n    Some campaign -> pure campaign\n    None -> abort \"Campaign missing\"\n\niouChoices : Script ()\niouChoices = do\n  issuer <- allocateParty \"issuer\"\n  alice <- allocateParty \"alice\"\n  bob <- allocateParty \"bob\"\n  submitMustFail alice do createCmd Iou with issuer; owner = alice; locker = alice; amount = 7.0; currency = \"USD\"\n  iou <- makeIou issuer alice 7.0\n  transferred <- submit alice do exerciseCmd iou Transfer with newOwner = bob\n  transferResult <- readIou issuer transferred\n  assert (transferResult.owner == bob && transferResult.locker == bob)\n  submitMustFail alice do exerciseCmd transferred Lock with newLocker = alice\n  locked <- submit bob do exerciseCmd transferred Lock with newLocker = alice\n  lockedResult <- readIou issuer locked\n  assert (lockedResult.owner == bob && lockedResult.locker == alice)\n  submitMustFail bob do exerciseCmd locked Transfer with newOwner = alice\n  submitMustFail bob do exerciseCmd locked Lock with newLocker = issuer\n  submitMustFail bob do exerciseCmd locked Unlock\n  unlocked <- submit alice do exerciseCmd locked Unlock\n  unlockedResult <- readIou issuer unlocked\n  assert (unlockedResult.owner == bob && unlockedResult.locker == bob)\n  submitMustFail alice do exerciseCmd unlocked Unlock\n  final <- submit bob do exerciseCmd unlocked Transfer with newOwner = alice\n  finalResult <- readIou issuer final\n  assert (finalResult.owner == alice && finalResult.locker == alice)\n\ninvitationAndPledges : Script ()\ninvitationAndPledges = do\n  originator <- allocateParty \"originator\"\n  issuer <- allocateParty \"issuer\"\n  alice <- allocateParty \"alice\"\n  bob <- allocateParty \"bob\"\n  stranger <- allocateParty \"stranger\"\n  start <- getTime\n  let deadline = addRelTime start (seconds 60)\n  submitMustFail originator do\n    createCmd Campaign with\n      originator; name = \"Garden\"; description = \"Community garden\"\n      backers = [alice]; ious = []; raised = 0.0; deadline; threshold = 10.0\n  campaign <- makeCampaign originator [] deadline 10.0\n  aliceIou <- makeIou issuer alice 4.0\n  submitMustFail alice do exerciseCmd campaign Pledge with backer = alice; iouId = aliceIou\n  invitation <- submit originator do exerciseCmd campaign Invite with backer = alice\n  submitMustFail bob do exerciseCmd invitation Accept\n  submitMustFail originator do exerciseCmd invitation Accept\n  invited <- submit alice do exerciseCmd invitation Accept\n  submitMustFail alice do exerciseCmd invitation Accept\n  invitedData <- readCampaign originator invited\n  assert (invitedData.backers == [alice] && invitedData.raised == 0.0 && invitedData.ious == [])\n  assert (invitedData.name == \"Garden\" && invitedData.description == \"Community garden\" && invitedData.deadline == deadline && invitedData.threshold == 10.0)\n  submitMustFail stranger do exerciseCmd invited Pledge with backer = stranger; iouId = aliceIou\n  submitMustFail bob do exerciseCmd invited Pledge with backer = alice; iouId = aliceIou\n  emptyIou <- makeIou issuer alice 0.0\n  negativeIou <- makeIou issuer alice (-1.0)\n  alreadyLockedIou <- submit issuer do\n    createCmd Iou with\n      issuer; owner = alice; locker = originator; amount = 2.0; currency = \"USD\"\n  submitMustFail alice do exerciseCmd invited Pledge with backer = alice; iouId = alreadyLockedIou\n  submitMustFail alice do exerciseCmd invited Pledge with backer = alice; iouId = emptyIou\n  submitMustFail alice do exerciseCmd invited Pledge with backer = alice; iouId = negativeIou\n  pledged <- submit alice do exerciseCmd invited Pledge with backer = alice; iouId = aliceIou\n  pledgeData <- readCampaign originator pledged\n  assert (pledgeData.raised == 4.0 && length pledgeData.ious == 1 && pledgeData.backers == [alice])\n  lockedIous <- mapA (\\iouId -> readIou issuer iouId) pledgeData.ious\n  assert (map (\\iou -> (iou.owner, iou.locker, iou.amount)) lockedIous == [(alice, originator, 4.0)])\n  submitMustFail alice do exerciseCmd pledged Pledge with backer = alice; iouId = aliceIou\n  bobInvitation <- submit originator do exerciseCmd pledged Invite with backer = bob\n  both <- submit bob do exerciseCmd bobInvitation Accept\n  bothData <- readCampaign originator both\n  assert (bothData.backers == [bob, alice] && bothData.ious == pledgeData.ious && bothData.raised == 4.0)\n  bobIou <- makeIou issuer bob 6.0\n  submitMustFail alice do exerciseCmd both Pledge with backer = alice; iouId = bobIou\n  fullyPledged <- submit bob do exerciseCmd both Pledge with backer = bob; iouId = bobIou\n  finalData <- readCampaign originator fullyPledged\n  assert (finalData.raised == 10.0 && length finalData.ious == 2)\n  extraIou <- makeIou issuer alice 1.0\n  submitMustFail originator do exerciseCmd fullyPledged Claim\n  submitMustFail alice do exerciseCmd fullyPledged Reclaim with backer = alice\n  setTime deadline\n  submitMustFail alice do exerciseCmd fullyPledged Pledge with backer = alice; iouId = extraIou\n  submitMustFail bob do exerciseCmd fullyPledged Claim\n  submitMustFail alice do exerciseCmd fullyPledged Reclaim with backer = alice\n  claimed <- submit originator do exerciseCmd fullyPledged Claim\n  assert (length claimed == 2)\n  results <- mapA (\\iouId -> readIou issuer iouId) claimed\n  assert (map (\\iou -> (iou.owner, iou.locker, iou.amount)) results == [(originator, originator, 6.0), (originator, originator, 4.0)])\n\nreclaimBelowThreshold : Script ()\nreclaimBelowThreshold = do\n  originator <- allocateParty \"originator\"\n  issuer <- allocateParty \"issuer\"\n  alice <- allocateParty \"alice\"\n  bob <- allocateParty \"bob\"\n  stranger <- allocateParty \"stranger\"\n  start <- getTime\n  let deadline = addRelTime start (seconds 60)\n  campaign <- makeCampaign originator [alice, bob] deadline 10.0\n  aliceIou <- makeIou issuer alice 3.0\n  bobIou <- makeIou issuer bob 2.0\n  once <- submit alice do exerciseCmd campaign Pledge with backer = alice; iouId = aliceIou\n  twice <- submit bob do exerciseCmd once Pledge with backer = bob; iouId = bobIou\n  submitMustFail originator do exerciseCmd twice Claim\n  submitMustFail alice do exerciseCmd twice Reclaim with backer = alice\n  setTime (addRelTime deadline (seconds 1))\n  submitMustFail originator do exerciseCmd twice Claim\n  submitMustFail stranger do exerciseCmd twice Reclaim with backer = stranger\n  submitMustFail originator do exerciseCmd twice Reclaim with backer = alice\n  submitMustFail bob do exerciseCmd twice Reclaim with backer = alice\n  returned <- submit alice do exerciseCmd twice Reclaim with backer = alice\n  assert (length returned == 2)\n  results <- mapA (\\iouId -> readIou issuer iouId) returned\n  assert (map (\\iou -> (iou.owner, iou.locker, iou.amount)) results == [(bob, bob, 2.0), (alice, alice, 3.0)])\n  submitMustFail bob do exerciseCmd twice Reclaim with backer = bob\n\nemptyCampaignBoundaries : Script ()\nemptyCampaignBoundaries = do\n  originator <- allocateParty \"originator\"\n  alice <- allocateParty \"alice\"\n  start <- getTime\n  let deadline = addRelTime start (seconds 60)\n  successful <- makeCampaign originator [alice] deadline 0.0\n  unsuccessful <- makeCampaign originator [alice] deadline 1.0\n  submitMustFail originator do exerciseCmd successful Claim\n  setTime deadline\n  submitMustFail alice do exerciseCmd successful Reclaim with backer = alice\n  submitMustFail originator do exerciseCmd unsuccessful Claim\n  claimed <- submit originator do exerciseCmd successful Claim\n  assert (claimed == [])\n  reclaimed <- submit alice do exerciseCmd unsuccessful Reclaim with backer = alice\n  assert (reclaimed == [])\n\nclaimAboveThreshold : Script ()\nclaimAboveThreshold = do\n  originator <- allocateParty \"originator\"\n  issuer <- allocateParty \"issuer\"\n  alice <- allocateParty \"alice\"\n  start <- getTime\n  let deadline = addRelTime start (seconds 60)\n  campaign <- makeCampaign originator [alice] deadline 5.0\n  firstIou <- makeIou issuer alice 3.0\n  secondIou <- makeIou issuer alice 4.0\n  once <- submit alice do exerciseCmd campaign Pledge with backer = alice; iouId = firstIou\n  twice <- submit alice do exerciseCmd once Pledge with backer = alice; iouId = secondIou\n  pledged <- readCampaign originator twice\n  assert (pledged.raised == 7.0)\n  setTime (addRelTime deadline (seconds 1))\n  claimed <- submit originator do exerciseCmd twice Claim\n  result <- mapA (readIou issuer) claimed\n  assert (map (\\iou -> (iou.owner, iou.locker, iou.amount)) result == [(originator, originator, 4.0), (originator, originator, 3.0)])\n",
+      "captured_at_utc": "2026-10-02T16:58:52.705989+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/ex-models_____fgvjwgaf",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added five Daml Script tests in `crowd-funding/daml/Test.daml:1`. They cover IOU transfer and locking, invitation and pledge authorization, invalid pledge amounts, claim and reclaim outcomes, and deadline and threshold boundaries.\n\n`daml test` passes all five scripts.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 194.07533833303023,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 329156,
+      "output_tokens": 10309,
+      "cached_input_tokens": 301512
+    },
+    "usage_by_thread": {
+      "01a0fd89-72e5-7223-8d4a-48c868f1dab8": {
+        "usage": {
+          "input_tokens": 329156,
+          "output_tokens": 10309,
+          "cached_input_tokens": 301512
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.2186804,
+    "input_usd": 0.055288000000000004,
+    "cached_input_usd": 0.0603024,
+    "output_usd": 0.10308999999999999,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790960041.764,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960044.463,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960047.753,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960050.389,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960052.542,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960055.66,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960065.402,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960081.475,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960083.921,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960100.755,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960117.559,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960130.975,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960143.352,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960168.453,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960192.451,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960203.276,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960209.048,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960222.696,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960226.55,
+          "client": "10.219.112.242",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "crowd-funding/daml/Test.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

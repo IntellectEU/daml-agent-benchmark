@@ -1,0 +1,118 @@
+task: daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml
+notes: ""
+mutations:
+  - id: split-ensure-nonstrict
+    source: llm
+    target_script: test_split
+    kind: validation
+    reason: The positivity check on the asset quantity is written as >= instead of >, so zero-quantity assets are allowed.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      index e2d1b13..cd0970c 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      @@ -19,7 +19,7 @@ template Asset
+           observers : [Party]
+         where
+           signatory issuer, owner
+      -    ensure quantity > 0.0
+      +    ensure quantity >= 0.0
+       
+           observer observers
+       -- ASSET_END
+  - id: split-remainder-adds
+    source: llm
+    target_script: test_split
+    kind: arithmetic
+    reason: The remainder of a split is computed by adding the split quantity instead of subtracting it.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      index e2d1b13..c021af8 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      @@ -35,7 +35,7 @@ template Asset
+               splitAsset <- create this with
+                 quantity = splitQuantity
+               remainder <- create this with
+      -          quantity = quantity - splitQuantity
+      +          quantity = quantity + splitQuantity
+               return SplitResult with
+                 splitAsset
+                 remainder
+  - id: merge-forgets-other
+    source: llm
+    target_script: test_merge
+    kind: arithmetic
+    reason: Merge creates the result with its own quantity and forgets to add the quantity of the other asset.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      index e2d1b13..aa5e01a 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      @@ -58,7 +58,7 @@ template Asset
+                 (symbol == other.symbol)
+               archive otherCid
+               create this with
+      -          quantity = quantity + other.quantity
+      +          quantity = quantity
+       -- MERGE_SPLIT_END
+       
+           choice ProposeTransfer
+  - id: merge-owner-check-inverted
+    source: llm
+    target_script: test_merge
+    kind: validation
+    reason: The owner consistency check in Merge is inverted, so only assets with different owners can be merged.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      index e2d1b13..e1f738b 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      @@ -52,7 +52,7 @@ template Asset
+                 (issuer == other.issuer)
+               assertMsg
+                 "Merge failed: owner does not match"
+      -          (owner == other.owner)
+      +          (owner /= other.owner)
+               assertMsg
+                 "Merge failed: symbol does not match"
+                 (symbol == other.symbol)
+  - id: accept-keeps-owner
+    source: llm
+    target_script: test_asset
+    kind: field
+    reason: Accepting a transfer proposal re-creates the asset without setting the new owner.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      index e2d1b13..e0eff29 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      @@ -92,8 +92,7 @@ template TransferProposal
+               : ContractId Asset
+               controller asset.issuer, newOwner
+               do
+      -          create asset with
+      -            owner = newOwner
+      +          create asset
+       
+           choice TransferProposal_Cancel
+               : ContractId Asset
+  - id: propose-wrong-new-owner
+    source: llm
+    target_script: test_asset
+    kind: field
+    reason: ProposeTransfer stores the current owner as the new owner in the proposal instead of the given newOwner.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      index e2d1b13..661c020 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml
+      @@ -69,7 +69,7 @@ template Asset
+             do
+               create TransferProposal with
+                 asset = this
+      -          newOwner
+      +          newOwner = owner
+       
+           choice  SetObservers
+             : ContractId Asset

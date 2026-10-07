@@ -1,0 +1,607 @@
+{
+  "task_id": "ex-models/shop/daml/Test.daml",
+  "task_safe_name": "ex-models__shop__daml__Test.daml",
+  "test_file": "ex-models/shop/daml/Test.daml",
+  "impl_files": [
+    "ex-models/shop/daml/Asset.daml",
+    "ex-models/shop/daml/Shop.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.437931+00:00",
+  "started_at_utc": "2026-10-02T17:02:21.630116+00:00",
+  "finished_at_utc": "2026-10-02T17:05:27.802319+00:00",
+  "live_updated_at_utc": "2026-10-02T17:05:27.802319+00:00",
+  "repo_copy": "261002-180850/ex-models_____v_k0xydm",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Test.daml:actors": true,
+      "daml/Test.daml:testAssetChoices": true,
+      "daml/Test.daml:testOnboarding": true,
+      "daml/Test.daml:testInvalidPurchases": true,
+      "daml/Test.daml:testMultipleOffers": true,
+      "daml/Test.daml:testTrade": true,
+      "daml/Test.daml:testInvalidOffers": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "offer-not-listed",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:actors": true,
+            "daml/Test.daml:testAssetChoices": true,
+            "daml/Test.daml:testOnboarding": true,
+            "daml/Test.daml:testInvalidPurchases": false,
+            "daml/Test.daml:testMultipleOffers": false,
+            "daml/Test.daml:testTrade": false,
+            "daml/Test.daml:testInvalidOffers": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:05:08.48 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 7e:1c:95:47:54:77:b9:95'. Ignoring it.\n\n2026-10-02 17:05:14.24 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\n\n2026-10-02 17:05:14.30 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\n\n2026-10-02 17:05:14.35 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\n\n2026-10-02 17:05:14.41 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Test.daml\nHidden:   no\nRange:    92:1-92:10\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    121:1-121:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    144:1-144:19\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    172:1-172:18\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "iou-not-paid",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:actors": true,
+            "daml/Test.daml:testAssetChoices": true,
+            "daml/Test.daml:testOnboarding": true,
+            "daml/Test.daml:testInvalidPurchases": true,
+            "daml/Test.daml:testMultipleOffers": false,
+            "daml/Test.daml:testTrade": false,
+            "daml/Test.daml:testInvalidOffers": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:05:21.01 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 5c:39:ac:ea:66:63:05:c6'. Ignoring it.\n\n2026-10-02 17:05:27.46 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\n\n2026-10-02 17:05:27.54 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Test.daml\nHidden:   no\nRange:    92:1-92:10\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    144:1-144:19\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 2,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Test.daml:given_a_shop": true,
+        "daml/Test.daml:gwt": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:57:28.303355+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/ex-models_____v_k0xydm/shop/daml/Test.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 4,
+    "bytes_scanned": 8950,
+    "elapsed_seconds": 0.001,
+    "repo_copy_digest": "afd51c1d316417fd526849704d861550dfaf97859372e64ed17ab8534b746965",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "ex-models/shop/daml/Test.daml",
+      "path_in_copy": "shop/daml/Test.daml",
+      "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Test where\n\nimport Daml.Script\n\nimport Asset\nimport Shop\n\ndata Fixture = Fixture with\n  issuer : Party\n  producer : Party\n  owner : Party\n  vendor : Party\n  user : Party\n  shopId : ShopId\n  itemId : ItemId\n  iouId : IouId\n  vendorId : VendorRelationshipId\n  userId : UserRelationshipId\n\ndata Test a b = Test with\n  given : Script a\n  when : a -> Script b\n  then_ : a -> b -> Script Bool\n\nrun : Test a b -> Script ()\nrun t = do\n  fixture <- t.given\n  result <- t.when fixture\n  check <- t.then_ fixture result\n  assert $ check\n\ngiven_a_shop : Script Fixture\ngiven_a_shop = do\n  issuer <- allocateParty \"Issuer\"\n  producer <- allocateParty \"Producer\"\n  owner <- allocateParty \"Owner\"\n  vendor <- allocateParty \"Vendor\"\n  user <- allocateParty \"User\"\n\n  itemId <- submit producer do createCmd Item with producer; owner = producer; label = \"Apple\"; quantity = 1.0; unit = \"kg\"; observers = []\n  itemId <- submit producer do exerciseCmd itemId TransferItem with newOwner = vendor\n  iouId <- submit issuer do createCmd Iou with issuer; owner = issuer; amount = 3.0; currency = \"USD\"\n  iouId <- submit issuer do exerciseCmd iouId TransferIou with newOwner = user\n\n  shopId <- submit owner do createCmd Shop with owner; vendors = []; users = []; offerIds = []\n  (shopId, inviteId) <- submit owner do exerciseCmd shopId InviteVendor with vendor\n  vendorId <- submit vendor do exerciseCmd inviteId AcceptVendorInvite\n  (shopId, inviteId) <- submit owner do exerciseCmd shopId InviteUser with user\n  userId <- submit user do exerciseCmd inviteId AcceptUserInvite\n  pure Fixture with ..\n\nwhen_the_vendor_offers_an_item : Fixture -> Script (ShopId, OfferId)\nwhen_the_vendor_offers_an_item f = do\n  submit f.vendor do exerciseCmd f.vendorId OfferItem with shopId = f.shopId; itemId = f.itemId; price = 1.0; currency = \"USD\"\n\nthen_the_offer_is_added_to_the_shop : Fixture -> (ShopId, OfferId) -> Script Bool\nthen_the_offer_is_added_to_the_shop f (shopId, offerId) = do\n  Some shop <- queryContractId f.owner shopId\n  pure $ offerId `elem` shop.offerIds\n\nthen_the_offer_is_visible_to_the_user : Fixture -> (ShopId, OfferId) -> Script Bool\nthen_the_offer_is_visible_to_the_user f (shopId, offerId) = do\n  Some _ <- queryContractId f.user offerId\n  pure True\n\nwhen_an_item_is_bought : Fixture -> Script (ShopId, ItemId, IouId)\nwhen_an_item_is_bought f = do\n  let Fixture{..} = f\n  (shopId, offerId) <- submit vendor do exerciseCmd vendorId OfferItem with price = 3.0; currency = \"USD\"; ..\n  submit user do exerciseCmd userId BuyItem with ..\n\nthen_the_item_and_iou_exchange_hands : Fixture -> (ShopId, ItemId, IouId) -> Script Bool\nthen_the_item_and_iou_exchange_hands f (shopId, itemId, iouId) = do\n  Some item <- queryContractId f.user itemId\n  Some iou <- queryContractId f.vendor iouId\n  pure $ item.owner == f.user && iou.owner == f.vendor\n\ngwt = script do\n  let offer_added = Test with\n        given = given_a_shop\n        when = when_the_vendor_offers_an_item\n        then_ = then_the_offer_is_added_to_the_shop\n  let offer_user_visible = offer_added with\n        then_ = then_the_offer_is_visible_to_the_user\n  let asset_exchange = Test with\n        given = given_a_shop\n        when = when_an_item_is_bought\n        then_ = then_the_item_and_iou_exchange_hands\n  run offer_added\n  run offer_user_visible\n  run asset_exchange\n",
+      "generated": "module Test where\n\nimport Daml.Script\nimport Asset\nimport Shop\n\ndata Actors = Actors with\n  issuer : Party\n  producer : Party\n  owner : Party\n  vendor : Party\n  user : Party\n  stranger : Party\n\nactors : Script Actors\nactors = do\n  issuer <- allocateParty \"Issuer\"\n  producer <- allocateParty \"Producer\"\n  owner <- allocateParty \"ShopOwner\"\n  vendor <- allocateParty \"Vendor\"\n  user <- allocateParty \"User\"\n  stranger <- allocateParty \"Stranger\"\n  pure Actors with ..\n\nopenShop : Actors -> Script ShopId\nopenShop Actors{..} =\n  submit owner do createCmd Shop with owner; vendors = []; users = []; offerIds = []\n\naddVendor : Actors -> ShopId -> Script (ShopId, VendorRelationshipId)\naddVendor Actors{..} shopId = do\n  (nextShop, inviteId) <- submit owner do exerciseCmd shopId InviteVendor with vendor\n  relationshipId <- submit vendor do exerciseCmd inviteId AcceptVendorInvite\n  pure (nextShop, relationshipId)\n\naddUser : Actors -> ShopId -> Script (ShopId, UserRelationshipId)\naddUser Actors{..} shopId = do\n  (nextShop, inviteId) <- submit owner do exerciseCmd shopId InviteUser with user\n  relationshipId <- submit user do exerciseCmd inviteId AcceptUserInvite\n  pure (nextShop, relationshipId)\n\nnewItem : Actors -> Script ItemId\nnewItem Actors{..} =\n  submit producer do createCmd Item with producer; owner = vendor; label = \"Tea\"; quantity = 3.0; unit = \"box\"; observers = [vendor]\n\nnewIou : Actors -> Decimal -> Text -> Script IouId\nnewIou Actors{..} amount currency =\n  submit issuer do createCmd Iou with issuer; owner = user; amount; currency\n\ntestOnboarding : Script ()\ntestOnboarding = do\n  parties@Actors{..} <- actors\n  initialShop <- openShop parties\n  submitMustFail stranger do exerciseCmd initialShop InviteVendor with vendor\n  (vendorShop, vendorInvite) <- submit owner do exerciseCmd initialShop InviteVendor with vendor\n  submitMustFail stranger do exerciseCmd vendorInvite AcceptVendorInvite\n  vendorRelationship <- submit vendor do exerciseCmd vendorInvite AcceptVendorInvite\n  Some relationship <- queryContractId vendor vendorRelationship\n  assert (relationship.owner == owner && relationship.vendor == vendor)\n  Some vendorShopContract <- queryContractId owner vendorShop\n  assert (vendorShopContract.vendors == [vendor] && vendorShopContract.users == [])\n  submitMustFail stranger do exerciseCmd vendorShop InviteUser with user\n  (userShop, userInvite) <- submit owner do exerciseCmd vendorShop InviteUser with user\n  submitMustFail stranger do exerciseCmd userInvite AcceptUserInvite\n  userRelationship <- submit user do exerciseCmd userInvite AcceptUserInvite\n  Some userRelation <- queryContractId user userRelationship\n  assert (userRelation.owner == owner && userRelation.user == user)\n  Some userShopContract <- queryContractId owner userShop\n  assert (userShopContract.vendors == [vendor] && userShopContract.users == [user])\n\ntestAssetChoices : Script ()\ntestAssetChoices = do\n  Actors{..} <- actors\n  itemId <- submit producer do createCmd Item with producer = producer; owner = producer; label = \"Tea\"; quantity = 3.0; unit = \"box\"; observers = [vendor]\n  submitMustFail stranger do exerciseCmd itemId TransferItem with newOwner = vendor\n  transferred <- submit producer do exerciseCmd itemId TransferItem with newOwner = vendor\n  Some item <- queryContractId producer transferred\n  assert (item.owner == vendor && item.producer == producer && item.label == \"Tea\")\n  assert (item.quantity == 3.0 && item.unit == \"box\" && item.observers == [vendor])\n  submitMustFail producer do exerciseCmd itemId TransferItem with newOwner = user\n  submitMustFail stranger do exerciseCmd transferred Disclose with users = [user]\n  disclosed <- submit vendor do exerciseCmd transferred Disclose with users = [owner, user]\n  Some disclosedItem <- queryContractId producer disclosed\n  assert (disclosedItem.owner == vendor && disclosedItem.observers == [owner, user])\n  iouId <- submit issuer do createCmd Iou with issuer; owner = issuer; amount = 12.0; currency = \"USD\"\n  submitMustFail stranger do exerciseCmd iouId TransferIou with newOwner = user\n  transferredIou <- submit issuer do exerciseCmd iouId TransferIou with newOwner = user\n  Some iou <- queryContractId issuer transferredIou\n  assert (iou.owner == user && iou.issuer == issuer && iou.amount == 12.0 && iou.currency == \"USD\")\n  submitMustFail issuer do exerciseCmd iouId TransferIou with newOwner = stranger\n\ntestTrade : Script ()\ntestTrade = do\n  parties@Actors{..} <- actors\n  initialShop <- openShop parties\n  (vendorShop, vendorRelationship) <- addVendor parties initialShop\n  (readyShop, userRelationship) <- addUser parties vendorShop\n  itemId <- newItem parties\n  submitMustFail stranger do exerciseCmd vendorRelationship OfferItem with shopId = readyShop; itemId; price = 12.0; currency = \"USD\"\n  (offeredShop, offerId) <- submit vendor do exerciseCmd vendorRelationship OfferItem with shopId = readyShop; itemId; price = 12.0; currency = \"USD\"\n  Some shop <- queryContractId owner offeredShop\n  assert (shop.offerIds == [offerId] && shop.users == [user] && shop.vendors == [vendor])\n  Some offer <- queryContractId owner offerId\n  assert (offer.owner == owner && offer.vendor == vendor && offer.price == 12.0)\n  assert (offer.currency == \"USD\" && offer.users == [user])\n  Some disclosedItem <- queryContractId producer offer.itemId\n  assert (disclosedItem.owner == vendor && disclosedItem.observers == [owner, user])\n  iouId <- newIou parties 12.0 \"USD\"\n  submitMustFail stranger do exerciseCmd userRelationship BuyItem with shopId = offeredShop; offerId; iouId\n  (soldShop, boughtItemId, paidIouId) <- submit user do exerciseCmd userRelationship BuyItem with shopId = offeredShop; offerId; iouId\n  Some soldShopContract <- queryContractId owner soldShop\n  assert (soldShopContract.offerIds == [] && soldShopContract.users == [user])\n  Some boughtItem <- queryContractId producer boughtItemId\n  assert (boughtItem.owner == user && boughtItem.producer == producer)\n  assert (boughtItem.label == \"Tea\" && boughtItem.quantity == 3.0 && boughtItem.unit == \"box\")\n  Some paidIou <- queryContractId issuer paidIouId\n  assert (paidIou.owner == vendor && paidIou.issuer == issuer)\n  assert (paidIou.amount == 12.0 && paidIou.currency == \"USD\")\n  submitMustFail user do exerciseCmd userRelationship BuyItem with shopId = soldShop; offerId; iouId\n\ntestInvalidPurchases : Script ()\ntestInvalidPurchases = do\n  parties@Actors{..} <- actors\n  initialShop <- openShop parties\n  (vendorShop, vendorRelationship) <- addVendor parties initialShop\n  (readyShop, userRelationship) <- addUser parties vendorShop\n  itemId <- newItem parties\n  (offeredShop, offerId) <- submit vendor do exerciseCmd vendorRelationship OfferItem with shopId = readyShop; itemId; price = 12.0; currency = \"USD\"\n  wrongAmount <- newIou parties 11.0 \"USD\"\n  submitMustFail user do exerciseCmd userRelationship BuyItem with shopId = offeredShop; offerId; iouId = wrongAmount\n  wrongCurrency <- newIou parties 12.0 \"EUR\"\n  submitMustFail user do exerciseCmd userRelationship BuyItem with shopId = offeredShop; offerId; iouId = wrongCurrency\n  correctIou <- newIou parties 12.0 \"USD\"\n  submitMustFail user do exerciseCmd userRelationship BuyItem with shopId = readyShop; offerId; iouId = correctIou\n  Some stillOffered <- queryContractId owner offeredShop\n  assert (stillOffered.offerIds == [offerId])\n  Some currentOffer <- queryContractId owner offerId\n  Some stillItem <- queryContractId producer currentOffer.itemId\n  assert (stillItem.owner == vendor)\n  (soldShop, _, _) <- submit user do exerciseCmd userRelationship BuyItem with shopId = offeredShop; offerId; iouId = correctIou\n  Some finalShop <- queryContractId owner soldShop\n  assert (finalShop.offerIds == [])\n\ntestMultipleOffers : Script ()\ntestMultipleOffers = do\n  parties@Actors{..} <- actors\n  initialShop <- openShop parties\n  (vendorShop, vendorRelationship) <- addVendor parties initialShop\n  (readyShop, userRelationship) <- addUser parties vendorShop\n  firstItem <- newItem parties\n  (oneOfferShop, firstOffer) <- submit vendor do exerciseCmd vendorRelationship OfferItem with shopId = readyShop; itemId = firstItem; price = 12.0; currency = \"USD\"\n  secondItem <- newItem parties\n  (twoOfferShop, secondOffer) <- submit vendor do exerciseCmd vendorRelationship OfferItem with shopId = oneOfferShop; itemId = secondItem; price = 20.0; currency = \"EUR\"\n  Some twoOffers <- queryContractId owner twoOfferShop\n  assert (twoOffers.offerIds == [secondOffer, firstOffer])\n  firstPayment <- newIou parties 12.0 \"USD\"\n  (oneRemainingShop, firstPurchased, firstPaid) <- submit user do exerciseCmd userRelationship BuyItem with shopId = twoOfferShop; offerId = firstOffer; iouId = firstPayment\n  Some oneRemaining <- queryContractId owner oneRemainingShop\n  assert (oneRemaining.offerIds == [secondOffer])\n  Some firstPurchasedItem <- queryContractId producer firstPurchased\n  Some firstPaidIou <- queryContractId issuer firstPaid\n  assert (firstPurchasedItem.owner == user && firstPaidIou.owner == vendor)\n  secondPayment <- newIou parties 20.0 \"EUR\"\n  (emptyShop, secondPurchased, secondPaid) <- submit user do exerciseCmd userRelationship BuyItem with shopId = oneRemainingShop; offerId = secondOffer; iouId = secondPayment\n  Some empty <- queryContractId owner emptyShop\n  assert (empty.offerIds == [] && empty.vendors == [vendor] && empty.users == [user])\n  Some secondPurchasedItem <- queryContractId producer secondPurchased\n  Some secondPaidIou <- queryContractId issuer secondPaid\n  assert (secondPurchasedItem.owner == user && secondPaidIou.owner == vendor)\n  assert (secondPaidIou.amount == 20.0 && secondPaidIou.currency == \"EUR\")\n\ntestInvalidOffers : Script ()\ntestInvalidOffers = do\n  parties@Actors{..} <- actors\n  initialShop <- openShop parties\n  (vendorShop, relationship) <- addVendor parties initialShop\n  (readyShop, _) <- addUser parties vendorShop\n  otherItem <- submit producer do createCmd Item with producer; owner = producer; label = \"Not for sale\"; quantity = 1.0; unit = \"each\"; observers = [vendor]\n  submitMustFail vendor do exerciseCmd relationship OfferItem with shopId = readyShop; itemId = otherItem; price = 5.0; currency = \"USD\"\n  Some unsold <- queryContractId producer otherItem\n  assert (unsold.owner == producer)\n  Some unchangedShop <- queryContractId owner readyShop\n  assert (unchangedShop.offerIds == [])\n  ownedItem <- newItem parties\n  (offeredShop, offerId) <- submit vendor do exerciseCmd relationship OfferItem with shopId = readyShop; itemId = ownedItem; price = 5.0; currency = \"USD\"\n  submitMustFail vendor do exerciseCmd offerId Settle with buyer = user\n  Some validOffer <- queryContractId owner offerId\n  assert (validOffer.price == 5.0 && validOffer.currency == \"USD\")\n  Some updatedShop <- queryContractId owner offeredShop\n  assert (updatedShop.offerIds == [offerId])\n",
+      "captured_at_utc": "2026-10-02T17:05:27.794623+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/ex-models_____v_k0xydm",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added Daml Script tests in `shop/daml/Test.daml:1` covering onboarding permissions, asset transfers, successful trades, multiple offers, and rejected offers and purchases.\n\nAll six test scripts pass with `daml test --files daml/Test.daml`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 147.08031116699567,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 190824,
+      "output_tokens": 8065,
+      "cached_input_tokens": 171027
+    },
+    "usage_by_thread": {
+      "01a0fd91-259d-7790-b726-0eadd14e0336": {
+        "usage": {
+          "input_tokens": 190824,
+          "output_tokens": 8065,
+          "cached_input_tokens": 171027
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.15444940000000001,
+    "input_usd": 0.039594000000000004,
+    "cached_input_usd": 0.0342054,
+    "output_usd": 0.08065,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790960545.501,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960548.563,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960579.729,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960588.4,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960606.043,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960610.805,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960615.601,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960622.514,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960629.606,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960640.956,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960662.015,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960674.681,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960684.008,
+          "client": "10.219.71.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "shop/daml/Test.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

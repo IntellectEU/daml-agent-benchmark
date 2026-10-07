@@ -9,12 +9,10 @@ import sys
 from time import monotonic, sleep
 
 from daml_agent_benchmark.constants import (
-    CONTAINER_AUTO_SWITCH_DESKTOP_CONTEXT,
     CONTAINER_DOCKER_BIN,
     CONTAINER_DOCKER_INFO_TIMEOUT_SECONDS,
     CONTAINER_DOCKER_START_STATUS_INTERVAL_SECONDS,
     CONTAINER_DOCKER_START_TIMEOUT_SECONDS,
-    CONTAINER_SANITIZE_DOCKER_ENV,
 )
 
 
@@ -27,11 +25,9 @@ def require_docker() -> None:
         )
 
 
-def maybe_sanitize_docker_env() -> None:
+def sanitize_docker_env() -> None:
     """Clear docker host/TLS override env vars for local Docker Desktop workflows.
     These overrides commonly break `docker info` in IDE-launched processes."""
-    if not CONTAINER_SANITIZE_DOCKER_ENV:
-        return
     removed: list[str] = []
     for name in ("DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_API_VERSION"):
         value = os.environ.pop(name, None)
@@ -94,8 +90,6 @@ def _maybe_switch_to_desktop_context() -> bool:
     """On macOS with Docker Desktop, switch to the `desktop-linux` context when available.
     This helps when the current context points to a stale/unreachable daemon."""
     if sys.platform != "darwin":
-        return False
-    if not CONTAINER_AUTO_SWITCH_DESKTOP_CONTEXT:
         return False
 
     list_proc = subprocess.run(

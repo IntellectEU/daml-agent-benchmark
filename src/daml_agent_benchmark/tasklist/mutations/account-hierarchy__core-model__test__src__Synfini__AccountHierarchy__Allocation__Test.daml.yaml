@@ -1,0 +1,230 @@
+task: account-hierarchy/core-model/test/src/Synfini/AccountHierarchy/Allocation/Test.daml
+notes: ''
+mutations:
+  - id: obs-drop-extra-observers
+    source: llm
+    target_script: test_AllocationChangeInstruction_observers
+    kind: authorization
+    reason: The observer clause forgets the explicit `observers` field, so parties added as observers never see the instruction.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..92687f9 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -120,8 +120,7 @@ template AllocationChangeInstruction
+           observer masterAgreement.party1,
+             masterAgreement.party2,
+             deallocationSignatories unconfirmedDeallocations,
+      -      allocationSignatories unconfirmedAllocations,
+      -      observers
+      +      allocationSignatories unconfirmedAllocations
+       
+           key (masterAgreement.id, tradeId, asset.id) : (Id, Id, Id)
+           maintainer key._1.signatories
+  - id: dealloc-skip-asset-check
+    source: llm
+    target_script: test_AllocationChangeInstruction_singleDeallocation
+    kind: validation
+    reason: Confirming a deallocation no longer checks that the deposit holds the instructed asset and quantity.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..1ce981e 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -152,7 +152,6 @@ template AllocationChangeInstruction
+             controller (head unconfirmedDeallocations).account.id.signatories
+             do
+               allocation <- fetch depositCid
+      -        allocation.asset === asset
+               let nextDeallocation = head unconfirmedDeallocations
+               allocation.account === nextDeallocation.account
+               let updatedNextDeallocation = nextDeallocation with depositCid = Some depositCid
+  - id: dealloc-process-no-archive
+    source: llm
+    target_script: test_AllocationChangeInstruction_singleDeallocation
+    kind: archival
+    reason: Processing the instruction checks the deallocations but never archives the confirmed deposits.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..f66f5eb 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -167,7 +167,6 @@ template AllocationChangeInstruction
+                 F.forA_ (zip deallocations (tail deallocations)) $ \(deallocation, nextDeallocation) -> do
+                   (_, custodialSerivce) <- fetchByKey @CustodyAgreement deallocation.account.id
+                   custodialSerivce.parent === nextDeallocation.account
+      -          F.mapA_ (\deallocation -> archive $ O.fromSome deallocation.depositCid) deallocations
+                 assertIsLeafNode (head deallocations).account
+       
+               unless (null allocations) do
+  - id: dealloc-skip-account-check
+    source: llm
+    target_script: test_AllocationChangeInstruction_singleDeallocation
+    kind: validation
+    reason: Confirming a deallocation accepts a deposit held in any account, not only the account being deallocated.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..ea617e3 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -154,7 +154,6 @@ template AllocationChangeInstruction
+               allocation <- fetch depositCid
+               allocation.asset === asset
+               let nextDeallocation = head unconfirmedDeallocations
+      -        allocation.account === nextDeallocation.account
+               let updatedNextDeallocation = nextDeallocation with depositCid = Some depositCid
+               create this with
+                 deallocations = confirmedDeallocations <> (updatedNextDeallocation :: tail unconfirmedDeallocations)
+  - id: dealloc-controller-last
+    source: llm
+    target_script: test_AllocationChangeInstruction_multipleDeallocation
+    kind: authorization
+    reason: The controller of the deallocation confirmation is taken from the last unconfirmed deallocation instead of the next (head) one.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..d262b0d 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -149,7 +149,7 @@ template AllocationChangeInstruction
+             with
+               depositCid : ContractId AssetDeposit -- ^ Deposit to archived during exercise of
+               -- 'AllocationChangeInstruction_Process'.
+      -      controller (head unconfirmedDeallocations).account.id.signatories
+      +      controller (last unconfirmedDeallocations).account.id.signatories
+             do
+               allocation <- fetch depositCid
+               allocation.asset === asset
+  - id: dealloc-confirm-order-swapped
+    source: llm
+    target_script: test_AllocationChangeInstruction_multipleDeallocation
+    kind: field
+    reason: After confirming a deallocation the confirmed entries are appended after the unconfirmed ones, reordering the deallocation list.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..e84cfc7 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -157,7 +157,7 @@ template AllocationChangeInstruction
+               allocation.account === nextDeallocation.account
+               let updatedNextDeallocation = nextDeallocation with depositCid = Some depositCid
+               create this with
+      -          deallocations = confirmedDeallocations <> (updatedNextDeallocation :: tail unconfirmedDeallocations)
+      +          deallocations = (updatedNextDeallocation :: tail unconfirmedDeallocations) <> confirmedDeallocations
+       
+           -- | Execute the allocation changes.
+           choice AllocationChangeInstruction_Process : [ContractId AssetDeposit]
+  - id: tree-dealloc-top-unchecked
+    source: llm
+    target_script: test_AllocationChangeInstruction_invalidTreeStructure
+    kind: branch
+    reason: A pure deallocation no longer checks that the topmost deallocated account is at the top of its hierarchy.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..7fae10d 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -183,7 +183,7 @@ template AllocationChangeInstruction
+                   unless (deallocationParent == allocationParent) do
+                     assertAtHierarchyTop topDeallocation.account
+                     assertAtHierarchyTop topAllocation.account
+      -          (Some topDeallocation, None) -> assertAtHierarchyTop topDeallocation.account
+      +          (Some topDeallocation, None) -> pure ()
+                 (None, Some topAllocation) -> assertAtHierarchyTop topAllocation.account
+                 (None, None) -> pure ()
+       
+  - id: tree-alloc-leaf-head
+    source: llm
+    target_script: test_AllocationChangeInstruction_invalidTreeStructure
+    kind: lookup
+    reason: The leaf check for allocations looks at the first (top) allocation instead of the last (bottom) one.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..dfbcb0c 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -174,7 +174,7 @@ template AllocationChangeInstruction
+                 F.forA_ (zip allocations (tail allocations)) $ \(allocation, nextAllocation) -> do
+                   (_, custodyAgreement) <- fetchByKey @CustodyAgreement nextAllocation.account.id
+                   custodyAgreement.parent === allocation.account
+      -          assertIsLeafNode (last allocations).account
+      +          assertIsLeafNode (head allocations).account
+       
+               case (LT.last deallocations, LT.head allocations) of
+                 (Some topDeallocation, Some topAllocation) -> do
+  - id: tree-transfer-owner-compare
+    source: llm
+    target_script: test_AllocationChangeInstruction_invalidTreeStructure
+    kind: branch
+    reason: The common-parent test compares only the owners of the two parent accounts, not the accounts themselves, so accounts from another hierarchy count as a common ancestor.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..d0d68cf 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -180,7 +180,7 @@ template AllocationChangeInstruction
+                 (Some topDeallocation, Some topAllocation) -> do
+                   deallocationParent <- getParent topDeallocation.account
+                   allocationParent <- getParent topAllocation.account
+      -            unless (deallocationParent == allocationParent) do
+      +            unless (deallocationParent.owner == allocationParent.owner) do
+                     assertAtHierarchyTop topDeallocation.account
+                     assertAtHierarchyTop topAllocation.account
+                 (Some topDeallocation, None) -> assertAtHierarchyTop topDeallocation.account
+  - id: alloc-confirm-flag-not-set
+    source: llm
+    target_script: test_AllocationChangeInstruction_singleAllocation
+    kind: field
+    reason: Confirming an allocation re-creates the instruction with the allocation still unconfirmed, so the confirming party never becomes a signatory.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..48498a6 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -142,7 +142,7 @@ template AllocationChangeInstruction
+               unconfirmedDeallocations === []
+               let nextAllocation = head unconfirmedAllocations
+               create this with
+      -          allocations = confirmedAllocations <> ((nextAllocation with confirmed = True) :: tail unconfirmedAllocations)
+      +          allocations = confirmedAllocations <> (nextAllocation :: tail unconfirmedAllocations)
+       
+           -- | Account signatories of the next unconfirmed deallocation can choose to consent to the allocation change.
+           choice AllocationChangeInstruction_ConfirmNextDeallocation : ContractId AllocationChangeInstruction
+  - id: alloc-drop-confirmed-signatories
+    source: llm
+    target_script: test_AllocationChangeInstruction_singleAllocation
+    kind: authorization
+    reason: Signatories of confirmed allocations are left out of the instruction's signatories, so their consent is not recorded.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..117ddd4 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -115,8 +115,7 @@ template AllocationChangeInstruction
+           observers : Set Party -- ^ Contract observers.
+         where
+           signatory masterAgreement.id.signatories,
+      -      deallocationSignatories confirmedDeallocations,
+      -      allocationSignatories confirmedAllocations
+      +      deallocationSignatories confirmedDeallocations
+           observer masterAgreement.party1,
+             masterAgreement.party2,
+             deallocationSignatories unconfirmedDeallocations,
+  - id: alloc-controller-last
+    source: llm
+    target_script: test_AllocationChangeInstruction_multipleAllocation
+    kind: authorization
+    reason: The controller of the allocation confirmation is taken from the last unconfirmed allocation instead of the next (head) one.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      index c0330ed..afe97a4 100644
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Allocation.daml
+      @@ -137,7 +137,7 @@ template AllocationChangeInstruction
+           -- | Account signatories of the next unconfirmed allocation can choose to consent to the allocation change. Can
+           -- only be exercised after all deallocations are confirmed.
+           choice AllocationChangeInstruction_ConfirmNextAllocation : ContractId AllocationChangeInstruction
+      -      controller (head unconfirmedAllocations).account.id.signatories
+      +      controller (last unconfirmedAllocations).account.id.signatories
+             do
+               unconfirmedDeallocations === []
+               let nextAllocation = head unconfirmedAllocations

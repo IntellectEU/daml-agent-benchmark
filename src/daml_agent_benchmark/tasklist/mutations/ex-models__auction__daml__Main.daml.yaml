@@ -1,0 +1,60 @@
+task: ex-models/auction/daml/Main.daml
+notes: The ground-truth file has a single script, setup, with no assertions; it only fails when a command in the flow is rejected, so every mutation targets a rejected command.
+mutations:
+  - id: archive-invite
+    source: llm
+    target_script: setup
+    kind: archival
+    reason: The InviteBidder choice is left consuming, so inviting a second bidder fails because the auction was archived by the first invitation.
+    patch: |
+      diff --git a/auction/daml/Auction.daml b/auction/daml/Auction.daml
+      index bd993b4..4db337d 100644
+      --- a/auction/daml/Auction.daml
+      +++ b/auction/daml/Auction.daml
+      @@ -31,7 +31,7 @@ template Auction
+           ensure quantity > 0 && start < end
+           signatory seller
+           -- Sent individually to each participant (bidder) at start of auction.
+      -    nonconsuming choice InviteBidder: ContractId AuctionInvitation 
+      +    choice InviteBidder: ContractId AuctionInvitation 
+               with buyer: Party
+               controller seller
+                 do create AuctionInvitation with buyer; auction = this
+  - id: bid-observer
+    source: llm
+    target_script: setup
+    kind: authorization
+    reason: The bid's observer is the bidder instead of the auction's seller, so the seller cannot fetch the bids when completing the auction.
+    patch: |
+      diff --git a/auction/daml/Auction.daml b/auction/daml/Auction.daml
+      index bd993b4..d62ca1f 100644
+      --- a/auction/daml/Auction.daml
+      +++ b/auction/daml/Auction.daml
+      @@ -70,7 +70,7 @@ template Bid
+           allocation: Allocation
+         where
+           signatory allocation.party
+      -    observer auction.seller
+      +    observer allocation.party
+       
+       -- Created on successful completion of an auction, to display allocs.
+       template AuctionResult
+  - id: bid-window-start
+    source: llm
+    target_script: setup
+    kind: time
+    reason: The bid window's lower bound is made strict, so a bid submitted at exactly the auction start is rejected.
+    patch: |
+      diff --git a/auction/daml/Auction.daml b/auction/daml/Auction.daml
+      index bd993b4..f4747e6 100644
+      --- a/auction/daml/Auction.daml
+      +++ b/auction/daml/Auction.daml
+      @@ -60,7 +60,7 @@ template AuctionInvitation
+               do
+                 now <- getTime
+                 assert(now <= auction.end &&
+      -                 now >= auction.start)
+      +                 now > auction.start)
+                 create Bid with auction; allocation = Allocation with party = buyer; price; quantity
+       
+       -- Used to place a bid on an active auction.

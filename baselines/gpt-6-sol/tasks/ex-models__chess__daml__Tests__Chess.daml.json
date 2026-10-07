@@ -60,9 +60,9 @@
     "repo_copy_digest": "6f6d136712ad738b83f2efc5d276183f5c30d3ed936286e5e25115e5707cd12f",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "ex-models/chess/daml/Chess.daml",
+      "answer_file": "ex-models/chess/daml/Chess.daml",
       "path_in_copy": "chess/daml/Chess.daml",
       "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Chess where\n\nimport DA.Assert\n\nimport Rules.Main\nimport Rules.Data\nimport Rules.Draw\nimport Types\n\ntemplate GameProposal\n  with\n    gameId : GameId\n    proposer : Party\n  where\n    signatory proposer\n\n    let receiver = oppositePlayer proposer gameId\n\n    controller receiver can\n      StartGame : ContractId Game\n        do\n          create Game with\n            gameId\n            state = (Rules.Data.initState ())\n\ntemplate Result\n  with\n    game : Game\n    winner : Optional Party\n  where\n    signatory game.gameId.white, game.gameId.black\n\ntemplate Game\n  with\n    gameId : GameId\n    state : GameState\n  where\n    signatory gameId.white, gameId.black\n\n    let\n      player = if state.player == White then gameId.white else gameId.black\n      opponent = if state.player == White then gameId.black else gameId.white\n\n    controller player can\n      Move : Either (ContractId Result) (ContractId Game)\n        with\n          move : ChessMove\n        do\n          case tryMove state move of\n            Winner _ -> do\n              win <- create Result with winner = Some player; game = this\n              return (Left win)\n            Error e -> abort e\n            NewState ns -> do\n              newGame <- create this with state = ns\n              return (Right newGame)\n\n      ClaimDraw : ContractId Result\n        do\n          case checkDraw state.moves of\n            Left e -> abort e\n            Right False -> abort \"Not a draw.\"\n            Right True -> return ()\n          create Result with\n            game = this\n            winner = None\n\n      Forfeit : ContractId Result\n        do\n          create Result with\n            game = this\n            winner = Some opponent\n\ntemplate DrawProposal\n  with\n    gameId : GameId\n    proposer : Party\n  where\n    signatory proposer\n\n    let receiver = oppositePlayer proposer gameId\n\n    controller receiver can\n      AcceptDraw : ContractId Result\n        with\n          game : ContractId Game\n        do\n          g <- fetch game\n          g.gameId === gameId\n          archive game\n          create Result with\n            game = g\n            winner = None",
       "generated": "module Chess where\n\nimport Types\nimport Rules.Data (initState)\nimport Rules.Draw (checkDraw)\nimport Rules.Main (tryMove)\n\ntemplate GameProposal\n  with\n    proposer : Party\n    gameId : GameId\n  where\n    signatory proposer\n    observer gameId.black\n\n    choice StartGame : ContractId Game\n      controller gameId.black\n      do\n        assertMsg \"Only white can propose a game\" (proposer == gameId.white)\n        create Game with\n          gameId\n          state = initState ()\n\ntemplate Game\n  with\n    gameId : GameId\n    state : GameState\n  where\n    signatory gameId.white, gameId.black\n\n    choice Move : Either (ContractId Result) (ContractId Game)\n      with\n        move : ChessMove\n      controller if state.player == White then gameId.white else gameId.black\n      do\n        case tryMove state move of\n          Error message -> abort message\n          Winner player -> do\n            result <- create Result with\n              gameId\n              winner = Some (if player == White then gameId.white else gameId.black)\n            return (Left result)\n          NewState nextState -> do\n            game <- create this with state = nextState\n            return (Right game)\n\n    choice ClaimDraw : ContractId Result\n      controller gameId.white\n      do\n        case checkDraw state.moves of\n          Left message -> abort message\n          Right False -> abort \"Draw cannot be claimed\"\n          Right True -> create Result with\n            gameId\n            winner = None\n\ntemplate Result\n  with\n    gameId : GameId\n    winner : Optional Party\n  where\n    signatory gameId.white, gameId.black\n",
@@ -319,13 +319,13 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "chess/daml/Chess.daml",
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

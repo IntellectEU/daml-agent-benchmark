@@ -38,6 +38,8 @@ Keep the experiments that you ran as named presets in the file, so it records wh
 - `max_parallel_tasks`: how many tasks run at once (see [Machine sizing](#machine-sizing)).
 - `ground_truth_control`: build and test each task with its original code before the agent runs. A task that fails is an infrastructure failure, and the agent does not run on it. Turn it on for benchmark runs. Passing controls are cached.
 - `run_name`: the name that the dashboard shows.
+- `task_kind`: `"implementation"` (the default), or `"test_generation"` for the agent to write tests graded on mutants. A test-generation run takes only tasks that have mutants. See [Test generation](test-generation.md).
+- `max_mutants_per_task`: for a quick test-generation run, grade only each task's first N mutants. A capped run is not a baseline.
 
 Every setting and its default is documented in [`config.py`](../src/daml_agent_benchmark/config.py).
 

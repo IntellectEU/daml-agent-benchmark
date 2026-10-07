@@ -1,8 +1,8 @@
 """The routes behind the run dashboard.
 
 The dashboard shows every run as a row of a matrix with one cell per task, and shows one
-task in full on request. Runs can be archived and deleted from it. The router mounts under
-`/api/agent`.
+task in full on request. Runs can be archived and deleted from it. Its mutation catalogue
+lists the test-generation tasks' mutations. The router mounts under `/api/agent`.
 """
 
 from __future__ import annotations
@@ -17,7 +17,8 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from daml_agent_benchmark.server import runs
+from daml_agent_benchmark.config import TaskKindName
+from daml_agent_benchmark.server import mutation_catalogue, runs
 from daml_agent_benchmark.tasklist_catalog import package_task_ids
 
 router = APIRouter(prefix="/api/agent")
@@ -67,24 +68,26 @@ def _repository_of(task_id: str) -> str:
 
 
 @router.get("/matrix")
-def get_matrix(include_archived: bool = False) -> dict[str, Any]:
-    """Every run as a row of cells, one per task, over the union of the runs' tasks.
+def get_matrix(include_archived: bool = False, kind: TaskKindName = TaskKindName.IMPLEMENTATION) -> dict[str, Any]:
+    """Every run of one task kind as a row of cells, one per task, over the union of the runs' tasks.
 
-    Tasks of the same repository share a header colour. `package_task_ids` names the tasks
-    that ship with the package, so a page showing runs over added tasklists can also show
-    what a user of the package alone would see.
+    A column compares runs on the same task, so runs of different kinds, which share task ids
+    but measure different things, never share a matrix. Tasks of the same repository share a
+    header colour. `package_task_ids` names the tasks that ship with the package, so a page
+    showing runs over added tasklists can also show what a user of the package alone would see.
     """
     task_ids: set[str] = set()
     items: list[dict[str, Any]] = []
     for run_dir in runs.iter_run_dirs(include_archived=include_archived):
         row = runs.matrix_row(run_dir)
-        if row is None:
+        if row is None or row["item"]["task_kind"] != kind:
             continue
         task_ids.update(row["task_ids"])
         items.append(row["item"])
 
     sorted_task_ids = sorted(task_ids)
     return {
+        "task_kind": kind,
         "task_ids": sorted_task_ids,
         "task_header_colors": {task_id: color_from_string(_repository_of(task_id)) for task_id in sorted_task_ids},
         "task_flags": runs.flag_labels(),
@@ -106,6 +109,21 @@ def get_task_detail(run_id: str, task_id: str) -> dict[str, Any]:
     if detail is None:
         raise HTTPException(status_code=404, detail=f"Task not found for run_id={run_id}: {task_id}")
     return detail
+
+
+@router.get("/mutations")
+def get_mutation_catalogue() -> dict[str, Any]:
+    """Every task that has mutations, with each mutation's id, kind and origin."""
+    return mutation_catalogue.catalogue().to_record()
+
+
+@router.get("/mutations/{file_name}")
+def get_task_mutations(file_name: str) -> dict[str, Any]:
+    """One task's mutations in full, by the task's file name, with the files they patch."""
+    detail = mutation_catalogue.task_mutations(file_name)
+    if detail is None:
+        raise HTTPException(status_code=404, detail=f"No task with mutations has the file name {file_name!r}")
+    return detail.to_record()
 
 
 @router.post("/runs/archive")

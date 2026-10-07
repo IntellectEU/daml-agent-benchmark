@@ -34,7 +34,7 @@ def _make_runner(temp_dir: str, *, copyback_rel_paths: list[str]) -> AppServerRu
             prompt="dummy",
             timeout_seconds=2,
             copyback_rel_paths=copyback_rel_paths,
-            test_rel_path="daml/Test.daml",
+            protected_rel_paths=["daml/Test.daml"],
             log_prefix="test",
             task_log_path=temp_path / "task.log",
             live_stdout_events_path=temp_path / "events.jsonl",

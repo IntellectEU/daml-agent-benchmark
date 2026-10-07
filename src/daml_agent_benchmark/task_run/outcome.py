@@ -143,8 +143,9 @@ def classify_attempt(attempt: AttemptResult, repo_copy_integrity: RepoCopyIntegr
     if not audit.available:
         found(TaskFlag.WORKSPACE_AUDIT_MISSING, "workspace change audit did not complete; non-target edits unknown")
     else:
-        if audit.test_file_changes:
-            found(TaskFlag.TEST_FILE_CHANGED, "agent modified the test file (graded against the pristine host copy)")
+        if audit.protected_file_changes:
+            changed = [change.path for change in audit.protected_file_changes]
+            found(TaskFlag.PROTECTED_FILE_CHANGED, f"agent modified {changed}, which grading takes from the pristine host copy")
         if audit.source_changes_outside_targets:
             changed = [change.path for change in audit.source_changes_outside_targets]
             found(TaskFlag.NON_TARGET_SOURCE_CHANGES, f"agent changed non-target source files {changed} (not graded)")

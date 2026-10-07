@@ -15,6 +15,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from daml_agent_benchmark.code_snapshot import stage_code_snapshot_for_run
+from daml_agent_benchmark.task_kinds import task_kind
 from daml_agent_benchmark.config import (
     DEFAULTS,
     ExperimentConfig,
@@ -25,7 +26,6 @@ from daml_agent_benchmark.config import (
 )
 from daml_agent_benchmark.constants import (
     CODEX_APPROVAL_POLICY,
-    CODEX_AUTH_MODE,
     CODEX_BIN,
     CODEX_SANDBOX,
     CONTAINER_IMAGE,
@@ -125,7 +125,8 @@ def prepare_agent_run(tasks: dict[str, list[str]], config: ExperimentConfig) -> 
     prepend_common_tool_paths(os.environ)
     resolved_codex_bin = resolve_codex_bin(CODEX_BIN)
     ensure_codex_auth_ready(resolved_codex_bin, config)
-    ensure_container_ready(tasks)
+    kind = task_kind(config.task_kind)
+    ensure_container_ready(tasks, [f for test, impls in tasks.items() for f in kind.answer_files(test, impls)])
     shared_proxy_state = setup_shared_egress_proxy(egress_allowed_suffixes(config), egress_allowed_hosts(config))
     configure_wrapper_environment(shared_proxy_state)
     return shared_proxy_state, resolved_codex_bin
@@ -159,8 +160,6 @@ def _run_config(config: ExperimentConfig) -> None:
             config_dump["run_name"] = run_name
             config_dump["run_repo_copies_dir"] = str(run_repo_copies_dir)
             config_dump["resolved_codex_bin"] = resolved_codex_bin
-            # Not an experiment field, but a reader needs it: it says whether the tokens were billed.
-            config_dump["codex_auth_mode"] = CODEX_AUTH_MODE
             config_dump["code_snapshot"] = code_snapshot_info
             config_dump["skill"] = skill_info
             write_json(run_dir / "config.json", config_dump)
@@ -181,7 +180,6 @@ def _run_config(config: ExperimentConfig) -> None:
             print(f"Run ID: {run_id}")
             print(f"Run Name: {run_name}")
             print(f"Resolved codex_bin: {resolved_codex_bin}")
-            print(f"Codex auth mode: {CODEX_AUTH_MODE}")
             if skill_info is not None:
                 print(f"Skill: enabled ({skill_info['staged_dir']})")
                 print(f"skill snapshot: {skill_info['snapshot_zip']} (sha256={skill_info['snapshot_zip_sha256']})")

@@ -1,0 +1,22 @@
+task: splice/daml/splitwell-test/daml/Splice/Scripts/TestSplitwell.daml
+notes: The task has a single script (test); testCase takes arguments and is a helper.
+mutations:
+  - id: net-not-antisymmetric
+    source: llm
+    target_script: test
+    kind: validation
+    reason: The symmetry check on netted balance changes compares the two entries for equality instead of negation, rejecting valid nettings.
+    patch: |
+      diff --git a/daml/splitwell/daml/Splice/Splitwell.daml b/daml/splitwell/daml/Splice/Splitwell.daml
+      index 0dc1c20..8ee891c 100644
+      --- a/daml/splitwell/daml/Splice/Splitwell.daml
+      +++ b/daml/splitwell/daml/Splice/Splitwell.daml
+      @@ -252,7 +252,7 @@ template Group
+                    -- Note that this also covers the membership change for p'
+                    case M.lookup p =<< M.lookup p' balanceChanges of
+                      None -> abort $ "No symmetric entry for balance change of " <> show (p, p')
+      -               Some change' -> require ("Balance change for " <> show (p, p') <> " must be symmetric: " <> show (change, change')) (change == -change')
+      +               Some change' -> require ("Balance change for " <> show (p, p') <> " must be symmetric: " <> show (change, change')) (change == change')
+                create BalanceUpdate with
+                  group = this
+                  update = Netting with balanceChanges

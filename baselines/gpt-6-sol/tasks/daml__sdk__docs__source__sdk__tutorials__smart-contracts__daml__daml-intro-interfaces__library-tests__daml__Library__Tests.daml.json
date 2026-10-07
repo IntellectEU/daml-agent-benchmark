@@ -56,9 +56,9 @@
     "repo_copy_digest": "1ba89385c83c94354935b576a97a5144270abdc335c60b179c7635e643810801",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml",
+      "answer_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml",
       "path_in_copy": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml",
       "original": "-- Copyright (c) 2025 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Library.Book where\n\nimport Library.CatalogItem\n\n-- BOOK_CONTRACT_BEGIN\ntemplate Book\n  with\n    owner : Party\n    title : Text\n    loanedTo : Optional Party\n    author : Text\n    observers : [Party]\n  where\n    signatory owner\n    observer observers\n-- BOOK_CONTRACT_END\n\n-- BOOK_INTERFACE_INSTANCE_BEGIN\n    interface instance CatalogItem for Book where\n      view = CatalogItemView with\n        owner\n        media = \"Book\"\n        title\n        loanedTo\n\n      discloseTo newObservers = do\n        disclosedBook <- create this with\n          observers = observers ++ filter (not . (`elem` observers)) newObservers\n        pure (toInterfaceContractId disclosedBook)\n\n      loanTo borrower = toInterfaceContractId <$> create this with loanedTo = Some borrower\n      returnToOwner = toInterfaceContractId <$> create this with loanedTo = None\n-- BOOK_INTERFACE_INSTANCE_END\n\n",
       "generated": "module Library.Book where\n\nimport Library.CatalogItem\n\ntemplate Book\n  with\n    owner : Party\n    author : Text\n    title : Text\n    loanedTo : Optional Party\n    observers : [Party]\n  where\n    signatory owner\n    observer observers\n\n    interface instance CatalogItem for Book where\n      view = CatalogItemView owner \"Book\" title loanedTo\n\n      discloseTo newObservers = do\n        disclosedBook <- create this with\n          observers = observers ++ filter (not . (`elem` observers)) newObservers\n        pure (toInterfaceContractId disclosedBook)\n\n      loanTo borrower = do\n        loanedBook <- create this with loanedTo = Some borrower\n        pure (toInterfaceContractId loanedBook)\n\n      returnToOwner = do\n        toInterfaceContractId <$> create this with loanedTo = None\n",
@@ -227,13 +227,13 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml",
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

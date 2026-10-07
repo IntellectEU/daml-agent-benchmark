@@ -8,20 +8,17 @@ import subprocess
 from pathlib import Path
 
 from daml_agent_benchmark.constants import (
-    CONTAINER_AUTO_BUILD_IMAGE,
     CONTAINER_CLEANUP_STALE_AFTER_SECONDS,
-    CONTAINER_CLEANUP_STALE_RESOURCES,
     CONTAINER_DOCKER_BIN,
     CONTAINER_DOCKERFILE,
     CONTAINER_EGRESS_PROXY_IMAGE,
     CONTAINER_IMAGE,
     CONTAINER_NETWORK_MODE,
-    CONTAINER_PREINSTALL_TASK_SDKS,
     CONTAINER_VERIFY_COMMANDS,
     PACKAGE_DIR,
     WRAPPER_PATH,
 )
-from daml_agent_benchmark.container.daemon import ensure_docker_daemon, maybe_sanitize_docker_env, require_docker
+from daml_agent_benchmark.container.daemon import ensure_docker_daemon, require_docker, sanitize_docker_env
 from daml_agent_benchmark.container.egress_proxy import ensure_egress_proxy_image
 from daml_agent_benchmark.docker_cleanup import cleanup_stale_daml_docker_resources
 from daml_agent_benchmark.repos.registry import handler_for, sdk_store_env
@@ -153,36 +150,30 @@ def container_has_command(command_name: str) -> bool:
     return proc.returncode == 0
 
 
-def ensure_container_ready(tasks: dict[str, list[str]]) -> None:
+def ensure_container_ready(tasks: dict[str, list[str]], answer_files: list[str]) -> None:
     """Top-level preflight: make sure the Docker image exists, has all required DAML SDKs
     baked in, and passes the command smoke test. Rebuilds the image automatically if needed.
-    Also checks that the SDK store every container mounts holds no copy of a task's answer."""
+    Also checks that the SDK store every container mounts holds no copy of a task's answer,
+    `answer_files`: what the agents write, which depends on the run's task kind."""
     _ensure_wrapper_executable(WRAPPER_PATH)
-    maybe_sanitize_docker_env()
+    sanitize_docker_env()
     require_docker()
     ensure_docker_daemon()
     cleanup_stale_daml_docker_resources(
         docker_bin=CONTAINER_DOCKER_BIN,
         container_image=CONTAINER_IMAGE,
         egress_proxy_image=CONTAINER_EGRESS_PROXY_IMAGE,
-        enabled=CONTAINER_CLEANUP_STALE_RESOURCES,
         stale_after_seconds=int(CONTAINER_CLEANUP_STALE_AFTER_SECONDS),
     )
-    sdk_versions = _collect_required_daml_versions(tasks) if CONTAINER_PREINSTALL_TASK_SDKS else []
+    sdk_versions = _collect_required_daml_versions(tasks)
 
     # Build from scratch if image doesn't exist yet. SDKs are NOT part of the image:
     # they live in the host-side SDK store (mounted into containers), so the image
     # build is small and SDK changes never require a rebuild.
     if not _container_image_exists():
-        if not CONTAINER_AUTO_BUILD_IMAGE:
-            raise RuntimeError(
-                f"Container image not found: {CONTAINER_IMAGE}. "
-                "Enable `CONTAINER_AUTO_BUILD_IMAGE=True` or build it manually first."
-            )
         _build_container_image()
     # Make sure the SDK store has every SDK version the selected tasks need
     # (downloads only what is missing).
-    answer_files = [impl for impls in tasks.values() for impl in impls]
     ensure_sdk_store(
         sdk_versions,
         image=CONTAINER_IMAGE,

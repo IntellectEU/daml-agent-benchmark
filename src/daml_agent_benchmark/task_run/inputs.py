@@ -228,9 +228,10 @@ def stage_skill_into_copy(config: ExperimentConfig, run_dir: Path | None, repo_c
     shutil.copytree(source, destination)
 
 
-def clear_implementation_files(impl_files: list[str]) -> None:
-    for impl_file in impl_files:
-        with open(impl_file, "w", encoding="utf-8") as f:
+def blank_files(paths: list[str]) -> None:
+    """Empty each file: the answer files, so the agent writes them from scratch."""
+    for path in paths:
+        with open(path, "w", encoding="utf-8") as f:
             f.write("")
 
 

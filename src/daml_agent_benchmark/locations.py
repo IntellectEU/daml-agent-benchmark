@@ -57,3 +57,14 @@ def configure(**overrides: object) -> Locations:
 
     tasklist_catalog.clear_caches()
     return locations
+
+
+def task_file_name(task_id: str) -> str:
+    """A task id as a file name. A task id is a path, and its separators cannot be in one.
+
+    Each separator becomes `__`, so an id that already holds `__` could share its file name
+    with another id, and is refused.
+    """
+    if "__" in task_id:
+        raise ValueError(f"task id {task_id!r} holds '__', which task file names use for '/'")
+    return task_id.replace("\\", "__").replace("/", "__")

@@ -1,0 +1,59 @@
+task: daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/library-tests/daml/Library/Tests.daml
+notes: "Only one script (test); the three mutations are in the Book interface instance, the only behaviour in the implementation file."
+mutations:
+  - id: disclose-keeps-only-existing
+    source: llm
+    target_script: test
+    kind: branch
+    reason: The filter that should drop already-present observers is inverted, so newly disclosed parties are never added.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      index 8b2b53e..f0d9e96 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      @@ -28,7 +28,7 @@ template Book
+       
+             discloseTo newObservers = do
+               disclosedBook <- create this with
+      -          observers = observers ++ filter (not . (`elem` observers)) newObservers
+      +          observers = observers ++ filter (`elem` observers) newObservers
+               pure (toInterfaceContractId disclosedBook)
+       
+             loanTo borrower = toInterfaceContractId <$> create this with loanedTo = Some borrower
+  - id: loan-to-owner
+    source: llm
+    target_script: test
+    kind: field
+    reason: loanTo records the owner as the borrower instead of the requested borrower.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      index 8b2b53e..5292818 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      @@ -31,7 +31,7 @@ template Book
+                 observers = observers ++ filter (not . (`elem` observers)) newObservers
+               pure (toInterfaceContractId disclosedBook)
+       
+      -      loanTo borrower = toInterfaceContractId <$> create this with loanedTo = Some borrower
+      +      loanTo borrower = toInterfaceContractId <$> create this with loanedTo = Some owner
+             returnToOwner = toInterfaceContractId <$> create this with loanedTo = None
+       -- BOOK_INTERFACE_INSTANCE_END
+       
+  - id: return-keeps-loan
+    source: llm
+    target_script: test
+    kind: field
+    reason: returnToOwner recreates the book without clearing loanedTo, so a returned book still looks loaned.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      index 8b2b53e..2e10e78 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-interfaces/book/daml/Library/Book.daml
+      @@ -32,6 +32,6 @@ template Book
+               pure (toInterfaceContractId disclosedBook)
+       
+             loanTo borrower = toInterfaceContractId <$> create this with loanedTo = Some borrower
+      -      returnToOwner = toInterfaceContractId <$> create this with loanedTo = None
+      +      returnToOwner = toInterfaceContractId <$> create this
+       -- BOOK_INTERFACE_INSTANCE_END
+       

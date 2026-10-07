@@ -1,0 +1,836 @@
+{
+  "task_id": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml",
+  "task_safe_name": "daml__sdk__docs__source__sdk__tutorials__smart-contracts__daml__daml-intro-compose__daml__Test__Intro__Asset.daml",
+  "test_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml",
+  "impl_files": [
+    "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Intro/Asset.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.427779+00:00",
+  "started_at_utc": "2026-10-02T16:29:49.809493+00:00",
+  "finished_at_utc": "2026-10-02T16:34:47.874672+00:00",
+  "live_updated_at_utc": "2026-10-02T16:34:47.874672+00:00",
+  "repo_copy": "261002-180850/daml_____smrj56im",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Test/Intro/Asset.daml:setup": true,
+      "daml/Test/Intro/Asset.daml:test_approval_cancel_reject": true,
+      "daml/Test/Intro/Asset.daml:test_approval_visibility_and_creation": true,
+      "daml/Test/Intro/Asset.daml:test_create": true,
+      "daml/Test/Intro/Asset.daml:test_approval_mismatch": true,
+      "daml/Test/Intro/Asset.daml:test_approval_transfer": true,
+      "daml/Test/Intro/Asset.daml:test_merge": true,
+      "daml/Test/Intro/Asset.daml:test_merge_mismatch": true,
+      "daml/Test/Intro/Asset.daml:test_observers": true,
+      "daml/Test/Intro/Asset.daml:test_proposal_accept": true,
+      "daml/Test/Intro/Asset.daml:test_proposal_cancel_reject": true,
+      "daml/Test/Intro/Asset.daml:test_split": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "cancel-approval-controlled-by-new-owner",
+        "source": "real-bug",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test/Intro/Asset.daml:setup": true,
+            "daml/Test/Intro/Asset.daml:test_approval_cancel_reject": false,
+            "daml/Test/Intro/Asset.daml:test_approval_visibility_and_creation": true,
+            "daml/Test/Intro/Asset.daml:test_create": true,
+            "daml/Test/Intro/Asset.daml:test_approval_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_approval_transfer": true,
+            "daml/Test/Intro/Asset.daml:test_merge": true,
+            "daml/Test/Intro/Asset.daml:test_merge_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_observers": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_accept": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_split": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:32:56.34 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 99:4d:e3:13:e2:7f:0c:db'. Ignoring it.\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    202:1-202:28\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Test.Intro.Asset:207:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises TransferApproval_Cancel on #0:0 (Intro.Asset:TransferApproval)\n    with\n  Sub-transactions:\n     0\n     └─> 'Bob-9cefe94d' exercises TransferApproval_Cancel on #0:0 (Intro.Asset:TransferApproval)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:205:16)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'Alice-40b5f04b' (0), 'Bob-9cefe94d' (0),\n                            'Issuer-c812a76d' (0)\n  └─> 'Issuer-c812a76d' creates Intro.Asset:TransferApproval\n                        with\n                          asset =\n                            (Intro.Asset:Asset with\n                               issuer = 'Issuer-c812a76d';\n                               owner = 'Alice-40b5f04b';\n                               symbol = \"USD\";\n                               quantity = 10.0000000000;\n                               observers = []);\n                          newOwner = 'Bob-9cefe94d'\n  \n  TX 1 1970-01-01T00:00:00Z (Test.Intro.Asset:207:3)\n  #1:0\n  │   disclosed to (since): 'Alice-40b5f04b' (1), 'Bob-9cefe94d' (1),\n                            'Issuer-c812a76d' (1)\n  └─> 'Bob-9cefe94d' exercises TransferApproval_Cancel on #0:0 (Intro.Asset:TransferApproval)\u001b[0m\n"
+        }
+      },
+      {
+        "id": "accept-keeps-old-owner",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test/Intro/Asset.daml:setup": true,
+            "daml/Test/Intro/Asset.daml:test_approval_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_approval_visibility_and_creation": true,
+            "daml/Test/Intro/Asset.daml:test_create": true,
+            "daml/Test/Intro/Asset.daml:test_approval_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_approval_transfer": true,
+            "daml/Test/Intro/Asset.daml:test_merge": true,
+            "daml/Test/Intro/Asset.daml:test_merge_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_observers": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_accept": false,
+            "daml/Test/Intro/Asset.daml:test_proposal_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_split": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:33:14.00 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: ae:4c:a9:c6:5a:00:a9:80'. Ignoring it.\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    115:1-115:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.GeneralError:GeneralError: Pattern match failure in do expression at daml/Test/Intro/Asset.daml:131:3-15\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'Alice-eeafacc8' (0),\n                            'Charlie-88aa034b' (0), 'Issuer-9b40d50c' (0)\n  └─> 'Alice-eeafacc8' and 'Issuer-9b40d50c' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-9b40d50c';\n                                               owner = 'Alice-eeafacc8';\n                                               symbol = \"USD\";\n                                               quantity = 10.0000000000;\n                                               observers = ['Charlie-88aa034b']\n  \n  TX 1 1970-01-01T00:00:00Z (Test.Intro.Asset:118:18)\n  #1:0\n  │   disclosed to (since): 'Alice-eeafacc8' (1),\n                            'Charlie-88aa034b' (1), 'Issuer-9b40d50c' (1)\n  └─> 'Alice-eeafacc8' exercises ProposeTransfer on #0:0 (Intro.Asset:Asset)\n                       with\n                         newOwner = 'Bob-be94df5a'\n      children:\n      #1:1\n      │   consumed by: #4:0\n      │   referenced by #4:0\n      │   disclosed to (since): 'Alice-eeafacc8' (1),\n                                'Charlie-88aa034b' (1), 'Issuer-9b40d50c' (1), 'Bob-be94df5a' (1)\n      └─> 'Alice-eeafacc8' and 'Issuer-9b40d50c' create Intro.Asset:TransferProposal\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset with\n                                                        issuer = 'Issuer-9b40d50c';\n                                                        owner = 'Alice-eeafacc8';\n                                                        symbol = \"USD\";\n                                                        quantity = 10.0000000000;\n                                                        observers = ['Charlie-88aa034b']);\n                                                   newOwner = 'Bob-be94df5a'\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-eeafacc8'} readAs:\n                                            {} (Test.Intro.Asset:125:3)\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Bob-be94df5a'} readAs:\n                                          {} (Test.Intro.Asset:127:3)\n  \n  TX 4 1970-01-01T00:00:00Z (Test.Intro.Asset:129:18)\n  #4:0\n  │   disclosed to (since): 'Alice-eeafacc8' (4), 'Bob-be94df5a' (4),\n                            'Issuer-9b40d50c' (4)\n  └─> 'Bob-be94df5a' and 'Issuer-9b40d50c' exercise TransferProposal_Accept on #1:1 (Intro.Asset:TransferProposal)\n      children:\n      #4:1\n      │   disclosed to (since): 'Alice-eeafacc8' (4), 'Bob-be94df5a' (4),\n                                'Issuer-9b40d50c' (4), 'Charlie-88aa034b' (4)\n      └─> 'Alice-eeafacc8' and 'Issuer-9b40d50c' create Intro.Asset:Asset\n                                                 with\n                                                   issuer = 'Issuer-9b40d50c';\n                                                   owner = 'Alice-eeafacc8';\n                                                   symbol = \"USD\";\n                                                   quantity = 10.0000000000;\n                                                   observers = ['Charlie-88aa034b']\u001b[0m\n"
+        }
+      },
+      {
+        "id": "propose-transfer-to-self",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test/Intro/Asset.daml:setup": true,
+            "daml/Test/Intro/Asset.daml:test_approval_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_approval_visibility_and_creation": true,
+            "daml/Test/Intro/Asset.daml:test_create": true,
+            "daml/Test/Intro/Asset.daml:test_approval_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_approval_transfer": true,
+            "daml/Test/Intro/Asset.daml:test_merge": true,
+            "daml/Test/Intro/Asset.daml:test_merge_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_observers": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_accept": false,
+            "daml/Test/Intro/Asset.daml:test_proposal_cancel_reject": false,
+            "daml/Test/Intro/Asset.daml:test_split": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:33:29.59 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: bf:31:30:13:16:18:7b:a2'. Ignoring it.\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    115:1-115:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.GeneralError:GeneralError: Pattern match failure in do expression at daml/Test/Intro/Asset.daml:120:3-15\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'Alice-eeafacc8' (0),\n                            'Charlie-88aa034b' (0), 'Issuer-9b40d50c' (0)\n  └─> 'Alice-eeafacc8' and 'Issuer-9b40d50c' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-9b40d50c';\n                                               owner = 'Alice-eeafacc8';\n                                               symbol = \"USD\";\n                                               quantity = 10.0000000000;\n                                               observers = ['Charlie-88aa034b']\n  \n  TX 1 1970-01-01T00:00:00Z (Test.Intro.Asset:118:18)\n  #1:0\n  │   disclosed to (since): 'Alice-eeafacc8' (1),\n                            'Charlie-88aa034b' (1), 'Issuer-9b40d50c' (1)\n  └─> 'Alice-eeafacc8' exercises ProposeTransfer on #0:0 (Intro.Asset:Asset)\n                       with\n                         newOwner = 'Bob-be94df5a'\n      children:\n      #1:1\n      │   disclosed to (since): 'Alice-eeafacc8' (1),\n                                'Charlie-88aa034b' (1), 'Issuer-9b40d50c' (1)\n      └─> 'Alice-eeafacc8' and 'Issuer-9b40d50c' create Intro.Asset:TransferProposal\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset with\n                                                        issuer = 'Issuer-9b40d50c';\n                                                        owner = 'Alice-eeafacc8';\n                                                        symbol = \"USD\";\n                                                        quantity = 10.0000000000;\n                                                        observers = ['Charlie-88aa034b']);\n                                                   newOwner = 'Alice-eeafacc8'\u001b[0m\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    115:1-115:21\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.GeneralError:GeneralError: Pattern match failure in do expression at daml/Test/Intro/Asset.daml:120:3-15\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'Alice-eeafacc8' (0),\n                            'Charlie-88aa034b' (0), 'Issuer-9b40d50c' (0)\n  └─> 'Alice-eeafacc8' and 'Issuer-9b40d50c' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-9b40d50c';\n                                               owner = 'Alice-eeafacc8';\n                                               symbol = \"USD\";\n                                               quantity = 10.0000000000;\n                                               observers = ['Charlie-88aa034b']\n  \n  TX 1 1970-01-01T00:00:00Z (Test.Intro.Asset:118:18)\n  #1:0\n  │   disclosed to (since): 'Alice-eeafacc8' (1),\n                            'Charlie-88aa034b' (1), 'Issuer-9b40d50c' (1)\n  └─> 'Alice-eeafacc8' exercises ProposeTransfer on #0:0 (Intro.Asset:Asset)\n                       with\n                         newOwner = 'Bob-be94df5a'\n      children:\n      #1:1\n      │   disclosed to (since): 'Alice-eeafacc8' (1),\n                                'Charlie-88aa034b' (1), 'Issuer-9b40d50c' (1)\n      └─> 'Alice-eeafacc8' and 'Issuer-9b40d50c' create Intro.Asset:TransferProposal\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset with\n                                                        issuer = 'Issuer-9b40d50c';\n                                                        owner = 'Alice-eeafacc8';\n                                                        symbol = \"USD\";\n                                                        quantity = 10.0000000000;\n                                                        observers = ['Charlie-88aa034b']);\n                                                   newOwner = 'Alice-eeafacc8'\u001b[0m\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    136:1-136:28\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Test.Intro.Asset:151:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises TransferProposal_Reject on #4:1 (Intro.Asset:TransferProposal)\n    with\n  Sub-transactions:\n     0\n     └─> 'Alice-4fb68066' exercises TransferProposal_Reject on #4:1 (Intro.Asset:TransferProposal)\n         children:\n         1\n         └─> 'Alice-4fb68066' and 'Issuer-0b817840' create Intro.Asset:Asset\n                                                    with\n                                                      issuer = 'Issuer-0b817840';\n                                                      owner = 'Alice-4fb68066';\n                                                      symbol = \"USD\";\n                                                      quantity = 8.0000000000;\n                                                      observers = []\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'Alice-4fb68066' (0),\n                            'Charlie-15317cd8' (0), 'Issuer-0b817840' (0)\n  └─> 'Alice-4fb68066' and 'Issuer-0b817840' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-0b817840';\n                                               owner = 'Alice-4fb68066';\n                                               symbol = \"USD\";\n                                               quantity = 8.0000000000;\n                                               observers = ['Charlie-15317cd8']\n  \n  TX 1 1970-01-01T00:00:00Z (Test.Intro.Asset:139:16)\n  #1:0\n  │   disclosed to (since): 'Alice-4fb68066' (1),\n                            'Charlie-15317cd8' (1), 'Issuer-0b817840' (1)\n  └─> 'Alice-4fb68066' exercises ProposeTransfer on #0:0 (Intro.Asset:Asset)\n                       with\n                         newOwner = 'Bob-341244c2'\n      children:\n      #1:1\n      │   consumed by: #3:0\n      │   referenced by #3:0\n      │   disclosed to (since): 'Alice-4fb68066' (1),\n                                'Charlie-15317cd8' (1), 'Issuer-0b817840' (1)\n      └─> 'Alice-4fb68066' and 'Issuer-0b817840' create Intro.Asset:TransferProposal\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset with\n                                                        issuer = 'Issuer-0b817840';\n                                                        owner = 'Alice-4fb68066';\n                                                        symbol = \"USD\";\n                                                        quantity = 8.0000000000;\n                                                        observers = ['Charlie-15317cd8']);\n                                                   newOwner = 'Alice-4fb68066'\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Bob-341244c2'} readAs:\n                                          {} (Test.Intro.Asset:141:3)\n  \n  TX 3 1970-01-01T00:00:00Z (Test.Intro.Asset:143:18)\n  #3:0\n  │   disclosed to (since): 'Alice-4fb68066' (3),\n                            'Issuer-0b817840' (3)\n  └─> 'Alice-4fb68066' exercises TransferProposal_Cancel on #1:1 (Intro.Asset:TransferProposal)\n      children:\n      #3:1\n      │   consumed by: #4:0\n      │   referenced by #4:0\n      │   disclosed to (since): 'Alice-4fb68066' (3),\n                                'Issuer-0b817840' (3)\n      └─> 'Alice-4fb68066' and 'Issuer-0b817840' create Intro.Asset:Asset\n                                                 with\n                                                   issuer = 'Issuer-0b817840';\n                                                   owner = 'Alice-4fb68066';\n                                                   symbol = \"USD\";\n                                                   quantity = 8.0000000000;\n                                                   observers = []\n  \n  TX 4 1970-01-01T00:00:00Z (Test.Intro.Asset:149:16)\n  #4:0\n  │   disclosed to (since): 'Alice-4fb68066' (4),\n                            'Issuer-0b817840' (4)\n  └─> 'Alice-4fb68066' exercises ProposeTransfer on #3:1 (Intro.Asset:Asset)\n                       with\n                         newOwner = 'Bob-341244c2'\n      children:\n      #4:1\n      │   consumed by: #5:0\n      │   referenced by #5:0\n      │   disclosed to (since): 'Alice-4fb68066' (4),\n                                'Issuer-0b817840' (4)\n      └─> 'Alice-4fb68066' and 'Issuer-0b817840' create Intro.Asset:TransferProposal\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset with\n                                                        issuer = 'Issuer-0b817840';\n                                                        owner = 'Alice-4fb68066';\n                                                        symbol = \"USD\";\n                                                        quantity = 8.0000000000;\n                                                        observers = []);\n                                                   newOwner = 'Alice-4fb68066'\n  \n  TX 5 1970-01-01T00:00:00Z (Test.Intro.Asset:151:3)\n  #5:0\n  │   disclosed to (since): 'Alice-4fb68066' (5),\n                            'Issuer-0b817840' (5)\n  └─> 'Alice-4fb68066' exercises TransferProposal_Reject on #4:1 (Intro.Asset:TransferProposal)\n      children:\n      #5:1\n      │   disclosed to (since): 'Alice-4fb68066' (5),\n                                'Issuer-0b817840' (5)\n      └─> 'Alice-4fb68066' and 'Issuer-0b817840' create Intro.Asset:Asset\n                                                 with\n                                                   issuer = 'Issuer-0b817840';\n                                                   owner = 'Alice-4fb68066';\n                                                   symbol = \"USD\";\n                                                   quantity = 8.0000000000;\n                                                   observers = []\u001b[0m\n"
+        }
+      },
+      {
+        "id": "ensure-allows-zero",
+        "source": "llm",
+        "kind": "validation",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test/Intro/Asset.daml:setup": true,
+            "daml/Test/Intro/Asset.daml:test_approval_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_approval_visibility_and_creation": true,
+            "daml/Test/Intro/Asset.daml:test_create": false,
+            "daml/Test/Intro/Asset.daml:test_approval_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_approval_transfer": true,
+            "daml/Test/Intro/Asset.daml:test_merge": true,
+            "daml/Test/Intro/Asset.daml:test_merge_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_observers": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_accept": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_split": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:33:48.28 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 91:9a:d5:81:ab:83:4e:90'. Ignoring it.\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    22:1-22:12\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Test.Intro.Asset:25:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-005ae0b4' and 'Issuer-b4865538' create Intro.Asset:Asset\n                                                with\n                                                  issuer = 'Issuer-b4865538';\n                                                  owner = 'Alice-005ae0b4';\n                                                  symbol = \"USD\";\n                                                  quantity = 0.0000000000;\n                                                  observers = ['Charlie-901d787a']\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:25:3)\n  #0:0\n  │   disclosed to (since): 'Alice-005ae0b4' (0),\n                            'Charlie-901d787a' (0), 'Issuer-b4865538' (0)\n  └─> 'Alice-005ae0b4' and 'Issuer-b4865538' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-b4865538';\n                                               owner = 'Alice-005ae0b4';\n                                               symbol = \"USD\";\n                                               quantity = 0.0000000000;\n                                               observers = ['Charlie-901d787a']\u001b[0m\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    22:1-22:12\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Test.Intro.Asset:25:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'Alice-005ae0b4' and 'Issuer-b4865538' create Intro.Asset:Asset\n                                                with\n                                                  issuer = 'Issuer-b4865538';\n                                                  owner = 'Alice-005ae0b4';\n                                                  symbol = \"USD\";\n                                                  quantity = 0.0000000000;\n                                                  observers = ['Charlie-901d787a']\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:25:3)\n  #0:0\n  │   disclosed to (since): 'Alice-005ae0b4' (0),\n                            'Charlie-901d787a' (0), 'Issuer-b4865538' (0)\n  └─> 'Alice-005ae0b4' and 'Issuer-b4865538' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-b4865538';\n                                               owner = 'Alice-005ae0b4';\n                                               symbol = \"USD\";\n                                               quantity = 0.0000000000;\n                                               observers = ['Charlie-901d787a']\u001b[0m\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    44:1-44:11\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Test.Intro.Asset:47:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises Split on #0:0 (Intro.Asset:Asset)\n    with\n      splitQuantity = 0.0000000000\n  Sub-transactions:\n     0\n     └─> 'Alice-40730ba6' exercises Split on #0:0 (Intro.Asset:Asset)\n                          with\n                            splitQuantity = 0.0000000000\n         children:\n         1\n         └─> 'Alice-40730ba6' and 'Issuer-6a2eb974' create Intro.Asset:Asset\n                                                    with\n                                                      issuer = 'Issuer-6a2eb974';\n                                                      owner = 'Alice-40730ba6';\n                                                      symbol = \"USD\";\n                                                      quantity = 0.0000000000;\n                                                      observers = ['Bob-f2bc3c2d']\n         \n         2\n         └─> 'Alice-40730ba6' and 'Issuer-6a2eb974' create Intro.Asset:Asset\n                                                    with\n                                                      issuer = 'Issuer-6a2eb974';\n                                                      owner = 'Alice-40730ba6';\n                                                      symbol = \"USD\";\n                                                      quantity = 10.0000000000;\n                                                      observers = ['Bob-f2bc3c2d']\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'Alice-40730ba6' (0), 'Bob-f2bc3c2d' (0),\n                            'Issuer-6a2eb974' (0)\n  └─> 'Alice-40730ba6' and 'Issuer-6a2eb974' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-6a2eb974';\n                                               owner = 'Alice-40730ba6';\n                                               symbol = \"USD\";\n                                               quantity = 10.0000000000;\n                                               observers = ['Bob-f2bc3c2d']\n  \n  TX 1 1970-01-01T00:00:00Z (Test.Intro.Asset:47:3)\n  #1:0\n  │   disclosed to (since): 'Alice-40730ba6' (1), 'Bob-f2bc3c2d' (1),\n                            'Issuer-6a2eb974' (1)\n  └─> 'Alice-40730ba6' exercises Split on #0:0 (Intro.Asset:Asset)\n                       with\n                         splitQuantity = 0.0000000000\n      children:\n      #1:1\n      │   disclosed to (since): 'Alice-40730ba6' (1), 'Bob-f2bc3c2d' (1),\n                                'Issuer-6a2eb974' (1)\n      └─> 'Alice-40730ba6' and 'Issuer-6a2eb974' create Intro.Asset:Asset\n                                                 with\n                                                   issuer = 'Issuer-6a2eb974';\n                                                   owner = 'Alice-40730ba6';\n                                                   symbol = \"USD\";\n                                                   quantity = 0.0000000000;\n                                                   observers = ['Bob-f2bc3c2d']\n      \n      #1:2\n      │   disclosed to (since): 'Alice-40730ba6' (1), 'Bob-f2bc3c2d' (1),\n                                'Issuer-6a2eb974' (1)\n      └─> 'Alice-40730ba6' and 'Issuer-6a2eb974' create Intro.Asset:Asset\n                                                 with\n                                                   issuer = 'Issuer-6a2eb974';\n                                                   owner = 'Alice-40730ba6';\n                                                   symbol = \"USD\";\n                                                   quantity = 10.0000000000;\n                                                   observers = ['Bob-f2bc3c2d']\u001b[0m\n"
+        }
+      },
+      {
+        "id": "split-controlled-by-issuer",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test/Intro/Asset.daml:setup": true,
+            "daml/Test/Intro/Asset.daml:test_approval_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_approval_visibility_and_creation": true,
+            "daml/Test/Intro/Asset.daml:test_create": true,
+            "daml/Test/Intro/Asset.daml:test_approval_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_approval_transfer": true,
+            "daml/Test/Intro/Asset.daml:test_merge": true,
+            "daml/Test/Intro/Asset.daml:test_merge_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_observers": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_accept": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_split": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:34:06.01 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 48:64:0b:3c:b0:f9:7e:e5'. Ignoring it.\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    44:1-44:11\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Test.Intro.Asset:55:35:\n  0: exercise of Split in Intro.Asset:Asset at DA.Internal.Template.Functions:239:18\n     failed due to a missing authorization from 'Issuer-6a2eb974'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #0:0\n  │   disclosed to (since): 'Alice-40730ba6' (0), 'Bob-f2bc3c2d' (0),\n                            'Issuer-6a2eb974' (0)\n  └─> 'Alice-40730ba6' and 'Issuer-6a2eb974' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-6a2eb974';\n                                               owner = 'Alice-40730ba6';\n                                               symbol = \"USD\";\n                                               quantity = 10.0000000000;\n                                               observers = ['Bob-f2bc3c2d']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-40730ba6'} readAs:\n                                            {} (Test.Intro.Asset:47:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-40730ba6'} readAs:\n                                            {} (Test.Intro.Asset:49:3)\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-40730ba6'} readAs:\n                                            {} (Test.Intro.Asset:51:3)\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'Alice-40730ba6'} readAs:\n                                            {} (Test.Intro.Asset:53:3)\u001b[0m\n"
+        }
+      },
+      {
+        "id": "merge-controlled-by-issuer",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test/Intro/Asset.daml:setup": true,
+            "daml/Test/Intro/Asset.daml:test_approval_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_approval_visibility_and_creation": true,
+            "daml/Test/Intro/Asset.daml:test_create": true,
+            "daml/Test/Intro/Asset.daml:test_approval_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_approval_transfer": true,
+            "daml/Test/Intro/Asset.daml:test_merge": false,
+            "daml/Test/Intro/Asset.daml:test_merge_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_observers": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_accept": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_split": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:34:23.69 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 62:88:6b:07:87:8d:4c:6a'. Ignoring it.\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    64:1-64:11\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Test.Intro.Asset:68:16:\n  0: exercise of Merge in Intro.Asset:Asset at DA.Internal.Template.Functions:239:18\n     failed due to a missing authorization from 'Issuer-69871a3b'\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #0:0\n  │   disclosed to (since): 'Alice-b9cc619d' (0), 'Bob-fc139ac0' (0),\n                            'Issuer-69871a3b' (0)\n  └─> 'Alice-b9cc619d' and 'Issuer-69871a3b' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-69871a3b';\n                                               owner = 'Alice-b9cc619d';\n                                               symbol = \"USD\";\n                                               quantity = 4.2500000000;\n                                               observers = ['Bob-fc139ac0']\n  \n  TX 1 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #1:0\n  │   disclosed to (since): 'Alice-b9cc619d' (1),\n                            'Issuer-69871a3b' (1)\n  └─> 'Alice-b9cc619d' and 'Issuer-69871a3b' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-69871a3b';\n                                               owner = 'Alice-b9cc619d';\n                                               symbol = \"USD\";\n                                               quantity = 5.7500000000;\n                                               observers = []\u001b[0m\n"
+        }
+      },
+      {
+        "id": "merge-ignores-other-quantity",
+        "source": "llm",
+        "kind": "arithmetic",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test/Intro/Asset.daml:setup": true,
+            "daml/Test/Intro/Asset.daml:test_approval_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_approval_visibility_and_creation": true,
+            "daml/Test/Intro/Asset.daml:test_create": true,
+            "daml/Test/Intro/Asset.daml:test_approval_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_approval_transfer": true,
+            "daml/Test/Intro/Asset.daml:test_merge": false,
+            "daml/Test/Intro/Asset.daml:test_merge_mismatch": true,
+            "daml/Test/Intro/Asset.daml:test_observers": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_accept": true,
+            "daml/Test/Intro/Asset.daml:test_proposal_cancel_reject": true,
+            "daml/Test/Intro/Asset.daml:test_split": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:34:39.10 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 68:53:42:97:d7:24:34:7b'. Ignoring it.\nFile:     daml/Test/Intro/Asset.daml\nHidden:   no\nRange:    64:1-64:11\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'Alice-b9cc619d' (0), 'Bob-fc139ac0' (0),\n                            'Issuer-69871a3b' (0)\n  └─> 'Alice-b9cc619d' and 'Issuer-69871a3b' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-69871a3b';\n                                               owner = 'Alice-b9cc619d';\n                                               symbol = \"USD\";\n                                               quantity = 4.2500000000;\n                                               observers = ['Bob-fc139ac0']\n  \n  TX 1 1970-01-01T00:00:00Z (Test.Intro.Asset:14:3)\n  #1:0\n  │   consumed by: #2:2\n  │   referenced by #2:1, #2:2\n  │   disclosed to (since): 'Alice-b9cc619d' (1),\n                            'Issuer-69871a3b' (1)\n  │   divulged to (since): 'Bob-fc139ac0' (2)\n  └─> 'Alice-b9cc619d' and 'Issuer-69871a3b' create Intro.Asset:Asset\n                                             with\n                                               issuer = 'Issuer-69871a3b';\n                                               owner = 'Alice-b9cc619d';\n                                               symbol = \"USD\";\n                                               quantity = 5.7500000000;\n                                               observers = []\n  \n  TX 2 1970-01-01T00:00:00Z (Test.Intro.Asset:68:16)\n  #2:0\n  │   disclosed to (since): 'Alice-b9cc619d' (2), 'Bob-fc139ac0' (2),\n                            'Issuer-69871a3b' (2)\n  └─> 'Alice-b9cc619d' exercises Merge on #0:0 (Intro.Asset:Asset)\n                       with\n                         otherCid = #1:0\n      children:\n      #2:1\n      │   disclosed to (since): 'Alice-b9cc619d' (2), 'Bob-fc139ac0' (2),\n                                'Issuer-69871a3b' (2)\n      └─> 'Alice-b9cc619d' and 'Issuer-69871a3b' fetch #1:0 (Intro.Asset:Asset)\n      \n      #2:2\n      │   disclosed to (since): 'Alice-b9cc619d' (2), 'Bob-fc139ac0' (2),\n                                'Issuer-69871a3b' (2)\n      └─> 'Alice-b9cc619d' and 'Issuer-69871a3b' exercise Archive on #1:0 (Intro.Asset:Asset)\n      \n      #2:3\n      │   disclosed to (since): 'Alice-b9cc619d' (2), 'Bob-fc139ac0' (2),\n                                'Issuer-69871a3b' (2)\n      └─> 'Alice-b9cc619d' and 'Issuer-69871a3b' create Intro.Asset:Asset\n                                                 with\n                                                   issuer = 'Issuer-69871a3b';\n                                                   owner = 'Alice-b9cc619d';\n                                                   symbol = \"USD\";\n                                                   quantity = 4.2500000000;\n                                                   observers = ['Bob-fc139ac0']\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 7,
+    "real_bugs_total": 1
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Test/Intro/Asset.daml:test_split": true,
+        "daml/Test/Intro/Asset.daml:test_merge": true,
+        "daml/Test/Intro/Asset.daml:test_asset": true,
+        "daml/Test/Intro/Asset/Role.daml:setupRoles": true,
+        "daml/Test/Intro/Asset/Role.daml:test_issuance": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:39:53.399012+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/daml_____smrj56im/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 8,
+    "bytes_scanned": 10296,
+    "elapsed_seconds": 0.003,
+    "repo_copy_digest": "e227ee5f8ad76540f59c1a6eb17d21cb4e37d8e10e5d354561cf97738524224d",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml",
+      "path_in_copy": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml",
+      "original": "-- Copyright (c) 2025 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\nmodule Test.Intro.Asset where\n\nimport Daml.Script\n\nimport Intro.Asset\nimport Intro.Asset.Role\n\nimport Test.Intro.Asset.Role\n\ntest_asset = do\n  ((alice, bob, bank, aha, ahb), assetCid) <- test_issuance\n\n  tp <- submit alice do\n    exerciseCmd assetCid ProposeTransfer with\n      newOwner = bob\n\n  assetCid <- submit bob do\n    exerciseCmd ahb Accept_Transfer with\n      transferProposalCid = tp\n\n  Some asset <- queryContractId bank assetCid\n  assert (asset == Asset with\n      issuer = bank\n      owner = bob\n      symbol = \"USD\"\n      quantity = 100.0\n      observers = []\n        )\n\ntest_split = do\n  (setupResult@(alice, bob, bank, _, _), assetCid) <- test_issuance\n\n  submitMustFail alice do\n    exerciseCmd assetCid Split with\n      splitQuantity = -30.0\n\n  submitMustFail alice do\n    exerciseCmd assetCid Split with\n      splitQuantity = 0.0\n\n  submitMustFail alice do\n    exerciseCmd assetCid Split with\n      splitQuantity = 101.0\n\n  splitResult <- submit alice do\n    exerciseCmd assetCid Split with\n      splitQuantity = 30.0\n\n  Some splitAsset <- queryContractId bank splitResult.splitAsset\n  Some remainder <- queryContractId bank splitResult.remainder\n\n  assert (splitAsset.quantity == 30.0)\n  assert (remainder.quantity == 70.0)\n\n  return (setupResult, splitResult)\n\ntest_merge = do\n  ((alice, bob, bank, _, _), splitResult) <- test_split\n\n  submitMustFail alice do\n    exerciseCmd splitResult.splitAsset Merge with\n      otherCid = splitResult.splitAsset\n\n  assetCid <- submit alice do\n    exerciseCmd splitResult.splitAsset Merge with\n      otherCid = splitResult.remainder\n\n  Some asset <- queryContractId bank assetCid\n  assert (asset.quantity == 100.0)\n",
+      "generated": "module Test.Intro.Asset where\n\nimport Daml.Script\nimport Intro.Asset\n\nsetup = do\n  issuer <- allocateParty \"Issuer\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  charlie <- allocateParty \"Charlie\"\n  return (issuer, alice, bob, charlie)\n\nmakeAsset issuer owner symbol quantity observers =\n  submit [issuer, owner] do\n    createCmd Asset with\n      issuer\n      owner\n      symbol\n      quantity\n      observers\n\ntest_create = do\n  (issuer, alice, bob, charlie) <- setup\n  let asset = Asset issuer alice \"USD\" 10.0 [charlie]\n  submitMustFail [issuer, alice] do\n    createCmd asset with quantity = 0.0\n  submitMustFail [issuer, alice] do\n    createCmd asset with quantity = -1.0\n  submitMustFail alice do\n    createCmd asset\n  submitMustFail issuer do\n    createCmd asset\n  assetCid <- submit [issuer, alice] do\n    createCmd asset\n  Some actual <- queryContractId charlie assetCid\n  assert (actual == asset)\n  unseen <- queryContractId bob assetCid\n  assert (unseen == None)\n  submitMustFail bob do\n    exerciseCmd assetCid Split with splitQuantity = 2.0\n  submitMustFail issuer do\n    exerciseCmd assetCid SetObservers with newObservers = [bob]\n\ntest_split = do\n  (issuer, alice, bob, _) <- setup\n  assetCid <- makeAsset issuer alice \"USD\" 10.0 [bob]\n  submitMustFail alice do\n    exerciseCmd assetCid Split with splitQuantity = 0.0\n  submitMustFail alice do\n    exerciseCmd assetCid Split with splitQuantity = 10.0\n  submitMustFail alice do\n    exerciseCmd assetCid Split with splitQuantity = -1.0\n  submitMustFail alice do\n    exerciseCmd assetCid Split with splitQuantity = 11.0\n  SplitResult splitCid restCid <- submit alice do\n    exerciseCmd assetCid Split with splitQuantity = 3.25\n  Some splitAsset <- queryContractId bob splitCid\n  Some remainder <- queryContractId bob restCid\n  assert (splitAsset == Asset issuer alice \"USD\" 3.25 [bob])\n  assert (remainder == Asset issuer alice \"USD\" 6.75 [bob])\n  old <- queryContractId alice assetCid\n  assert (old == None)\n\ntest_merge = do\n  (issuer, alice, bob, _) <- setup\n  firstCid <- makeAsset issuer alice \"USD\" 4.25 [bob]\n  secondCid <- makeAsset issuer alice \"USD\" 5.75 []\n  mergedCid <- submit alice do\n    exerciseCmd firstCid Merge with otherCid = secondCid\n  Some merged <- queryContractId bob mergedCid\n  assert (merged == Asset issuer alice \"USD\" 10.0 [bob])\n  first <- queryContractId alice firstCid\n  second <- queryContractId alice secondCid\n  assert (first == None && second == None)\n  submitMustFail alice do\n    exerciseCmd mergedCid Merge with otherCid = mergedCid\n\ntest_merge_mismatch = do\n  (issuer, alice, bob, _) <- setup\n  otherIssuer <- allocateParty \"OtherIssuer\"\n  firstCid <- makeAsset issuer alice \"USD\" 4.0 []\n  wrongIssuer <- makeAsset otherIssuer alice \"USD\" 2.0 []\n  wrongOwner <- makeAsset issuer bob \"USD\" 2.0 [alice]\n  wrongSymbol <- makeAsset issuer alice \"EUR\" 2.0 []\n  submitMustFail [alice, otherIssuer] do\n    exerciseCmd firstCid Merge with otherCid = wrongIssuer\n  submitMustFail [alice, bob] do\n    exerciseCmd firstCid Merge with otherCid = wrongOwner\n  submitMustFail alice do\n    exerciseCmd firstCid Merge with otherCid = wrongSymbol\n  Some first <- queryContractId alice firstCid\n  Some other <- queryContractId alice wrongIssuer\n  Some ownedByBob <- queryContractId bob wrongOwner\n  Some euros <- queryContractId alice wrongSymbol\n  assert (first.quantity == 4.0 && other.quantity == 2.0)\n  assert (ownedByBob.owner == bob && euros.symbol == \"EUR\")\n\ntest_observers = do\n  (issuer, alice, bob, charlie) <- setup\n  oldCid <- makeAsset issuer alice \"USD\" 10.0 [charlie]\n  updatedCid <- submit alice do\n    exerciseCmd oldCid SetObservers with newObservers = [bob]\n  Some updated <- queryContractId bob updatedCid\n  assert (updated == Asset issuer alice \"USD\" 10.0 [bob])\n  removed <- queryContractId charlie updatedCid\n  old <- queryContractId alice oldCid\n  assert (removed == None && old == None)\n  clearedCid <- submit alice do\n    exerciseCmd updatedCid SetObservers with newObservers = []\n  Some cleared <- queryContractId alice clearedCid\n  assert (cleared == Asset issuer alice \"USD\" 10.0 [])\n  noLongerObserved <- queryContractId bob clearedCid\n  assert (noLongerObserved == None)\n\ntest_proposal_accept = do\n  (issuer, alice, bob, charlie) <- setup\n  oldCid <- makeAsset issuer alice \"USD\" 10.0 [charlie]\n  proposalCid <- submit alice do\n    exerciseCmd oldCid ProposeTransfer with newOwner = bob\n  Some proposal <- queryContractId bob proposalCid\n  assert (proposal.asset == Asset issuer alice \"USD\" 10.0 [charlie])\n  assert (proposal.newOwner == bob)\n  old <- queryContractId alice oldCid\n  assert (old == None)\n  submitMustFail alice do\n    exerciseCmd proposalCid TransferProposal_Accept\n  submitMustFail bob do\n    exerciseCmd proposalCid TransferProposal_Accept\n  acceptedCid <- submit [issuer, bob] do\n    exerciseCmd proposalCid TransferProposal_Accept\n  Some accepted <- queryContractId bob acceptedCid\n  assert (accepted == Asset issuer bob \"USD\" 10.0 [charlie])\n  consumed <- queryContractId bob proposalCid\n  assert (consumed == None)\n\ntest_proposal_cancel_reject = do\n  (issuer, alice, bob, charlie) <- setup\n  oldCid <- makeAsset issuer alice \"USD\" 8.0 [charlie]\n  cancelCid <- submit alice do\n    exerciseCmd oldCid ProposeTransfer with newOwner = bob\n  submitMustFail bob do\n    exerciseCmd cancelCid TransferProposal_Cancel\n  restoredCid <- submit alice do\n    exerciseCmd cancelCid TransferProposal_Cancel\n  Some restored <- queryContractId alice restoredCid\n  assert (restored == Asset issuer alice \"USD\" 8.0 [])\n  gone <- queryContractId alice cancelCid\n  assert (gone == None)\n  rejectCid <- submit alice do\n    exerciseCmd restoredCid ProposeTransfer with newOwner = bob\n  submitMustFail alice do\n    exerciseCmd rejectCid TransferProposal_Reject\n  rejectedCid <- submit bob do\n    exerciseCmd rejectCid TransferProposal_Reject\n  Some rejected <- queryContractId alice rejectedCid\n  assert (rejected == Asset issuer alice \"USD\" 8.0 [])\n  gone <- queryContractId bob rejectCid\n  assert (gone == None)\n\ntest_approval_transfer = do\n  (issuer, alice, bob, charlie) <- setup\n  let approved = Asset issuer alice \"USD\" 10.0 []\n  approvalCid <- submit issuer do\n    createCmd TransferApproval with asset = approved; newOwner = bob\n  assetCid <- makeAsset issuer alice \"USD\" 10.0 [charlie]\n  submitMustFail alice do\n    exerciseCmd approvalCid TransferApproval_Transfer with assetCid\n  submitMustFail bob do\n    exerciseCmd approvalCid TransferApproval_Transfer with assetCid\n  transferredCid <- submit [alice, bob] do\n    exerciseCmd approvalCid TransferApproval_Transfer with assetCid\n  Some transferred <- queryContractId bob transferredCid\n  assert (transferred == Asset issuer bob \"USD\" 10.0 [])\n  old <- queryContractId alice assetCid\n  used <- queryContractId issuer approvalCid\n  assert (old == None && used == None)\n\ntest_approval_mismatch = do\n  (issuer, alice, bob, _) <- setup\n  otherIssuer <- allocateParty \"OtherIssuer\"\n  let approved = Asset issuer alice \"USD\" 10.0 []\n  approvalCid <- submit issuer do\n    createCmd TransferApproval with asset = approved; newOwner = bob\n  wrongQuantity <- makeAsset issuer alice \"USD\" 11.0 []\n  wrongSymbol <- makeAsset issuer alice \"EUR\" 10.0 []\n  wrongIssuer <- makeAsset otherIssuer alice \"USD\" 10.0 []\n  wrongOwner <- makeAsset issuer bob \"USD\" 10.0 [alice]\n  submitMustFail [alice, bob] do\n    exerciseCmd approvalCid TransferApproval_Transfer with assetCid = wrongQuantity\n  submitMustFail [alice, bob] do\n    exerciseCmd approvalCid TransferApproval_Transfer with assetCid = wrongSymbol\n  submitMustFail [otherIssuer, alice, bob] do\n    exerciseCmd approvalCid TransferApproval_Transfer with assetCid = wrongIssuer\n  submitMustFail [alice, bob] do\n    exerciseCmd approvalCid TransferApproval_Transfer with assetCid = wrongOwner\n  correctCid <- makeAsset issuer alice \"USD\" 10.0 []\n  transferredCid <- submit [alice, bob] do\n    exerciseCmd approvalCid TransferApproval_Transfer with assetCid = correctCid\n  Some transferred <- queryContractId bob transferredCid\n  assert (transferred.owner == bob)\n\ntest_approval_cancel_reject = do\n  (issuer, alice, bob, _) <- setup\n  let asset = Asset issuer alice \"USD\" 10.0 []\n  cancelCid <- submit issuer do\n    createCmd TransferApproval with asset; newOwner = bob\n  submitMustFail bob do\n    exerciseCmd cancelCid TransferApproval_Cancel\n  submit alice do\n    exerciseCmd cancelCid TransferApproval_Cancel\n  cancelled <- queryContractId issuer cancelCid\n  assert (cancelled == None)\n  rejectCid <- submit issuer do\n    createCmd TransferApproval with asset; newOwner = bob\n  submitMustFail alice do\n    exerciseCmd rejectCid TransferApproval_Reject\n  submit bob do\n    exerciseCmd rejectCid TransferApproval_Reject\n  rejected <- queryContractId issuer rejectCid\n  assert (rejected == None)\n\ntest_approval_visibility_and_creation = do\n  (issuer, alice, bob, charlie) <- setup\n  let asset = Asset issuer alice \"USD\" 1.0 []\n  submitMustFail alice do\n    createCmd TransferApproval with asset; newOwner = bob\n  submitMustFail bob do\n    createCmd TransferApproval with asset; newOwner = bob\n  approvalCid <- submit issuer do\n    createCmd TransferApproval with asset; newOwner = bob\n  Some ownerView <- queryContractId alice approvalCid\n  Some recipientView <- queryContractId bob approvalCid\n  assert (ownerView.asset == asset && recipientView.newOwner == bob)\n  outsiderView <- queryContractId charlie approvalCid\n  assert (outsiderView == None)\n  submitMustFail charlie do\n    exerciseCmd approvalCid TransferApproval_Cancel\n",
+      "captured_at_utc": "2026-10-02T16:34:47.862044+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/daml_____smrj56im",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added Daml Script tests in `sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml:1`. They cover asset creation, split and merge boundaries, observer changes, transfer proposals and approvals, authorization, and mismatched-asset rejection.\n\nAll tests pass with `daml test --files daml/Test/Intro/Asset.daml`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 161.02111779199913,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 332140,
+      "output_tokens": 8979,
+      "cached_input_tokens": 309841
+    },
+    "usage_by_thread": {
+      "01a0fd73-5f21-7ca2-acda-089ad029ce9c": {
+        "usage": {
+          "input_tokens": 332140,
+          "output_tokens": 8979,
+          "cached_input_tokens": 309841
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.19635619999999998,
+    "input_usd": 0.044598000000000006,
+    "cached_input_usd": 0.0619682,
+    "output_usd": 0.08978999999999998,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790958595.113,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958598.807,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958601.373,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958606.856,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958641.148,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958646.173,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958650.953,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958671.644,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958674.61,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958680.965,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958687.377,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958701.839,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958704.315,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958710.76,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958724.649,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958727.096,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958733.532,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958740.021,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958743.437,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958745.795,
+          "client": "10.219.98.226",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-compose/daml/Test/Intro/Asset.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

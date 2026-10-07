@@ -832,16 +832,158 @@ body {
 }
 
 /* The label over the outcome columns overflows its header cell, so that cell is drawn
-   above its sticky neighbours. */
+   above its sticky neighbours. The cell's height sets the header row's least height: room
+   for the label above the centred headers, mirrored below, so it never rises past the
+   row's top however short the other headers are. */
 .ant-table-wrapper .ant-table-thead > tr > th.run-col-group-label-host {
+  --run-group-label-lift: 16px;
+  height: calc(2 * (var(--run-group-label-lift) + 1lh) + 8px);
   overflow: visible;
   z-index: 4 !important;
 }
 .run-col-group-label {
   position: absolute;
   left: 0;
-  bottom: calc(50% + 16px);
+  bottom: calc(50% + var(--run-group-label-lift));
   text-align: center;
   font-weight: 600;
   pointer-events: none;
+}
+
+/* A test-generation cell: mutants caught over the task's mutants, tinted by the share. */
+/* Caught over total, stacked so the count fits the narrowest task column. */
+.agent-matrix-catch {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 1.8em;
+  padding: 1px 2px;
+  border-radius: 3px;
+  font-size: 10px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.agent-matrix-catch-total {
+  border-top: 1px solid currentColor;
+}
+
+/* The mutant-by-script matrix in the task view. */
+.agent-mutant-matrix-summary { margin-bottom: 8px; }
+.agent-mutant-matrix-scroll { overflow-x: auto; }
+.agent-mutant-matrix table { border-collapse: collapse; font-size: 12px; }
+.agent-mutant-matrix th, .agent-mutant-matrix td { padding: 3px 8px; border-bottom: 1px solid #f0f0f0; text-align: center; white-space: nowrap; }
+.agent-mutant-matrix th:first-child, .agent-mutant-matrix td:first-child { text-align: left; }
+.agent-mutant-matrix-correct td { background: #fafafa; font-style: italic; }
+
+/* The mutation catalogue: a summary strip, then the task index on the left and the chosen
+   task's mutations on the right; one column on narrow screens. */
+.mc-wrap {
+  --mc-line: #e2e8f0;
+  --mc-muted: #64748b;
+  --mc-accent: #1677ff;
+  --mc-accent-soft: #e6f4ff;
+  --mc-warn: #d46b08;
+  --mc-warn-soft: #fff7e6;
+  --mc-hunk: #eef2f7;
+  --mc-code: #f6f8fa;
+  --mc-add: #e6f4ea;
+  --mc-del: #fbe9e9;
+  --mc-add-strong: #b9e3c6;
+  --mc-del-strong: #f3c4c4;
+  --mc-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+  display: grid;
+  gap: 16px;
+}
+.mc-header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.mc-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; }
+.mc-stat { color: var(--mc-muted); }
+.mc-stat b { color: #0f172a; font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; margin-right: 4px; }
+.mc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mc-sources { padding-right: 16px; border-right: 1px solid var(--mc-line); }
+.mc-kinds { flex: 1 1 320px; justify-content: flex-end; }
+.mc-chip.ant-tag-checkable { margin: 0; border: 1px solid var(--mc-line); border-radius: 999px; padding: 1px 10px; font-variant-numeric: tabular-nums; }
+.mc-chip.ant-tag-checkable-checked { background: var(--mc-accent-soft); border-color: var(--mc-accent); color: var(--mc-accent); }
+.mc-chip.mc-chip-real.ant-tag-checkable-checked { background: var(--mc-warn-soft); border-color: var(--mc-warn); color: var(--mc-warn); }
+
+.mc-main { display: grid; grid-template-columns: minmax(180px, 230px) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .mc-main { grid-template-columns: minmax(0, 1fr); } }
+.mc-col-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--mc-line); }
+.mc-col-head h2 { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.mc-n { color: var(--mc-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.mc-task > .mc-col-head { padding: 0 2px; border: 0; }
+.mc-repo { font-size: 11px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--mc-muted); }
+
+.mc-index { position: sticky; top: 16px; background: #fff; border: 1px solid #f0f0f0; border-radius: 8px; overflow: hidden; }
+.mc-search { border-bottom: 1px solid var(--mc-line); border-radius: 0; padding: 8px 12px; }
+.mc-index ul { list-style: none; margin: 0; padding: 0; max-height: 70vh; overflow-y: auto; }
+.mc-index li button { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--mc-line); }
+.mc-index li button:hover { background: var(--mc-hunk); }
+.mc-index li button:focus-visible { outline: 2px solid var(--mc-accent); outline-offset: -2px; }
+.mc-index li button[aria-current="true"] { background: var(--mc-accent-soft); box-shadow: inset 3px 0 0 var(--mc-accent); }
+.mc-short { font-size: 14px; font-weight: 500; overflow-wrap: break-word; grid-column: 1; }
+.mc-count { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--mc-muted); }
+
+.mc-task { display: grid; gap: 12px; min-width: 0; }
+.mc-task-head { display: grid; gap: 2px; }
+.mc-task-short { font-size: 16px; font-weight: 600; overflow-wrap: break-word; }
+.mc-task-path { font: 12px var(--mc-mono); color: var(--mc-muted); overflow-wrap: anywhere; }
+.mc-mut { background: #fff; border: 1px solid #f0f0f0; border-radius: 8px; min-width: 0; }
+.mc-mut summary { list-style: none; cursor: pointer; padding: 10px 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline; }
+.mc-mut summary::-webkit-details-marker { display: none; }
+.mc-mut[open] summary { border-bottom: 1px solid var(--mc-line); }
+.mc-mut-id { font: 500 13px var(--mc-mono); overflow-wrap: anywhere; }
+.mc-mut-reason { grid-column: 1 / -1; }
+.mc-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.mc-tags .ant-tag { margin: 0; }
+.mc-detail { padding: 12px 16px; display: grid; gap: 10px; min-width: 0; }
+.mc-meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; margin: 0; font-size: 13px; }
+.mc-meta dt { color: var(--mc-muted); }
+.mc-meta dd { margin: 0; font: 12px var(--mc-mono); overflow-wrap: anywhere; }
+
+.mc-diff { border: 1px solid var(--mc-line); border-radius: 6px; font: 12px/1.45 var(--mc-mono); overflow: hidden; background: var(--mc-code); }
+.mc-file-line { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 4px 10px; color: var(--mc-muted); background: var(--mc-hunk); border-bottom: 1px solid var(--mc-line); overflow-wrap: anywhere; }
+.mc-sbs + .mc-file-line { border-top: 1px solid var(--mc-line); }
+.mc-hunk { padding: 2px 10px; color: var(--mc-muted); background: var(--mc-hunk); overflow-wrap: anywhere; white-space: pre-wrap; }
+.mc-sbs { display: grid; grid-template-columns: 3.2em minmax(0, 1fr) 3.2em minmax(0, 1fr); }
+.mc-sbs > span { padding: 0 8px; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
+/* A wrapped line hangs under its first characters, so it does not read as a new line. */
+.mc-sbs > span:not(.mc-ln) { padding-left: calc(8px + 4ch); text-indent: -4ch; }
+.mc-sbs .mc-ln { color: var(--mc-muted); text-align: right; padding: 0 6px; user-select: none; font-variant-numeric: tabular-nums; opacity: .7; }
+.mc-sbs .mc-del { background: var(--mc-del); }
+.mc-sbs .mc-add { background: var(--mc-add); }
+.mc-sbs .mc-del .mc-x { background: var(--mc-del-strong); border-radius: 2px; }
+.mc-sbs .mc-add .mc-x { background: var(--mc-add-strong); border-radius: 2px; }
+.mc-sbs .mc-gap { background: var(--mc-hunk); }
+.mc-sbs .mc-old { border-right: 1px solid var(--mc-line); }
+@media (max-width: 700px) { .mc-sbs { grid-template-columns: 2.6em minmax(0, 1fr) 2.6em minmax(0, 1fr); font-size: 11px; } }
+.mc-empty { color: var(--mc-muted); padding: 24px 16px; text-align: center; background: #fff; border: 1px dashed var(--mc-line); border-radius: 8px; }
+.mc-index .mc-empty { border: 0; border-radius: 0; }
+.mc-note { font-size: 12px; }
+
+/* Task columns fitted below their contents' width: no padding, and a block of the cell's colour. */
+.agent-matrix-compact .agent-matrix-status-cell,
+.agent-matrix-compact .agent-matrix-status-header {
+  padding: 0 !important;
+}
+.agent-matrix-compact-fill {
+  display: block;
+  height: 22px;
+}
+.agent-matrix-compact .agent-matrix-status-header::before {
+  display: none;
+}
+/* The empty header label still carries the task's tooltip, so it fills the header cell. */
+.agent-matrix-compact .agent-matrix-header {
+  width: 100%;
+  height: 72px;
+}
+/* Without their contents, neighbouring cells of one colour would merge; a thin edge keeps them apart. */
+.agent-matrix-compact .ant-table-tbody > tr > td.agent-matrix-status-cell,
+.agent-matrix-compact .agent-matrix-status-header {
+  border-right: 1px solid rgba(0, 0, 0, 0.15) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+.agent-matrix-compact .ant-table-tbody > tr > td.agent-matrix-status-cell-start,
+.agent-matrix-compact .agent-matrix-status-header-start {
+  border-left: 1px solid rgba(0, 0, 0, 0.15) !important;
 }

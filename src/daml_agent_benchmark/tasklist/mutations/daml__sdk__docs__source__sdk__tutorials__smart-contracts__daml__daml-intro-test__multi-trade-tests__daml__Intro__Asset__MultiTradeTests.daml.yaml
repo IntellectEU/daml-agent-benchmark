@@ -1,0 +1,57 @@
+task: daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade-tests/daml/Intro/Asset/MultiTradeTests.daml
+notes: "The only script is testMultiTrade, a happy-path settlement, so mutations must break the successful flow."
+mutations:
+  - id: settle-controller-base-owner
+    source: llm
+    target_script: testMultiTrade
+    kind: authorization
+    reason: The controller of Trade_Settle is the base owner who created the trade instead of the quote owner who accepts it.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      index 04f6ba1..2ba2c3f 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      @@ -47,7 +47,7 @@ template MultiTrade
+             with
+               quoteAssetCids : [ContractId Asset]
+               baseApprovalCids : [ContractId TransferApproval]
+      -      controller quoteOwner this
+      +      controller baseOwner this
+             do
+               assertMsg
+                 "Wrong number of quoteAssetCids"
+  - id: swapped-settle-result
+    source: llm
+    target_script: testMultiTrade
+    kind: field
+    reason: Trade_Settle returns the transferred quote contracts first and the base contracts second, the reverse of the declared order.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      index 04f6ba1..40d5689 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      @@ -76,4 +76,4 @@ template MultiTrade
+               transferredQuoteCids <- mapA transfer (zip quoteAssetCids quoteApprovalCids)
+       -- LOCAL_FUNCTIONS_END
+       
+      -        return (transferredBaseCids, transferredQuoteCids)
+      +        return (transferredQuoteCids, transferredBaseCids)
+  - id: quote-transfer-wrong-approvals
+    source: llm
+    target_script: testMultiTrade
+    kind: lookup
+    reason: The quote assets are transferred with the base approvals instead of the quote approvals.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      index 04f6ba1..c2cd84f 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade/daml/Intro/Asset/MultiTrade.daml
+      @@ -73,7 +73,7 @@ template MultiTrade
+                   exercise approvalCid TransferApproval_Transfer with assetCid
+       
+               transferredBaseCids <- mapA transfer (zip baseAssetCids baseApprovalCids)
+      -        transferredQuoteCids <- mapA transfer (zip quoteAssetCids quoteApprovalCids)
+      +        transferredQuoteCids <- mapA transfer (zip quoteAssetCids baseApprovalCids)
+       -- LOCAL_FUNCTIONS_END
+       
+               return (transferredBaseCids, transferredQuoteCids)

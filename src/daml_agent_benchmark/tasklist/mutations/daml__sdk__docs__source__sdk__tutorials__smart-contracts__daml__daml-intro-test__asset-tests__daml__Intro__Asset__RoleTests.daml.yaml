@@ -1,0 +1,45 @@
+task: daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/Asset/RoleTests.daml
+notes: "The only script is test_issuance; all mutations are in Issue_Asset."
+# The sibling multi-trade-tests package's TradeSetup.daml repeats setupRoles and test_issuance
+# word for word, so the copy leaves that package out.
+hidden_from_copy:
+  - sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/multi-trade-tests
+mutations:
+  - id: issue-controller-owner
+    source: llm
+    target_script: test_issuance
+    kind: authorization
+    reason: The Issue_Asset choice is given to the holder (owner) as controller instead of the issuer, so the issuer can no longer issue.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml
+      index d25dcda..ce8d219 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml
+      @@ -39,7 +39,7 @@ template AssetHolder
+             with
+               symbol : Text
+               quantity : Decimal
+      -      controller issuer
+      +      controller owner
+             do
+               create Asset with
+                 issuer
+  - id: issue-owner-is-issuer
+    source: llm
+    target_script: test_issuance
+    kind: field
+    reason: The issued asset is created with the issuer as its owner instead of the holder's owner.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml
+      index d25dcda..daf3027 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml
+      @@ -43,7 +43,7 @@ template AssetHolder
+             do
+               create Asset with
+                 issuer
+      -          owner
+      +          owner = issuer
+                 symbol
+                 quantity
+                 observers = []

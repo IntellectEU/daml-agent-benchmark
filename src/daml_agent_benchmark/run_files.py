@@ -13,9 +13,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from daml_agent_benchmark.config import ExperimentConfig
-from daml_agent_benchmark.records import ImplFileSnapshot, now_utc, repo_relative, task_file_name, task_live_events_path
+from daml_agent_benchmark.records import AnswerFileSnapshot, now_utc, repo_relative, task_live_events_path
 from daml_agent_benchmark.run_identity import build_uuid_run_identity, default_agent_run_name
-from daml_agent_benchmark.locations import locations
+from daml_agent_benchmark.locations import locations, task_file_name
 from daml_agent_benchmark.tasklist_catalog import repo_relative_id
 
 
@@ -68,25 +68,25 @@ def safe_read_text(path: str | Path) -> str | None:
         return None
 
 
-def read_impl_original_snapshots(impl_files: list[str]) -> dict[str, str | None]:
-    """The implementation files as the source repository has them, read before the task blanks them.
+def read_answer_original_snapshots(answer_files: list[str]) -> dict[str, str | None]:
+    """The answer files as the source repository has them, read before the task blanks them.
 
-    This is the ground truth half of `build_impl_file_snapshots`, taken while it is still
+    This is the ground truth half of `build_answer_file_snapshots`, taken while it is still
     on disk. A file that cannot be read is recorded as None rather than as empty.
     """
     snapshots: dict[str, str | None] = {}
-    for impl_file in impl_files:
-        snapshots[str(impl_file)] = safe_read_text(impl_file)
+    for answer_file in answer_files:
+        snapshots[str(answer_file)] = safe_read_text(answer_file)
     return snapshots
 
 
-def build_impl_file_snapshots(
-    impl_files: list[str],
-    repo_copy_impl_files: list[str],
+def build_answer_file_snapshots(
+    answer_files: list[str],
+    repo_copy_answer_files: list[str],
     repo_copy_root: str,
     original_snapshots: dict[str, str | None],
-) -> list[ImplFileSnapshot]:
-    """Each implementation file as it was before the task blanked it, next to what the agent wrote.
+) -> list[AnswerFileSnapshot]:
+    """Each answer file as it was before the task blanked it, next to what the agent wrote.
 
     The repository copy is deleted when the run ends, so this is the only place the agent's
     work survives. Without it a run keeps a grade and nothing to read behind it, and no way
@@ -97,13 +97,13 @@ def build_impl_file_snapshots(
     """
     captured_at_utc = now_utc()
     root = Path(repo_copy_root).resolve()
-    snapshots: list[ImplFileSnapshot] = []
-    for impl_file, copy_path in zip(impl_files, repo_copy_impl_files, strict=True):
+    snapshots: list[AnswerFileSnapshot] = []
+    for answer_file, copy_path in zip(answer_files, repo_copy_answer_files, strict=True):
         snapshots.append(
-            ImplFileSnapshot(
-                impl_file=repo_relative(impl_file),
+            AnswerFileSnapshot(
+                answer_file=repo_relative(answer_file),
                 path_in_copy=Path(copy_path).resolve().relative_to(root).as_posix(),
-                original=original_snapshots.get(str(impl_file)),
+                original=original_snapshots.get(str(answer_file)),
                 generated=safe_read_text(copy_path),
                 captured_at_utc=captured_at_utc,
             )

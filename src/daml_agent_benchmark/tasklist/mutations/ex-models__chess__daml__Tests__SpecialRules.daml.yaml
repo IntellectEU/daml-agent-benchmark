@@ -1,0 +1,129 @@
+task: ex-models/chess/daml/Tests/SpecialRules.daml
+notes: "testCheck exercises only Main.checkCheck; none of the three implementation files affect it (its castle attempt fails on the invalid check claim regardless), so it has no mutation."
+mutations:
+  - id: castle-path-check-dropped
+    source: llm
+    target_script: testCastle
+    kind: validation
+    reason: A developer forgets to check that the squares between the king and the rook are empty.
+    patch: |
+      diff --git a/chess/daml/Rules/Castle.daml b/chess/daml/Rules/Castle.daml
+      --- a/chess/daml/Rules/Castle.daml
+      +++ b/chess/daml/Rules/Castle.daml
+      @@ -44,9 +44,6 @@
+         assertMsg "Castling needs an unmoved rook"
+           (rook.tp == Rook && not rook.moved)
+       
+      -  movePath <- pathBetween md.from rookFrom
+      -  forA_ movePath (\c -> assertMsg "Path blocked" (isNone $ M.lookup c md.stateMap))
+      -
+         return $
+           M.insert md.to
+             (movePiece md.move.to md.piece)
+  - id: castle-rook-lands-on-king-square
+    source: llm
+    target_script: testCastle
+    kind: field
+    reason: The white kingside rook destination is typed as G1, the king's square, instead of F1.
+    patch: |
+      diff --git a/chess/daml/Rules/Castle.daml b/chess/daml/Rules/Castle.daml
+      --- a/chess/daml/Rules/Castle.daml
+      +++ b/chess/daml/Rules/Castle.daml
+      @@ -33,7 +33,7 @@
+       
+         (rookFromCoord, rookToCoord) <-
+           case (md.state.player, md.move.to) of
+      -      (White, G1) -> return (H1, F1)
+      +      (White, G1) -> return (H1, G1)
+             (white, C1) -> return (A1, C1)
+             (Black, G8) -> return (H8, F8)
+             (Black, G1) -> return (A8, C8)
+  - id: enpassant-any-single-step-counts
+    source: llm
+    target_script: testEnPassant
+    kind: arithmetic
+    reason: The double-step detection checks for a row distance of 1 instead of 2.
+    patch: |
+      diff --git a/chess/daml/Rules/EnPassant.daml b/chess/daml/Rules/EnPassant.daml
+      --- a/chess/daml/Rules/EnPassant.daml
+      +++ b/chess/daml/Rules/EnPassant.daml
+      @@ -29,7 +29,7 @@
+           (M.lookup lmTo md.stateMap)
+         let
+           lastMoveMatch = lastMovePiece.tp == Pawn
+      -          && rowD lmTo lmFrom == 2
+      +          && rowD lmTo lmFrom == 1
+           targetMatch = epTarget == lmTo
+           tgt = if lastMoveMatch && targetMatch && md.piece.tp == Pawn
+             then epTarget
+  - id: enpassant-target-is-destination
+    source: llm
+    target_script: testEnPassant
+    kind: field
+    reason: The captured pawn square is built from the destination row instead of the moving pawn's row.
+    patch: |
+      diff --git a/chess/daml/Rules/EnPassant.daml b/chess/daml/Rules/EnPassant.daml
+      --- a/chess/daml/Rules/EnPassant.daml
+      +++ b/chess/daml/Rules/EnPassant.daml
+      @@ -37,5 +37,5 @@
+         return tgt
+       
+         where
+      -    epTarget = (md.to._1, md.from._2)
+      +    epTarget = (md.to._1, md.to._2)
+           oEpTargetPiece = M.lookup epTarget md.stateMap
+      \ No newline at end of file
+  - id: enpassant-uses-oldest-move
+    source: llm
+    target_script: testEnPassant
+    kind: lookup
+    reason: The last move is taken with last instead of head although moves are stored newest first.
+    patch: |
+      diff --git a/chess/daml/Rules/EnPassant.daml b/chess/daml/Rules/EnPassant.daml
+      --- a/chess/daml/Rules/EnPassant.daml
+      +++ b/chess/daml/Rules/EnPassant.daml
+      @@ -21,7 +21,7 @@
+       
+       targetInner : MoveData -> E IntCoord
+       targetInner md = do
+      -  let lastMove = head md.state.moves
+      +  let lastMove = last md.state.moves
+             lmTo = toIntCoord lastMove.to
+             lmFrom = toIntCoord lastMove.from
+         lastMovePiece <- optionalToEither
+  - id: promotion-white-row-off-by-one
+    source: llm
+    target_script: testPromote
+    kind: arithmetic
+    reason: White promotion is allowed on row index 6 instead of the last row 7.
+    patch: |
+      diff --git a/chess/daml/Rules/Promotion.daml b/chess/daml/Rules/Promotion.daml
+      --- a/chess/daml/Rules/Promotion.daml
+      +++ b/chess/daml/Rules/Promotion.daml
+      @@ -14,7 +14,7 @@
+           Some t -> do
+             assertMsg "Promotion not allowed" (md.piece.tp == Pawn &&
+               (md.state.player == Black && md.to._2 == 0) ||
+      -        (md.state.player == White && md.to._2 == 7)
+      +        (md.state.player == White && md.to._2 == 6)
+               )
+             return t
+           _ -> return $ md.piece.tp
+  - id: promotion-white-condition-uses-black
+    source: llm
+    target_script: testPromote
+    kind: branch
+    reason: The white promotion condition tests for the Black player, a copy-paste slip from the line above.
+    patch: |
+      diff --git a/chess/daml/Rules/Promotion.daml b/chess/daml/Rules/Promotion.daml
+      --- a/chess/daml/Rules/Promotion.daml
+      +++ b/chess/daml/Rules/Promotion.daml
+      @@ -14,7 +14,7 @@
+           Some t -> do
+             assertMsg "Promotion not allowed" (md.piece.tp == Pawn &&
+               (md.state.player == Black && md.to._2 == 0) ||
+      -        (md.state.player == White && md.to._2 == 7)
+      +        (md.state.player == Black && md.to._2 == 7)
+               )
+             return t
+           _ -> return $ md.piece.tp

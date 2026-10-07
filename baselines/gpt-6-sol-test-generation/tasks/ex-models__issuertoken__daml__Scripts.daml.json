@@ -1,0 +1,671 @@
+{
+  "task_id": "ex-models/issuertoken/daml/Scripts.daml",
+  "task_safe_name": "ex-models__issuertoken__daml__Scripts.daml",
+  "test_file": "ex-models/issuertoken/daml/Scripts.daml",
+  "impl_files": [
+    "ex-models/issuertoken/daml/Main.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.437341+00:00",
+  "started_at_utc": "2026-10-02T16:58:52.731343+00:00",
+  "finished_at_utc": "2026-10-02T17:02:21.621882+00:00",
+  "live_updated_at_utc": "2026-10-02T17:02:21.621882+00:00",
+  "repo_copy": "261002-180850/ex-models_____ne0dtzet",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Scripts.daml:transferRejectsInvalidBalances": true,
+      "daml/Scripts.daml:transferUpdatesBothWallets": true,
+      "daml/Scripts.daml:requestAuthorityAndVisibility": true,
+      "daml/Scripts.daml:transferEdgeCases": true,
+      "daml/Scripts.daml:requestAndAcceptance": true,
+      "daml/Scripts.daml:requestsRespectLimits": true,
+      "daml/Scripts.daml:authorizationAndWalletBounds": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "ensure-no-upper-bound",
+        "source": "llm",
+        "kind": "validation",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Scripts.daml:transferRejectsInvalidBalances": false,
+            "daml/Scripts.daml:transferUpdatesBothWallets": true,
+            "daml/Scripts.daml:requestAuthorityAndVisibility": true,
+            "daml/Scripts.daml:transferEdgeCases": true,
+            "daml/Scripts.daml:requestAndAcceptance": true,
+            "daml/Scripts.daml:requestsRespectLimits": true,
+            "daml/Scripts.daml:authorizationAndWalletBounds": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:01:48.86 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 72:76:1e:fd:8d:81:12:92'. Ignoring it.\nFile:     daml/Scripts.daml\nHidden:   no\nRange:    14:1-14:29\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Scripts:37:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises AuthorizeInvestor on #0:0 (Main:Wallet)\n  with\n  investor = 'Bob'; maxTokens$u0027 = -1\n  Sub-transactions:\n  0\n  └─> 'Issuer' exercises AuthorizeInvestor on #0:0 (Main:Wallet)\n  with\n  investor = 'Bob'; maxTokens$u0027 = -1\n  children:\n  1\n  └─> create Main:Wallet\n  with\n  owner = 'Bob'; issuer = 'Issuer'; tokens = 0; maxTokens = -1\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Scripts:18:11)\n  #0:0\n  │ referenced by #1:0\n  │ known to (since): 'Issuer' (0)\n  └─> create Main:Wallet\n  with\n  owner = 'Issuer'; issuer = 'Issuer'; tokens = 0; maxTokens = 0\n\n  TX 1 1970-01-01T00:00:00Z (Scripts:20:18)\n  #1:0\n  │ known to (since): 'Issuer' (1)\n  └─> 'Issuer' exercises AuthorizeInvestor on #0:0 (Main:Wallet)\n  with\n  investor = 'Alice'; maxTokens$u0027 = 10\n  children:\n  #1:1\n  │ known to (since): 'Issuer' (1), 'Alice' (1)\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 0; maxTokens = 10\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'Alice'} readAs: {} (Scripts:35:3)\u001b[0m\nFile:     daml/Scripts.daml\nHidden:   no\nRange:    97:1-97:31\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Scripts:107:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises TransferTokens on #0:0 (Main:Wallet)\n  with\n  quantity = 3; toWalletId = #1:0\n  Sub-transactions:\n  0\n  └─> 'Issuer' exercises TransferTokens on #0:0 (Main:Wallet)\n  with\n  quantity = 3; toWalletId = #1:0\n  children:\n  1\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 2; maxTokens = 10\n\n  2\n  └─> fetch #1:0 (Main:Wallet)\n\n  3\n  └─> 'Issuer' exercises Archive on #1:0 (Main:Wallet)\n  with\n\n  4\n  └─> create Main:Wallet\n  with\n  owner = 'Bob'; issuer = 'Issuer'; tokens = 11; maxTokens = 10\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Scripts:101:13)\n  #0:0\n  │ known to (since): 'Alice' (0), 'Issuer' (0)\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 5; maxTokens = 10\n\n  TX 1 1970-01-01T00:00:00Z (Scripts:103:18)\n  #1:0\n  │ known to (since): 'Bob' (1), 'Issuer' (1)\n  └─> create Main:Wallet\n  with\n  owner = 'Bob'; issuer = 'Issuer'; tokens = 8; maxTokens = 10\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'Issuer'} readAs: {} (Scripts:105:3)\u001b[0m\n"
+        }
+      },
+      {
+        "id": "credit-subtracts",
+        "source": "llm",
+        "kind": "arithmetic",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Scripts.daml:transferRejectsInvalidBalances": false,
+            "daml/Scripts.daml:transferUpdatesBothWallets": false,
+            "daml/Scripts.daml:requestAuthorityAndVisibility": true,
+            "daml/Scripts.daml:transferEdgeCases": false,
+            "daml/Scripts.daml:requestAndAcceptance": false,
+            "daml/Scripts.daml:requestsRespectLimits": false,
+            "daml/Scripts.daml:authorizationAndWalletBounds": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:02:02.04 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 92:86:c4:19:d6:33:3e:7a'. Ignoring it.\n\n2026-10-02 17:02:08.32 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Scripts.daml\nHidden:   no\nRange:    53:1-53:27\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Scripts:61:34:\n  Unhandled exception:\n  DA.Exception.PreconditionFailed:PreconditionFailed@f20de1e4e37b92280264c08bf15eca0be0bc5babd7a7b5e574997f154c00cb78\n  with\n  message =\n  \"Template precondition violated: Wallet {owner = 'Bob', issuer = 'Issuer', tokens = -1, maxTokens\n  = 10}\"\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Archive on #1:0 (Main:Wallet)\n  with\n  Sub-transactions:\n  0\n  └─> 'Issuer' exercises TransferTokens on #0:0 (Main:Wallet)\n  with\n  quantity = 3; toWalletId = #1:0\n  children:\n  1\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 5; maxTokens = 12\n\n  2\n  └─> fetch #1:0 (Main:Wallet)\n\n  3\n  └─> 'Issuer' exercises Archive on #1:0 (Main:Wallet)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Scripts:57:13)\n  #0:0\n  │ known to (since): 'Alice' (0), 'Issuer' (0)\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 8; maxTokens = 12\n\n  TX 1 1970-01-01T00:00:00Z (Scripts:59:18)\n  #1:0\n  │ known to (since): 'Bob' (1), 'Issuer' (1)\n  └─> create Main:Wallet\n  with\n  owner = 'Bob'; issuer = 'Issuer'; tokens = 2; maxTokens = 10\u001b[0m\nFile:     daml/Scripts.daml\nHidden:   no\nRange:    97:1-97:31\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Scripts:107:3:\n  Aborted: Expected submit to fail but it succeeded\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises TransferTokens on #0:0 (Main:Wallet)\n  with\n  quantity = 3; toWalletId = #1:0\n  Sub-transactions:\n  0\n  └─> 'Issuer' exercises TransferTokens on #0:0 (Main:Wallet)\n  with\n  quantity = 3; toWalletId = #1:0\n  children:\n  1\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 2; maxTokens = 10\n\n  2\n  └─> fetch #1:0 (Main:Wallet)\n\n  3\n  └─> 'Issuer' exercises Archive on #1:0 (Main:Wallet)\n  with\n\n  4\n  └─> create Main:Wallet\n  with\n  owner = 'Bob'; issuer = 'Issuer'; tokens = 5; maxTokens = 10\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Scripts:101:13)\n  #0:0\n  │ known to (since): 'Alice' (0), 'Issuer' (0)\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 5; maxTokens = 10\n\n  TX 1 1970-01-01T00:00:00Z (Scripts:103:18)\n  #1:0\n  │ known to (since): 'Bob' (1), 'Issuer' (1)\n  └─> create Main:Wallet\n  with\n  owner = 'Bob'; issuer = 'Issuer'; tokens = 8; maxTokens = 10\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'Issuer'} readAs: {} (Scripts:105:3)\u001b[0m\nFile:     daml/Scripts.daml\nHidden:   no\nRange:    123:1-123:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Scripts:146:34:\n  Unhandled exception:\n  DA.Exception.PreconditionFailed:PreconditionFailed@f20de1e4e37b92280264c08bf15eca0be0bc5babd7a7b5e574997f154c00cb78\n  with\n  message =\n  \"Template precondition violated: Wallet {owner = 'Bob', issuer = 'Issuer', tokens = -3, maxTokens\n  = 8}\"\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Archive on #1:0 (Main:Wallet)\n  with\n  Sub-transactions:\n  0\n  └─> 'Issuer' exercises AcceptTokenRequest on #0:0 (Main:Wallet)\n  with\n  requestId = #2:1\n  children:\n  1\n  └─> fetch #2:1 (Main:TokenRequest)\n\n  2\n  └─> 'Issuer' exercises TransferTokens on #0:0 (Main:Wallet)\n  with\n  quantity = 4; toWalletId = #1:0\n  children:\n  3\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 5; maxTokens = 10\n\n  4\n  └─> fetch #1:0 (Main:Wallet)\n\n  5\n  └─> 'Issuer' exercises Archive on #1:0 (Main:Wallet)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Scripts:127:13)\n  #0:0\n  │ known to (since): 'Alice' (0), 'Issuer' (0)\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 9; maxTokens = 10\n\n  TX 1 1970-01-01T00:00:00Z (Scripts:129:18)\n  #1:0\n  │ referenced by #2:0\n  │ known to (since): 'Bob' (1), 'Issuer' (1)\n  └─> create Main:Wallet\n  with\n  owner = 'Bob'; issuer = 'Issuer'; tokens = 1; maxTokens = 8\n\n  TX 2 1970-01-01T00:00:00Z (Scripts:131:14)\n  #2:0\n  │ known to (since): 'Bob' (2), 'Issuer' (2)\n  └─> 'Bob' exercises RequestTokens on #1:0 (Main:Wallet)\n  with\n  requestedQuantity = 4\n  children:\n  #2:1\n  │ known to (since): 'Bob' (2), 'Issuer' (2)\n  └─> create Main:TokenRequest\n  with\n  issuer = 'Issuer'; owner = 'Bob'; walletId = #1:0; quantity = 4\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'Alice'} readAs: {} (Scripts:144:3)\u001b[0m\nFile:     daml/Scripts.daml\nHidden:   no\nRange:    161:1-161:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Scripts:183:37:\n  Unhandled exception:\n  DA.Exception.PreconditionFailed:PreconditionFailed@f20de1e4e37b92280264c08bf15eca0be0bc5babd7a7b5e574997f154c00cb78\n  with\n  message =\n  \"Template precondition violated: Wallet {owner = 'Bob', issuer = 'Issuer', tokens = -1, maxTokens\n  = 5}\"\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Archive on #1:0 (Main:Wallet)\n  with\n  Sub-transactions:\n  0\n  └─> 'Issuer' exercises AcceptTokenRequest on #0:0 (Main:Wallet)\n  with\n  requestId = #6:1\n  children:\n  1\n  └─> fetch #6:1 (Main:TokenRequest)\n\n  2\n  └─> 'Issuer' exercises TransferTokens on #0:0 (Main:Wallet)\n  with\n  quantity = 3; toWalletId = #1:0\n  children:\n  3\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 0; maxTokens = 10\n\n  4\n  └─> fetch #1:0 (Main:Wallet)\n\n  5\n  └─> 'Issuer' exercises Archive on #1:0 (Main:Wallet)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Scripts:165:13)\n  #0:0\n  │ known to (since): 'Alice' (0), 'Issuer' (0)\n  └─> create Main:Wallet\n  with\n  owner = 'Alice'; issuer = 'Issuer'; tokens = 3; maxTokens = 10\n\n  TX 1 1970-01-01T00:00:00Z (Scripts:167:18)\n  #1:0\n  │ referenced by #2:0, #4:0, #6:0\n  │ known to (since): 'Bob' (1), 'Issuer' (1)\n  └─> create Main:Wallet\n  with\n  owner = 'Bob'; issuer = 'Issuer'; tokens = 2; maxTokens = 5\n\n  TX 2 1970-01-01T00:00:00Z (Scripts:169:15)\n  #2:0\n  │ known to (since): 'Bob' (2), 'Issuer' (2)\n  └─> 'Bob' exercises RequestTokens on #1:0 (Main:Wallet)\n  with\n  requestedQuantity = 4\n  children:\n  #2:1\n  │ known to (since): 'Bob' (2), 'Issuer' (2)\n  └─> create Main:TokenRequest\n  with\n  issuer = 'Issuer'; owner = 'Bob'; walletId = #1:0; quantity = 4\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'Issuer'} readAs: {} (Scripts:171:3)\n\n  TX 4 1970-01-01T00:00:00Z (Scripts:173:14)\n  #4:0\n  │ known to (since): 'Bob' (4), 'Issuer' (4)\n  └─> 'Bob' exercises RequestTokens on #1:0 (Main:Wallet)\n  with\n  requestedQuantity = 6\n  children:\n  #4:1\n  │ known to (since): 'Bob' (4), 'Issuer' (4)\n  └─> create Main:TokenRequest\n  with\n  issuer = 'Issuer'; owner = 'Bob'; walletId = #1:0; quantity = 6\n\n  TX 5 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'Issuer'} readAs: {} (Scripts:175:3)\n\n  TX 6 1970-01-01T00:00:00Z (Scripts:181:12)\n  #6:0\n  │ known to (since): 'Bob' (6), 'Issuer' (6)\n  └─> 'Bob' exercises RequestTokens on #1:0 (Main:Wallet)\n  with\n  requestedQuantity = 3\n  children:\n  #6:1\n  │ known to (since): 'Bob' (6), 'Issuer' (6)\n  └─> create Main:TokenRequest\n  with\n  issuer = 'Issuer'; owner = 'Bob'; walletId = #1:0; quantity = 3\u001b[0m\nFile:     daml/Scripts.daml\nHidden:   no\nRange:    191:1-191:18\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "investor-cap-from-issuer",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Scripts.daml:transferRejectsInvalidBalances": true,
+            "daml/Scripts.daml:transferUpdatesBothWallets": true,
+            "daml/Scripts.daml:requestAuthorityAndVisibility": true,
+            "daml/Scripts.daml:transferEdgeCases": true,
+            "daml/Scripts.daml:requestAndAcceptance": true,
+            "daml/Scripts.daml:requestsRespectLimits": true,
+            "daml/Scripts.daml:authorizationAndWalletBounds": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:02:14.68 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 3a:d7:cb:4d:a6:cc:20:e5'. Ignoring it.\n\n2026-10-02 17:02:21.40 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Scripts.daml\nHidden:   no\nRange:    14:1-14:29\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 3,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Scripts.daml:setup": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:57:07.305274+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/ex-models_____ne0dtzet/issuertoken/daml/Scripts.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 4,
+    "bytes_scanned": 3793,
+    "elapsed_seconds": 0.001,
+    "repo_copy_digest": "7147704fb882861317b2df0280268bef16561d4fde28aae8bee1581a1d8ea145",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "ex-models/issuertoken/daml/Scripts.daml",
+      "path_in_copy": "issuertoken/daml/Scripts.daml",
+      "original": "\n-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n--\n-- This file contains unit tests aka scripts that can be executed on the\n-- ledger without having to run an external process to submit the transactions.\n\nmodule Scripts where\n\nimport Daml.Script\n\nimport Main\n\nsetup = script do\n  issuer <- allocateParty \"Issuer\"\n  sally <- allocateParty \"Sally\"\n  rebecca <- allocateParty \"Rebecca\"\n\n  -- The issuer ‘mints’ these tokens on the blockchain into their own wallet.\n  issuerWalletId <- submit issuer do\n    createCmd Wallet with\n      issuer = issuer\n      owner = issuer\n      tokens = 1000\n      maxTokens = 1000\n\n  -- The issuer now has a wallet which shows 1,000 of their blockchain-based shares or tokens.\n  Some issuerWallet <- queryContractId issuer issuerWalletId\n  assert(issuerWallet.owner == issuer && issuerWallet.tokens == 1000)\n\n  -- The issuer sends one token to another wallet owned by Sally.\n\n  -- 1. Authorize Sally to accept the token prior to the blockchain ‘clearing’\n  -- or confirming the transaction.\n  sallyWalletId <- submit issuer do\n    exerciseCmd issuerWalletId AuthorizeInvestor with\n      investor = sally\n      maxTokens' = 1\n\n  sallyTokenRequestId <- submit sally do\n    exerciseCmd sallyWalletId RequestTokens with requestedQuantity = 1\n\n  (issuerWalletId, sallysWalletId) <- submit issuer do\n    exerciseCmd issuerWalletId AcceptTokenRequest with requestId = sallyTokenRequestId\n\n  -- Sally’s wallet that received the token from the issuer now holds one token.\n  Some sallyWallet <- queryContractId sally sallysWalletId\n  assert(sallyWallet.tokens == 1)\n\n  -- The recipient is now in sole custody of one token.\n  Some issuerWallet <- queryContractId issuer issuerWalletId\n  assert(issuerWallet.tokens == 999)\n\n  -- 2. Can the issuer revoke the token from Sally? Upon revocation will the\n  -- token simply be subtracted from the outstanding supply or will the token\n  -- be transferred from Sally’s wallet back to the issuers wallet?\n  (sallyWalletId, issuerWalletId) <- submit issuer do\n    exerciseCmd sallysWalletId TransferTokens with\n      quantity = 1\n      toWalletId = issuerWalletId\n\n  -- 3. Can the issuer createCmd a ‘rule’ in the smart contract limiting how many\n  -- tokens from the outstanding supply Sally may hold?\n  submitMustFail issuer do\n    exerciseCmd issuerWalletId TransferTokens with\n      quantity = 2\n      toWalletId = sallyWalletId\n\n  -- 4. The issuer also wishes to send a token to Rebecca. The issuer would like\n  -- for Rebecca to not be able to send the token to Sally and vice versa. Is\n  -- this possible to enforce?\n  rebeccaAuthId <- submit issuer do\n    exerciseCmd issuerWalletId AuthorizeInvestor with\n      investor = rebecca\n      maxTokens' = 20\n\n  (issuerWalletId, rebeccasWalletId) <- submit issuer do\n    exerciseCmd issuerWalletId TransferTokens with\n        quantity = 10\n        toWalletId = rebeccaAuthId\n\n  submitMustFail rebecca do\n    exerciseCmd rebeccasWalletId TransferTokens with\n        quantity = 1\n        toWalletId = sallyWalletId",
+      "generated": "module Scripts where\n\nimport Daml.Script\nimport Main\ngetContract : (Template t) => Party -> ContractId t -> Script t\ngetContract party contractId = do\n  result <- queryContractId party contractId\n  case result of\n    Some contract -> pure contract\n    None -> error \"Expected active visible contract\"\n\n\nauthorizationAndWalletBounds : Script ()\nauthorizationAndWalletBounds = script do\n  issuer <- allocateParty \"Issuer\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  root <- submit issuer do\n    createCmd Wallet with owner = issuer; issuer; tokens = 0; maxTokens = 0\n  aliceWallet <- submit issuer do\n    exerciseCmd root AuthorizeInvestor with investor = alice; maxTokens' = 10\n  aliceState <- getContract issuer aliceWallet\n  assert (aliceState.owner == alice)\n  assert (aliceState.issuer == issuer)\n  assert (aliceState.tokens == 0)\n  assert (aliceState.maxTokens == 10)\n  _ <- getContract issuer root\n  _ <- getContract alice aliceWallet\n  do\n    visible <- queryContractId bob aliceWallet\n    assert (visible == None)\n  do\n    visible <- queryContractId alice root\n    assert (visible == None)\n  submitMustFail alice do\n    exerciseCmd aliceWallet AuthorizeInvestor with investor = bob; maxTokens' = 5\n  submitMustFail issuer do\n    exerciseCmd root AuthorizeInvestor with investor = bob; maxTokens' = -1\n  submitMustFail issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = -1; maxTokens = 10\n  submitMustFail issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 11; maxTokens = 10\n  submitMustFail issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 0; maxTokens = -1\n  submitMustFail bob do\n    createCmd Wallet with owner = bob; issuer; tokens = 1; maxTokens = 10\n  boundary <- submit issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 10; maxTokens = 10\n  boundaryState <- getContract bob boundary\n  assert (boundaryState.tokens == 10)\n\ntransferUpdatesBothWallets : Script ()\ntransferUpdatesBothWallets = script do\n  issuer <- allocateParty \"Issuer\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  source <- submit issuer do\n    createCmd Wallet with owner = alice; issuer; tokens = 8; maxTokens = 12\n  destination <- submit issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 2; maxTokens = 10\n  (newSource, newDestination) <- submit issuer do\n    exerciseCmd source TransferTokens with quantity = 3; toWalletId = destination\n  sourceState <- getContract issuer newSource\n  destinationState <- getContract issuer newDestination\n  assert (sourceState.owner == alice)\n  assert (sourceState.issuer == issuer)\n  assert (sourceState.tokens == 5)\n  assert (sourceState.maxTokens == 12)\n  assert (destinationState.owner == bob)\n  assert (destinationState.issuer == issuer)\n  assert (destinationState.tokens == 5)\n  assert (destinationState.maxTokens == 10)\n  do\n    visible <- queryContractId issuer source\n    assert (visible == None)\n  do\n    visible <- queryContractId issuer destination\n    assert (visible == None)\n  _ <- getContract alice newSource\n  _ <- getContract bob newDestination\n  do\n    visible <- queryContractId bob newSource\n    assert (visible == None)\n  do\n    visible <- queryContractId alice newDestination\n    assert (visible == None)\n  submitMustFail alice do\n    exerciseCmd newSource TransferTokens with quantity = 1; toWalletId = newDestination\n  (emptySource, fullDestination) <- submit issuer do\n    exerciseCmd newSource TransferTokens with quantity = 5; toWalletId = newDestination\n  emptyState <- getContract issuer emptySource\n  fullState <- getContract issuer fullDestination\n  assert (emptyState.tokens == 0)\n  assert (fullState.tokens == 10)\n\ntransferRejectsInvalidBalances : Script ()\ntransferRejectsInvalidBalances = script do\n  issuer <- allocateParty \"Issuer\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  source <- submit issuer do\n    createCmd Wallet with owner = alice; issuer; tokens = 5; maxTokens = 10\n  destination <- submit issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 8; maxTokens = 10\n  submitMustFail issuer do\n    exerciseCmd source TransferTokens with quantity = 6; toWalletId = destination\n  submitMustFail issuer do\n    exerciseCmd source TransferTokens with quantity = 3; toWalletId = destination\n  submitMustFail issuer do\n    exerciseCmd source TransferTokens with quantity = -9; toWalletId = destination\n  unchangedSource <- getContract issuer source\n  unchangedDestination <- getContract issuer destination\n  assert (unchangedSource.tokens == 5)\n  assert (unchangedDestination.tokens == 8)\n  (afterSource, afterDestination) <- submit issuer do\n    exerciseCmd source TransferTokens with quantity = 2; toWalletId = destination\n  finalSource <- getContract issuer afterSource\n  finalDestination <- getContract issuer afterDestination\n  assert (finalSource.tokens == 3)\n  assert (finalDestination.tokens == 10)\n\nrequestAndAcceptance : Script ()\nrequestAndAcceptance = script do\n  issuer <- allocateParty \"Issuer\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  source <- submit issuer do\n    createCmd Wallet with owner = alice; issuer; tokens = 9; maxTokens = 10\n  destination <- submit issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 1; maxTokens = 8\n  request <- submit bob do\n    exerciseCmd destination RequestTokens with requestedQuantity = 4\n  requestState <- getContract issuer request\n  assert (requestState.issuer == issuer)\n  assert (requestState.owner == bob)\n  assert (requestState.walletId == destination)\n  assert (requestState.quantity == 4)\n  _ <- getContract bob request\n  do\n    visible <- queryContractId alice request\n    assert (visible == None)\n  originalDestination <- getContract issuer destination\n  assert (originalDestination.tokens == 1)\n  submitMustFail alice do\n    exerciseCmd source AcceptTokenRequest with requestId = request\n  (newSource, newDestination) <- submit issuer do\n    exerciseCmd source AcceptTokenRequest with requestId = request\n  sourceState <- getContract issuer newSource\n  destinationState <- getContract issuer newDestination\n  assert (sourceState.tokens == 5)\n  assert (destinationState.tokens == 5)\n  assert (destinationState.owner == bob)\n  _ <- getContract issuer request\n  do\n    visible <- queryContractId issuer destination\n    assert (visible == None)\n  submitMustFail issuer do\n    exerciseCmd newSource AcceptTokenRequest with requestId = request\n\nrequestsRespectLimits : Script ()\nrequestsRespectLimits = script do\n  issuer <- allocateParty \"Issuer\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  source <- submit issuer do\n    createCmd Wallet with owner = alice; issuer; tokens = 3; maxTokens = 10\n  destination <- submit issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 2; maxTokens = 5\n  tooLarge <- submit bob do\n    exerciseCmd destination RequestTokens with requestedQuantity = 4\n  submitMustFail issuer do\n    exerciseCmd source AcceptTokenRequest with requestId = tooLarge\n  tooMuch <- submit bob do\n    exerciseCmd destination RequestTokens with requestedQuantity = 6\n  submitMustFail issuer do\n    exerciseCmd source AcceptTokenRequest with requestId = tooMuch\n  unchangedSource <- getContract issuer source\n  unchangedDestination <- getContract issuer destination\n  assert (unchangedSource.tokens == 3)\n  assert (unchangedDestination.tokens == 2)\n  exact <- submit bob do\n    exerciseCmd destination RequestTokens with requestedQuantity = 3\n  (emptySource, fullDestination) <- submit issuer do\n    exerciseCmd source AcceptTokenRequest with requestId = exact\n  sourceState <- getContract issuer emptySource\n  destinationState <- getContract issuer fullDestination\n  assert (sourceState.tokens == 0)\n  assert (destinationState.tokens == 5)\n\ntransferEdgeCases : Script ()\ntransferEdgeCases = script do\n  issuer <- allocateParty \"Issuer\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  source <- submit issuer do\n    createCmd Wallet with owner = alice; issuer; tokens = 3; maxTokens = 10\n  destination <- submit issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 4; maxTokens = 10\n  submitMustFail issuer do\n    exerciseCmd source TransferTokens with quantity = 1; toWalletId = source\n  (zeroSource, zeroDestination) <- submit issuer do\n    exerciseCmd source TransferTokens with quantity = 0; toWalletId = destination\n  sourceState <- getContract issuer zeroSource\n  destinationState <- getContract issuer zeroDestination\n  assert (sourceState.tokens == 3)\n  assert (destinationState.tokens == 4)\n  do\n    visible <- queryContractId issuer source\n    assert (visible == None)\n  do\n    visible <- queryContractId issuer destination\n    assert (visible == None)\n  (reverseSource, reverseDestination) <- submit issuer do\n    exerciseCmd zeroSource TransferTokens with quantity = -2; toWalletId = zeroDestination\n  reverseSourceState <- getContract issuer reverseSource\n  reverseDestinationState <- getContract issuer reverseDestination\n  assert (reverseSourceState.tokens == 5)\n  assert (reverseDestinationState.tokens == 2)\n\nrequestAuthorityAndVisibility : Script ()\nrequestAuthorityAndVisibility = script do\n  issuer <- allocateParty \"Issuer\"\n  alice <- allocateParty \"Alice\"\n  bob <- allocateParty \"Bob\"\n  source <- submit issuer do\n    createCmd Wallet with owner = alice; issuer; tokens = 6; maxTokens = 10\n  destination <- submit issuer do\n    createCmd Wallet with owner = bob; issuer; tokens = 0; maxTokens = 10\n  submitMustFail issuer do\n    exerciseCmd destination RequestTokens with requestedQuantity = 1\n  submitMustFail alice do\n    exerciseCmd destination RequestTokens with requestedQuantity = 1\n  submitMustFail issuer do\n    createCmd TokenRequest with issuer; owner = bob; walletId = destination; quantity = 1\n  submitMustFail bob do\n    exerciseCmd source TransferTokens with quantity = 1; toWalletId = destination\n  request <- submit bob do\n    exerciseCmd destination RequestTokens with requestedQuantity = 2\n  requestState <- getContract bob request\n  assert (requestState.quantity == 2)\n  do\n    visible <- queryContractId alice request\n    assert (visible == None)\n  _ <- getContract issuer source\n  _ <- getContract issuer destination\n  pure ()\n",
+      "captured_at_utc": "2026-10-02T17:02:21.613223+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/ex-models_____ne0dtzet",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added seven Daml Script tests in `issuertoken/daml/Scripts.daml:1`. They cover wallet authorization and bounds, transfer balances and edge cases, request acceptance, visibility, and unauthorized actions.\n\n`daml test --files daml/Scripts.daml` passes all seven scripts.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 155.4719870829722,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 294050,
+      "output_tokens": 8660,
+      "cached_input_tokens": 268261
+    },
+    "usage_by_thread": {
+      "01a0fd8d-f535-7a90-b7fa-e88df1d947cc": {
+        "usage": {
+          "input_tokens": 294050,
+          "output_tokens": 8660,
+          "cached_input_tokens": 268261
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.1918302,
+    "input_usd": 0.051578000000000006,
+    "cached_input_usd": 0.0536522,
+    "output_usd": 0.08660000000000001,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790960336.863,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960339.966,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960344.547,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960353.408,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960371.869,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960376.813,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960381.893,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960400.02,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960408.281,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960419.372,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960422.944,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960429.506,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960432.307,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960441.179,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960464.948,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960470.448,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960483.532,
+          "client": "10.219.8.18",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "issuertoken/daml/Scripts.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

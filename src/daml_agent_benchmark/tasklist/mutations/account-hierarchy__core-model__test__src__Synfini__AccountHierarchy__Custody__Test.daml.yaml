@@ -1,0 +1,111 @@
+task: account-hierarchy/core-model/test/src/Synfini/AccountHierarchy/Custody/Test.daml
+notes: ""
+mutations:
+  - id: agreement-signatory-drops-parent
+    source: llm
+    target_script: test_CustodyAgreement_signatories
+    kind: authorization
+    reason: The agreement is signed only by the account signatories, forgetting that the parent account signatories must agree too.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      @@ -15,7 +15,7 @@
+             -- parent account.
+           observers : Set Party
+         where
+      -    signatory account.id.signatories, parent.id.signatories
+      +    signatory account.id.signatories
+           observer account.owner, observers
+       
+           ensure account.provider == parent.owner
+  - id: agreement-observer-drops-owner
+    source: llm
+    target_script: test_CustodyAgreement_observers
+    kind: authorization
+    reason: The account owner is left out of the observers so the beneficiary cannot see its own agreement.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      @@ -16,7 +16,7 @@
+           observers : Set Party
+         where
+           signatory account.id.signatories, parent.id.signatories
+      -    observer account.owner, observers
+      +    observer observers
+       
+           ensure account.provider == parent.owner
+       
+  - id: agreement-ensure-compares-owner
+    source: llm
+    target_script: test_CustodyAgreement_ensure
+    kind: validation
+    reason: The invariant compares the account owner with the parent owner instead of the account provider.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      @@ -18,7 +18,7 @@
+           signatory account.id.signatories, parent.id.signatories
+           observer account.owner, observers
+       
+      -    ensure account.provider == parent.owner
+      +    ensure account.owner == parent.owner
+       
+           key account.id : Id
+           maintainer key.signatories
+  - id: setobservers-controller-parent-owner
+    source: llm
+    target_script: test_CustodyAgreement_SetObservers
+    kind: authorization
+    reason: The controller of SetObservers is the parent owner (custodian) instead of the account owner.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      @@ -27,7 +27,7 @@
+           choice CustodyAgreement_SetObservers : ContractId CustodyAgreement
+             with
+               newObservers : Set Party -- ^ Updated contract observers.
+      -      controller account.owner
+      +      controller parent.owner
+             do
+               create this with observers = newObservers
+       
+  - id: request-signatory-adds-parent
+    source: llm
+    target_script: test_CustodyRequest_signatories
+    kind: authorization
+    reason: The request also requires the parent signatories, though only the prospective beneficiary should sign it.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      @@ -37,7 +37,7 @@
+           parent : Account -- ^ Account in which the custodian keeps assets of clients for safe-keeping.
+           account : Account -- ^ Account of prospective beneficiary.
+         where
+      -    signatory account.id.signatories
+      +    signatory account.id.signatories, parent.id.signatories
+           observer parent.owner
+       
+           -- | Accept the request and create the 'CustodyAgreement'.
+  - id: accept-looks-up-account-role
+    source: llm
+    target_script: test_CustodyRequest_Accept
+    kind: lookup
+    reason: The accept choice looks up the custodian role by the requester account id instead of the parent account id.
+    patch: |
+      diff --git a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      --- a/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      +++ b/core-model/main/src/Synfini/AccountHierarchy/Custody.daml
+      @@ -44,7 +44,7 @@
+           choice CustodyRequest_Accept : ContractId CustodyAgreement
+             controller parent.owner
+             do
+      -        exerciseByKey @CustodianRole parent.id CustodianRole_EnterCustodyAgreement with account
+      +        exerciseByKey @CustodianRole account.id CustodianRole_EnterCustodyAgreement with account
+       
+           -- | Cancel the request.
+           choice CustodyRequest_Cancel : ()

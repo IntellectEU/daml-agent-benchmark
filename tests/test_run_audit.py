@@ -65,7 +65,7 @@ def test_hash_tree_ignores_codex_state_but_not_its_config(tmp_path) -> None:
     assert len(hash_tree(root, ignore=no_ignore)) == 5
 
     audit = WorkspaceAudit.from_changes(
-        [{"path": ".codex_home/config.toml", "kind": "modified"}], ["daml/Impl.daml"], "daml/Test.daml"
+        [{"path": ".codex_home/config.toml", "kind": "modified"}], ["daml/Impl.daml"], ["daml/Test.daml"]
     )
     assert audit.codex_home_changes == [FileChange(path=".codex_home/config.toml", kind=ChangeKind.MODIFIED)]
     assert audit.tamper_suspected() is False
@@ -173,7 +173,7 @@ def test_workspace_audit_incomplete_is_none() -> None:
     egress_events, workspace_changes = extract_wrapper_report('[workspace-change] {"path": "x", "kind": "added"}\n')
     assert workspace_changes is None
     assert egress_events == []
-    assert WorkspaceAudit.from_changes(None, [], "daml/Test.daml").available is False
+    assert WorkspaceAudit.from_changes(None, [], ["daml/Test.daml"]).available is False
 
 
 def test_suspicious_commands_are_reported() -> None:
@@ -200,9 +200,9 @@ def test_classify_workspace_changes_flags_test_and_source_edits() -> None:
     before = {"daml/Impl.daml": "a", "daml/Test.daml": "b", "daml.yaml": "c", "README.md": "d", "keep.txt": "e"}
     after = {"daml/Impl.daml": "a2", "daml/Test.daml": "b2", "daml.yaml": "c", "README.md": "d2", "new/Extra.daml": "f"}
     changes = diff_tree_hashes(before, after)
-    audit = classify_workspace_changes(changes, ["daml/Impl.daml"], "daml/Test.daml")
-    assert [c["path"] for c in audit["impl_changes"]] == ["daml/Impl.daml"]
-    assert [c["path"] for c in audit["test_file_changes"]] == ["daml/Test.daml"]
+    audit = classify_workspace_changes(changes, ["daml/Impl.daml"], ["daml/Test.daml"])
+    assert [c["path"] for c in audit["target_file_changes"]] == ["daml/Impl.daml"]
+    assert [c["path"] for c in audit["protected_file_changes"]] == ["daml/Test.daml"]
     assert [c["path"] for c in audit["source_changes_outside_targets"]] == ["new/Extra.daml"]
     assert [c["path"] for c in audit["other_changes"]] == ["README.md", "keep.txt"]
     assert audit["tamper_suspected"] is True
@@ -214,7 +214,7 @@ def test_classify_workspace_changes_build_outputs_are_not_tampering() -> None:
         {"path": "package/.daml/dist/x.dar", "kind": "added"},
         {"path": "lib/vendored-dep-1.0.0.dar", "kind": "modified"},
     ]
-    audit = classify_workspace_changes(changes, ["daml/Impl.daml"], "daml/Test.daml")
+    audit = classify_workspace_changes(changes, ["daml/Impl.daml"], ["daml/Test.daml"])
     assert [c["path"] for c in audit["build_outputs"]] == [
         "build/example-impl-0.0.1.dar",
         "package/.daml/dist/x.dar",
@@ -226,7 +226,7 @@ def test_classify_workspace_changes_build_outputs_are_not_tampering() -> None:
 
 def test_classify_workspace_changes_impl_only_is_clean() -> None:
     audit = classify_workspace_changes(
-        [{"path": "daml/Impl.daml", "kind": "modified"}], ["daml/Impl.daml"], "daml/Test.daml"
+        [{"path": "daml/Impl.daml", "kind": "modified"}], ["daml/Impl.daml"], ["daml/Test.daml"]
     )
     assert audit["tamper_suspected"] is False
 
@@ -423,7 +423,7 @@ def _attempt(**overrides) -> AttemptResult:
         out_of_workspace_writes=[],
         egress=EgressSummary.from_events([], ["openai.com"], []),
         runtime_identity=_VERIFIED,
-        workspace_audit=WorkspaceAudit.from_changes([], ["daml/Impl.daml"], "daml/Test.daml"),
+        workspace_audit=WorkspaceAudit.from_changes([], ["daml/Impl.daml"], ["daml/Test.daml"]),
     )
     fields.update(overrides)
     return AttemptResult(**fields)
@@ -465,16 +465,16 @@ def test_classify_attempt_separates_security_infra_and_warnings() -> None:
             egress=_egress(("example.com", True)),
             suspicious_commands=[SuspiciousCommand("c1", "cat /proc/1/environ", "/proc/1/environ")],
             workspace_audit=WorkspaceAudit.from_changes(
-                [{"path": "daml/Test.daml", "kind": "modified"}], ["daml/Impl.daml"], "daml/Test.daml"
+                [{"path": "daml/Test.daml", "kind": "modified"}], ["daml/Impl.daml"], ["daml/Test.daml"]
             ),
         ),
         _CLEAN_INTEGRITY,
     )
-    assert [f.flag for f in warned] == [TaskFlag.BLOCKED_EGRESS, TaskFlag.SUSPICIOUS_COMMANDS, TaskFlag.TEST_FILE_CHANGED]
+    assert [f.flag for f in warned] == [TaskFlag.BLOCKED_EGRESS, TaskFlag.SUSPICIOUS_COMMANDS, TaskFlag.PROTECTED_FILE_CHANGED]
     assert all(f.flag.severity is Severity.WARNING for f in warned)
 
     # No audit report is a warning, never a clean result.
-    missing = classify_attempt(_attempt(workspace_audit=WorkspaceAudit.from_changes(None, [], "t")), _CLEAN_INTEGRITY)
+    missing = classify_attempt(_attempt(workspace_audit=WorkspaceAudit.from_changes(None, [], ["t"])), _CLEAN_INTEGRITY)
     assert [f.flag for f in missing] == [TaskFlag.WORKSPACE_AUDIT_MISSING]
 
     # An attempt that ended cleanly but never reported its tally: a warning on the cost,
@@ -541,12 +541,13 @@ def test_ground_truth_control_caches_passes_and_rebuilds_everything_else(tmp_pat
     graded: list[str] = []
     outcome = Grade(True, True, True, {"Test:main": True}, None, None, None)
 
-    def fake_grade(test_file: str, impl_files: list[str]) -> Grade:
+    def fake_grade(test_file: str, impl_files: list[str], lint_files: list[str]) -> Grade:
         graded.append(test_file)
         return outcome
 
-    monkeypatch.setattr(ground_truth_module, "grade_task", fake_grade)
-    config = DEFAULTS.merge(SimpleNamespace(eval_in_container=False))
+    # Stand in for grading in the container, and for asking Docker for the image's id.
+    monkeypatch.setattr(ground_truth_module, "grade_in_environment", fake_grade)
+    monkeypatch.setattr(ground_truth_module, "container_image_id", lambda image: "image-1")
     task = {
         "task_id": "repository/tic-tac-toe",
         "repo_copy_test_file": "/s/daml/Test.daml",
@@ -554,26 +555,26 @@ def test_ground_truth_control_caches_passes_and_rebuilds_everything_else(tmp_pat
         "log_prefix": "",
     }
 
-    first = ground_truth_module.run_ground_truth_control(config, repo_copy_digest="digest-1", **task)
+    first = ground_truth_module.run_ground_truth_control(repo_copy_digest="digest-1", **task)
     assert (first.passed(), first.cached) == (True, False)
-    assert first.image_id == "host"  # host grading never shares a key with container grading
+    assert first.image_id == "image-1"
     assert first.grade.test_results == {"Test:main": True}
 
     # Same task, same content, same toolchain: replayed without a build.
-    second = ground_truth_module.run_ground_truth_control(config, repo_copy_digest="digest-1", **task)
+    second = ground_truth_module.run_ground_truth_control(repo_copy_digest="digest-1", **task)
     assert (second.passed(), second.cached) == (True, True)
     assert graded == ["/s/daml/Test.daml"]
 
     # Edited copy: different key, so it is built again.
-    third = ground_truth_module.run_ground_truth_control(config, repo_copy_digest="digest-2", **task)
+    third = ground_truth_module.run_ground_truth_control(repo_copy_digest="digest-2", **task)
     assert third.cached is False
     assert len(graded) == 2
 
     # A failure is never cached: it may be transient, so it must be re-established.
     outcome = replace(outcome, tests_passed=False)
-    failed = ground_truth_module.run_ground_truth_control(config, repo_copy_digest="digest-3", **task)
+    failed = ground_truth_module.run_ground_truth_control(repo_copy_digest="digest-3", **task)
     assert (failed.passed(), failed.cached) == (False, False)
-    again = ground_truth_module.run_ground_truth_control(config, repo_copy_digest="digest-3", **task)
+    again = ground_truth_module.run_ground_truth_control(repo_copy_digest="digest-3", **task)
     assert (again.passed(), again.cached) == (False, False)
     assert len(graded) == 4
 
@@ -582,7 +583,7 @@ def test_rate_limited_attempts_keep_their_audit_trail() -> None:
     """A retried task carries the network and tool activity of the attempts it discarded."""
     final = _attempt(
         egress=_egress(("api.openai.com", False)),
-        forbidden_tool_calls=[ForbiddenToolCall(ForbiddenTool.WEB_SEARCH, None, None, None, None, None)],
+        forbidden_tool_calls=[ForbiddenToolCall(ForbiddenTool.WEB_SEARCH, None, None, None, None, ItemEvent.STARTED)],
         suspicious_commands=[SuspiciousCommand("c2", "curl api.openai.com", "api.openai.com")],
     )
     prior = _attempt(

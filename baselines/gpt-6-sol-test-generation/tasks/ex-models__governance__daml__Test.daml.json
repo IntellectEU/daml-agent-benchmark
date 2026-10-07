@@ -1,0 +1,699 @@
+{
+  "task_id": "ex-models/governance/daml/Test.daml",
+  "task_safe_name": "ex-models__governance__daml__Test.daml",
+  "test_file": "ex-models/governance/daml/Test.daml",
+  "impl_files": [
+    "ex-models/governance/daml/Governance.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.436806+00:00",
+  "started_at_utc": "2026-10-02T16:57:54.116127+00:00",
+  "finished_at_utc": "2026-10-02T17:02:53.211334+00:00",
+  "live_updated_at_utc": "2026-10-02T17:02:53.211334+00:00",
+  "repo_copy": "261002-180850/ex-models_____lk4h2sl8",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Test.daml:testTiesAndRejectedProposals": true,
+      "daml/Test.daml:testVotingAndDecision": true,
+      "daml/Test.daml:testExecuteProposals": true,
+      "daml/Test.daml:testUpgradeAndBallotManagement": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "vote-recorded-inverted",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:testTiesAndRejectedProposals": false,
+            "daml/Test.daml:testVotingAndDecision": false,
+            "daml/Test.daml:testExecuteProposals": false,
+            "daml/Test.daml:testUpgradeAndBallotManagement": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:01:41.49 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 71:ea:2a:05:21:e7:e2:e9'. Ignoring it.\n\n2026-10-02 17:01:48.27 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\n\n2026-10-02 17:01:48.32 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.GeneralError:GeneralError@86828b98{ message = \"Creation must return a Constitution ID\" }\n\n2026-10-02 17:01:48.46 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Test.daml\nHidden:   no\nRange:    31:1-31:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    70:1-70:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    110:1-110:29\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:128:14:\n  1: create of Governance:Constitution at DA.Internal.Prelude:375:26\n  failed due to a missing authorization from 'bob'\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Decide on #5:1 (Governance:Ballot)\n  with\n  Sub-transactions:\n  0\n  └─> 'government' exercises Decide on #5:1 (Governance:Ballot)\n  with\n  children:\n  1\n  └─> create Governance:Constitution\n  with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:115:15)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'alice' (0), 'bob' (0), 'government' (0)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"tie\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap[]);\n  votes = []\n\n  TX 1 1970-01-01T00:00:00Z (Test:116:3)\n  #1:0\n  │ known to (since): 'alice' (1), 'bob' (1), 'government' (1)\n  └─> 'alice' exercises Vote on #0:0 (Governance:Ballot)\n  with\n  voter = 'alice'; accept = true\n  children:\n  #1:1\n  │ consumed by: #2:0\n  │ referenced by #2:0\n  │ known to (since): 'alice' (1), 'bob' (1), 'government' (1)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"tie\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  votes = [false]\n\n  TX 2 1970-01-01T00:00:00Z (Test:118:3)\n  #2:0\n  │ known to (since): 'alice' (2), 'bob' (2), 'government' (2)\n  └─> 'bob' exercises Vote on #1:1 (Governance:Ballot)\n  with\n  voter = 'bob'; accept = false\n  children:\n  #2:1\n  │ known to (since): 'alice' (2), 'bob' (2), 'government' (2)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"tie\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  votes = [true, false]\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'government'} readAs: {} (Test:120:3)\n\n  TX 4 1970-01-01T00:00:00Z (Test:125:15)\n  #4:0\n  │ consumed by: #5:0\n  │ referenced by #5:0\n  │ known to (since): 'alice' (4), 'government' (4)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"rejection\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap[]);\n  votes = []\n\n  TX 5 1970-01-01T00:00:00Z (Test:126:3)\n  #5:0\n  │ known to (since): 'alice' (5), 'government' (5)\n  └─> 'alice' exercises Vote on #4:0 (Governance:Ballot)\n  with\n  voter = 'alice'; accept = false\n  children:\n  #5:1\n  │ known to (since): 'alice' (5), 'government' (5)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"rejection\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  votes = [true]\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    146:1-146:31\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "nays-count-yays",
+        "source": "llm",
+        "kind": "branch",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:testTiesAndRejectedProposals": false,
+            "daml/Test.daml:testVotingAndDecision": false,
+            "daml/Test.daml:testExecuteProposals": false,
+            "daml/Test.daml:testUpgradeAndBallotManagement": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:01:55.24 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 4a:71:08:c4:42:3a:30:86'. Ignoring it.\nFile:     daml/Test.daml\nHidden:   no\nRange:    31:1-31:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:21:3:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Cannot decide on tie\"\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Decide on #2:1 (Governance:Ballot)\n  with\n  Sub-transactions:\n  0\n  └─> 'government' exercises Decide on #2:1 (Governance:Ballot)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:16:15)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'alice' (0), 'bob' (0), 'government' (0)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"create\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"initial\";\n  version = 7);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap[]);\n  votes = []\n\n  TX 1 1970-01-01T00:00:00Z (Test:17:3)\n  #1:0\n  │ known to (since): 'alice' (1), 'bob' (1), 'government' (1)\n  └─> 'alice' exercises Vote on #0:0 (Governance:Ballot)\n  with\n  voter = 'alice'; accept = true\n  children:\n  #1:1\n  │ consumed by: #2:0\n  │ referenced by #2:0\n  │ known to (since): 'alice' (1), 'bob' (1), 'government' (1)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"create\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"initial\";\n  version = 7);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  votes = [true]\n\n  TX 2 1970-01-01T00:00:00Z (Test:19:3)\n  #2:0\n  │ known to (since): 'alice' (2), 'bob' (2), 'government' (2)\n  └─> 'bob' exercises Vote on #1:1 (Governance:Ballot)\n  with\n  voter = 'bob'; accept = true\n  children:\n  #2:1\n  │ known to (since): 'alice' (2), 'bob' (2), 'government' (2)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"create\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"initial\";\n  version = 7);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  votes = [true, true]\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    70:1-70:22\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:100:13:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Cannot decide on tie\"\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Decide on #10:1 (Governance:Ballot)\n  with\n  Sub-transactions:\n  0\n  └─> 'government' exercises Decide on #10:1 (Governance:Ballot)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:78:15)\n  #0:0\n  │ consumed by: #5:0\n  │ referenced by #5:0\n  │ known to (since): 'alice' (0), 'bob' (0), 'charlie' (0),\n  'government' (0)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"creation\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map =\n  GenMap['alice'->{}, 'bob'->{},\n  'charlie'->{}]);\n  text = \"voted text\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}, 'charlie'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap[]);\n  votes = []\n\n  TX 1 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'government'} readAs: {} (Test:79:3)\n\n  TX 2 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'outsider'} readAs: {} (Test:80:3)\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:81:3)\n\n  TX 4 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'government'} readAs: {} (Test:82:3)\n\n  TX 5 1970-01-01T00:00:00Z (Test:83:3)\n  #5:0\n  │ known to (since): 'alice' (5), 'bob' (5), 'charlie' (5),\n  'government' (5)\n  └─> 'alice' exercises Vote on #0:0 (Governance:Ballot)\n  with\n  voter = 'alice'; accept = true\n  children:\n  #5:1\n  │ consumed by: #8:0\n  │ referenced by #8:0\n  │ known to (since): 'alice' (5), 'bob' (5), 'charlie' (5),\n  'government' (5)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"creation\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map =\n  GenMap['alice'->{}, 'bob'->{},\n  'charlie'->{}]);\n  text = \"voted text\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}, 'charlie'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  votes = [true]\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:88:3)\n\n  TX 7 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'government'} readAs: {} (Test:89:3)\n\n  TX 8 1970-01-01T00:00:00Z (Test:90:3)\n  #8:0\n  │ known to (since): 'alice' (8), 'bob' (8), 'charlie' (8),\n  'government' (8)\n  └─> 'bob' exercises Vote on #5:1 (Governance:Ballot)\n  with\n  voter = 'bob'; accept = false\n  children:\n  #8:1\n  │ consumed by: #10:0\n  │ referenced by #10:0\n  │ known to (since): 'alice' (8), 'bob' (8), 'charlie' (8),\n  'government' (8)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"creation\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map =\n  GenMap['alice'->{}, 'bob'->{},\n  'charlie'->{}]);\n  text = \"voted text\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}, 'charlie'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  votes = [false, true]\n\n  TX 9 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'government'} readAs: {} (Test:94:3)\n\n  TX 10 1970-01-01T00:00:00Z (Test:95:3)\n  #10:0\n  │ known to (since): 'alice' (10), 'bob' (10), 'charlie' (10),\n  'government' (10)\n  └─> 'charlie' exercises Vote on #8:1 (Governance:Ballot)\n  with\n  voter = 'charlie'; accept = true\n  children:\n  #10:1\n  │ known to (since): 'alice' (10), 'bob' (10), 'charlie' (10),\n  'government' (10)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"creation\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map =\n  GenMap['alice'->{}, 'bob'->{},\n  'charlie'->{}]);\n  text = \"voted text\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}, 'charlie'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}, 'charlie'->{}]);\n  votes = [true, false, true]\n\n  TX 11 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:99:3)\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    110:1-110:29\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:128:14:\n  Unhandled exception:\n  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415\n  with\n  message = \"Cannot decide on tie\"\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises Decide on #5:1 (Governance:Ballot)\n  with\n  Sub-transactions:\n  0\n  └─> 'government' exercises Decide on #5:1 (Governance:Ballot)\n  with\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:115:15)\n  #0:0\n  │ consumed by: #1:0\n  │ referenced by #1:0\n  │ known to (since): 'alice' (0), 'bob' (0), 'government' (0)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"tie\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap[]);\n  votes = []\n\n  TX 1 1970-01-01T00:00:00Z (Test:116:3)\n  #1:0\n  │ known to (since): 'alice' (1), 'bob' (1), 'government' (1)\n  └─> 'alice' exercises Vote on #0:0 (Governance:Ballot)\n  with\n  voter = 'alice'; accept = true\n  children:\n  #1:1\n  │ consumed by: #2:0\n  │ referenced by #2:0\n  │ known to (since): 'alice' (1), 'bob' (1), 'government' (1)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"tie\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  votes = [true]\n\n  TX 2 1970-01-01T00:00:00Z (Test:118:3)\n  #2:0\n  │ known to (since): 'alice' (2), 'bob' (2), 'government' (2)\n  └─> 'bob' exercises Vote on #1:1 (Governance:Ballot)\n  with\n  voter = 'bob'; accept = false\n  children:\n  #2:1\n  │ known to (since): 'alice' (2), 'bob' (2), 'government' (2)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"tie\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  votes = [false, true]\n\n  TX 3 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'government'} readAs: {} (Test:120:3)\n\n  TX 4 1970-01-01T00:00:00Z (Test:125:15)\n  #4:0\n  │ consumed by: #5:0\n  │ referenced by #5:0\n  │ known to (since): 'alice' (4), 'government' (4)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"rejection\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap[]);\n  votes = []\n\n  TX 5 1970-01-01T00:00:00Z (Test:126:3)\n  #5:0\n  │ known to (since): 'alice' (5), 'government' (5)\n  └─> 'alice' exercises Vote on #4:0 (Governance:Ballot)\n  with\n  voter = 'alice'; accept = false\n  children:\n  #5:1\n  │ known to (since): 'alice' (5), 'government' (5)\n  └─> create Governance:Ballot\n  with\n  government = 'government';\n  name = \"rejection\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"no\";\n  version = 1);\n  voters =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  voted =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}]);\n  votes = [false]\u001b[0m\n"
+        }
+      },
+      {
+        "id": "add-replaces-voters",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:testTiesAndRejectedProposals": true,
+            "daml/Test.daml:testVotingAndDecision": true,
+            "daml/Test.daml:testExecuteProposals": true,
+            "daml/Test.daml:testUpgradeAndBallotManagement": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:02:09.07 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 7e:61:4b:fd:7a:47:ee:77'. Ignoring it.\n\n2026-10-02 17:02:15.99 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Test.daml\nHidden:   no\nRange:    146:1-146:31\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "update-text-ignored",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:testTiesAndRejectedProposals": true,
+            "daml/Test.daml:testVotingAndDecision": true,
+            "daml/Test.daml:testExecuteProposals": false,
+            "daml/Test.daml:testUpgradeAndBallotManagement": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:02:22.89 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 59:15:bc:84:78:ef:a2:a5'. Ignoring it.\n\n2026-10-02 17:02:29.25 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\n\n2026-10-02 17:02:29.29 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Test.daml\nHidden:   no\nRange:    31:1-31:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    146:1-146:31\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "upgrade-version-not-bumped",
+        "source": "llm",
+        "kind": "arithmetic",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:testTiesAndRejectedProposals": true,
+            "daml/Test.daml:testVotingAndDecision": true,
+            "daml/Test.daml:testExecuteProposals": false,
+            "daml/Test.daml:testUpgradeAndBallotManagement": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:02:35.15 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 62:00:0e:61:40:a4:d5:59'. Ignoring it.\n\n2026-10-02 17:02:41.43 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\n\n2026-10-02 17:02:41.48 [ERROR]  [test ScenarioService]  [] \nSCENARIO SERVICE STDERR: Error: Unhandled exception: DA.Exception.AssertionFailed:AssertionFailed@3f4deaf1{ message = \"Assertion failed\" }\nFile:     daml/Test.daml\nHidden:   no\nRange:    31:1-31:21\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\nFile:     daml/Test.daml\nHidden:   no\nRange:    146:1-146:31\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91m\"Scenario service backend error: BErrorClient (ClientIOError (GRPCIOBadStatusCode StatusUnknown\n  (StatusDetails {unStatusDetails = \\\"\\\"})))\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "ballot-controller-citizens",
+        "source": "llm",
+        "kind": "authorization",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Test.daml:testTiesAndRejectedProposals": true,
+            "daml/Test.daml:testVotingAndDecision": true,
+            "daml/Test.daml:testExecuteProposals": true,
+            "daml/Test.daml:testUpgradeAndBallotManagement": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 17:02:47.06 [ERROR]  [test ScenarioService]  [] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 5c:38:7d:b1:5a:2c:4a:24'. Ignoring it.\nFile:     daml/Test.daml\nHidden:   no\nRange:    146:1-146:31\nSource:   Script\nSeverity: DsError\nMessage: \n  \u001b[0;91mScenario execution failed on commit at Test:161:10:\n  0: exercise of CreateBallot in Governance:ConstitutionV2 at DA.Internal.Prelude:375:26\n  failed due to a missing authorization from 'alice', 'bob'\n\n  Ledger time: 1970-01-01T00:00:00Z\n\n  Partial transaction:\n  Failed exercise (unknown source):\n  exercises CreateBallot on #5:3 (Governance:ConstitutionV2)\n  with\n  name = \"law\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"law\";\n  version = 1)\n  Sub-transactions:\n  0\n  └─> 'alice', 'bob',\n  'government' exercises CreateBallot on #5:3 (Governance:ConstitutionV2)\n  with\n  name = \"law\";\n  proposal =\n  Governance:Proposal:CreateConstitution (Governance:Constitution with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map =\n  GenMap['alice'->{},\n  'bob'->{}]);\n  text = \"law\";\n  version = 1)\n\n  Committed transactions:\n  TX 0 1970-01-01T00:00:00Z (Test:152:17)\n  #0:0\n  │ consumed by: #2:0\n  │ referenced by #2:0\n  │ known to (since): 'alice' (0), 'bob' (0), 'government' (0)\n  └─> create Governance:Constitution\n  with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"old\";\n  version = 3\n\n  TX 1 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'government'} readAs: {} (Test:153:3)\n\n  TX 2 1970-01-01T00:00:00Z (Test:154:16)\n  #2:0\n  │ known to (since): 'alice' (2), 'bob' (2), 'government' (2)\n  └─> 'alice', 'bob',\n  'government' exercises UpdateText on #0:0 (Governance:Constitution)\n  with\n  newText = \"new\"\n  children:\n  #2:1\n  │ consumed by: #5:2\n  │ referenced by #5:1, #5:2\n  │ known to (since): 'alice' (2), 'bob' (2), 'government' (2)\n  └─> create Governance:Constitution\n  with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"new\";\n  version = 3\n\n  TX 3 1970-01-01T00:00:00Z (Test:155:16)\n  #3:0\n  │ consumed by: #5:0\n  │ referenced by #5:0\n  │ known to (since): 'alice' (3), 'bob' (3), 'government' (3)\n  └─> create Governance:ConstituationUpgrade\n  with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}])\n\n  TX 4 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'government'} readAs: {} (Test:156:3)\n\n  TX 5 1970-01-01T00:00:00Z (Test:157:11)\n  #5:0\n  │ known to (since): 'alice' (5), 'bob' (5), 'government' (5)\n  └─> 'alice', 'bob',\n  'government' exercises Execute on #3:0 (Governance:ConstituationUpgrade)\n  with\n  constitutionId = #2:1\n  children:\n  #5:1\n  │ known to (since): 'alice' (5), 'bob' (5), 'government' (5)\n  └─> fetch #2:1 (Governance:Constitution)\n\n  #5:2\n  │ known to (since): 'alice' (5), 'bob' (5), 'government' (5)\n  └─> 'alice', 'bob',\n  'government' exercises Archive on #2:1 (Governance:Constitution)\n  with\n\n  #5:3\n  │ known to (since): 'alice' (5), 'bob' (5), 'government' (5)\n  └─> create Governance:ConstitutionV2\n  with\n  government = 'government';\n  citizens =\n  (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n  map = GenMap['alice'->{}, 'bob'->{}]);\n  text = \"new\";\n  version = 4\n\n  TX 6 1970-01-01T00:00:00Z\n  mustFailAt actAs: {'alice'} readAs: {} (Test:160:3)\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 6,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Test.daml:fixture": true,
+        "daml/Test.daml:voteCreateConstitution'": true,
+        "daml/Test.daml:voteUpdateConstitutionText'": true,
+        "daml/Test.daml:allScripts": true,
+        "daml/Test.daml:createNewBallotOffConstitution'": true,
+        "daml/Test.daml:voteUpgradeConstitution'": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:55:19.219631+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/ex-models_____lk4h2sl8/governance/daml/Test.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 4,
+    "bytes_scanned": 5713,
+    "elapsed_seconds": 0.001,
+    "repo_copy_digest": "5319e8710b0069bb8de0c6c52932d02643f04ab50439213fd1564b283a421b73",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "ex-models/governance/daml/Test.daml",
+      "path_in_copy": "governance/daml/Test.daml",
+      "original": "-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Test where\n\nimport DA.Set as S\nimport Daml.Script\nimport Governance\n\ndata Fixture = Fixture with\n  government : Party\n  x : Party\n  y : Party\n  z : Party\n  citizens : Set Party\n  name : Text\n\nfixture : Script Fixture\nfixture =\n  do\n    government <- allocateParty \"Government\"\n    x <- allocateParty \"A\"\n    y <- allocateParty \"B\"\n    z <- allocateParty \"C\"\n    let citizens = S.fromList [ x, y, z ]\n    let name = \"TestBallot\"\n    pure Fixture with ..\n\nacceptBallot : Fixture -> Proposal -> Script DecisionOutcome\nacceptBallot Fixture{..} proposal =\n  do\n    let ballot = Ballot with government; name; proposal; voters = S.empty; voted = S.empty; votes = []\n    let ballotKey = key ballot\n    submit government do createCmd ballot\n    submit government do exerciseByKeyCmd @Ballot ballotKey Add with voter = x\n    submit government do exerciseByKeyCmd @Ballot ballotKey Add with voter = y\n    submit government do exerciseByKeyCmd @Ballot ballotKey Add with voter = z\n    submit x do exerciseByKeyCmd @Ballot ballotKey Vote with voter = x; accept = True\n    submit y do exerciseByKeyCmd @Ballot ballotKey Vote with voter = y; accept = True\n    submit z do exerciseByKeyCmd @Ballot ballotKey Vote with voter = z; accept = False\n    submit government do exerciseByKeyCmd @Ballot ballotKey Decide\n\nassertConstitution : DecisionOutcome -> Script (ContractId Constitution)\nassertConstitution outcome =\n  case outcome of\n    None -> fail \"Expected Some outcome, got None\"\n    Some either ->\n      case either of\n        Left constitutionId -> pure constitutionId\n        _ -> fail \"Expected Left (ContractId Constitution), got Right\"\n\nassertConstitutionV2 : DecisionOutcome -> Script (ContractId ConstitutionV2)\nassertConstitutionV2 outcome =\n  case outcome of\n    None -> fail \"Expected Some outcome, got None\"\n    Some either ->\n      case either of\n        Right constitutionId -> pure constitutionId\n        _ -> fail \"Expected Right (ContractId ConstitutionV2), got Left\"\n\n-- Vote to create constitution\nvoteCreateConstitution' = voteCreateConstitution =<< fixture\n\nvoteCreateConstitution fixture@Fixture{..} = script do\n  let proposal = CreateConstitution (Constitution with government; citizens; text = \"Constitution Text v1\"; version = 1)\n  outcome <- acceptBallot fixture proposal\n  constitutionId <- assertConstitution outcome\n  Some constitution <- queryContractId government constitutionId\n  assert $ constitution.text == \"Constitution Text v1\"\n  assert $ constitution.version == 1\n  pure constitutionId\n\n-- Vote to update constitution text\nvoteUpdateConstitutionText' = voteUpdateConstitutionText =<< fixture\n\nvoteUpdateConstitutionText fixture@Fixture{..} = script do\n  constitutionId <- voteCreateConstitution fixture\n  let proposal = UpdateConstitutionText (constitutionId, \"Constitution Text v1.1\")\n  outcome <- acceptBallot fixture proposal\n  constitutionId <- assertConstitution outcome\n  Some constitution <- queryContractId government constitutionId\n  assert $ constitution.text == \"Constitution Text v1.1\"\n  assert $ constitution.version == 1\n  pure constitutionId\n\n-- Vote to ugrade constitution contract\nvoteUpgradeConstitution' = voteUpgradeConstitution =<< fixture\nvoteUpgradeConstitution fixture@Fixture{..} = script do\n  constitutionId <- voteUpdateConstitutionText fixture\n  let proposal = UpgradeConstitution constitutionId\n  outcome <- acceptBallot fixture proposal\n  constitutionV2Id <- assertConstitutionV2 outcome\n  Some constitutionV2 <- queryContractId government constitutionV2Id\n  assert $ constitutionV2.text == \"Constitution Text v1.1\"\n  assert $ constitutionV2.version == 2\n  pure constitutionV2Id\n\n-- Create a new ballot off ConstitutionV2\n-- We can create the ballot and all voting rights right away using the signatures on ConstitutionV2\ncreateNewBallotOffConstitution' = createNewBallotOffConstitution =<< fixture\ncreateNewBallotOffConstitution fixture@Fixture{..} = script do\n  constitutionV2Id <- voteUpgradeConstitution fixture\n  -- Now we can create new ballots and voting rights right off the constitution having everyone's signature there\n  let proposal = CreateConstitution (Constitution with government; citizens; text = \"Constitution Text v3\"; version = 1)\n  submit government do exerciseCmd constitutionV2Id CreateBallot with name = \"NewBallot\"; proposal\n\nallScripts = do\n  fixture <- fixture\n  voteCreateConstitution fixture\n  voteUpdateConstitutionText fixture\n  voteUpgradeConstitution fixture\n  createNewBallotOffConstitution fixture\n",
+      "generated": "module Test where\n\nimport Daml.Script\nimport qualified DA.Set as S\nimport Governance\n\nballotByName : Party -> Text -> Script (ContractId Ballot, Ballot)\nballotByName government name = do\n  ballots <- query @Ballot government\n  case filter (\\(_, ballot) -> ballot.name == name) ballots of\n    [found] -> pure found\n    _ -> abort \"Expected exactly one active ballot\"\n\napproveTwo : Party -> Party -> Party -> Text -> Proposal -> Script DecisionOutcome\napproveTwo government alice bob name proposal = do\n  ballotId <- submit government do createCmd (Ballot with government; name; proposal; voters = S.fromList [alice, bob]; voted = S.empty; votes = [])\n  submit alice do exerciseCmd ballotId Vote with voter = alice; accept = True\n  (firstId, _) <- ballotByName government name\n  submit bob do exerciseCmd firstId Vote with voter = bob; accept = True\n  (secondId, _) <- ballotByName government name\n  submit government do exerciseCmd secondId Decide\n\nrejectOne : Party -> Party -> Text -> Proposal -> Script DecisionOutcome\nrejectOne government alice name proposal = do\n  ballotId <- submit government do createCmd (Ballot with government; name; proposal; voters = S.singleton alice; voted = S.empty; votes = [])\n  submit alice do exerciseCmd ballotId Vote with voter = alice; accept = False\n  (votedId, _) <- ballotByName government name\n  submit government do exerciseCmd votedId Decide\n\ntestExecuteProposals : Script ()\ntestExecuteProposals = do\n  government <- allocateParty \"government\"\n  alice <- allocateParty \"alice\"\n  bob <- allocateParty \"bob\"\n  let citizens = S.fromList [alice, bob]\n  let constitution = Constitution with government; citizens; text = \"initial\"; version = 7\n  created <- approveTwo government alice bob \"create\" (CreateConstitution constitution)\n  initialId <- case created of\n    Some (Left cid) -> pure cid\n    _ -> abort \"Creation must return a Constitution ID\"\n  initial <- queryContractId government initialId\n  assert (initial == Some constitution)\n  updated <- approveTwo government alice bob \"update\" (UpdateConstitutionText (initialId, \"revised\"))\n  updatedId <- case updated of\n    Some (Left cid) -> pure cid\n    _ -> abort \"Update must return a Constitution ID\"\n  assert (updatedId /= initialId)\n  archived <- queryContractId government initialId\n  assert (archived == None)\n  current <- queryContractId government updatedId\n  assert (current == Some (constitution with text = \"revised\"))\n  upgraded <- approveTwo government alice bob \"upgrade\" (UpgradeConstitution updatedId)\n  v2Id <- case upgraded of\n    Some (Right cid) -> pure cid\n    _ -> abort \"Upgrade must return a ConstitutionV2 ID\"\n  old <- queryContractId government updatedId\n  assert (old == None)\n  new <- queryContractId government v2Id\n  assert (new == Some (ConstitutionV2 with government; citizens; text = \"revised\"; version = 8))\n  declinedCreate <- rejectOne government alice \"declined-create\" (CreateConstitution constitution)\n  assert (declinedCreate == None)\n  declinedUpdate <- rejectOne government alice \"declined-update\" (UpdateConstitutionText (initialId, \"wrong\"))\n  assert (declinedUpdate == None)\n  declinedUpgrade <- rejectOne government alice \"declined-upgrade\" (UpgradeConstitution initialId)\n  assert (declinedUpgrade == None)\n  unchanged <- queryContractId government v2Id\n  assert (unchanged == new)\n\ntestVotingAndDecision : Script ()\ntestVotingAndDecision = do\n  government <- allocateParty \"government\"\n  alice <- allocateParty \"alice\"\n  bob <- allocateParty \"bob\"\n  charlie <- allocateParty \"charlie\"\n  outsider <- allocateParty \"outsider\"\n  let citizens = S.fromList [alice, bob, charlie]\n  let constitution = Constitution with government; citizens; text = \"voted text\"; version = 1\n  ballotId <- submit government do createCmd (Ballot with government; name = \"creation\"; proposal = CreateConstitution constitution; voters = citizens; voted = S.empty; votes = [])\n  submitMustFail government do exerciseCmd ballotId Decide\n  submitMustFail outsider do exerciseCmd ballotId Vote with voter = outsider; accept = True\n  submitMustFail alice do exerciseCmd ballotId Vote with voter = outsider; accept = True\n  submitMustFail government do exerciseCmd ballotId Vote with voter = government; accept = True\n  submit alice do exerciseCmd ballotId Vote with voter = alice; accept = True\n  (firstId, first) <- ballotByName government \"creation\"\n  assert (first.voted == S.singleton alice)\n  assert (first.votes == [True])\n  assert (first.voters == citizens)\n  submitMustFail alice do exerciseCmd firstId Vote with voter = alice; accept = False\n  submitMustFail government do exerciseCmd firstId Decide\n  submit bob do exerciseCmd firstId Vote with voter = bob; accept = False\n  (secondId, second) <- ballotByName government \"creation\"\n  assert (second.voted == S.fromList [alice, bob])\n  assert (second.votes == [False, True])\n  submitMustFail government do exerciseCmd secondId Decide\n  submit charlie do exerciseCmd secondId Vote with voter = charlie; accept = True\n  (thirdId, third) <- ballotByName government \"creation\"\n  assert (third.voted == citizens)\n  assert (third.votes == [True, False, True])\n  submitMustFail alice do exerciseCmd thirdId Decide\n  result <- submit government do exerciseCmd thirdId Decide\n  newId <- case result of\n    Some (Left cid) -> pure cid\n    _ -> abort \"Majority acceptance must create a constitution\"\n  new <- queryContractId government newId\n  assert (new == Some constitution)\n  ballots <- query @Ballot government\n  assert (null ballots)\n\ntestTiesAndRejectedProposals : Script ()\ntestTiesAndRejectedProposals = do\n  government <- allocateParty \"government\"\n  alice <- allocateParty \"alice\"\n  bob <- allocateParty \"bob\"\n  let constitution = Constitution with government; citizens = S.fromList [alice, bob]; text = \"no\"; version = 1\n  ballotId <- submit government do createCmd (Ballot with government; name = \"tie\"; proposal = CreateConstitution constitution; voters = S.fromList [alice, bob]; voted = S.empty; votes = [])\n  submit alice do exerciseCmd ballotId Vote with voter = alice; accept = True\n  (firstId, _) <- ballotByName government \"tie\"\n  submit bob do exerciseCmd firstId Vote with voter = bob; accept = False\n  (tieId, _) <- ballotByName government \"tie\"\n  submitMustFail government do exerciseCmd tieId Decide\n  constitutions <- query @Constitution government\n  assert (null constitutions)\n  (activeId, _) <- ballotByName government \"tie\"\n  assert (activeId == tieId)\n  rejectId <- submit government do createCmd (Ballot with government; name = \"rejection\"; proposal = CreateConstitution constitution; voters = S.fromList [alice]; voted = S.empty; votes = [])\n  submit alice do exerciseCmd rejectId Vote with voter = alice; accept = False\n  (votedId, _) <- ballotByName government \"rejection\"\n  outcome <- submit government do exerciseCmd votedId Decide\n  assert (outcome == None)\n  after <- query @Constitution government\n  assert (null after)\n  charlie <- allocateParty \"charlie\"\n  mixedId <- submit government do createCmd (Ballot with government; name = \"minority\"; proposal = CreateConstitution constitution; voters = S.fromList [alice, bob, charlie]; voted = S.empty; votes = [])\n  submit alice do exerciseCmd mixedId Vote with voter = alice; accept = True\n  (oneId, _) <- ballotByName government \"minority\"\n  submit bob do exerciseCmd oneId Vote with voter = bob; accept = False\n  (twoId, _) <- ballotByName government \"minority\"\n  submit charlie do exerciseCmd twoId Vote with voter = charlie; accept = False\n  (threeId, _) <- ballotByName government \"minority\"\n  minorityResult <- submit government do exerciseCmd threeId Decide\n  assert (minorityResult == None)\n  finalConstitutions <- query @Constitution government\n  assert (null finalConstitutions)\n\ntestUpgradeAndBallotManagement : Script ()\ntestUpgradeAndBallotManagement = do\n  government <- allocateParty \"government\"\n  alice <- allocateParty \"alice\"\n  bob <- allocateParty \"bob\"\n  charlie <- allocateParty \"charlie\"\n  let citizens = S.fromList [alice, bob]\n  originalId <- submitMulti [government, alice, bob] [] do createCmd (Constitution with government; citizens; text = \"old\"; version = 3)\n  submitMustFail government do exerciseCmd originalId UpdateText with newText = \"unauthorized\"\n  updatedId <- submitMulti [government, alice, bob] [] do exerciseCmd originalId UpdateText with newText = \"new\"\n  upgradeId <- submitMulti [government, alice, bob] [] do createCmd ConstituationUpgrade with government; citizens\n  submitMustFail government do exerciseCmd upgradeId Execute with constitutionId = updatedId\n  v2Id <- submitMulti [government, alice, bob] [] do exerciseCmd upgradeId Execute with constitutionId = updatedId\n  v2 <- queryContractId government v2Id\n  assert (v2 == Some (ConstitutionV2 with government; citizens; text = \"new\"; version = 4))\n  submitMustFail alice do exerciseCmd v2Id CreateBallot with name = \"law\"; proposal = UpgradeConstitution originalId\n  key <- submit government do exerciseCmd v2Id CreateBallot with name = \"law\"; proposal = CreateConstitution (Constitution with government; citizens; text = \"law\"; version = 1)\n  assert (key == (government, \"law\"))\n  (ballotId, ballot) <- ballotByName government \"law\"\n  assert (ballot.voters == citizens)\n  assert (ballot.voted == S.empty)\n  assert (ballot.votes == [])\n  submitMustFail government do exerciseCmd v2Id CreateBallot with name = \"law\"; proposal = UpgradeConstitution originalId\n  submitMustFail alice do exerciseCmd ballotId Add with voter = charlie\n  submit government do exerciseCmd ballotId Add with voter = charlie\n  (_, expanded) <- ballotByName government \"law\"\n  assert (expanded.voters == S.insert charlie citizens)\n  assert (expanded.voted == S.empty)\n  assert (expanded.votes == [])\n  (expandedId, _) <- ballotByName government \"law\"\n  submit charlie do exerciseCmd expandedId Vote with voter = charlie; accept = True\n  (votedId, votedBallot) <- ballotByName government \"law\"\n  assert (votedBallot.voters == S.insert charlie citizens)\n  assert (votedBallot.voted == S.singleton charlie)\n  assert (votedBallot.votes == [True])\n  submitMustFail government do exerciseCmd votedId Decide\n  newerId <- submitMulti [government, alice, bob] [] do exerciseCmd v2Id UpgradeV2 with newText = \"latest\"\n  old <- queryContractId government v2Id\n  assert (old == None)\n  newer <- queryContractId government newerId\n  assert (newer == Some (ConstitutionV2 with government; citizens; text = \"latest\"; version = 4))\n",
+      "captured_at_utc": "2026-10-02T17:02:53.198687+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/ex-models_____lk4h2sl8",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added Daml Script tests in `governance/daml/Test.daml:1` covering proposal creation, text updates and upgrades; voting majorities, ties and rejection; voter eligibility and duplicate votes; ballot management and authorization failures.\n\nAll four scripts pass with `daml test`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 207.0720817919937,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 268557,
+      "output_tokens": 9861,
+      "cached_input_tokens": 242081
+    },
+    "usage_by_thread": {
+      "01a0fd8d-10b6-7e82-9ca8-83aa57f4ccf4": {
+        "usage": {
+          "input_tokens": 268557,
+          "output_tokens": 9861,
+          "cached_input_tokens": 242081
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.1999782,
+    "input_usd": 0.052952,
+    "cached_input_usd": 0.04841619999999999,
+    "output_usd": 0.09861000000000002,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790960278.274,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960280.347,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960290.387,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960294.388,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960317.375,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960320.744,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960361.969,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960372.239,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960381.043,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960392.217,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960408.107,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960433.492,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960446.068,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960463.961,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790960476.449,
+          "client": "10.219.163.50",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "governance/daml/Test.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

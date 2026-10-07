@@ -1,0 +1,111 @@
+task: splice/daml/splice-wallet-test/daml/Splice/Scripts/Wallet/TestMintingDelegation.daml
+notes: ""
+mutations:
+  - id: accept-existing-not-archived
+    source: llm
+    target_script: testMintingDelegation_AcceptWithExistingDelegationArchival
+    kind: archival
+    reason: The existing delegation is fetched with fetchButArchiveLater instead of fetchAndArchive, so replacing a delegation leaves the old one active.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      @@ -26,7 +26,7 @@ template MintingDelegationProposal
+             do
+               case existingDelegationCid of
+                 Some cid -> do
+      -            existingDelegation <- fetchAndArchive (ForOwner with dso = delegation.dso; owner = delegation.beneficiary) cid
+      +            existingDelegation <- fetchButArchiveLater (ForOwner with dso = delegation.dso; owner = delegation.beneficiary) cid
+                   existingDelegation.delegate === delegation.delegate
+                 None -> pure ()
+               MintingDelegationProposal_AcceptResult <$> create delegation
+  - id: accept-existing-owner-is-delegate
+    source: llm
+    target_script: testMintingDelegation_AcceptWithExistingDelegationArchival
+    kind: lookup
+    reason: The existing delegation is fetched as owned by the delegate instead of the beneficiary, so the group check compares the wrong party.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      @@ -26,7 +26,7 @@ template MintingDelegationProposal
+             do
+               case existingDelegationCid of
+                 Some cid -> do
+      -            existingDelegation <- fetchAndArchive (ForOwner with dso = delegation.dso; owner = delegation.beneficiary) cid
+      +            existingDelegation <- fetchAndArchive (ForOwner with dso = delegation.dso; owner = delegation.delegate) cid
+                   existingDelegation.delegate === delegation.delegate
+                 None -> pure ()
+               MintingDelegationProposal_AcceptResult <$> create delegation
+  - id: mint-no-expiry-check
+    source: llm
+    target_script: testMintingDelegation_checksExpiry
+    kind: time
+    reason: The deadline assertion at the start of MintingDelegation_Mint is left out, so an expired delegation can still mint.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      @@ -64,7 +64,7 @@ template MintingDelegation
+               context : PaymentTransferContext
+                 -- ^ The transfer context including amulet rules.
+             controller delegate
+      -      do assertWithinDeadline "expiresAt" expiresAt
+      +      do pure ()
+                transferResult <- exercise context.amuletRules AmuletRules_Transfer with
+                  transfer = Transfer with
+                    sender = beneficiary
+  - id: mint-sender-is-delegate
+    source: llm
+    target_script: testMintingDelegation
+    kind: field
+    reason: The transfer sender is the delegate instead of the beneficiary, so rewards are minted from the delegate's inputs rather than on behalf of the beneficiary.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      @@ -67,7 +67,7 @@ template MintingDelegation
+             do assertWithinDeadline "expiresAt" expiresAt
+                transferResult <- exercise context.amuletRules AmuletRules_Transfer with
+                  transfer = Transfer with
+      -             sender = beneficiary
+      +             sender = delegate
+                    provider = delegate
+                    inputs
+                    outputs = []
+  - id: accept-controller-is-beneficiary
+    source: llm
+    target_script: testMintingDelegation_AcceptWithExistingDelegationArchival
+    kind: authorization
+    reason: The accept choice is controlled by the beneficiary who already signs the proposal, instead of the delegate who must agree to it.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      @@ -22,7 +22,7 @@ template MintingDelegationProposal
+               existingDelegationCid : Optional (ContractId MintingDelegation)
+                 -- ^ Optional existing delegation to archive while creating the new one.
+                 -- Useful for changing the parameters of the delegation.
+      -      controller delegation.delegate
+      +      controller delegation.beneficiary
+             do
+               case existingDelegationCid of
+                 Some cid -> do
+  - id: mint-controller-is-beneficiary
+    source: llm
+    target_script: testMintingDelegation
+    kind: authorization
+    reason: MintingDelegation_Mint is controlled by the beneficiary instead of the delegate, so the delegate cannot mint on the beneficiary's behalf.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/MintingDelegation.daml
+      @@ -63,7 +63,7 @@ template MintingDelegation
+                 -- ^ The inputs to the transfer, like the validator liveness activity records owned by the beneficiary.
+               context : PaymentTransferContext
+                 -- ^ The transfer context including amulet rules.
+      -      controller delegate
+      +      controller beneficiary
+             do assertWithinDeadline "expiresAt" expiresAt
+                transferResult <- exercise context.amuletRules AmuletRules_Transfer with
+                  transfer = Transfer with

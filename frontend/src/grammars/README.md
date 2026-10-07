@@ -1,0 +1,1 @@
+`daml.tmLanguage.json` is upstream: the Daml VS Code extension's grammar, unmodified apart from its conversion to JSON, under the licence in `daml.LICENSE.txt`. `daml-extras.tmLanguage.json` is ours, under the package's Apache-2.0 licence: it is injected into the upstream grammar and adds the scopes that grammar leaves out.

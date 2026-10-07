@@ -1,5 +1,5 @@
 // The dialog that opens from a matrix cell. It shows how the task was graded, the Codex
-// event timeline with its token-usage chart, the implementation files before and after,
+// event timeline with its token-usage chart, the answer files before and after,
 // the terminal log and the raw JSON. It loads the task itself and polls while the task is running.
 // Mount it while a task is selected and unmount it to close it. Filters, sort order and
 // expanded sections are state of this component, so closing discards them.
@@ -11,6 +11,7 @@ import { Button, Modal, Select, Space, Tag, Tooltip, Typography, message } from 
 import { fetchAgentTaskDetail } from './api'
 import { copyTextToClipboard } from './clipboard'
 import { CodeBlock } from './components/CodeBlock'
+import { MutantMatrix } from './components/MutantMatrix'
 import { Sym } from './components/Sym'
 import { formatDuration, formatSmallUsd, formatTestTally, formatTokenCount, readErrorDetail } from './format'
 import { STATUS_META } from './symbols'
@@ -572,7 +573,7 @@ function diffRowsToAlignedText(rows: SideBySideDiffRow[]): {
   }
 }
 
-function syntaxLanguageForImpl(path: string): string {
+function syntaxLanguageForPath(path: string): string {
   return /\.daml$/i.test(path) ? 'haskell' : 'text'
 }
 
@@ -645,7 +646,7 @@ function CostSummaryStrip({ eventCosts, total }: { eventCosts: AgentEventCosts; 
           {eventCosts.priced
             ? `${eventCosts.requests.length} requests at ${eventCosts.model} prices. Each event carries what it cost to write, to send once fresh and to resend from cache.`
             : eventCosts.model === null
-              ? 'The run was billed to a subscription, so no cost is shown and the timeline shows tokens only.'
+              ? 'No model is recorded for this task, so the timeline shows tokens only.'
               : `No price is known for ${eventCosts.model}, so the timeline shows tokens only.`}
         </Text>
       </div>
@@ -714,7 +715,7 @@ export function TaskDetailModal({ runId, taskId, taskFlags, onClose }: TaskDetai
   const [detailLoading, setDetailLoading] = useState(true)
   const [detailError, setDetailError] = useState<string | null>(null)
   const [detailData, setDetailData] = useState<AgentTaskDetailResponse | null>(null)
-  const [selectedImplPath, setSelectedImplPath] = useState<string | null>(null)
+  const [selectedAnswerPath, setSelectedAnswerPath] = useState<string | null>(null)
   const { copiedValue: copiedTaskJsonPath, copyWithFeedback: copyTaskJsonPathWithFeedback } = useClipboardFeedback()
   const [eventSortKey, setEventSortKey] = useState<EventSortKey>('line')
   const [eventSortDirection, setEventSortDirection] = useState<'asc' | 'desc'>('asc')
@@ -874,19 +875,19 @@ export function TaskDetailModal({ runId, taskId, taskFlags, onClose }: TaskDetai
     : eventCosts.priced
       ? eventCosts.total_usd ?? 0
       : eventCosts.categories.reduce((sum, category) => sum + category.tokens, 0)
-  const implFileViews = useMemo(() => detailData?.impl_file_views || [], [detailData])
-  const selectedImplView = useMemo(() => {
-    if (implFileViews.length === 0) return null
-    const selected = selectedImplPath
-      ? implFileViews.find((item) => item.impl_file === selectedImplPath) || null
+  const answerFileViews = useMemo(() => detailData?.answer_file_views || [], [detailData])
+  const selectedAnswerView = useMemo(() => {
+    if (answerFileViews.length === 0) return null
+    const selected = selectedAnswerPath
+      ? answerFileViews.find((item) => item.answer_file === selectedAnswerPath) || null
       : null
-    return selected || implFileViews[0]
-  }, [implFileViews, selectedImplPath])
-  const implDiffRows = useMemo(
-    () => buildSideBySideDiffRows(selectedImplView?.original_text || '', selectedImplView?.generated_text || ''),
-    [selectedImplView]
+    return selected || answerFileViews[0]
+  }, [answerFileViews, selectedAnswerPath])
+  const answerDiffRows = useMemo(
+    () => buildSideBySideDiffRows(selectedAnswerView?.original_text || '', selectedAnswerView?.generated_text || ''),
+    [selectedAnswerView]
   )
-  const alignedImplDiff = useMemo(() => diffRowsToAlignedText(implDiffRows), [implDiffRows])
+  const alignedAnswerDiff = useMemo(() => diffRowsToAlignedText(answerDiffRows), [answerDiffRows])
 
   async function onCopyTaskJsonPath(taskJsonPath: string): Promise<void> {
     const copied = await copyTaskJsonPathWithFeedback(taskJsonPath)
@@ -1050,6 +1051,13 @@ export function TaskDetailModal({ runId, taskId, taskFlags, onClose }: TaskDetai
               </div>
             </div>
 
+            {detailData.mutant_matrix && (
+              <div className="agent-task-detail-block">
+                <div className="agent-task-detail-title">Mutants</div>
+                <MutantMatrix matrix={detailData.mutant_matrix} />
+              </div>
+            )}
+
             <div className="agent-task-detail-block agent-task-detail-block-paths">
               <div className="agent-task-detail-title">Paths</div>
               <div className="agent-task-detail-grid">
@@ -1066,38 +1074,38 @@ export function TaskDetailModal({ runId, taskId, taskFlags, onClose }: TaskDetai
             </div>
 
             <div className="agent-task-detail-block agent-task-detail-block-impl-viewer">
-              <div className="agent-task-detail-title">Model Response by Impl File</div>
-              {implFileViews.length === 0 && (
+              <div className="agent-task-detail-title">Model Response by File</div>
+              {answerFileViews.length === 0 && (
                 <Text type="secondary">
                   No per-file generated snapshots are stored for this task.
                 </Text>
               )}
-              {implFileViews.length > 0 && selectedImplView && (
+              {answerFileViews.length > 0 && selectedAnswerView && (
                 <>
                   <div className="agent-impl-viewer-toolbar">
                     <div className="agent-impl-viewer-select">
-                      <strong>Impl file</strong>
+                      <strong>Answer file</strong>
                       <Select
-                        value={selectedImplView.impl_file}
+                        value={selectedAnswerView.answer_file}
                         style={{ minWidth: 460, maxWidth: '100%' }}
-                        options={implFileViews.map((item) => ({
+                        options={answerFileViews.map((item) => ({
                           label: item.path_in_copy,
-                          value: item.impl_file,
+                          value: item.answer_file,
                         }))}
-                        onChange={(value: string) => setSelectedImplPath(value)}
+                        onChange={(value: string) => setSelectedAnswerPath(value)}
                         showSearch
                         optionFilterProp="label"
                       />
                     </div>
                     <div className="agent-impl-viewer-tags">
-                      <Tag>Original: {selectedImplView.original_source}</Tag>
-                      <Tag>Generated: {selectedImplView.generated_source}</Tag>
+                      <Tag>Original: {selectedAnswerView.original_source}</Tag>
+                      <Tag>Generated: {selectedAnswerView.generated_source}</Tag>
                     </div>
                   </div>
                   <div className="agent-impl-viewer-path">
-                    <Text code>{selectedImplView.impl_file}</Text>
+                    <Text code>{selectedAnswerView.answer_file}</Text>
                   </div>
-                  {selectedImplView.generated_text === null && (
+                  {selectedAnswerView.generated_text === null && (
                     <div className="agent-task-detail-error">
                       Model-generated content is missing for this file in stored metadata.
                     </div>
@@ -1106,21 +1114,21 @@ export function TaskDetailModal({ runId, taskId, taskFlags, onClose }: TaskDetai
                     <div className="agent-impl-diff-col">
                       <div className="agent-impl-diff-header">Original</div>
                       <CodeBlock
-                        language={syntaxLanguageForImpl(selectedImplView.impl_file)}
-                        text={alignedImplDiff.leftText}
+                        language={syntaxLanguageForPath(selectedAnswerView.answer_file)}
+                        text={alignedAnswerDiff.leftText}
                         theme="light"
                         maxHeight="520px"
-                        lineClassName={(lineNumber) => `agent-impl-diff-line-${alignedImplDiff.leftKinds[lineNumber - 1] || 'same'}`}
+                        lineClassName={(lineNumber) => `agent-impl-diff-line-${alignedAnswerDiff.leftKinds[lineNumber - 1] || 'same'}`}
                       />
                     </div>
                     <div className="agent-impl-diff-col">
                       <div className="agent-impl-diff-header">Model Generated</div>
                       <CodeBlock
-                        language={syntaxLanguageForImpl(selectedImplView.impl_file)}
-                        text={alignedImplDiff.rightText}
+                        language={syntaxLanguageForPath(selectedAnswerView.answer_file)}
+                        text={alignedAnswerDiff.rightText}
                         theme="light"
                         maxHeight="520px"
-                        lineClassName={(lineNumber) => `agent-impl-diff-line-${alignedImplDiff.rightKinds[lineNumber - 1] || 'same'}`}
+                        lineClassName={(lineNumber) => `agent-impl-diff-line-${alignedAnswerDiff.rightKinds[lineNumber - 1] || 'same'}`}
                       />
                     </div>
                   </div>

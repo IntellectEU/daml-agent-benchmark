@@ -25,7 +25,7 @@ MODEL = "gpt-6-luna"
 
 
 def _price(input_tokens: int, output_tokens: int = 0, cached: int = 0) -> float:
-    return sum(cost_breakdown(MODEL, input_tokens, output_tokens, cached).values())
+    return cost_breakdown(MODEL, input_tokens, output_tokens, cached).total
 
 
 def _request(input_tokens: int, output_tokens: int = 0, cached: int = 0, thread_id: str = "main") -> RequestTokenUsage:
@@ -45,9 +45,9 @@ def test_parts_are_per_request_sums() -> None:
     cost = requests_cost(MODEL, [_request(150_000, 2_000, 100_000), _request(180_000, 3_000, 150_000)])
     first = cost_breakdown(MODEL, 150_000, 2_000, 100_000)
     second = cost_breakdown(MODEL, 180_000, 3_000, 150_000)
-    assert cost.input == pytest.approx(first["input"] + second["input"])
-    assert cost.cached_input == pytest.approx(first["cached_input"] + second["cached_input"])
-    assert cost.output == pytest.approx(first["output"] + second["output"])
+    assert cost.input == pytest.approx(first.input + second.input)
+    assert cost.cached_input == pytest.approx(first.cached_input + second.cached_input)
+    assert cost.output == pytest.approx(first.output + second.output)
     assert cost.total == cost.input + cost.cached_input + cost.output
 
 

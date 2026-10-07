@@ -1,0 +1,652 @@
+{
+  "task_id": "daml-finance/src/test/daml/Daml/Finance/Data/Test/DateClock.daml",
+  "task_safe_name": "daml-finance__src__test__daml__Daml__Finance__Data__Test__DateClock.daml",
+  "test_file": "daml-finance/src/test/daml/Daml/Finance/Data/Test/DateClock.daml",
+  "impl_files": [
+    "daml-finance/src/main/daml/Daml/Finance/Data/V4/Time/DateClock/Types.daml",
+    "daml-finance/src/main/daml/Daml/Finance/Data/V4/Time/DateClock.daml",
+    "daml-finance/src/main/daml/Daml/Finance/Interface/Data/V4/Reference/Time.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.427072+00:00",
+  "started_at_utc": "2026-10-02T16:25:51.442921+00:00",
+  "finished_at_utc": "2026-10-02T16:31:23.314491+00:00",
+  "live_updated_at_utc": "2026-10-02T16:31:23.314491+00:00",
+  "repo_copy": "261002-180850/daml-finance_____zy67ef1p",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClockConversions": true,
+      "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClockMoves": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "move-clock-keeps-old-clock",
+        "source": "real-bug",
+        "kind": "archival",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClockConversions": true,
+            "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClockMoves": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:29:56.57 [ERROR]  [test ScenarioService] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: ed:02:8a:87:19:96:35:b8'. Ignoring it.\nFile:     src/test/daml/Daml/Finance/Data/Test/DateClock.daml\nHidden:   no\nRange:    43:1-43:19\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Unhandled exception:  DA.Exception.GeneralError:GeneralError@86828b9843465f419db1ef8a8ee741d1eef645df02375ebf509cdc8c3ddd16cb with\n                          message = \"Advancing must archive the old clock\"\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:66:15)\n  #0:0\n  │   referenced by #1:0, #2:0, #3:0, #8:0\n  │   disclosed to (since): 'ClockObserver' (0), 'ClockProvider' (0)\n  └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClock:DateClock\n                      with\n                        providers =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockProvider'->{}]);\n                        date =\n                          (Daml.Finance.Data.V4.Time.DateClock.Types:Unit with\n                             unpack = 2024-02-28T);\n                        id =\n                          (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                             unpack = \"daily\");\n                        description = \"original clock\";\n                        observers =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockObserver'->{}])\n  \n  TX 1 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:68:57)\n  #1:0\n  │   disclosed to (since): 'ClockObserver' (1), 'ClockProvider' (1)\n  └─> 'ClockObserver' exercises GetView on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        viewer = 'ClockObserver'\n  \n  TX 2 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:72:74)\n  #2:0\n  │   disclosed to (since): 'ClockObserver' (2), 'ClockProvider' (2)\n  └─> 'ClockObserver' exercises GetView on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        viewer = 'ClockObserver'\n  \n  TX 3 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:76:18)\n  #3:0\n  │   disclosed to (since): 'ClockObserver' (3), 'ClockProvider' (3)\n  └─> 'ClockObserver' exercises GetTime on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        actors =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockObserver'->{}])\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockObserver'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:80:3)\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockObserver'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:82:3)\n  \n  TX 6 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockStranger'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:84:3)\n  \n  TX 7 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockStranger'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:86:3)\n  \n  TX 8 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:89:28)\n  #8:0\n  │   disclosed to (since): 'ClockProvider' (8)\n  └─> 'ClockProvider' exercises Advance on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        eventId =\n                          (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                             unpack = \"leap day\");\n                        eventDescription = \"advance across leap day\"\n      children:\n      #8:1\n      │   disclosed to (since): 'ClockProvider' (8), 'ClockObserver' (8)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClock:DateClock\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date =\n                              (Daml.Finance.Data.V4.Time.DateClock.Types:Unit with\n                                 unpack = 2024-02-29T);\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"daily\");\n                            description = \"original clock\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\n      \n      #8:2\n      │   disclosed to (since): 'ClockProvider' (8), 'ClockObserver' (8)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClockUpdate:DateClockUpdateEvent\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date = 2024-02-29T;\n                            eventTime = 2024-02-29T00:00:00Z;\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"leap day\");\n                            description = \"advance across leap day\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\u001b[0m\n"
+        }
+      },
+      {
+        "id": "rewind-moves-forward",
+        "source": "llm",
+        "kind": "arithmetic",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClockConversions": true,
+            "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClockMoves": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:30:34.70 [ERROR]  [test ScenarioService] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 3d:27:4b:a9:76:6b:1f:f2'. Ignoring it.\nFile:     src/test/daml/Daml/Finance/Data/Test/DateClock.daml\nHidden:   no\nRange:    43:1-43:19\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Unhandled exception:  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415 with\n                          message = \"Failure, expected 2024-03-02 == 2024-02-29\"\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:66:15)\n  #0:0\n  │   consumed by: #8:1\n  │   referenced by #2:0, #8:1, #8:0, #3:0, #1:0\n  │   disclosed to (since): 'ClockObserver' (0), 'ClockProvider' (0)\n  └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClock:DateClock\n                      with\n                        providers =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockProvider'->{}]);\n                        date =\n                          (Daml.Finance.Data.V4.Time.DateClock.Types:Unit with\n                             unpack = 2024-02-28T);\n                        id =\n                          (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                             unpack = \"daily\");\n                        description = \"original clock\";\n                        observers =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockObserver'->{}])\n  \n  TX 1 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:68:57)\n  #1:0\n  │   disclosed to (since): 'ClockObserver' (1), 'ClockProvider' (1)\n  └─> 'ClockObserver' exercises GetView on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        viewer = 'ClockObserver'\n  \n  TX 2 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:72:74)\n  #2:0\n  │   disclosed to (since): 'ClockObserver' (2), 'ClockProvider' (2)\n  └─> 'ClockObserver' exercises GetView on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        viewer = 'ClockObserver'\n  \n  TX 3 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:76:18)\n  #3:0\n  │   disclosed to (since): 'ClockObserver' (3), 'ClockProvider' (3)\n  └─> 'ClockObserver' exercises GetTime on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        actors =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockObserver'->{}])\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockObserver'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:80:3)\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockObserver'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:82:3)\n  \n  TX 6 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockStranger'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:84:3)\n  \n  TX 7 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockStranger'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:86:3)\n  \n  TX 8 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:89:28)\n  #8:0\n  │   disclosed to (since): 'ClockProvider' (8)\n  └─> 'ClockProvider' exercises Advance on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        eventId =\n                          (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                             unpack = \"leap day\");\n                        eventDescription = \"advance across leap day\"\n      children:\n      #8:1\n      │   disclosed to (since): 'ClockProvider' (8), 'ClockObserver' (8)\n      └─> 'ClockProvider' exercises Archive on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n      \n      #8:2\n      │   consumed by: #13:1\n      │   referenced by #12:0, #13:0, #13:1\n      │   disclosed to (since): 'ClockProvider' (8), 'ClockObserver' (8)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClock:DateClock\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date =\n                              (Daml.Finance.Data.V4.Time.DateClock.Types:Unit with\n                                 unpack = 2024-02-29T);\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"daily\");\n                            description = \"original clock\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\n      \n      #8:3\n      │   referenced by #9:0, #10:0\n      │   disclosed to (since): 'ClockProvider' (8), 'ClockObserver' (8)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClockUpdate:DateClockUpdateEvent\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date = 2024-02-29T;\n                            eventTime = 2024-02-29T00:00:00Z;\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"leap day\");\n                            description = \"advance across leap day\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\n  \n  TX 9 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:109:5)\n  #9:0\n  │   disclosed to (since): 'ClockObserver' (9), 'ClockProvider' (9)\n  └─> 'ClockObserver' exercises GetView on #8:3 (Daml.Finance.Data.V4.Time.DateClockUpdate:DateClockUpdateEvent)\n                      with\n                        viewer = 'ClockObserver'\n  \n  TX 10 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:116:23)\n  #10:0\n  │   disclosed to (since): 'ClockObserver' (10),\n                            'ClockProvider' (10)\n  └─> 'ClockObserver' exercises GetView on #8:3 (Daml.Finance.Data.V4.Time.DateClockUpdate:DateClockUpdateEvent)\n                      with\n                        viewer = 'ClockObserver'\n  \n  TX 11 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockProvider'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:119:3)\n  \n  TX 12 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:121:15)\n  #12:0\n  │   disclosed to (since): 'ClockProvider' (12)\n  └─> 'ClockProvider' exercises GetTime on #8:2 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        actors =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockProvider'->{}])\n  \n  TX 13 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:126:30)\n  #13:0\n  │   disclosed to (since): 'ClockProvider' (13)\n  └─> 'ClockProvider' exercises Advance on #8:2 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        eventId =\n                          (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                             unpack = \"March\");\n                        eventDescription = \"new month\"\n      children:\n      #13:1\n      │   disclosed to (since): 'ClockProvider' (13),\n                                'ClockObserver' (13)\n      └─> 'ClockProvider' exercises Archive on #8:2 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n      \n      #13:2\n      │   consumed by: #14:1\n      │   referenced by #14:0, #14:1\n      │   disclosed to (since): 'ClockProvider' (13),\n                                'ClockObserver' (13)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClock:DateClock\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date =\n                              (Daml.Finance.Data.V4.Time.DateClock.Types:Unit with\n                                 unpack = 2024-03-01T);\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"daily\");\n                            description = \"original clock\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\n      \n      #13:3\n      │   disclosed to (since): 'ClockProvider' (13),\n                                'ClockObserver' (13)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClockUpdate:DateClockUpdateEvent\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date = 2024-03-01T;\n                            eventTime = 2024-03-01T00:00:00Z;\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"March\");\n                            description = \"new month\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\n  \n  TX 14 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:134:33)\n  #14:0\n  │   disclosed to (since): 'ClockProvider' (14)\n  └─> 'ClockProvider' exercises Rewind on #13:2 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        eventId =\n                          (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                             unpack = \"back to February\");\n                        eventDescription = \"rewind from March\"\n      children:\n      #14:1\n      │   disclosed to (since): 'ClockProvider' (14),\n                                'ClockObserver' (14)\n      └─> 'ClockProvider' exercises Archive on #13:2 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n      \n      #14:2\n      │   disclosed to (since): 'ClockProvider' (14),\n                                'ClockObserver' (14)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClock:DateClock\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date =\n                              (Daml.Finance.Data.V4.Time.DateClock.Types:Unit with\n                                 unpack = 2024-03-02T);\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"daily\");\n                            description = \"original clock\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\n      \n      #14:3\n      │   disclosed to (since): 'ClockProvider' (14),\n                                'ClockObserver' (14)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClockUpdate:DateClockUpdateEvent\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date = 2024-03-02T;\n                            eventTime = 2024-03-02T00:00:00Z;\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"back to February\");\n                            description = \"rewind from March\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\u001b[0m\n"
+        }
+      },
+      {
+        "id": "clock-date-not-updated",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClockConversions": true,
+            "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClockMoves": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:31:12.90 [ERROR]  [test ScenarioService] \nExpected PORT=<port> from scenario service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: c3:7c:39:66:59:91:72:8d'. Ignoring it.\nFile:     src/test/daml/Daml/Finance/Data/Test/DateClock.daml\nHidden:   no\nRange:    43:1-43:19\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Unhandled exception:  DA.Exception.AssertionFailed:AssertionFailed@3f4deaf145a15cdcfa762c058005e2edb9baa75bb7f95a4f8f6f937378e86415 with\n                          message = \"Failure, expected 2024-02-28 == 2024-02-29\"\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:66:15)\n  #0:0\n  │   consumed by: #8:1\n  │   referenced by #2:0, #3:0, #1:0, #8:0, #8:1\n  │   disclosed to (since): 'ClockObserver' (0), 'ClockProvider' (0)\n  └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClock:DateClock\n                      with\n                        providers =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockProvider'->{}]);\n                        date =\n                          (Daml.Finance.Data.V4.Time.DateClock.Types:Unit with\n                             unpack = 2024-02-28T);\n                        id =\n                          (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                             unpack = \"daily\");\n                        description = \"original clock\";\n                        observers =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockObserver'->{}])\n  \n  TX 1 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:68:57)\n  #1:0\n  │   disclosed to (since): 'ClockObserver' (1), 'ClockProvider' (1)\n  └─> 'ClockObserver' exercises GetView on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        viewer = 'ClockObserver'\n  \n  TX 2 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:72:74)\n  #2:0\n  │   disclosed to (since): 'ClockObserver' (2), 'ClockProvider' (2)\n  └─> 'ClockObserver' exercises GetView on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        viewer = 'ClockObserver'\n  \n  TX 3 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:76:18)\n  #3:0\n  │   disclosed to (since): 'ClockObserver' (3), 'ClockProvider' (3)\n  └─> 'ClockObserver' exercises GetTime on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        actors =\n                          (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                             map = GenMap['ClockObserver'->{}])\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockObserver'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:80:3)\n  \n  TX 5 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockObserver'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:82:3)\n  \n  TX 6 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockStranger'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:84:3)\n  \n  TX 7 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'ClockStranger'} readAs:\n                                           {} (Daml.Finance.Data.Test.DateClock:86:3)\n  \n  TX 8 1970-01-01T00:00:00Z (Daml.Finance.Data.Test.DateClock:89:28)\n  #8:0\n  │   disclosed to (since): 'ClockProvider' (8)\n  └─> 'ClockProvider' exercises Advance on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n                      with\n                        eventId =\n                          (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                             unpack = \"leap day\");\n                        eventDescription = \"advance across leap day\"\n      children:\n      #8:1\n      │   disclosed to (since): 'ClockProvider' (8), 'ClockObserver' (8)\n      └─> 'ClockProvider' exercises Archive on #0:0 (Daml.Finance.Data.V4.Time.DateClock:DateClock)\n      \n      #8:2\n      │   disclosed to (since): 'ClockProvider' (8), 'ClockObserver' (8)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClock:DateClock\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date =\n                              (Daml.Finance.Data.V4.Time.DateClock.Types:Unit with\n                                 unpack = 2024-02-28T);\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"daily\");\n                            description = \"original clock\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\n      \n      #8:3\n      │   disclosed to (since): 'ClockProvider' (8), 'ClockObserver' (8)\n      └─> 'ClockProvider' creates Daml.Finance.Data.V4.Time.DateClockUpdate:DateClockUpdateEvent\n                          with\n                            providers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockProvider'->{}]);\n                            date = 2024-02-29T;\n                            eventTime = 2024-02-29T00:00:00Z;\n                            id =\n                              (Daml.Finance.Interface.Types.Common.V3.Types:Id with\n                                 unpack = \"leap day\");\n                            description = \"advance across leap day\";\n                            observers =\n                              (DA.Set.Types:Set@97b883cd8a2b7f49f90d5d39c981cf6e110cf1f1c64427a28a6d58ec88c43657 with\n                                 map = GenMap['ClockObserver'->{}])\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 3,
+    "real_bugs_total": 1
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "src/test/daml/Daml/Finance/Data/Test/DateClock.daml:testDateClock": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:36:55.880831+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/daml-finance_____zy67ef1p/src/test/daml/Daml/Finance/Data/Test/DateClock.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 1076,
+    "bytes_scanned": 18479683,
+    "elapsed_seconds": 2.751,
+    "repo_copy_digest": "c4b0750c2c5583e08125d3381a4fe28b47f9396b75fc647e139c59da3959aaa6",
+    "pruned_archives": [
+      {
+        "path": "package/test/daml/Daml.Finance.Test.Util/.lib/daml-finance/Daml.Finance.Data.V4/4.0.0/daml-finance-data-v4-4.0.0.dar",
+        "entries": [
+          "daml-finance-data-v4-4.0.0-4663fb5b41624dfa2d9e2daf862735ebcd04c90e1250fd19f790eade7d861824/Daml/Finance/Data/V4/Time/DateClock.daml",
+          "daml-finance-data-v4-4.0.0-4663fb5b41624dfa2d9e2daf862735ebcd04c90e1250fd19f790eade7d861824/Daml/Finance/Data/V4/Time/DateClock.hie",
+          "daml-finance-data-v4-4.0.0-4663fb5b41624dfa2d9e2daf862735ebcd04c90e1250fd19f790eade7d861824/Daml/Finance/Data/V4/Time/DateClock/Types.daml",
+          "daml-finance-data-v4-4.0.0-4663fb5b41624dfa2d9e2daf862735ebcd04c90e1250fd19f790eade7d861824/Daml/Finance/Data/V4/Time/DateClock/Types.hie"
+        ]
+      }
+    ]
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "daml-finance/src/test/daml/Daml/Finance/Data/Test/DateClock.daml",
+      "path_in_copy": "src/test/daml/Daml/Finance/Data/Test/DateClock.daml",
+      "original": "-- Copyright (c) 2024 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Daml.Finance.Data.Test.DateClock where\n\nimport DA.Assert ((===))\nimport DA.Date (addDays, toDateUTC)\nimport DA.Set (singleton)\nimport Daml.Finance.Data.V4.Time.DateClock qualified as DateClock (DateClock(..), T)\nimport Daml.Finance.Data.V4.Time.DateClock.Types (Unit(..))\nimport Daml.Finance.Interface.Data.V4.Reference.Time qualified as Time (Advance(..), I, Rewind(..))\nimport Daml.Finance.Interface.Types.Common.V3.Types (Id(..))\nimport Daml.Script\n\ntestDateClock : Script ()\ntestDateClock = script do\n  bank <- allocatePartyWithHint <*> PartyIdHint $ \"Bank\"\n  now <- getTime\n\n  let\n    dateNow = toDateUTC now\n    dateClock = DateClock.DateClock with\n      providers = singleton bank\n      date = Unit dateNow\n      id = Id \"CLOCK\"\n      description = \"Clock\"\n      observers = mempty\n\n  -- test advance\n  dateClockCid <- toInterfaceContractId @Time.I <$> submit bank do createCmd dateClock\n  (dateClockCid, _) <- submit bank $\n    exerciseCmd dateClockCid Time.Advance with\n      eventId = Id \"T1\"\n      eventDescription = \"Time advance\"\n\n  Some dateClock <- queryContractId bank $ fromInterfaceContractId @DateClock.T dateClockCid\n  dateClock.date === Unit (dateNow `addDays` 1)\n\n  -- test rewind\n  (dateClockCid, _) <- submit bank $\n    exerciseCmd dateClockCid Time.Rewind with\n      eventId = Id \"T2\"\n      eventDescription = \"Time rewind\"\n\n  Some dateClock <- queryContractId bank $ fromInterfaceContractId @DateClock.T dateClockCid\n  dateClock.date === Unit dateNow\n",
+      "generated": "module Daml.Finance.Data.Test.DateClock where\n\nimport DA.Assert ((===))\nimport DA.Date (Month(..))\nimport DA.Date qualified as Date (date)\nimport DA.Set (singleton)\nimport DA.Time (time)\nimport Daml.Finance.Data.V4.Time.DateClock (DateClock(..), dateToDateClockTime)\nimport Daml.Finance.Data.V4.Time.DateClock.Types (Unit(..))\nimport Daml.Finance.Data.V4.Time.DateClockUpdate (DateClockUpdateEvent(..))\nimport Daml.Finance.Interface.Data.V4.Reference.Time qualified as Clock (Advance(..), GetView(..), I, Rewind(..), View(..))\nimport Daml.Finance.Interface.Lifecycle.V4.Event qualified as Event (GetView(..), I, View(..))\nimport Daml.Finance.Interface.Lifecycle.V4.Event.Time qualified as TimeEvent (GetView(..), View(..))\nimport Daml.Finance.Interface.Lifecycle.V4.Observable.TimeObservable qualified as Observable (GetTime(..), GetView(..), I, View(..))\nimport Daml.Finance.Interface.Types.Common.V3.Types (Id(..))\nimport Daml.Finance.Interface.Types.Date.V3.Classes (HasUTCTimeConversion(..))\nimport Daml.Script\n\ntestDateClockConversions : Script ()\ntestDateClockConversions = script do\n  provider <- allocateParty \"ConversionProvider\"\n  let\n    feb28 = Date.date 2024 Feb 28\n    feb29 = Date.date 2024 Feb 29\n    mar01 = Date.date 2024 Mar 01\n    providers = singleton provider\n    clock = DateClock with\n      providers\n      observers = mempty\n      date = Unit feb29\n      id = Id \"calendar\"\n      description = \"daily clock\"\n  toUTCTime (Unit feb29) === time feb29 0 0 0\n  dateToDateClockTime mar01 === time mar01 0 0 0\n  toUTCTime clock === time feb29 0 0 0\n  assert (Unit feb28 < Unit feb29 && Unit feb29 < Unit mar01)\n  assert (Unit feb29 <= Unit feb29 && Unit mar01 > Unit feb29)\n  assert (Unit feb29 == Unit feb29 && Unit feb28 /= Unit feb29)\n  show (Unit feb29) === show feb29\n  assert (clock < clock with date = Unit mar01)\n\ntestDateClockMoves : Script ()\ntestDateClockMoves = script do\n  provider <- allocateParty \"ClockProvider\"\n  observer <- allocateParty \"ClockObserver\"\n  stranger <- allocateParty \"ClockStranger\"\n  let\n    providers = singleton provider\n    observers = singleton observer\n    initialDate = Date.date 2024 Feb 28\n    leapDate = Date.date 2024 Feb 29\n    marchDate = Date.date 2024 Mar 01\n    clockId = Id \"daily\"\n    clockDescription = \"original clock\"\n    clock = DateClock with\n      providers\n      observers\n      date = Unit initialDate\n      id = clockId\n      description = clockDescription\n    advanceId = Id \"leap day\"\n    advanceDescription = \"advance across leap day\"\n    rewindId = Id \"back to February\"\n    rewindDescription = \"rewind from March\"\n\n  original <- submit provider do createCmd clock\n  let originalRule = toInterfaceContractId @Clock.I original\n  Clock.View{providers = viewProviders; id = viewId} <- submit observer do\n    exerciseCmd originalRule Clock.GetView with viewer = observer\n  viewProviders === providers\n  viewId === clockId\n  Observable.View{providers = observableProviders; id = observableId} <- submit observer do\n    exerciseCmd (toInterfaceContractId @Observable.I original) Observable.GetView with viewer = observer\n  observableProviders === providers\n  observableId === clockId\n  initialTime <- submit observer do\n    exerciseCmd (toInterfaceContractId @Observable.I original) Observable.GetTime with actors = observers\n  initialTime === time initialDate 0 0 0\n\n  submitMustFail observer do\n    exerciseCmd originalRule Clock.Advance with eventId = advanceId; eventDescription = advanceDescription\n  submitMustFail observer do\n    exerciseCmd originalRule Clock.Rewind with eventId = rewindId; eventDescription = rewindDescription\n  submitMustFail stranger do\n    exerciseCmd originalRule Clock.GetView with viewer = stranger\n  submitMustFail stranger do\n    exerciseCmd (toInterfaceContractId @Observable.I original) Observable.GetTime with actors = singleton stranger\n\n  (leapRule, leapEvent) <- submit provider do\n    exerciseCmd originalRule Clock.Advance with eventId = advanceId; eventDescription = advanceDescription\n  oldClock <- queryContractId provider original\n  case oldClock of\n    None -> pure ()\n    Some _ -> abort \"Advancing must archive the old clock\"\n  Some leapClock <- queryContractId provider $ fromInterfaceContractId @DateClock leapRule\n  leapClock.date === Unit leapDate\n  leapClock.id === clockId\n  leapClock.description === clockDescription\n  leapClock.providers === providers\n  leapClock.observers === observers\n  Some leapUpdate <- queryContractId observer $ fromInterfaceContractId @DateClockUpdateEvent leapEvent\n  leapUpdate.date === leapDate\n  leapUpdate.eventTime === time leapDate 0 0 0\n  leapUpdate.id === advanceId\n  leapUpdate.description === advanceDescription\n  leapUpdate.providers === providers\n  leapUpdate.observers === observers\n  Event.View{providers = eventProviders; id = eventId; description = eventDescription; eventTime} <-\n    submit observer do\n      exerciseCmd (toInterfaceContractId @Event.I $ fromInterfaceContractId @DateClockUpdateEvent leapEvent)\n        Event.GetView with viewer = observer\n  eventProviders === providers\n  eventId === advanceId\n  eventDescription === advanceDescription\n  eventTime === time leapDate 0 0 0\n  TimeEvent.View{} <- submit observer do\n    exerciseCmd leapEvent TimeEvent.GetView with viewer = observer\n\n  submitMustFail provider do\n    exerciseCmd originalRule Clock.Advance with eventId = advanceId; eventDescription = advanceDescription\n  leapTime <- submit provider do\n    exerciseCmd (toInterfaceContractId @Observable.I $ fromInterfaceContractId @DateClock leapRule)\n      Observable.GetTime with actors = providers\n  leapTime === time leapDate 0 0 0\n\n  (marchRule, marchEvent) <- submit provider do\n    exerciseCmd leapRule Clock.Advance with eventId = Id \"March\"; eventDescription = \"new month\"\n  Some marchClock <- queryContractId provider $ fromInterfaceContractId @DateClock marchRule\n  marchClock.date === Unit marchDate\n  Some marchUpdate <- queryContractId provider $ fromInterfaceContractId @DateClockUpdateEvent marchEvent\n  marchUpdate.date === marchDate\n  marchUpdate.eventTime === time marchDate 0 0 0\n\n  (rewoundRule, rewindEvent) <- submit provider do\n    exerciseCmd marchRule Clock.Rewind with eventId = rewindId; eventDescription = rewindDescription\n  oldMarchClock <- queryContractId provider $ fromInterfaceContractId @DateClock marchRule\n  case oldMarchClock of\n    None -> pure ()\n    Some _ -> abort \"Rewinding must archive the old clock\"\n  Some rewoundClock <- queryContractId provider $ fromInterfaceContractId @DateClock rewoundRule\n  rewoundClock.date === Unit leapDate\n  rewoundClock.id === clockId\n  rewoundClock.providers === providers\n  rewoundClock.observers === observers\n  rewoundTime <- submit observer do\n    exerciseCmd (toInterfaceContractId @Observable.I $ fromInterfaceContractId @DateClock rewoundRule)\n      Observable.GetTime with actors = observers\n  rewoundTime === time leapDate 0 0 0\n  Some rewindUpdate <- queryContractId observer $ fromInterfaceContractId @DateClockUpdateEvent rewindEvent\n  rewindUpdate.date === leapDate\n  rewindUpdate.eventTime === time leapDate 0 0 0\n  rewindUpdate.id === rewindId\n  rewindUpdate.description === rewindDescription\n  rewindUpdate.providers === providers\n  rewindUpdate.observers === observers\n  submitMustFail provider do\n    exerciseCmd marchRule Clock.Rewind with eventId = rewindId; eventDescription = rewindDescription\n  pure ()\n",
+      "captured_at_utc": "2026-10-02T16:31:23.295541+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/daml-finance_____zy67ef1p",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added two Daml Script tests in `src/test/daml/Daml/Finance/Data/Test/DateClock.daml:1`. They cover UTC date conversion and ordering, leap-day advance and rewind, interface views, event details, authorization, and archiving of old clock contracts.\n\nBoth scripts pass with `daml test --files src/test/daml/Daml/Finance/Data/Test/DateClock.daml`.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 149.0598193750484,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 307740,
+      "output_tokens": 6533,
+      "cached_input_tokens": 279493
+    },
+    "usage_by_thread": {
+      "01a0fd6f-e2f8-7981-b045-3f774474ecc4": {
+        "usage": {
+          "input_tokens": 307740,
+          "output_tokens": 6533,
+          "cached_input_tokens": 279493
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.1777226,
+    "input_usd": 0.056494,
+    "cached_input_usd": 0.05589860000000001,
+    "output_usd": 0.06533,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790958365.77,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958369.101,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958372.752,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958375.161,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958378.607,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958395.323,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958407.313,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958425.071,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958431.827,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958436.004,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958444.194,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958452.861,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958478.391,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958486.366,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958488.78,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790958503.175,
+          "client": "10.219.47.130",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "src/test/daml/Daml/Finance/Data/Test/DateClock.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

@@ -48,7 +48,7 @@ done
                 prompt="dummy",
                 timeout_seconds=2,
                 copyback_rel_paths=["impl.daml"],
-                test_rel_path="daml/Test.daml",
+                protected_rel_paths=["daml/Test.daml"],
                 log_prefix="test",
                 task_log_path=Path(temp_dir) / "task.log",
                 live_stdout_events_path=Path(temp_dir) / "events.jsonl",

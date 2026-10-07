@@ -10,13 +10,15 @@ route:
 - task detail returns the task's record with its per-event costs, and 404 for a task that is not in the run
 - archive moves the run into `z_archive/`, and delete removes it
 - a run id that would leave the logs directory is refused
+- the mutation catalogue lists the tasks that have mutations, and one task's mutations with
+  their validation, when a report has one, and the files they patch, when they are checked out
 - `/` and `/assets/...` serve the built page when a `dist/` directory exists
 - the start-up build is skipped when `dist/` exists, and refused plainly when npm is missing
 """
 
 import json
 import socket
-from dataclasses import replace
+from dataclasses import asdict, replace
 from datetime import datetime, timezone
 
 import pytest
@@ -40,7 +42,8 @@ from daml_agent_benchmark.server import app as server_app
 from daml_agent_benchmark.server.app import create_app, ensure_frontend_built, ensure_port_free
 from daml_agent_benchmark.server import runs
 from daml_agent_benchmark.server.runs import MATRIX_CACHE_FILENAME
-from daml_agent_benchmark.locations import configure, locations
+from daml_agent_benchmark.locations import configure, locations, task_file_name
+from daml_agent_benchmark.server.mutation_catalogue import short_names
 
 NOW = datetime(2026, 1, 2, 3, 4, 5, tzinfo=timezone.utc)
 
@@ -75,7 +78,7 @@ def _task(name: str, *, tests_passed: bool) -> TaskResult:
         out_of_workspace_writes=[],
         egress=EgressSummary.from_events([], ["openai.com"], []),
         runtime_identity=RuntimeIdentity("gpt-6-luna", "gpt-6-luna", True, None, None, True, "openai", "0.1"),
-        workspace_audit=WorkspaceAudit.from_changes([], [f"daml/{name}.daml"], "daml/Test.daml"),
+        workspace_audit=WorkspaceAudit.from_changes([], [f"daml/{name}.daml"], ["daml/Test.daml"]),
     )
     return TaskResult(
         task_id=f"repo/daml/{name}Test.daml",
@@ -92,7 +95,7 @@ def _task(name: str, *, tests_passed: bool) -> TaskResult:
         grade=Grade(True, True, tests_passed, {f"{name}Test:main": tests_passed}, None, None, None),
         ground_truth_control=None,
         repo_copy_integrity=None,
-        impl_file_snapshots=[],
+        answer_file_snapshots=[],
         attempts=attempt,
     )
 
@@ -102,7 +105,7 @@ def logs_dir(tmp_path):
     """A logs directory holding one run of three tasks: one passed its tests, one failed them, one is still queued."""
     run_dir = tmp_path / "run-1"
     run_dir.mkdir()
-    (run_dir / "config.json").write_text(json.dumps({"codex_auth_mode": "api_key", "codex_model": "gpt-6-luna", "max_task_runtime_seconds": 600}), encoding="utf-8")
+    (run_dir / "config.json").write_text(json.dumps({"codex_model": "gpt-6-luna", "max_task_runtime_seconds": 600, "task_kind": "implementation"}), encoding="utf-8")
     tasks = [_task("A", tests_passed=True), _task("B", tests_passed=False)]
     for task in tasks:
         write_task_result(run_dir, task)
@@ -235,13 +238,13 @@ def test_matrix_costs(tmp_path) -> None:
     from daml_agent_benchmark.records import task_live_events_path
 
     def price(input_tokens: int, output_tokens: int, cached: int) -> float:
-        return sum(cost_breakdown("gpt-6-luna", input_tokens, output_tokens, cached).values())
+        return cost_breakdown("gpt-6-luna", input_tokens, output_tokens, cached).total
 
     per_request = price(200_000, 1_000, 150_000) + price(200_000, 2_000, 190_000)
 
     run_dir = tmp_path / "run-2"
     run_dir.mkdir()
-    (run_dir / "config.json").write_text(json.dumps({"codex_auth_mode": "api_key", "codex_model": "gpt-6-luna", "max_task_runtime_seconds": 600}), encoding="utf-8")
+    (run_dir / "config.json").write_text(json.dumps({"codex_model": "gpt-6-luna", "max_task_runtime_seconds": 600, "task_kind": "implementation"}), encoding="utf-8")
     finished = _task("A", tests_passed=True)
     attempt = replace(
         finished.attempts,
@@ -313,3 +316,132 @@ def test_a_partly_priced_run_shows_its_known_cost_as_a_lower_bound() -> None:
     assert summary([cell(0.5), cell(None, tokens=None)]) == {"total_usd_cost": 0.5, "usage_complete": True}
     assert summary([cell(0.5), cell(None)]) == {"total_usd_cost": 0.5, "usage_complete": False}
     assert summary([cell(None), cell(None)]) == {"total_usd_cost": None, "usage_complete": True}
+
+
+CATALOGUE_REPOS_YAML = """\
+example-fetched-repo:
+  url: null
+  commit: null
+  license: null
+  build_tool: daml
+example-unfetched-repo:
+  url: null
+  commit: null
+  license: null
+  build_tool: daml
+"""
+
+CATALOGUE_TASKS_YAML = """\
+- repo: example-fetched-repo
+  test: daml/Test/Order.daml
+  impl: [daml/Shop/Order.daml]
+- repo: example-fetched-repo
+  test: daml/Test/Plain.daml
+  impl: [daml/Shop/Plain.daml]
+- repo: example-unfetched-repo
+  test: daml/Test/Order.daml
+  impl: [daml/Shop/Order.daml]
+"""
+
+ORDER_PATCH = """\
+diff --git a/daml/Shop/Order.daml b/daml/Shop/Order.daml
+--- a/daml/Shop/Order.daml
++++ b/daml/Shop/Order.daml
+@@ -2,3 +2,3 @@ template Order
+   with
+-    ensure qty > 0
++    ensure qty >= 0
+   where
+"""
+
+
+def _mutation_file(task_id: str, ids: list[str]) -> str:
+    entries = "".join(
+        f"  - id: {mid}\n    source: {'real-bug' if mid.startswith('fix') else 'llm'}\n    kind: validation\n"
+        f"    reason: The check lets an empty order through.\n    patch: |\n"
+        + "".join(f"      {line}\n" for line in ORDER_PATCH.splitlines())
+        for mid in ids
+    )
+    return f"task: {task_id}\nmutations:\n{entries}"
+
+
+@pytest.fixture
+def catalogue_client(tmp_path):
+    """A task list of three tasks: `example-fetched-repo`'s order task has two mutations and a
+    validation report that lists one of them, its plain task has none, and
+    `example-unfetched-repo`'s task has mutations but no checkout and no report."""
+    tasklist = tmp_path / "tasklist"
+    (tasklist / "mutations").mkdir(parents=True)
+    (tasklist / "repos.yaml").write_text(CATALOGUE_REPOS_YAML, encoding="utf-8")
+    (tasklist / "tasks.yaml").write_text(CATALOGUE_TASKS_YAML, encoding="utf-8")
+    for task_id, ids in (("example-fetched-repo/daml/Test/Order.daml", ["qty-allow-zero", "fix-qty-check"]), ("example-unfetched-repo/daml/Test/Order.daml", ["qty-allow-zero"])):
+        (tasklist / "mutations" / f"{task_file_name(task_id)}.yaml").write_text(_mutation_file(task_id, ids), encoding="utf-8")
+    sources = tmp_path / "sources"
+    (sources / "example-fetched-repo" / "daml" / "Shop").mkdir(parents=True)
+    (sources / "example-fetched-repo" / "daml" / "Shop" / "Order.daml").write_text("template Order\n  with\n    ensure qty > 0\n  where\n", encoding="utf-8")
+    report = {
+        "task": "example-fetched-repo/daml/Test/Order.daml",
+        "ground_truth_seconds": 3.0,
+        "ground_truth_scripts": ["daml/Test/Order.daml:testZero", "daml/Test/Order.daml:testOne", "daml/Test/Utils.daml:setup"],
+        "mutations": [
+            {"id": "qty-allow-zero", "source": "llm", "kind": "validation", "target_script": "testZero", "outcome": "killed",
+             "outcome_detail": None, "newly_failing": {"daml/Test/Order.daml:testZero": "expected failure"}, "seconds": 2.0},
+        ],
+    }
+    logs = tmp_path / "logs"
+    (logs / "mutations").mkdir(parents=True)
+    (logs / "mutations" / "example-fetched-repo__daml__Test__Order.daml.json").write_text(json.dumps(report), encoding="utf-8")
+    saved = asdict(locations)
+    configure(tasklist_dirs=(tasklist,), extra_code_dirs=(), sources_root=sources, logs_dir=logs)
+    yield TestClient(create_app(frontend_dist=tmp_path / "no-frontend"))
+    configure(**saved)
+
+
+def test_the_catalogue_lists_the_tasks_that_have_mutations(catalogue_client) -> None:
+    tasks = catalogue_client.get("/api/agent/mutations").json()["tasks"]
+    assert [(t["task_id"], t["file_name"], t["short_name"]) for t in tasks] == [
+        ("example-fetched-repo/daml/Test/Order.daml", "example-fetched-repo__daml__Test__Order.daml", "Order"),
+        ("example-unfetched-repo/daml/Test/Order.daml", "example-unfetched-repo__daml__Test__Order.daml", "Order"),
+    ]
+    assert tasks[0]["mutations"] == [
+        {"id": "qty-allow-zero", "kind": "validation", "source": "llm"},
+        {"id": "fix-qty-check", "kind": "validation", "source": "real-bug"},
+    ]
+
+
+def test_a_tasks_mutations_come_with_their_validation_and_patched_files(catalogue_client) -> None:
+    detail = catalogue_client.get("/api/agent/mutations/example-fetched-repo__daml__Test__Order.daml").json()
+    # The test file's own scripts, without the helper its module imports.
+    assert detail["scripts"] == 2
+    validated, unvalidated = detail["mutations"]
+    assert validated["patch"] == ORDER_PATCH
+    assert validated["validation"] == {"outcome": "killed", "outcome_detail": None, "newly_failing": ["daml/Test/Order.daml:testZero"]}
+    assert unvalidated["validation"] is None
+    assert detail["files"] == {"daml/Shop/Order.daml": "template Order\n  with\n    ensure qty > 0\n  where\n"}
+
+
+def test_a_task_without_a_report_or_a_checkout_shows_its_patches_alone(catalogue_client) -> None:
+    detail = catalogue_client.get("/api/agent/mutations/example-unfetched-repo__daml__Test__Order.daml").json()
+    assert detail["scripts"] is None
+    assert [m["validation"] for m in detail["mutations"]] == [None]
+    assert detail["files"] == {}
+    assert catalogue_client.get("/api/agent/mutations/example-fetched-repo__daml__Test__Plain.daml").status_code == 404
+
+
+def test_short_names_grow_until_they_are_unique_within_a_repository() -> None:
+    names = short_names([
+        "lib/daml/Shop/Order/Test.daml",
+        "lib/daml/Bank/Order/Test.daml",
+        "lib/src/Account/Model.daml",
+        "other/daml/Shop/Order/Test.daml",
+    ])
+    assert names == {
+        "lib/daml/Shop/Order/Test.daml": "Shop / Order",
+        "lib/daml/Bank/Order/Test.daml": "Bank / Order",
+        "lib/src/Account/Model.daml": "Account / Model",
+        "other/daml/Shop/Order/Test.daml": "Shop / Order",
+    }
+    assert short_names(["lib/x/Core/Order/Test.daml", "lib/y/Core/Order/Test.daml"]) == {
+        "lib/x/Core/Order/Test.daml": "x / Core / Order",
+        "lib/y/Core/Order/Test.daml": "y / Core / Order",
+    }

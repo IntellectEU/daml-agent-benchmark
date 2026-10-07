@@ -33,6 +33,7 @@ export function statusEmoji(cell: AgentTaskCell | undefined): string {
 // The run table's per-run figures: the symbol heading each column and what it counts.
 export const RUN_COLUMN_META = {
   tests: { emoji: '📋', label: 'Test scripts passed, over all tasks' },
+  mutants: { emoji: '🐞', label: 'Mutants caught by test files that pass on the correct code, over all mutants' },
   duration: { emoji: '⏱', label: 'Duration: wall-clock time of the run' },
   cost: { emoji: '💵', label: 'Cost of the run in USD. A leading > means part of the usage went unrecorded.' },
   fresh: { emoji: '👓', label: 'Fresh input tokens' },

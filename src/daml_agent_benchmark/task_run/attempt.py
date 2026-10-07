@@ -20,7 +20,7 @@ from daml_agent_benchmark.records import AttemptResult, EgressSummary
 from daml_agent_benchmark.task_run.app_server import run_app_server_attempt
 from daml_agent_benchmark.task_run.env import prepare_codex_invocation
 from daml_agent_benchmark.task_run.events import redact_secret_values
-from daml_agent_benchmark.task_run.inputs import clear_implementation_files, prepare_task_codex_home
+from daml_agent_benchmark.task_run.inputs import blank_files, prepare_task_codex_home
 from daml_agent_benchmark.task_run.outcome import compute_quota_retry_delay_seconds, rate_limited_for_retry
 
 
@@ -30,7 +30,7 @@ def run_attempt(
     prompt: str,
     timeout_seconds: int,
     copyback_rel_paths: list[str],
-    test_rel_path: str,
+    protected_rel_paths: list[str],
     codex_home_override: str,
     log_prefix: str = "",
     task_log_path: Path | None = None,
@@ -48,7 +48,7 @@ def run_attempt(
         prompt=prompt,
         timeout_seconds=timeout_seconds,
         copyback_rel_paths=copyback_rel_paths,
-        test_rel_path=test_rel_path,
+        protected_rel_paths=protected_rel_paths,
         log_prefix=log_prefix,
         task_log_path=task_log_path,
         live_stdout_events_path=live_stdout_events_path,
@@ -96,16 +96,16 @@ def attempt_with_quota_retries(
     *,
     task_id: str,
     repo_copy_root: str,
-    repo_copy_impl_files: list[str],
+    repo_copy_answer_files: list[str],
     prompt: str,
-    test_rel_path: str,
+    protected_rel_paths: list[str],
     log_prefix: str,
     task_log_path: Path | None,
     live_stdout_events_path: Path | None,
 ) -> AttemptResult:
     """The agent's attempt at this task, retried while the provider is rate-limiting it.
 
-    A retry starts from scratch: the implementation files are blanked again and the agent
+    A retry starts from scratch: the answer files are blanked again and the agent
     gets a fresh home, so it cannot read what the cut-short attempt left behind. What the
     discarded attempts did to the network and which tools they reached for is carried into
     the attempt that is kept, because they ran.
@@ -120,14 +120,14 @@ def attempt_with_quota_retries(
         if attempt is not None:
             print(f"{log_prefix}retrying attempt {quota_retry_count + 1} after rate-limit response", flush=True)
             prior_attempts.append(attempt)
-            clear_implementation_files(repo_copy_impl_files)
+            blank_files(repo_copy_answer_files)
         attempt = run_attempt(
             config=config,
             repo_copy_root=repo_copy_root,
             prompt=prompt,
             timeout_seconds=config.max_task_runtime_seconds,
-            copyback_rel_paths=[os.path.relpath(p, repo_copy_root).replace("\\", "/") for p in repo_copy_impl_files],
-            test_rel_path=test_rel_path,
+            copyback_rel_paths=[os.path.relpath(p, repo_copy_root).replace("\\", "/") for p in repo_copy_answer_files],
+            protected_rel_paths=protected_rel_paths,
             codex_home_override=prepare_task_codex_home(config, repo_copy_root),
             log_prefix=log_prefix,
             task_log_path=task_log_path,

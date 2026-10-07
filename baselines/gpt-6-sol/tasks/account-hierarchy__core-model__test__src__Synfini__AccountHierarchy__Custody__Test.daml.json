@@ -68,9 +68,9 @@
     "repo_copy_digest": "33e04a9b597bf833fd2a559133181c97c473d7428b979284a4a4deb6bb3ab96a",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "account-hierarchy/core-model/main/src/Synfini/AccountHierarchy/Custody.daml",
+      "answer_file": "account-hierarchy/core-model/main/src/Synfini/AccountHierarchy/Custody.daml",
       "path_in_copy": "core-model/main/src/Synfini/AccountHierarchy/Custody.daml",
       "original": "-- Copyright (c) 2022 ASX Operations Pty Ltd. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\nmodule Synfini.AccountHierarchy.Custody where\n\nimport DA.Finance.Types\nimport DA.Set (Set)\nimport qualified DA.Set as Set\n\n-- | Agreement between beneficiary and custodian.\ntemplate CustodyAgreement\n  with\n    parent : Account -- ^ Account in which the custodian keeps assets of clients for safe-keeping.\n    account : Account -- ^ Account owned by a beneficiary, which is allocated some portion of the assets in the\n      -- parent account.\n    observers : Set Party\n  where\n    signatory account.id.signatories, parent.id.signatories\n    observer account.owner, observers\n\n    ensure account.provider == parent.owner\n\n    key account.id : Id\n    maintainer key.signatories\n\n    -- | Update contract observers.\n    choice CustodyAgreement_SetObservers : ContractId CustodyAgreement\n      with\n        newObservers : Set Party -- ^ Updated contract observers.\n      controller account.owner\n      do\n        create this with observers = newObservers\n\n-- | A request made to a custodian by a party seeking to act as a beneficiary of assets.\ntemplate CustodyRequest\n  with\n    parent : Account -- ^ Account in which the custodian keeps assets of clients for safe-keeping.\n    account : Account -- ^ Account of prospective beneficiary.\n  where\n    signatory account.id.signatories\n    observer parent.owner\n\n    -- | Accept the request and create the 'CustodyAgreement'.\n    choice CustodyRequest_Accept : ContractId CustodyAgreement\n      controller parent.owner\n      do\n        exerciseByKey @CustodianRole parent.id CustodianRole_EnterCustodyAgreement with account\n\n    -- | Cancel the request.\n    choice CustodyRequest_Cancel : ()\n      controller account.id.signatories\n      do\n        pure ()\n\n    -- | Reject the request.\n    choice CustodyRequest_Reject : ()\n      controller parent.owner\n      do\n        pure ()\n\n-- | Contract in which the account signatories allow the account owner to delegate beneficial ownership of assets in\n-- the account to other parties. This contract also signifies that the account is not a leaf node in the tree.\ntemplate CustodianRole\n  with\n    parent : Account -- ^ Owner of this account can choose to enter 'CustodyAgreement' contracts (with this as the\n    -- 'parent' account).\n    observers : Set Party -- ^ Contract observers.\n  where\n    signatory parent.id.signatories\n    observer parent.provider, parent.owner, observers\n\n    key parent.id : Id\n    maintainer key.signatories\n\n    -- | Accept a request to act as a custodian.\n    nonconsuming choice CustodianRole_EnterCustodyAgreement : ContractId CustodyAgreement\n      with\n        account : Account -- ^ Account of beneficiary.\n      controller parent.owner, account.id.signatories\n      do\n        create CustodyAgreement with parent, account, observers = Set.empty\n",
       "generated": "module Synfini.AccountHierarchy.Custody where\n\nimport DA.Finance.Types\nimport DA.Set (Set)\nimport qualified DA.Set as Set\n\ntemplate CustodyAgreement\n  with\n    parent : Account\n    account : Account\n    observers : Set Party\n  where\n    signatory parent.id.signatories, account.id.signatories\n    observer account.owner, observers\n    ensure parent.owner == account.provider\n\n    key account.id : Id\n    maintainer key.signatories\n\n    choice CustodyAgreement_SetObservers : ContractId CustodyAgreement\n      with newObservers : Set Party\n      controller account.owner\n      do create this with observers = newObservers\n\ntemplate CustodianRole\n  with\n    parent : Account\n    observers : Set Party\n  where\n    signatory parent.id.signatories\n    observer parent.owner, observers\n\n    key parent.id : Id\n    maintainer key.signatories\n\n    nonconsuming choice CustodianRole_EnterCustodyAgreement : ContractId CustodyAgreement\n      with account : Account\n      controller parent.owner, account.id.signatories\n      do create CustodyAgreement with parent, account, observers = Set.empty\n\ntemplate CustodyRequest\n  with\n    account : Account\n    parent : Account\n  where\n    signatory account.id.signatories\n    observer parent.owner\n\n    choice CustodyRequest_Accept : ContractId CustodyAgreement\n      controller parent.owner\n      do\n        (roleCid, _) <- fetchByKey @CustodianRole parent.id\n        exercise roleCid CustodianRole_EnterCustodyAgreement with account\n",
@@ -393,13 +393,13 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "core-model/main/src/Synfini/AccountHierarchy/Custody.daml",
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

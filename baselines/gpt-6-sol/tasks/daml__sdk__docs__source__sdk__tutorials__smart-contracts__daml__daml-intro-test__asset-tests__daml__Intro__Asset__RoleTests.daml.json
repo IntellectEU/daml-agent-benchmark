@@ -55,9 +55,9 @@
     "repo_copy_digest": "7cc77d94e52b121d85238f4accac4859ed7ca2f44b4b9f8a8365f77a37812587",
     "pruned_archives": []
   },
-  "impl_file_snapshots": [
+  "answer_file_snapshots": [
     {
-      "impl_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml",
+      "answer_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml",
       "path_in_copy": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml",
       "original": "-- Copyright (c) 2025 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\n\n-- PRAGMA_BEGIN\n\nmodule Intro.Asset.Role where\n-- PRAGMA_END\n\n\n-- IMPORT_BEGIN\nimport Intro.Asset\n-- IMPORT_END\n\ntemplate AssetHolderInvite\n  with\n    issuer : Party\n    owner : Party\n  where\n    signatory issuer\n    observer owner\n\n    choice AssetHolderInvite_Accept\n      : ContractId AssetHolder\n      controller owner\n      do\n        create AssetHolder with\n          issuer\n          owner\n\ntemplate AssetHolder\n  with\n    issuer : Party\n    owner : Party\n  where\n    signatory issuer, owner\n\n    nonconsuming choice Issue_Asset\n      : ContractId Asset\n      with\n        symbol : Text\n        quantity : Decimal\n      controller issuer\n      do\n        create Asset with\n          issuer\n          owner\n          symbol\n          quantity\n          observers = []\n\n    nonconsuming choice Accept_Transfer\n      : ContractId Asset\n      with\n        transferProposalCid : ContractId TransferProposal\n      controller owner\n      do\n        exercise transferProposalCid TransferProposal_Accept\n\n    nonconsuming choice Preapprove_Transfer\n      : ContractId TransferApproval\n      with\n        asset : Asset\n      controller owner\n      do\n        create TransferApproval with\n          asset\n          newOwner = owner\n",
       "generated": "module Intro.Asset.Role where\n\nimport Intro.Asset\n\ntemplate AssetHolderInvite\n  with\n    issuer : Party\n    owner : Party\n  where\n    signatory issuer\n    observer owner\n\n    choice AssetHolderInvite_Accept : ContractId AssetHolder\n      controller owner\n      do\n        create AssetHolder with ..\n\ntemplate AssetHolder\n  with\n    issuer : Party\n    owner : Party\n  where\n    signatory issuer, owner\n\n    nonconsuming choice Issue_Asset : ContractId Asset\n      with\n        symbol : Text\n        quantity : Decimal\n      controller issuer\n      do\n        create Asset with\n          issuer\n          owner\n          symbol\n          quantity\n          observers = []\n",
@@ -237,13 +237,13 @@
     },
     "workspace_audit": {
       "available": true,
-      "impl_changes": [
+      "target_file_changes": [
         {
           "path": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Role.daml",
           "kind": "modified"
         }
       ],
-      "test_file_changes": [],
+      "protected_file_changes": [],
       "source_changes_outside_targets": [],
       "build_outputs": [],
       "codex_home_changes": [

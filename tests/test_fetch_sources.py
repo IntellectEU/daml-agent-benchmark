@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 from daml_agent_benchmark import fetch_sources
-from daml_agent_benchmark.tasklist_catalog import Repo
+from daml_agent_benchmark.tasklist_catalog import BuildTool, Repo
 
 
 def _git(path: Path, *args: str) -> str:
@@ -41,7 +41,7 @@ def remote(tmp_path: Path) -> tuple[Path, str, str]:
 def run(tmp_path: Path, remote, monkeypatch):
     """Run the fetcher's command line over one repository, `demo`, backed by the remote."""
     path, _, pinned = remote
-    repos = {"demo": Repo(name="demo", url=str(path), commit=pinned, license=None, build_tool="daml")}
+    repos = {"demo": Repo(name="demo", url=str(path), commit=pinned, license=None, build_tool=BuildTool.DAML)}
     monkeypatch.setattr(fetch_sources, "load_repos", lambda: repos)
     sources = tmp_path / "sources"
 
@@ -144,7 +144,7 @@ def test_an_unknown_name_exits_1_before_fetching(run, capsys) -> None:
 
 def test_a_failed_fetch_exits_1(run, tmp_path, capsys) -> None:
     run_main, _, repos = run
-    repos["demo"] = Repo(name="demo", url=str(tmp_path / "missing"), commit="0" * 40, license=None, build_tool="daml")
+    repos["demo"] = Repo(name="demo", url=str(tmp_path / "missing"), commit="0" * 40, license=None, build_tool=BuildTool.DAML)
     assert run_main() == 1
     err = capsys.readouterr().err
     assert "[demo] failed" in err

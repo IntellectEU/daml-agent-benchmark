@@ -1,0 +1,58 @@
+task: daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/Asset/TradeTests.daml
+notes: ""
+mutations:
+  - id: settle-controller-base-owner
+    source: llm
+    target_script: test_trade
+    kind: authorization
+    reason: The settle choice is controlled by the base asset owner, who offered the trade, instead of the quote asset owner who is accepting it.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      index 32e3bb8..8f537c7 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      @@ -34,7 +34,7 @@ template Trade
+             with
+               quoteAssetCid : ContractId Asset
+               baseApprovalCid : ContractId TransferApproval
+      -      controller quoteAsset.owner
+      +      controller baseAsset.owner
+             do
+               fetchedBaseAsset <- fetch baseAssetCid
+               assertMsg
+  - id: swap-returned-cids
+    source: llm
+    target_script: test_trade
+    kind: field
+    reason: The settle choice returns the transferred quote and base contract ids in the wrong order.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      index 32e3bb8..2a06bd9 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      @@ -56,5 +56,5 @@ template Trade
+                 quoteApprovalCid TransferApproval_Transfer with
+                   assetCid = quoteAssetCid
+       
+      -        return (transferredBaseCid, transferredQuoteCid)
+      +        return (transferredQuoteCid, transferredBaseCid)
+       -- TRADE_SETTLE_END
+  - id: inverted-base-check
+    source: llm
+    target_script: test_trade
+    kind: validation
+    reason: The base asset consistency check is written with /= instead of ==, so settlement is only allowed when the asset has changed.
+    patch: |
+      diff --git a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      index 32e3bb8..dd0c9be 100644
+      --- a/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      +++ b/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset/Trade.daml
+      @@ -39,7 +39,7 @@ template Trade
+               fetchedBaseAsset <- fetch baseAssetCid
+               assertMsg
+                 "Base asset mismatch"
+      -          (baseAsset == fetchedBaseAsset with
+      +          (baseAsset /= fetchedBaseAsset with
+                   observers = baseAsset.observers)
+       
+               fetchedQuoteAsset <- fetch quoteAssetCid

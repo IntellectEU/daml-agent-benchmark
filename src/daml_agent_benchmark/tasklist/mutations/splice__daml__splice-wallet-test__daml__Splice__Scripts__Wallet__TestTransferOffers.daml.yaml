@@ -1,0 +1,82 @@
+task: splice/daml/splice-wallet-test/daml/Splice/Scripts/Wallet/TestTransferOffers.daml
+notes: ""
+mutations:
+  - id: tracking-id-length-unchecked
+    source: real-bug
+    commit: 139ee12335f61851d7cbf540a4b56c80622c911f
+    kind: validation
+    reason: The offer limits the description's length but not the tracking id's.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml b/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      @@ -46,12 +46,7 @@ template TransferOffer
+         where
+           signatory sender
+           observer receiver
+      -    ensure
+      -      DA.Text.length description < 280 &&
+      -      DA.Text.length trackingId < 280
+      -      -- Note: the allowed trackingId length is probably way larger than required.
+      -      -- It is chosen this way to avoid issues with past versions of the code
+      -      -- that did not limit the offer length at all.
+      +    ensure (DA.Text.length description < 280)
+       
+           choice TransferOffer_Accept : TransferOffer_AcceptResult
+             with
+  - id: complete-without-dso-check
+    source: real-bug
+    commit: ed49ac434420c71e7489031892d114a8213245f3
+    kind: authorization
+    reason: Completing an accepted offer transfers through the amulet rules without checking they belong to the expected DSO party.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml b/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      @@ -140,7 +140,10 @@ template AcceptedTransferOffer
+                         receiverFeeRatio = 0.0
+                     ]
+                   beneficiaries = None -- no beneficiaries for p2p transfers
+      -        result <- exercisePaymentTransfer dso transferContext transfer
+      +        result <- exercise transferContext.amuletRules AmuletRules_Transfer with
+      +          transfer
+      +          context = transferContext.context
+      +          expectedDso = None
+               pure AcceptedTransferOffer_CompleteResult with
+                 transferResult = result
+                 trackingInfo = TransferOfferTrackingInfo { .. }
+  - id: accept-expiry-dropped
+    source: llm
+    target_script: testTransferOffers
+    kind: time
+    reason: The offer's Accept choice forgets to check that the offer has not expired.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml b/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      @@ -58,7 +58,6 @@ template TransferOffer
+               controller receiver
+             do
+               now <- getTime
+      -        require "Offer has not expired" (now < expiresAt)
+               acceptedTransferOffer <- create AcceptedTransferOffer with ..
+               return TransferOffer_AcceptResult with ..
+       
+  - id: withdraw-controller-receiver
+    source: llm
+    target_script: testTransferOffers
+    kind: authorization
+    reason: The sender's withdraw choice is controlled by the receiver instead of the sender.
+    patch: |
+      diff --git a/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml b/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      --- a/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      +++ b/daml/splice-wallet/daml/Splice/Wallet/TransferOffer.daml
+      @@ -72,7 +72,7 @@ template TransferOffer
+           choice TransferOffer_Withdraw : TransferOffer_WithdrawResult
+             with
+               reason : Text
+      -      controller sender
+      +      controller receiver
+             do
+               pure TransferOffer_WithdrawResult with
+                 trackingInfo = TransferOfferTrackingInfo { .. }

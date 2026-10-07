@@ -36,7 +36,7 @@ def queued_task_result(test_file_path: str, impl_files: list[str]) -> TaskResult
         grade=None,
         ground_truth_control=None,
         repo_copy_integrity=None,
-        impl_file_snapshots=[],
+        answer_file_snapshots=[],
         attempts=None,
     )
 

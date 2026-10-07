@@ -83,7 +83,7 @@ def _toy_requests(*, request5_cached: int = 0, request3_input: int = 18_850) -> 
 def _rates() -> tuple[float, float, float]:
     """Fresh, cached and output price per token of the test model."""
     costs = cost_breakdown(MODEL, 2_000, 1_000_000, 1_000)
-    return costs["input"] / 1_000, costs["cached_input"] / 1_000, costs["output"] / 1_000_000
+    return costs.input / 1_000, costs.cached_input / 1_000, costs.output / 1_000_000
 
 
 def _line_of(records: list[dict], item_id: str) -> int:
@@ -97,7 +97,7 @@ def _assert_reconciles(result) -> None:
     assert parts == pytest.approx(requests, abs=1e-12)
     assert result.total_usd == pytest.approx(requests, abs=1e-12)
     assert sum(category.usd for category in result.categories) == pytest.approx(requests, abs=1e-12)
-    billed = sum(sum(cost_breakdown(MODEL, c.fresh + c.cached, c.out, c.cached).values()) for c in result.requests)
+    billed = sum(cost_breakdown(MODEL, c.fresh + c.cached, c.out, c.cached).total for c in result.requests)
     assert requests == pytest.approx(billed, rel=1e-9)
 
 

@@ -1,0 +1,55 @@
+task: splice/daml/splice-validator-lifecycle-test/daml/Splice/Scripts/TestValidatorOnboarding.daml
+notes: ""
+mutations:
+  - id: match-without-expiry-check
+    source: real-bug
+    commit: dab0bb4c252c24d8bd676bb292d1eb68778b728a
+    target_script: testValidatorOnboardingExpire
+    kind: time
+    reason: ValidatorOnboarding_Match does not check the onboarding's expiry, so an expired secret can still be used.
+    patch: |
+      diff --git a/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml b/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      --- a/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      +++ b/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      @@ -33,7 +33,6 @@ template ValidatorOnboarding with
+               validator : Party
+             controller sv
+             do
+      -        assertWithinDeadline "ValidatorOnboarding.expiresAt" expiresAt
+               require "provided secret matches the stored secret" (providedSecret == candidateSecret)
+               usedSecret <- create UsedSecret with
+                 secret = candidateSecret
+  - id: match-without-secret-check
+    source: llm
+    target_script: testValidatorOnboarding
+    kind: validation
+    reason: ValidatorOnboarding_Match no longer requires the provided secret to equal the stored secret, so any secret onboards the validator.
+    patch: |
+      diff --git a/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml b/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      --- a/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      +++ b/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      @@ -34,7 +34,6 @@ template ValidatorOnboarding with
+             controller sv
+             do
+               assertWithinDeadline "ValidatorOnboarding.expiresAt" expiresAt
+      -        require "provided secret matches the stored secret" (providedSecret == candidateSecret)
+               usedSecret <- create UsedSecret with
+                 secret = candidateSecret
+                 ..
+  - id: expire-without-deadline-check
+    source: llm
+    target_script: testValidatorOnboardingExpire
+    kind: validation
+    reason: ValidatorOnboarding_Expire does not check that the deadline has passed, so the sv can archive a live offer.
+    patch: |
+      diff --git a/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml b/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      --- a/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      +++ b/daml/splice-validator-lifecycle/daml/Splice/ValidatorOnboarding.daml
+      @@ -44,7 +44,6 @@ template ValidatorOnboarding with
+           choice ValidatorOnboarding_Expire : ValidatorOnboarding_ExpireResult
+             controller sv
+             do
+      -        assertDeadlineExceeded "ValidatorOnboarding.expiresAt" expiresAt
+               pure ValidatorOnboarding_ExpireResult
+       
+       

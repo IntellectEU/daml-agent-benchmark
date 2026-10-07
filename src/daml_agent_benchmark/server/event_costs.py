@@ -161,7 +161,7 @@ def _rates(model: str, input_tokens: int) -> _Rates | None:
     costs = cost_breakdown(model, total, 1_000_000, cached)
     if costs is None:
         return None
-    return _Rates(costs["input"] / (total - cached), costs["cached_input"] / cached, costs["output"] / 1_000_000)
+    return _Rates(costs.input / (total - cached), costs.cached_input / cached, costs.output / 1_000_000)
 
 
 @dataclass
@@ -249,18 +249,18 @@ def _item_entry(item: dict[str, Any], line_no: int) -> _Entry:
     item_type = _text(item.get("type"))
     if item_type in _REASONING_TYPES:
         return _Entry(CATEGORY_REASONING, line_no, reasoning=True)
-    if item_type in ("user_message", "userMessage"):
+    if item_type == "user_message":
         content = item.get("content")
         parts = content if isinstance(content, list) else []
         text = "".join(_text(part.get("text")) for part in parts if isinstance(part, dict))
         return _Entry(CATEGORY_PROMPT, line_no, user_input=True, tool_weight=len(text))
     if item_type in _UNWRITTEN_ITEM_TYPES:
         return _Entry(CATEGORY_COMMANDS, line_no)
-    if item_type in ("agent_message", "agentMessage"):
+    if item_type == "agent_message":
         return _Entry(CATEGORY_MESSAGES, line_no, model_written=True, written_weight=len(_text(item.get("text"))))
-    if item_type in ("command_execution", "commandExecution"):
+    if item_type == "command_execution":
         command = _text(item.get("command"))
-        output = _text(item.get("aggregated_output")) or _text(item.get("aggregatedOutput"))
+        output = _text(item.get("aggregated_output"))
         return _Entry(
             CATEGORY_COMMANDS,
             line_no,
@@ -268,7 +268,7 @@ def _item_entry(item: dict[str, Any], line_no: int) -> _Entry:
             written_weight=len(command),
             tool_weight=len(output),
         )
-    if item_type in ("file_change", "fileChange"):
+    if item_type == "file_change":
         changes = item.get("changes")
         changes = [change for change in changes if isinstance(change, dict)] if isinstance(changes, list) else []
         return _Entry(

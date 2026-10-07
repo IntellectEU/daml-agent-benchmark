@@ -5,6 +5,9 @@ export type AgentRunStatus = 'in_progress' | 'completed'
 
 export type AgentLiveState = 'queued' | 'running' | 'completed'
 
+// What a run's agents wrote: the implementation for the task's tests, or tests for its implementation.
+export type AgentTaskKind = 'implementation' | 'test_generation'
+
 // What a finding means for the grade: the task cannot be trusted, the harness failed,
 // or it is recorded for the audit and the task is graded normally.
 export type AgentSeverity = 'security' | 'infra' | 'warning'
@@ -44,6 +47,18 @@ export type AgentRunSummary = {
   }
   // Finding flag -> the tasks it was recorded on.
   flagged: Record<string, string[]>
+  // All zero for an implementation run.
+  test_generation: {
+    mutants_caught: number
+    mutants_total: number
+    mutant_catch_rate: number
+    mean_task_catch_rate: number
+    tests_pass_on_correct_code: number
+    real_bugs_caught: number
+    real_bugs_total: number
+    // Some task graded fewer mutants than it has: a quick development run, not comparable to a full one.
+    mutants_capped: boolean
+  }
 }
 
 export type AgentTaskStatusCode =
@@ -58,9 +73,19 @@ export type AgentTaskStatusCode =
   | 'security_violation'
   | 'other_error'
 
+// A test-generation task's mutants: how many its tests caught, of how many were built and how many it has.
+export type AgentTaskMutants = {
+  caught: number
+  built: number
+  total: number
+  // Why none was built, e.g. the test file does not compile; null when they were.
+  skipped: string | null
+}
+
 export type AgentTaskCell = {
   task_id: string
   status_code: AgentTaskStatusCode
+  mutants: AgentTaskMutants | null
   timed_out: boolean
   tests_succeeded: number
   tests_total: number
@@ -77,6 +102,7 @@ export type AgentTaskCell = {
 export type AgentMatrixRunItem = {
   run_id: string
   archived: boolean
+  task_kind: AgentTaskKind
   summary: AgentRunSummary
   task_statuses: Record<string, AgentTaskCell>
   // Only the statuses at least one task has.
@@ -84,6 +110,7 @@ export type AgentMatrixRunItem = {
 }
 
 export type AgentMatrixResponse = {
+  task_kind: AgentTaskKind
   task_ids: string[]
   task_header_colors: Record<string, string>
   // Every finding flag the benchmark can record, and its severity.
@@ -106,6 +133,34 @@ export type AgentGrade = {
   syntax_error: string | null
   compile_error: string | null
   tests_error: string | null
+  // A test-generation grade also carries its mutants; an implementation grade does not have these.
+  mutants?: AgentMutantResult[]
+  mutants_total?: number
+  real_bugs_total?: number
+}
+
+export type AgentMutantResult = {
+  id: string
+  source: 'llm' | 'real-bug'
+  kind: string
+  grade: AgentGrade
+}
+
+// The agent's scripts against the correct code and each mutant, as the task view draws it.
+export type AgentMutantMatrix = {
+  scripts: string[]
+  correct: Record<string, boolean>
+  skipped: string | null
+  total: number
+  rows: {
+    id: string
+    source: 'llm' | 'real-bug'
+    kind: string
+    caught: boolean
+    // Null when the test file no longer built against the mutant.
+    results: Record<string, boolean | null> | null
+    error: string | null
+  }[]
 }
 
 export type AgentFileChange = {
@@ -167,8 +222,8 @@ export type AgentEgressSummary = {
 
 export type AgentWorkspaceAudit = {
   available: boolean
-  impl_changes: AgentFileChange[]
-  test_file_changes: AgentFileChange[]
+  target_file_changes: AgentFileChange[]
+  protected_file_changes: AgentFileChange[]
   source_changes_outside_targets: AgentFileChange[]
   build_outputs: AgentFileChange[]
   codex_home_changes: AgentFileChange[]
@@ -251,8 +306,8 @@ export type AgentRepoCopyIntegrity = {
   pruned_archives: Array<{ path: string; entries: string[] }>
 }
 
-export type AgentImplFileSnapshot = {
-  impl_file: string
+export type AgentAnswerFileSnapshot = {
+  answer_file: string
   path_in_copy: string
   original: string | null
   generated: string | null
@@ -275,7 +330,7 @@ export type AgentTask = {
   grade: AgentGrade | null
   ground_truth_control: AgentGroundTruthControl | null
   repo_copy_integrity: AgentRepoCopyIntegrity | null
-  impl_file_snapshots: AgentImplFileSnapshot[]
+  answer_file_snapshots: AgentAnswerFileSnapshot[]
   attempts: AgentAttempt | null
 }
 
@@ -347,8 +402,8 @@ export type AgentTaskDetailResponse = {
   // Events of a task that is still running; a finished task carries them on its attempt.
   live_events: AgentStdoutEvent[]
   event_costs: AgentEventCosts
-  impl_file_views: Array<{
-    impl_file: string
+  answer_file_views: Array<{
+    answer_file: string
     path_in_copy: string
     original_text: string | null
     generated_text: string | null
@@ -356,10 +411,59 @@ export type AgentTaskDetailResponse = {
     original_source: 'snapshot' | 'current_source' | 'missing'
     generated_source: 'snapshot' | 'missing'
   }>
+  // Null for an implementation task.
+  mutant_matrix: AgentMutantMatrix | null
   terminal_log: {
     path: string | null
     content: string | null
     truncated: boolean
     total_chars: number
   }
+}
+
+export type MutationSource = 'llm' | 'real-bug'
+
+// A task's mutation as the catalogue's list carries it: enough to filter and search by.
+export type MutationSummary = {
+  id: string
+  kind: string
+  source: MutationSource
+}
+
+export type MutationCatalogueTask = {
+  task_id: string
+  // The task id as a file name: the key the task's mutations are fetched by.
+  file_name: string
+  repo: string
+  short_name: string
+  mutations: MutationSummary[]
+}
+
+export type MutationCatalogueResponse = {
+  tasks: MutationCatalogueTask[]
+}
+
+export type MutationValidationOutcome = 'not-impl-only' | 'does-not-apply' | 'does-not-compile' | 'survived' | 'killed'
+
+export type CatalogueMutation = MutationSummary & {
+  reason: string
+  patch: string
+  target_script: string | null
+  commit: string | null
+  // Null when no validation report lists the mutation.
+  validation: {
+    outcome: MutationValidationOutcome
+    outcome_detail: string | null
+    // Grading keys, `<file>:<script>`, of the original test file's scripts the mutation makes fail.
+    newly_failing: string[]
+  } | null
+}
+
+export type TaskMutationsResponse = {
+  task_id: string
+  // The original test file's scripts; null without a validation report.
+  scripts: number | null
+  mutations: CatalogueMutation[]
+  // The original text of each patched file that is checked out, by repository-relative path.
+  files: Record<string, string>
 }

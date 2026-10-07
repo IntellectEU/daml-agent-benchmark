@@ -1,0 +1,192 @@
+task: splice/token-standard/splice-token-standard-test/daml/Splice/Tests/TestAmuletTokenDvP.daml
+notes: ""
+mutations:
+  - id: dvp-featuring-disallowed
+    source: llm
+    target_script: testDvP
+    kind: field
+    reason: "The two-step transfer built from an allocation does not allow featuring, so no app reward coupons are created for the executor."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/AmuletAllocation.daml b/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      index 92d1160..d3aaa50 100644
+      --- a/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      +++ b/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      @@ -64,7 +64,7 @@ allocationToTwoStepTransfer allocation =
+           provider = allocation.settlement.executor
+           transferBefore = allocation.settlement.settleBefore
+           transferBeforeDeadline = "allocation.settlement.settleBefore"
+      -    allowFeaturing = True
+      +    allowFeaturing = False
+           lockContext = Text.implode
+             -- We don't show more context to avoid bloating the response here.
+             ["allocation for transfer leg ", show allocation.transferLegId, " to ", show allocation.transferLeg.receiver]
+  - id: dvp-provider-is-sender
+    source: llm
+    target_script: testDvP
+    kind: field
+    reason: "The transfer's app provider is the sender of the leg instead of the settlement executor."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/AmuletAllocation.daml b/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      index 92d1160..76610a8 100644
+      --- a/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      +++ b/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      @@ -61,7 +61,7 @@ allocationToTwoStepTransfer allocation =
+           sender = allocation.transferLeg.sender
+           receiver = allocation.transferLeg.receiver
+           amount = allocation.transferLeg.amount
+      -    provider = allocation.settlement.executor
+      +    provider = allocation.transferLeg.sender
+           transferBefore = allocation.settlement.settleBefore
+           transferBeforeDeadline = "allocation.settlement.settleBefore"
+           allowFeaturing = True
+  - id: dvp-execute-after-deadline-only
+    source: llm
+    target_script: testDvP
+    kind: time
+    reason: "Executing the transfer asserts that the deadline has already passed instead of that it has not."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..32bf5da 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -110,7 +110,7 @@ executeTwoStepTransfer
+         : TwoStepTransfer -> ContractId LockedAmulet -> ExtraArgs
+         -> Update ([ContractId Holding], [ContractId Holding], Metadata)
+       executeTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+      -  assertWithinDeadline transferBeforeDeadline transferBefore
+      +  assertDeadlineExceeded transferBeforeDeadline transferBefore
+         (paymentContext, beneficiaries) <-
+           if allowFeaturing
+             then do
+  - id: dvp-transfer-to-sender
+    source: llm
+    target_script: testDvP
+    kind: field
+    reason: "The final transfer output is addressed to the sender rather than the receiver of the leg."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..d04639c 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -127,7 +127,7 @@ executeTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+         let amuletCid = unlockResult.amuletSum.amulet
+         -- execute transfer
+         let receiverOutput = TransferOutput with
+      -        receiver = receiver
+      +        receiver = sender
+               amount = amount
+               receiverFeeRatio = 0.0  -- all fees are paid by the sender
+               lock = None
+  - id: cancel-does-not-unlock
+    source: llm
+    target_script: testDvPCancel
+    kind: archival
+    reason: "Cancelling an allocation returns without unlocking the locked amulet, leaving the sender's funds locked."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/AmuletAllocation.daml b/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      index 92d1160..9e02990 100644
+      --- a/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      +++ b/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      @@ -41,7 +41,7 @@ template AmuletAllocation
+                   meta = emptyMetadata
+       
+             allocation_cancelImpl _self Allocation_Cancel{..} = do
+      -        senderHoldingCids <- unlockAmuletAllocation this extraArgs
+      +        let senderHoldingCids = []
+               pure Allocation_CancelResult
+                 with
+                   senderHoldingCids
+  - id: cancel-requires-deadline-not-passed
+    source: llm
+    target_script: testDvPCancel
+    kind: time
+    reason: "When the lock is already gone, aborting asserts that the deadline has not passed yet instead of that it has."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..d166867 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -156,6 +156,6 @@ abortTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+             pure [toInterfaceContractId result.amuletSum.amulet]
+           else do
+             -- scan is telling us to not expire the lock, this is OK if the transfer expired
+      -      assertDeadlineExceeded transferBeforeDeadline transferBefore
+      +      assertWithinDeadline transferBeforeDeadline transferBefore
+             pure []
+       
+  - id: withdraw-does-not-unlock
+    source: llm
+    target_script: testDvPWithdraw
+    kind: archival
+    reason: "Withdrawing an allocation returns without unlocking the locked amulet, leaving the sender's funds locked."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/AmuletAllocation.daml b/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      index 92d1160..d73549a 100644
+      --- a/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      +++ b/daml/splice-amulet/daml/Splice/AmuletAllocation.daml
+      @@ -34,7 +34,7 @@ template AmuletAllocation
+             allocation_executeTransferImpl _self Allocation_ExecuteTransfer{..} = transferAmuletAllocation this extraArgs
+       
+             allocation_withdrawImpl _self Allocation_Withdraw{..} = do
+      -        senderHoldingCids <- unlockAmuletAllocation this extraArgs
+      +        let senderHoldingCids = []
+               pure Allocation_WithdrawResult
+                 with
+                   senderHoldingCids
+  - id: abort-expire-flag-inverted
+    source: llm
+    target_script: testDvPWithdraw
+    kind: branch
+    reason: "Aborting a two-step transfer takes the expire-lock path when the scan says not to expire the lock, and vice versa."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..d29e454 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -147,7 +147,7 @@ executeTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+       abortTwoStepTransfer : TwoStepTransfer -> ContractId LockedAmulet -> ExtraArgs -> Update [ContractId Holding]
+       abortTwoStepTransfer TwoStepTransfer{..} lockedAmuletCid extraArgs = do
+         expireLockedAmulet <- getFromContextU @Bool extraArgs.context expireLockKey
+      -  if expireLockedAmulet
+      +  if not expireLockedAmulet
+           then do
+             openRoundCid <- getFromContextU @(ContractId OpenMiningRound) extraArgs.context openRoundContextKey
+             -- prudent engineering: check the DSO party
+  - id: prepare-lock-holder-is-sender
+    source: llm
+    target_script: setupOtcTrade
+    kind: authorization
+    reason: "The lock created when preparing the transfer is held by the sender instead of the DSO party."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..186724d 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -92,7 +92,7 @@ prepareTwoStepTransfer TwoStepTransfer{..} requestedAt inputHoldingCids paymentC
+                     receiverFeeRatio = 0.0 -- locking fees are paid by the sender
+                     lock = Some TimeLock with
+                       expiresAt = transferBefore
+      -                holders = [dso]
+      +                holders = [sender]
+                       optContext = Some lockContext
+                 ]
+               inputs = transferInputs
+  - id: prepare-lock-expires-early
+    source: llm
+    target_script: setupOtcTrade
+    kind: time
+    reason: "The amulet is locked only until the time of the request instead of until the settlement deadline."
+    patch: |
+      diff --git a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      index db8a885..0bd0b4f 100644
+      --- a/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      +++ b/daml/splice-amulet/daml/Splice/Amulet/TwoStepTransfer.daml
+      @@ -91,7 +91,7 @@ prepareTwoStepTransfer TwoStepTransfer{..} requestedAt inputHoldingCids paymentC
+                     amount = amount + feesReserveAmount
+                     receiverFeeRatio = 0.0 -- locking fees are paid by the sender
+                     lock = Some TimeLock with
+      -                expiresAt = transferBefore
+      +                expiresAt = requestedAt
+                       holders = [dso]
+                       optContext = Some lockContext
+                 ]

@@ -1,0 +1,773 @@
+{
+  "task_id": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml",
+  "task_safe_name": "daml__sdk__docs__source__sdk__tutorials__smart-contracts__daml__daml-intro-test__asset-tests__daml__Intro__AssetTests.daml",
+  "test_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml",
+  "impl_files": [
+    "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset/daml/Intro/Asset.daml"
+  ],
+  "live_state": "completed",
+  "queued_at_utc": "2026-10-02T16:08:50.432244+00:00",
+  "started_at_utc": "2026-10-02T16:41:23.715290+00:00",
+  "finished_at_utc": "2026-10-02T16:47:00.746273+00:00",
+  "live_updated_at_utc": "2026-10-02T16:47:00.746273+00:00",
+  "repo_copy": "261002-180850/daml_____ku74g8zr",
+  "findings": [],
+  "grade": {
+    "syntax_passed": true,
+    "compile_passed": true,
+    "tests_passed": true,
+    "test_results": {
+      "daml/Intro/AssetTests.daml:testApprovalCancelReject": true,
+      "daml/Intro/AssetTests.daml:testApprovalMismatch": true,
+      "daml/Intro/AssetTests.daml:testApprovalTransfer": true,
+      "daml/Intro/AssetTests.daml:testAssetCreation": true,
+      "daml/Intro/AssetTests.daml:testMerge": true,
+      "daml/Intro/AssetTests.daml:testMergeMismatch": true,
+      "daml/Intro/AssetTests.daml:testProposalAccept": true,
+      "daml/Intro/AssetTests.daml:testProposalCancelReject": true,
+      "daml/Intro/AssetTests.daml:testSetObservers": true,
+      "daml/Intro/AssetTests.daml:testSplit": true
+    },
+    "syntax_error": null,
+    "compile_error": null,
+    "tests_error": null,
+    "mutants": [
+      {
+        "id": "split-ensure-nonstrict",
+        "source": "llm",
+        "kind": "validation",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Intro/AssetTests.daml:testApprovalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testApprovalMismatch": true,
+            "daml/Intro/AssetTests.daml:testApprovalTransfer": true,
+            "daml/Intro/AssetTests.daml:testAssetCreation": false,
+            "daml/Intro/AssetTests.daml:testMerge": true,
+            "daml/Intro/AssetTests.daml:testMergeMismatch": true,
+            "daml/Intro/AssetTests.daml:testProposalAccept": true,
+            "daml/Intro/AssetTests.daml:testProposalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testSetObservers": true,
+            "daml/Intro/AssetTests.daml:testSplit": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:44:30.21 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 39:03:e7:64:e8:5d:aa:df'. Ignoring it.\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    17:1-17:18\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Intro.AssetTests:28:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'issuer-5e33a8f6' creates Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                           with\n                             issuer = 'issuer-5e33a8f6';\n                             owner = 'issuer-5e33a8f6';\n                             symbol = \"USD\";\n                             quantity = 0.0000000000;\n                             observers = []\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   disclosed to (since): 'issuer-5e33a8f6' (0),\n                            'observer-005ae0b4' (0), 'owner-b4865538' (0)\n  └─> 'issuer-5e33a8f6' and 'owner-b4865538' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                             with\n                                               issuer = 'issuer-5e33a8f6';\n                                               owner = 'owner-b4865538';\n                                               symbol = \"USD\";\n                                               quantity = 0.0100000000;\n                                               observers = ['observer-005ae0b4']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'issuer-5e33a8f6'} readAs:\n                                             {} (Intro.AssetTests:26:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'outsider-025c8f5f'} readAs:\n                                               {} (Intro.AssetTests:27:3)\n  \n  TX 3 1970-01-01T00:00:00Z (Intro.AssetTests:28:3)\n  #3:0\n  │   disclosed to (since): 'issuer-5e33a8f6' (3)\n  └─> 'issuer-5e33a8f6' creates Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                        with\n                          issuer = 'issuer-5e33a8f6';\n                          owner = 'issuer-5e33a8f6';\n                          symbol = \"USD\";\n                          quantity = 0.0000000000;\n                          observers = []\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    17:1-17:18\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Intro.AssetTests:28:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Sub-transactions:\n     0\n     └─> 'issuer-5e33a8f6' creates Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                           with\n                             issuer = 'issuer-5e33a8f6';\n                             owner = 'issuer-5e33a8f6';\n                             symbol = \"USD\";\n                             quantity = 0.0000000000;\n                             observers = []\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   disclosed to (since): 'issuer-5e33a8f6' (0),\n                            'observer-005ae0b4' (0), 'owner-b4865538' (0)\n  └─> 'issuer-5e33a8f6' and 'owner-b4865538' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                             with\n                                               issuer = 'issuer-5e33a8f6';\n                                               owner = 'owner-b4865538';\n                                               symbol = \"USD\";\n                                               quantity = 0.0100000000;\n                                               observers = ['observer-005ae0b4']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'issuer-5e33a8f6'} readAs:\n                                             {} (Intro.AssetTests:26:3)\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'outsider-025c8f5f'} readAs:\n                                               {} (Intro.AssetTests:27:3)\n  \n  TX 3 1970-01-01T00:00:00Z (Intro.AssetTests:28:3)\n  #3:0\n  │   disclosed to (since): 'issuer-5e33a8f6' (3)\n  └─> 'issuer-5e33a8f6' creates Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                        with\n                          issuer = 'issuer-5e33a8f6';\n                          owner = 'issuer-5e33a8f6';\n                          symbol = \"USD\";\n                          quantity = 0.0000000000;\n                          observers = []\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    31:1-31:10\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Intro.AssetTests:43:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises Split on #1:1 (Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d)\n    with\n      splitQuantity = 0.0000000000\n  Sub-transactions:\n     0\n     └─> 'owner-5bf242ac' exercises Split on #1:1 (Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d)\n                          with\n                            splitQuantity = 0.0000000000\n         children:\n         1\n         └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                                    with\n                                                      issuer = 'issuer-10743c2b';\n                                                      owner = 'owner-5bf242ac';\n                                                      symbol = \"USD\";\n                                                      quantity = 0.0000000000;\n                                                      observers = ['observer-46350e7d']\n         \n         2\n         └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                                    with\n                                                      issuer = 'issuer-10743c2b';\n                                                      owner = 'owner-5bf242ac';\n                                                      symbol = \"USD\";\n                                                      quantity = 3.2500000000;\n                                                      observers = ['observer-46350e7d']\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'issuer-10743c2b' (0),\n                            'observer-46350e7d' (0), 'owner-5bf242ac' (0)\n  └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                             with\n                                               issuer = 'issuer-10743c2b';\n                                               owner = 'owner-5bf242ac';\n                                               symbol = \"USD\";\n                                               quantity = 10.0000000000;\n                                               observers = ['observer-46350e7d']\n  \n  TX 1 1970-01-01T00:00:00Z (Intro.AssetTests:37:13)\n  #1:0\n  │   disclosed to (since): 'issuer-10743c2b' (1),\n                            'observer-46350e7d' (1), 'owner-5bf242ac' (1)\n  └─> 'owner-5bf242ac' exercises Split on #0:0 (Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d)\n                       with\n                         splitQuantity = 3.2500000000\n      children:\n      #1:1\n      │   consumed by: #2:0\n      │   referenced by #2:0\n      │   disclosed to (since): 'issuer-10743c2b' (1),\n                                'observer-46350e7d' (1), 'owner-5bf242ac' (1)\n      └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                                 with\n                                                   issuer = 'issuer-10743c2b';\n                                                   owner = 'owner-5bf242ac';\n                                                   symbol = \"USD\";\n                                                   quantity = 3.2500000000;\n                                                   observers = ['observer-46350e7d']\n      \n      #1:2\n      │   disclosed to (since): 'issuer-10743c2b' (1),\n                                'observer-46350e7d' (1), 'owner-5bf242ac' (1)\n      └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                                 with\n                                                   issuer = 'issuer-10743c2b';\n                                                   owner = 'owner-5bf242ac';\n                                                   symbol = \"USD\";\n                                                   quantity = 6.7500000000;\n                                                   observers = ['observer-46350e7d']\n  \n  TX 2 1970-01-01T00:00:00Z (Intro.AssetTests:43:3)\n  #2:0\n  │   disclosed to (since): 'issuer-10743c2b' (2),\n                            'observer-46350e7d' (2), 'owner-5bf242ac' (2)\n  └─> 'owner-5bf242ac' exercises Split on #1:1 (Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d)\n                       with\n                         splitQuantity = 0.0000000000\n      children:\n      #2:1\n      │   disclosed to (since): 'issuer-10743c2b' (2),\n                                'observer-46350e7d' (2), 'owner-5bf242ac' (2)\n      └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                                 with\n                                                   issuer = 'issuer-10743c2b';\n                                                   owner = 'owner-5bf242ac';\n                                                   symbol = \"USD\";\n                                                   quantity = 0.0000000000;\n                                                   observers = ['observer-46350e7d']\n      \n      #2:2\n      │   disclosed to (since): 'issuer-10743c2b' (2),\n                                'observer-46350e7d' (2), 'owner-5bf242ac' (2)\n      └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@f66060ff66942e8a239edaf5b7c22073c63311f89c0191b908e2001a98d4654d\n                                                 with\n                                                   issuer = 'issuer-10743c2b';\n                                                   owner = 'owner-5bf242ac';\n                                                   symbol = \"USD\";\n                                                   quantity = 3.2500000000;\n                                                   observers = ['observer-46350e7d']\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "split-remainder-adds",
+        "source": "llm",
+        "kind": "arithmetic",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Intro/AssetTests.daml:testApprovalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testApprovalMismatch": true,
+            "daml/Intro/AssetTests.daml:testApprovalTransfer": true,
+            "daml/Intro/AssetTests.daml:testAssetCreation": true,
+            "daml/Intro/AssetTests.daml:testMerge": true,
+            "daml/Intro/AssetTests.daml:testMergeMismatch": true,
+            "daml/Intro/AssetTests.daml:testProposalAccept": true,
+            "daml/Intro/AssetTests.daml:testProposalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testSetObservers": true,
+            "daml/Intro/AssetTests.daml:testSplit": false
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:45:00.50 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: ec:a4:81:63:96:1c:25:62'. Ignoring it.\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    31:1-31:10\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'issuer-10743c2b' (0),\n                            'observer-46350e7d' (0), 'owner-5bf242ac' (0)\n  └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@3b7b234e66db84ad1f9744bbd9e301a358d3f11c69f33cda0caf62c503134235\n                                             with\n                                               issuer = 'issuer-10743c2b';\n                                               owner = 'owner-5bf242ac';\n                                               symbol = \"USD\";\n                                               quantity = 10.0000000000;\n                                               observers = ['observer-46350e7d']\n  \n  TX 1 1970-01-01T00:00:00Z (Intro.AssetTests:37:13)\n  #1:0\n  │   disclosed to (since): 'issuer-10743c2b' (1),\n                            'observer-46350e7d' (1), 'owner-5bf242ac' (1)\n  └─> 'owner-5bf242ac' exercises Split on #0:0 (Intro.Asset:Asset@3b7b234e66db84ad1f9744bbd9e301a358d3f11c69f33cda0caf62c503134235)\n                       with\n                         splitQuantity = 3.2500000000\n      children:\n      #1:1\n      │   disclosed to (since): 'issuer-10743c2b' (1),\n                                'observer-46350e7d' (1), 'owner-5bf242ac' (1)\n      └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@3b7b234e66db84ad1f9744bbd9e301a358d3f11c69f33cda0caf62c503134235\n                                                 with\n                                                   issuer = 'issuer-10743c2b';\n                                                   owner = 'owner-5bf242ac';\n                                                   symbol = \"USD\";\n                                                   quantity = 3.2500000000;\n                                                   observers = ['observer-46350e7d']\n      \n      #1:2\n      │   disclosed to (since): 'issuer-10743c2b' (1),\n                                'observer-46350e7d' (1), 'owner-5bf242ac' (1)\n      └─> 'issuer-10743c2b' and 'owner-5bf242ac' create Intro.Asset:Asset@3b7b234e66db84ad1f9744bbd9e301a358d3f11c69f33cda0caf62c503134235\n                                                 with\n                                                   issuer = 'issuer-10743c2b';\n                                                   owner = 'owner-5bf242ac';\n                                                   symbol = \"USD\";\n                                                   quantity = 13.2500000000;\n                                                   observers = ['observer-46350e7d']\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "merge-forgets-other",
+        "source": "llm",
+        "kind": "arithmetic",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Intro/AssetTests.daml:testApprovalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testApprovalMismatch": true,
+            "daml/Intro/AssetTests.daml:testApprovalTransfer": true,
+            "daml/Intro/AssetTests.daml:testAssetCreation": true,
+            "daml/Intro/AssetTests.daml:testMerge": false,
+            "daml/Intro/AssetTests.daml:testMergeMismatch": true,
+            "daml/Intro/AssetTests.daml:testProposalAccept": true,
+            "daml/Intro/AssetTests.daml:testProposalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testSetObservers": true,
+            "daml/Intro/AssetTests.daml:testSplit": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:45:29.14 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 01:af:ba:67:90:80:ce:6a'. Ignoring it.\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    48:1-48:10\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'issuer-901d787a' (0),\n                            'observer-49310e6c' (0), 'owner-40bcf2e7' (0)\n  └─> 'issuer-901d787a' and 'owner-40bcf2e7' create Intro.Asset:Asset@c1656b2ea14d9dc7d600ba5809671babcdf5bc76b4ada854713a001a865eb3fd\n                                             with\n                                               issuer = 'issuer-901d787a';\n                                               owner = 'owner-40bcf2e7';\n                                               symbol = \"USD\";\n                                               quantity = 4.0000000000;\n                                               observers = ['observer-49310e6c']\n  \n  TX 1 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #1:0\n  │   consumed by: #2:2\n  │   referenced by #2:1, #2:2\n  │   disclosed to (since): 'issuer-901d787a' (1),\n                            'owner-40bcf2e7' (1)\n  │   divulged to (since): 'observer-49310e6c' (2)\n  └─> 'issuer-901d787a' and 'owner-40bcf2e7' create Intro.Asset:Asset@c1656b2ea14d9dc7d600ba5809671babcdf5bc76b4ada854713a001a865eb3fd\n                                             with\n                                               issuer = 'issuer-901d787a';\n                                               owner = 'owner-40bcf2e7';\n                                               symbol = \"USD\";\n                                               quantity = 2.5000000000;\n                                               observers = []\n  \n  TX 2 1970-01-01T00:00:00Z (Intro.AssetTests:55:16)\n  #2:0\n  │   disclosed to (since): 'issuer-901d787a' (2),\n                            'observer-49310e6c' (2), 'owner-40bcf2e7' (2)\n  └─> 'owner-40bcf2e7' exercises Merge on #0:0 (Intro.Asset:Asset@c1656b2ea14d9dc7d600ba5809671babcdf5bc76b4ada854713a001a865eb3fd)\n                       with\n                         otherCid = #1:0\n      children:\n      #2:1\n      │   disclosed to (since): 'issuer-901d787a' (2),\n                                'observer-49310e6c' (2), 'owner-40bcf2e7' (2)\n      └─> 'issuer-901d787a' and 'owner-40bcf2e7' fetch #1:0 (Intro.Asset:Asset@c1656b2ea14d9dc7d600ba5809671babcdf5bc76b4ada854713a001a865eb3fd)\n      \n      #2:2\n      │   disclosed to (since): 'issuer-901d787a' (2),\n                                'observer-49310e6c' (2), 'owner-40bcf2e7' (2)\n      └─> 'issuer-901d787a' and 'owner-40bcf2e7' exercise Archive on #1:0 (Intro.Asset:Asset@c1656b2ea14d9dc7d600ba5809671babcdf5bc76b4ada854713a001a865eb3fd)\n      \n      #2:3\n      │   disclosed to (since): 'issuer-901d787a' (2),\n                                'observer-49310e6c' (2), 'owner-40bcf2e7' (2)\n      └─> 'issuer-901d787a' and 'owner-40bcf2e7' create Intro.Asset:Asset@c1656b2ea14d9dc7d600ba5809671babcdf5bc76b4ada854713a001a865eb3fd\n                                                 with\n                                                   issuer = 'issuer-901d787a';\n                                                   owner = 'owner-40bcf2e7';\n                                                   symbol = \"USD\";\n                                                   quantity = 4.0000000000;\n                                                   observers = ['observer-49310e6c']\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "merge-owner-check-inverted",
+        "source": "llm",
+        "kind": "validation",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Intro/AssetTests.daml:testApprovalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testApprovalMismatch": true,
+            "daml/Intro/AssetTests.daml:testApprovalTransfer": true,
+            "daml/Intro/AssetTests.daml:testAssetCreation": true,
+            "daml/Intro/AssetTests.daml:testMerge": false,
+            "daml/Intro/AssetTests.daml:testMergeMismatch": true,
+            "daml/Intro/AssetTests.daml:testProposalAccept": true,
+            "daml/Intro/AssetTests.daml:testProposalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testSetObservers": true,
+            "daml/Intro/AssetTests.daml:testSplit": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:45:56.02 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: bb:40:da:d1:c8:3e:65:24'. Ignoring it.\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    48:1-48:10\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Intro.AssetTests:55:16:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Merge failed: owner does not match\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises Merge on #0:0 (Intro.Asset:Asset@6bb2e3fc3c90075a29ca7b6be9cf85289781c68b4dda33719cb1f9e392f88ed3)\n    with\n      otherCid = #1:0\n  Sub-transactions:\n     0\n     └─> 'owner-40bcf2e7' exercises Merge on #0:0 (Intro.Asset:Asset@6bb2e3fc3c90075a29ca7b6be9cf85289781c68b4dda33719cb1f9e392f88ed3)\n                          with\n                            otherCid = #1:0\n         children:\n         1\n         └─> 'issuer-901d787a' and 'owner-40bcf2e7' fetch #1:0 (Intro.Asset:Asset@6bb2e3fc3c90075a29ca7b6be9cf85289781c68b4dda33719cb1f9e392f88ed3)\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   disclosed to (since): 'issuer-901d787a' (0),\n                            'observer-49310e6c' (0), 'owner-40bcf2e7' (0)\n  └─> 'issuer-901d787a' and 'owner-40bcf2e7' create Intro.Asset:Asset@6bb2e3fc3c90075a29ca7b6be9cf85289781c68b4dda33719cb1f9e392f88ed3\n                                             with\n                                               issuer = 'issuer-901d787a';\n                                               owner = 'owner-40bcf2e7';\n                                               symbol = \"USD\";\n                                               quantity = 4.0000000000;\n                                               observers = ['observer-49310e6c']\n  \n  TX 1 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #1:0\n  │   disclosed to (since): 'issuer-901d787a' (1),\n                            'owner-40bcf2e7' (1)\n  └─> 'issuer-901d787a' and 'owner-40bcf2e7' create Intro.Asset:Asset@6bb2e3fc3c90075a29ca7b6be9cf85289781c68b4dda33719cb1f9e392f88ed3\n                                             with\n                                               issuer = 'issuer-901d787a';\n                                               owner = 'owner-40bcf2e7';\n                                               symbol = \"USD\";\n                                               quantity = 2.5000000000;\n                                               observers = []\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "accept-keeps-owner",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Intro/AssetTests.daml:testApprovalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testApprovalMismatch": true,
+            "daml/Intro/AssetTests.daml:testApprovalTransfer": true,
+            "daml/Intro/AssetTests.daml:testAssetCreation": true,
+            "daml/Intro/AssetTests.daml:testMerge": true,
+            "daml/Intro/AssetTests.daml:testMergeMismatch": true,
+            "daml/Intro/AssetTests.daml:testProposalAccept": false,
+            "daml/Intro/AssetTests.daml:testProposalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testSetObservers": true,
+            "daml/Intro/AssetTests.daml:testSplit": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:46:22.54 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 0c:46:90:a5:b2:d5:cf:2b'. Ignoring it.\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    94:1-94:19\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.AssertionFailed:AssertionFailed: Assertion failed\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'issuer-fb1f38d6' (0),\n                            'owner-91edc490' (0), 'recipient-03474bdc' (0)\n  └─> 'issuer-fb1f38d6' and 'owner-91edc490' create Intro.Asset:Asset@da605f3f5d763e9256e4315807154a09af463ec27e66113f4fcb435264586316\n                                             with\n                                               issuer = 'issuer-fb1f38d6';\n                                               owner = 'owner-91edc490';\n                                               symbol = \"USD\";\n                                               quantity = 5.0000000000;\n                                               observers = ['recipient-03474bdc']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'issuer-fb1f38d6'} readAs:\n                                             {} (Intro.AssetTests:100:3)\n  \n  TX 2 1970-01-01T00:00:00Z (Intro.AssetTests:101:18)\n  #2:0\n  │   disclosed to (since): 'issuer-fb1f38d6' (2),\n                            'owner-91edc490' (2), 'recipient-03474bdc' (2)\n  └─> 'owner-91edc490' exercises ProposeTransfer on #0:0 (Intro.Asset:Asset@da605f3f5d763e9256e4315807154a09af463ec27e66113f4fcb435264586316)\n                       with\n                         newOwner = 'recipient-03474bdc'\n      children:\n      #2:1\n      │   consumed by: #5:0\n      │   referenced by #5:0\n      │   disclosed to (since): 'issuer-fb1f38d6' (2),\n                                'owner-91edc490' (2), 'recipient-03474bdc' (2)\n      └─> 'issuer-fb1f38d6' and 'owner-91edc490' create Intro.Asset:TransferProposal@da605f3f5d763e9256e4315807154a09af463ec27e66113f4fcb435264586316\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset@da605f3f5d763e9256e4315807154a09af463ec27e66113f4fcb435264586316 with\n                                                        issuer = 'issuer-fb1f38d6';\n                                                        owner = 'owner-91edc490';\n                                                        symbol = \"USD\";\n                                                        quantity = 5.0000000000;\n                                                        observers = ['recipient-03474bdc']);\n                                                   newOwner = 'recipient-03474bdc'\n  \n  TX 3 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'recipient-03474bdc'} readAs:\n                                                {} (Intro.AssetTests:105:3)\n  \n  TX 4 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'issuer-fb1f38d6'} readAs:\n                                             {} (Intro.AssetTests:106:3)\n  \n  TX 5 1970-01-01T00:00:00Z (Intro.AssetTests:107:13)\n  #5:0\n  │   disclosed to (since): 'issuer-fb1f38d6' (5),\n                            'owner-91edc490' (5), 'recipient-03474bdc' (5)\n  └─> 'issuer-fb1f38d6' and 'recipient-03474bdc' exercise TransferProposal_Accept on #2:1 (Intro.Asset:TransferProposal@da605f3f5d763e9256e4315807154a09af463ec27e66113f4fcb435264586316)\n      children:\n      #5:1\n      │   disclosed to (since): 'issuer-fb1f38d6' (5),\n                                'owner-91edc490' (5), 'recipient-03474bdc' (5)\n      └─> 'issuer-fb1f38d6' and 'owner-91edc490' create Intro.Asset:Asset@da605f3f5d763e9256e4315807154a09af463ec27e66113f4fcb435264586316\n                                                 with\n                                                   issuer = 'issuer-fb1f38d6';\n                                                   owner = 'owner-91edc490';\n                                                   symbol = \"USD\";\n                                                   quantity = 5.0000000000;\n                                                   observers = ['recipient-03474bdc']\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      },
+      {
+        "id": "propose-wrong-new-owner",
+        "source": "llm",
+        "kind": "field",
+        "grade": {
+          "syntax_passed": true,
+          "compile_passed": true,
+          "tests_passed": false,
+          "test_results": {
+            "daml/Intro/AssetTests.daml:testApprovalCancelReject": true,
+            "daml/Intro/AssetTests.daml:testApprovalMismatch": true,
+            "daml/Intro/AssetTests.daml:testApprovalTransfer": true,
+            "daml/Intro/AssetTests.daml:testAssetCreation": true,
+            "daml/Intro/AssetTests.daml:testMerge": true,
+            "daml/Intro/AssetTests.daml:testMergeMismatch": true,
+            "daml/Intro/AssetTests.daml:testProposalAccept": false,
+            "daml/Intro/AssetTests.daml:testProposalCancelReject": false,
+            "daml/Intro/AssetTests.daml:testSetObservers": true,
+            "daml/Intro/AssetTests.daml:testSplit": true
+          },
+          "syntax_error": null,
+          "compile_error": null,
+          "tests_error": "WARNING: Daml Assistant has been deprecated and replaced with the Digital Asset Package Manager (DPM)\nSee installation here: https://docs.digitalasset.com/build/3.4/dpm/dpm.html\nDaml Assistant will be removed in 3.5\nYou can disable this warning with --no-legacy-assistant-warning\n\n\n2026-10-02 16:46:50.03 [ERROR]  [test ScriptService] \nExpected PORT=<port> from script service, but got 'Failed to find a usable hardware address from the network interfaces; using random bytes: 2e:06:92:cf:e6:48:68:da'. Ignoring it.\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    94:1-94:19\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.GeneralError:GeneralError: Pattern match failure in do expression at daml/Intro/AssetTests.daml:103:3-15\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'issuer-fb1f38d6' (0),\n                            'owner-91edc490' (0), 'recipient-03474bdc' (0)\n  └─> 'issuer-fb1f38d6' and 'owner-91edc490' create Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                             with\n                                               issuer = 'issuer-fb1f38d6';\n                                               owner = 'owner-91edc490';\n                                               symbol = \"USD\";\n                                               quantity = 5.0000000000;\n                                               observers = ['recipient-03474bdc']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'issuer-fb1f38d6'} readAs:\n                                             {} (Intro.AssetTests:100:3)\n  \n  TX 2 1970-01-01T00:00:00Z (Intro.AssetTests:101:18)\n  #2:0\n  │   disclosed to (since): 'issuer-fb1f38d6' (2),\n                            'owner-91edc490' (2), 'recipient-03474bdc' (2)\n  └─> 'owner-91edc490' exercises ProposeTransfer on #0:0 (Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327)\n                       with\n                         newOwner = 'recipient-03474bdc'\n      children:\n      #2:1\n      │   disclosed to (since): 'issuer-fb1f38d6' (2),\n                                'owner-91edc490' (2), 'recipient-03474bdc' (2)\n      └─> 'issuer-fb1f38d6' and 'owner-91edc490' create Intro.Asset:TransferProposal@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327 with\n                                                        issuer = 'issuer-fb1f38d6';\n                                                        owner = 'owner-91edc490';\n                                                        symbol = \"USD\";\n                                                        quantity = 5.0000000000;\n                                                        observers = ['recipient-03474bdc']);\n                                                   newOwner = 'owner-91edc490'\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    94:1-94:19\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed:\n  Failed with status: UNHANDLED_EXCEPTION/DA.Exception.GeneralError:GeneralError: Pattern match failure in do expression at daml/Intro/AssetTests.daml:103:3-15\n  Using Canton Error Category InvalidGivenCurrentSystemStateOther\n\nLedger time: 1970-01-01T00:00:00Z\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   consumed by: #2:0\n  │   referenced by #2:0\n  │   disclosed to (since): 'issuer-fb1f38d6' (0),\n                            'owner-91edc490' (0), 'recipient-03474bdc' (0)\n  └─> 'issuer-fb1f38d6' and 'owner-91edc490' create Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                             with\n                                               issuer = 'issuer-fb1f38d6';\n                                               owner = 'owner-91edc490';\n                                               symbol = \"USD\";\n                                               quantity = 5.0000000000;\n                                               observers = ['recipient-03474bdc']\n  \n  TX 1 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'issuer-fb1f38d6'} readAs:\n                                             {} (Intro.AssetTests:100:3)\n  \n  TX 2 1970-01-01T00:00:00Z (Intro.AssetTests:101:18)\n  #2:0\n  │   disclosed to (since): 'issuer-fb1f38d6' (2),\n                            'owner-91edc490' (2), 'recipient-03474bdc' (2)\n  └─> 'owner-91edc490' exercises ProposeTransfer on #0:0 (Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327)\n                       with\n                         newOwner = 'recipient-03474bdc'\n      children:\n      #2:1\n      │   disclosed to (since): 'issuer-fb1f38d6' (2),\n                                'owner-91edc490' (2), 'recipient-03474bdc' (2)\n      └─> 'issuer-fb1f38d6' and 'owner-91edc490' create Intro.Asset:TransferProposal@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327 with\n                                                        issuer = 'issuer-fb1f38d6';\n                                                        owner = 'owner-91edc490';\n                                                        symbol = \"USD\";\n                                                        quantity = 5.0000000000;\n                                                        observers = ['recipient-03474bdc']);\n                                                   newOwner = 'owner-91edc490'\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    113:1-113:25\nSource:   Script\nSeverity: DsError\nMessage: \n\u001b[0;91mScript execution failed on commit at Intro.AssetTests:128:3:\n  Aborted:  Expected submit to fail but it succeeded\n\nLedger time: 1970-01-01T00:00:00Z\n\nPartial transaction:\n  Failed exercise (unknown source):\n    exercises TransferProposal_Reject on #5:1 (Intro.Asset:TransferProposal@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327)\n    with\n  Sub-transactions:\n     0\n     └─> 'owner-b9cc619d' exercises TransferProposal_Reject on #5:1 (Intro.Asset:TransferProposal@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327)\n         children:\n         1\n         └─> 'issuer-69871a3b' and 'owner-b9cc619d' create Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                                    with\n                                                      issuer = 'issuer-69871a3b';\n                                                      owner = 'owner-b9cc619d';\n                                                      symbol = \"USD\";\n                                                      quantity = 5.0000000000;\n                                                      observers = ['observer-8bcf01f3']\n\nCommitted transactions: \n  TX 0 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #0:0\n  │   consumed by: #1:0\n  │   referenced by #1:0\n  │   disclosed to (since): 'issuer-69871a3b' (0),\n                            'observer-8bcf01f3' (0), 'owner-b9cc619d' (0)\n  └─> 'issuer-69871a3b' and 'owner-b9cc619d' create Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                             with\n                                               issuer = 'issuer-69871a3b';\n                                               owner = 'owner-b9cc619d';\n                                               symbol = \"USD\";\n                                               quantity = 5.0000000000;\n                                               observers = ['observer-8bcf01f3']\n  \n  TX 1 1970-01-01T00:00:00Z (Intro.AssetTests:120:16)\n  #1:0\n  │   disclosed to (since): 'issuer-69871a3b' (1),\n                            'observer-8bcf01f3' (1), 'owner-b9cc619d' (1)\n  └─> 'owner-b9cc619d' exercises ProposeTransfer on #0:0 (Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327)\n                       with\n                         newOwner = 'recipient-fc139ac0'\n      children:\n      #1:1\n      │   consumed by: #3:0\n      │   referenced by #3:0\n      │   disclosed to (since): 'issuer-69871a3b' (1),\n                                'observer-8bcf01f3' (1), 'owner-b9cc619d' (1)\n      └─> 'issuer-69871a3b' and 'owner-b9cc619d' create Intro.Asset:TransferProposal@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327 with\n                                                        issuer = 'issuer-69871a3b';\n                                                        owner = 'owner-b9cc619d';\n                                                        symbol = \"USD\";\n                                                        quantity = 5.0000000000;\n                                                        observers = ['observer-8bcf01f3']);\n                                                   newOwner = 'owner-b9cc619d'\n  \n  TX 2 1970-01-01T00:00:00Z\n     mustFailAt actAs: {'recipient-fc139ac0'} readAs:\n                                                {} (Intro.AssetTests:121:3)\n  \n  TX 3 1970-01-01T00:00:00Z (Intro.AssetTests:122:18)\n  #3:0\n  │   disclosed to (since): 'issuer-69871a3b' (3),\n                            'owner-b9cc619d' (3)\n  └─> 'owner-b9cc619d' exercises TransferProposal_Cancel on #1:1 (Intro.Asset:TransferProposal@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327)\n      children:\n      #3:1\n      │   disclosed to (since): 'issuer-69871a3b' (3),\n                                'owner-b9cc619d' (3)\n      └─> 'issuer-69871a3b' and 'owner-b9cc619d' create Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                                 with\n                                                   issuer = 'issuer-69871a3b';\n                                                   owner = 'owner-b9cc619d';\n                                                   symbol = \"USD\";\n                                                   quantity = 5.0000000000;\n                                                   observers = []\n  \n  TX 4 1970-01-01T00:00:00Z (Intro.AssetTests:14:15)\n  #4:0\n  │   consumed by: #5:0\n  │   referenced by #5:0\n  │   disclosed to (since): 'issuer-69871a3b' (4),\n                            'observer-8bcf01f3' (4), 'owner-b9cc619d' (4)\n  └─> 'issuer-69871a3b' and 'owner-b9cc619d' create Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                             with\n                                               issuer = 'issuer-69871a3b';\n                                               owner = 'owner-b9cc619d';\n                                               symbol = \"USD\";\n                                               quantity = 5.0000000000;\n                                               observers = ['observer-8bcf01f3']\n  \n  TX 5 1970-01-01T00:00:00Z (Intro.AssetTests:127:16)\n  #5:0\n  │   disclosed to (since): 'issuer-69871a3b' (5),\n                            'observer-8bcf01f3' (5), 'owner-b9cc619d' (5)\n  └─> 'owner-b9cc619d' exercises ProposeTransfer on #4:0 (Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327)\n                       with\n                         newOwner = 'recipient-fc139ac0'\n      children:\n      #5:1\n      │   consumed by: #6:0\n      │   referenced by #6:0\n      │   disclosed to (since): 'issuer-69871a3b' (5),\n                                'observer-8bcf01f3' (5), 'owner-b9cc619d' (5)\n      └─> 'issuer-69871a3b' and 'owner-b9cc619d' create Intro.Asset:TransferProposal@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                                 with\n                                                   asset =\n                                                     (Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327 with\n                                                        issuer = 'issuer-69871a3b';\n                                                        owner = 'owner-b9cc619d';\n                                                        symbol = \"USD\";\n                                                        quantity = 5.0000000000;\n                                                        observers = ['observer-8bcf01f3']);\n                                                   newOwner = 'owner-b9cc619d'\n  \n  TX 6 1970-01-01T00:00:00Z (Intro.AssetTests:128:3)\n  #6:0\n  │   disclosed to (since): 'issuer-69871a3b' (6),\n                            'owner-b9cc619d' (6)\n  └─> 'owner-b9cc619d' exercises TransferProposal_Reject on #5:1 (Intro.Asset:TransferProposal@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327)\n      children:\n      #6:1\n      │   disclosed to (since): 'issuer-69871a3b' (6),\n                                'owner-b9cc619d' (6), 'observer-8bcf01f3' (6)\n      └─> 'issuer-69871a3b' and 'owner-b9cc619d' create Intro.Asset:Asset@e0b64ec78d4024573b6d064fbd89bafd305522d14a94579a039f4e40bdac6327\n                                                 with\n                                                   issuer = 'issuer-69871a3b';\n                                                   owner = 'owner-b9cc619d';\n                                                   symbol = \"USD\";\n                                                   quantity = 5.0000000000;\n                                                   observers = ['observer-8bcf01f3']\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    14:15-14:26\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:14:15: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    107:13-107:24\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:107:13: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    145:21-145:32\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:145:21: warning:\n    In the use of ‘submitMulti’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submit`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    163:3-163:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:163:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    164:3-164:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:164:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    165:3-165:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:165:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\nFile:     daml/Intro/AssetTests.daml\nHidden:   no\nRange:    166:3-166:22\nSource:   typecheck\nSeverity: DsWarning\nMessage: \n\u001b[0;93mdaml/Intro/AssetTests.daml:166:3: warning:\n    In the use of ‘submitMultiMustFail’\n    (imported from Daml.Script, but defined in Daml.Script.Internal.Questions.Submit):\n    Deprecated: \"Legacy API, use `submitMustFail`, `actAs` and `readAs` separately\"\u001b[0m\n"
+        }
+      }
+    ],
+    "mutants_total": 6,
+    "real_bugs_total": 0
+  },
+  "ground_truth_control": {
+    "grade": {
+      "syntax_passed": true,
+      "compile_passed": true,
+      "tests_passed": true,
+      "test_results": {
+        "daml/Intro/AssetTests.daml:test_split": true,
+        "daml/Intro/AssetTests.daml:test_merge": true,
+        "daml/Intro/AssetTests.daml:test_asset": true,
+        "daml/Intro/Asset/RoleTests.daml:setupRoles": true,
+        "daml/Intro/Asset/RoleTests.daml:test_issuance": true
+      },
+      "syntax_error": null,
+      "compile_error": null,
+      "tests_error": null
+    },
+    "cached": true,
+    "image_id": "sha256:50d4c33c5545ba9fc5306257039b588e553475d59efd34087e196a931c0706a2",
+    "evaluated_at_utc": "2026-09-25T15:45:47.039152+00:00",
+    "build_outputs_removed": 0
+  },
+  "repo_copy_integrity": {
+    "ok": true,
+    "offending": [],
+    "partial_matches": [],
+    "git_entries": [],
+    "symlinks_outside_repo_copy": [],
+    "targets_checked": [
+      "<repo-copies>/261002-180850/daml_____ku74g8zr/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml"
+    ],
+    "targets_skipped_too_short": [],
+    "files_scanned": 18,
+    "bytes_scanned": 19853,
+    "elapsed_seconds": 0.005,
+    "repo_copy_digest": "7cc77d94e52b121d85238f4accac4859ed7ca2f44b4b9f8a8365f77a37812587",
+    "pruned_archives": []
+  },
+  "answer_file_snapshots": [
+    {
+      "answer_file": "daml/sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml",
+      "path_in_copy": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml",
+      "original": "-- Copyright (c) 2025 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.\n-- SPDX-License-Identifier: Apache-2.0\nmodule Intro.AssetTests where\n\nimport Daml.Script\n\nimport Intro.Asset\nimport Intro.Asset.Role\n\nimport Intro.Asset.RoleTests\n\ntest_asset = do\n  ((alice, bob, bank, aha, ahb), assetCid) <- test_issuance\n\n  tp <- submit alice do\n    exerciseCmd assetCid ProposeTransfer with\n      newOwner = bob\n\n  assetCid <- submit bob do\n    exerciseCmd ahb Accept_Transfer with\n      transferProposalCid = tp\n\n  Some asset <- queryContractId bank assetCid\n  assert (asset == Asset with\n      issuer = bank\n      owner = bob\n      symbol = \"USD\"\n      quantity = 100.0\n      observers = []\n        )\n\ntest_split = do\n  (setupResult@(alice, bob, bank, _, _), assetCid) <- test_issuance\n\n  submitMustFail alice do\n    exerciseCmd assetCid Split with\n      splitQuantity = -30.0\n\n  submitMustFail alice do\n    exerciseCmd assetCid Split with\n      splitQuantity = 0.0\n\n  submitMustFail alice do\n    exerciseCmd assetCid Split with\n      splitQuantity = 101.0\n\n  splitResult <- submit alice do\n    exerciseCmd assetCid Split with\n      splitQuantity = 30.0\n\n  Some splitAsset <- queryContractId bank splitResult.splitAsset\n  Some remainder <- queryContractId bank splitResult.remainder\n\n  assert (splitAsset.quantity == 30.0)\n  assert (remainder.quantity == 70.0)\n\n  return (setupResult, splitResult)\n\ntest_merge = do\n  ((alice, bob, bank, _, _), splitResult) <- test_split\n\n  submitMustFail alice do\n    exerciseCmd splitResult.splitAsset Merge with\n      otherCid = splitResult.splitAsset\n\n  assetCid <- submit alice do\n    exerciseCmd splitResult.splitAsset Merge with\n      otherCid = splitResult.remainder\n\n  Some asset <- queryContractId bank assetCid\n  assert (asset.quantity == 100.0)\n",
+      "generated": "module Intro.AssetTests where\n\nimport Daml.Script\nimport Intro.Asset\n\nmkAsset issuer owner symbol quantity observers = Asset with\n  issuer = issuer\n  owner = owner\n  symbol = symbol\n  quantity = quantity\n  observers = observers\n\nissue : Asset -> Script (ContractId Asset)\nissue asset = submitMulti [asset.issuer, asset.owner] [] do\n  createCmd asset\n\ntestAssetCreation = do\n  issuer <- allocateParty \"issuer\"\n  owner <- allocateParty \"owner\"\n  observer <- allocateParty \"observer\"\n  outsider <- allocateParty \"outsider\"\n  let asset = mkAsset issuer owner \"USD\" 0.01 [observer]\n  cid <- issue asset\n  Some actual <- queryContractId observer cid\n  assert (actual == asset)\n  submitMustFail issuer do createCmd asset\n  submitMustFail outsider do createCmd asset\n  submitMustFail issuer do createCmd (mkAsset issuer issuer \"USD\" 0.0 [])\n  submitMustFail issuer do createCmd (mkAsset issuer issuer \"USD\" (-1.0) [])\n\ntestSplit = do\n  issuer <- allocateParty \"issuer\"\n  owner <- allocateParty \"owner\"\n  observer <- allocateParty \"observer\"\n  let asset = mkAsset issuer owner \"USD\" 10.0 [observer]\n  cid <- issue asset\n  result <- submit owner do exerciseCmd cid Split with splitQuantity = 3.25\n  Some split <- queryContractId observer result.splitAsset\n  Some rest <- queryContractId observer result.remainder\n  assert (split == asset with quantity = 3.25)\n  assert (rest == asset with quantity = 6.75)\n  None <- queryContractId issuer cid\n  submitMustFail owner do exerciseCmd result.splitAsset Split with splitQuantity = 0.0\n  submitMustFail owner do exerciseCmd result.splitAsset Split with splitQuantity = 3.25\n  submitMustFail owner do exerciseCmd result.splitAsset Split with splitQuantity = (-0.1)\n  submitMustFail issuer do exerciseCmd result.remainder Split with splitQuantity = 1.0\n\ntestMerge = do\n  issuer <- allocateParty \"issuer\"\n  owner <- allocateParty \"owner\"\n  observer <- allocateParty \"observer\"\n  let asset = mkAsset issuer owner \"USD\" 4.0 [observer]\n  firstCid <- issue asset\n  otherCid <- issue (asset with quantity = 2.5, observers = [])\n  mergedCid <- submit owner do exerciseCmd firstCid Merge with otherCid = otherCid\n  Some merged <- queryContractId observer mergedCid\n  assert (merged == asset with quantity = 6.5)\n  None <- queryContractId issuer firstCid\n  None <- queryContractId issuer otherCid\n  submitMustFail owner do exerciseCmd mergedCid Merge with otherCid = mergedCid\n\ntestMergeMismatch = do\n  issuer <- allocateParty \"issuer\"\n  differentIssuer <- allocateParty \"differentIssuer\"\n  owner <- allocateParty \"owner\"\n  differentOwner <- allocateParty \"differentOwner\"\n  let asset = mkAsset issuer owner \"USD\" 4.0 []\n  cid <- issue asset\n  wrongIssuer <- issue (asset with issuer = differentIssuer)\n  wrongOwner <- issue (asset with owner = differentOwner)\n  wrongSymbol <- issue (asset with symbol = \"EUR\")\n  submitMustFail owner do exerciseCmd cid Merge with otherCid = wrongIssuer\n  submitMustFail owner do exerciseCmd cid Merge with otherCid = wrongOwner\n  submitMustFail owner do exerciseCmd cid Merge with otherCid = wrongSymbol\n  submitMustFail differentOwner do exerciseCmd cid Merge with otherCid = wrongOwner\n  Some unchanged <- queryContractId owner cid\n  assert (unchanged == asset)\n\ntestSetObservers = do\n  issuer <- allocateParty \"issuer\"\n  owner <- allocateParty \"owner\"\n  observer <- allocateParty \"observer\"\n  let asset = mkAsset issuer owner \"USD\" 5.0 []\n  cid <- issue asset\n  submitMustFail issuer do exerciseCmd cid SetObservers with newObservers = [observer]\n  updatedCid <- submit owner do exerciseCmd cid SetObservers with newObservers = [observer]\n  Some updated <- queryContractId observer updatedCid\n  assert (updated == asset with observers = [observer])\n  None <- queryContractId issuer cid\n  clearedCid <- submit owner do exerciseCmd updatedCid SetObservers with newObservers = []\n  Some cleared <- queryContractId owner clearedCid\n  assert (cleared == asset)\n\ntestProposalAccept = do\n  issuer <- allocateParty \"issuer\"\n  owner <- allocateParty \"owner\"\n  recipient <- allocateParty \"recipient\"\n  let asset = mkAsset issuer owner \"USD\" 5.0 [recipient]\n  cid <- issue asset\n  submitMustFail issuer do exerciseCmd cid ProposeTransfer with newOwner = recipient\n  proposalCid <- submit owner do exerciseCmd cid ProposeTransfer with newOwner = recipient\n  None <- queryContractId issuer cid\n  Some proposal <- queryContractId recipient proposalCid\n  assert (proposal.asset == asset && proposal.newOwner == recipient)\n  submitMustFail recipient do exerciseCmd proposalCid TransferProposal_Accept\n  submitMustFail issuer do exerciseCmd proposalCid TransferProposal_Accept\n  newCid <- submitMulti [issuer, recipient] [] do exerciseCmd proposalCid TransferProposal_Accept\n  Some transferred <- queryContractId recipient newCid\n  assert (transferred == asset with owner = recipient)\n  None <- queryContractId issuer proposalCid\n  pure ()\n\ntestProposalCancelReject = do\n  issuer <- allocateParty \"issuer\"\n  owner <- allocateParty \"owner\"\n  recipient <- allocateParty \"recipient\"\n  observer <- allocateParty \"observer\"\n  let asset = mkAsset issuer owner \"USD\" 5.0 [observer]\n  cancelAssetCid <- issue asset\n  cancelCid <- submit owner do exerciseCmd cancelAssetCid ProposeTransfer with newOwner = recipient\n  submitMustFail recipient do exerciseCmd cancelCid TransferProposal_Cancel\n  restoredCid <- submit owner do exerciseCmd cancelCid TransferProposal_Cancel\n  Some restored <- queryContractId owner restoredCid\n  assert (restored == asset with observers = [])\n  None <- queryContractId issuer cancelCid\n  rejectAssetCid <- issue asset\n  rejectCid <- submit owner do exerciseCmd rejectAssetCid ProposeTransfer with newOwner = recipient\n  submitMustFail owner do exerciseCmd rejectCid TransferProposal_Reject\n  rejectedCid <- submit recipient do exerciseCmd rejectCid TransferProposal_Reject\n  Some rejected <- queryContractId observer rejectedCid\n  assert (rejected == asset)\n  None <- queryContractId issuer rejectCid\n  pure ()\n\ntestApprovalTransfer = do\n  issuer <- allocateParty \"issuer\"\n  owner <- allocateParty \"owner\"\n  recipient <- allocateParty \"recipient\"\n  observer <- allocateParty \"observer\"\n  let asset = mkAsset issuer owner \"USD\" 8.0 [observer]\n  cid <- issue (asset with observers = [recipient])\n  approvalCid <- submit issuer do createCmd TransferApproval with asset = asset; newOwner = recipient\n  submitMustFail owner do exerciseCmd approvalCid TransferApproval_Transfer with assetCid = cid\n  submitMustFail recipient do exerciseCmd approvalCid TransferApproval_Transfer with assetCid = cid\n  transferredCid <- submitMulti [owner, recipient] [] do exerciseCmd approvalCid TransferApproval_Transfer with assetCid = cid\n  Some transferred <- queryContractId recipient transferredCid\n  assert (transferred == asset with owner = recipient, observers = [])\n  None <- queryContractId issuer cid\n  None <- queryContractId issuer approvalCid\n  pure ()\n\ntestApprovalMismatch = do\n  issuer <- allocateParty \"issuer\"\n  differentIssuer <- allocateParty \"differentIssuer\"\n  owner <- allocateParty \"owner\"\n  recipient <- allocateParty \"recipient\"\n  let asset = mkAsset issuer owner \"USD\" 8.0 [recipient]\n  approvalCid <- submit issuer do createCmd TransferApproval with asset = asset; newOwner = recipient\n  wrongQuantity <- issue (asset with quantity = 7.0)\n  wrongSymbol <- issue (asset with symbol = \"EUR\")\n  wrongOwner <- issue (asset with owner = issuer)\n  wrongIssuer <- issue (asset with issuer = differentIssuer)\n  submitMultiMustFail [owner, recipient] [] do exerciseCmd approvalCid TransferApproval_Transfer with assetCid = wrongQuantity\n  submitMultiMustFail [owner, recipient] [] do exerciseCmd approvalCid TransferApproval_Transfer with assetCid = wrongSymbol\n  submitMultiMustFail [owner, recipient, issuer] [] do exerciseCmd approvalCid TransferApproval_Transfer with assetCid = wrongOwner\n  submitMultiMustFail [owner, recipient, differentIssuer] [] do exerciseCmd approvalCid TransferApproval_Transfer with assetCid = wrongIssuer\n  Some unchanged <- queryContractId issuer approvalCid\n  assert (unchanged.asset == asset)\n\ntestApprovalCancelReject = do\n  issuer <- allocateParty \"issuer\"\n  owner <- allocateParty \"owner\"\n  recipient <- allocateParty \"recipient\"\n  let asset = mkAsset issuer owner \"USD\" 8.0 []\n  cancelCid <- submit issuer do createCmd TransferApproval with asset = asset; newOwner = recipient\n  submitMustFail recipient do exerciseCmd cancelCid TransferApproval_Cancel\n  submit owner do exerciseCmd cancelCid TransferApproval_Cancel\n  None <- queryContractId issuer cancelCid\n  rejectCid <- submit issuer do createCmd TransferApproval with asset = asset; newOwner = recipient\n  submitMustFail owner do exerciseCmd rejectCid TransferApproval_Reject\n  submit recipient do exerciseCmd rejectCid TransferApproval_Reject\n  None <- queryContractId issuer rejectCid\n  pure ()\n",
+      "captured_at_utc": "2026-10-02T16:47:00.731931+00:00"
+    }
+  ],
+  "attempts": {
+    "command": [
+      "<package>/src/daml_agent_benchmark/codex_in_container.py",
+      "-C",
+      "<repo-copies>/261002-180850/daml_____ku74g8zr",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ],
+    "model": "gpt-6-sol",
+    "approval_policy": "never",
+    "event_schema_version": "codex_canonical_v1",
+    "final_message": "Added ten Daml Script tests in `sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml:1`. They cover asset creation, split and merge boundaries, observer changes, proposal and approval transfer paths, authorization, and mismatched assets.\n\n`daml test` passes: all ten new scripts and the existing scripts succeed.",
+    "sub_agents": [],
+    "returncode": 143,
+    "wall_seconds": 137.67014545900747,
+    "timed_out": false,
+    "export_timed_out": false,
+    "quota_limit_detected": false,
+    "quota_retry_count": 0,
+    "usage": {
+      "input_tokens": 265221,
+      "output_tokens": 7766,
+      "cached_input_tokens": 244320
+    },
+    "usage_by_thread": {
+      "01a0fd7d-f4f5-7a53-8b93-da0a147f75d0": {
+        "usage": {
+          "input_tokens": 265221,
+          "output_tokens": 7766,
+          "cached_input_tokens": 244320
+        },
+        "usage_reported": true,
+        "turn_completed": true
+      }
+    },
+    "usage_complete": true,
+    "usd_cost": 0.16832599999999998,
+    "input_usd": 0.04180199999999999,
+    "cached_input_usd": 0.048864000000000005,
+    "output_usd": 0.07765999999999997,
+    "stdout": null,
+    "stderr": null,
+    "stdout_events": null,
+    "forbidden_tool_calls": [],
+    "allowed_mcp_tool_calls": [],
+    "suspicious_commands": [],
+    "out_of_workspace_writes": [],
+    "egress": {
+      "events": [
+        {
+          "timestamp": 1790959288.825,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959292.391,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959295.963,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959299.238,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959303.335,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959307.09,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959330.559,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959335.957,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959360.273,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959362.876,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959370.428,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959373.559,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959380.034,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959395.452,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959398.016,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959404.444,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959414.086,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        },
+        {
+          "timestamp": 1790959416.448,
+          "client": "10.219.200.98",
+          "action": "TCP_TUNNEL",
+          "http_status": 200,
+          "method": "CONNECT",
+          "url": "api.openai.com:443",
+          "host": "api.openai.com",
+          "domain": "api.openai.com",
+          "blocked": false
+        }
+      ],
+      "domains_observed": [
+        "api.openai.com"
+      ],
+      "blocked_domains": [],
+      "non_allowed_domains": [],
+      "allowed_domain_suffixes": [
+        "openai.com",
+        "oaiusercontent.com"
+      ],
+      "allowed_hosts": []
+    },
+    "runtime_identity": {
+      "model_expected": "gpt-6-sol",
+      "model_reported": "gpt-6-sol",
+      "model_verified": true,
+      "reasoning_effort_expected": null,
+      "reasoning_effort_reported": null,
+      "reasoning_effort_verified": true,
+      "model_provider": "openai-https",
+      "cli_version": "0.153.4"
+    },
+    "workspace_audit": {
+      "available": true,
+      "target_file_changes": [
+        {
+          "path": "sdk/docs/source/sdk/tutorials/smart-contracts/daml/daml-intro-test/asset-tests/daml/Intro/AssetTests.daml",
+          "kind": "modified"
+        }
+      ],
+      "protected_file_changes": [],
+      "source_changes_outside_targets": [],
+      "build_outputs": [],
+      "codex_home_changes": [
+        {
+          "path": ".codex_home/.sandbox_migration",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/config.toml",
+          "kind": "modified"
+        },
+        {
+          "path": ".codex_home/installation_id",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/.codex-system-skills.marker",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/assets/imagegen.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/cli.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/codex-network.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/image-api.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/prompting.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/references/sample-prompts.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/image_gen.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/imagegen/scripts/remove_chroma_key.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/assets/openai.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/codex-self-knowledge.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/latest-model.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/mcp-diagnostics.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-migration.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/model-selection.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/official-docs.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/prompting-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrade-guide.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/references/upgrading-to-gpt-5p6-sol.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/assets/plugin-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/installing-and-updating.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/references/plugin-json-spec.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/create_basic_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/identifier_validation.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/read_marketplace_name.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/plugin-creator/scripts/validate_plugin.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/review-agent/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/assets/skill-creator.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/license.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/references/openai_yaml.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/generate_openai_yaml.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/init_skill.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-creator/scripts/quick_validate.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/LICENSE.txt",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/SKILL.md",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/agents/openai.yaml",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer-small.svg",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/assets/skill-installer.png",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/github_utils.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/install-skill-from-github.py",
+          "kind": "added"
+        },
+        {
+          "path": ".codex_home/skills/.system/skill-installer/scripts/list-skills.py",
+          "kind": "added"
+        }
+      ],
+      "other_changes": []
+    }
+  }
+}

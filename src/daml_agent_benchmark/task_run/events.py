@@ -427,8 +427,6 @@ def usage_by_thread(events: list[dict]) -> dict[str, ThreadUsage]:
             continue
         if event_type == "thread.token_usage.updated":
             data = event.get("usage")
-            if not isinstance(data, dict):
-                data = usage_from_app_server_token_usage(event.get("token_usage"))
             if isinstance(data, dict):
                 current = entry(thread_id)
                 for key in ("input_tokens", "output_tokens", "cached_input_tokens"):

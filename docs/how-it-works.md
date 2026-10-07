@@ -2,17 +2,17 @@
 
 A score means something only if the agent had to write the code itself, and if a failure is the agent's failure. This page follows one task and says what guarantees each of those conditions.
 
-The implementation files that the agent has to write are the target files. Their original content is the answer.
+The files that the agent has to write are the target files: the implementation files in an implementation task, and the test file in a test-generation task (see [Test generation](test-generation.md)). Their original content is the answer.
 
 ## Steps of a task
 
 1. **Copy.** The harness copies the source repository into a directory of its own, the repository copy. The agent never works in the original checkout.
 2. **Scan.** While the original files are still in the copy, the harness scans every other file for the answer.
 3. **Control.** With `ground_truth_control=True`, the harness builds and tests the original code, to check that the task works in this environment. It then deletes everything that the build added and scans again.
-4. **Blank.** The harness empties the target files. They stay in place, so the agent knows their names. The prompt names the test file and the targets and asks the agent to make the test pass by editing only the targets.
+4. **Blank.** The harness empties the target files. They stay in place, so the agent knows their names. The prompt names the targets and the files they belong with, and asks the agent to edit only the targets: in an implementation task, to make the test file pass; in a test-generation task, to write tests for the implementation.
 5. **Attempt.** The agent runs in a fresh container until it says it is done or its time runs out.
 6. **Copy back.** Only the target files come back to the host. The harness also records which other files the agent changed, and collects its network log and its event stream: every message, command and tool call that the agent reported.
-7. **Grade.** A second container, with no network, grades the targets against the untouched test file in three stages. The Daml linter checks syntax, with only errors failing. Then the project is built (see [Grading scope](#grading-scope)). Then the test file's scripts run, and the stage passes when the test runner exits zero. Each stage runs only when the one before it passed.
+7. **Grade.** A second container, with no network, grades the targets. In an implementation task, it grades them against the untouched test file in three stages. The Daml linter checks syntax, with only errors failing. Then the project is built (see [Grading scope](#grading-scope)). Then the test file's scripts run, and the stage passes when the test runner exits zero. Each stage runs only when the one before it passed. In a test-generation task, the agent's test file runs on the untouched implementation and then on each mutant, as [Test generation](test-generation.md#how-the-tests-are-graded) describes.
 
 ## Avoiding answer leaking into sandbox
 
@@ -58,4 +58,4 @@ The flags are `out_of_workspace_writes`, `forbidden_tool_calls` and `non_allowed
 
 ## Red-team testing
 
-In a red-team sweep the agent's only job is to search its sandbox for the answer, through the same path as a benchmark task. In some of the sandboxes, a copy of the answer is planted without being named, to show that the search works. On the public tasks, the agent found no leak in any of 17 clean sandboxes, and it found the planted copy in 16 of 17 others. [`redteam.py`](../src/daml_agent_benchmark/redteam.py) runs a sweep.
+In a red-team sweep the agent's only job is to search its sandbox for the answer, through the same path as a benchmark task. In some of the sandboxes, a copy of the answer, whichever files the run's task kind has the agent write, is planted without being named, to show that the search works. On the public implementation tasks, the agent found no leak in any of 17 clean sandboxes, and it found the planted copy in 16 of 17 others. [`redteam.py`](../src/daml_agent_benchmark/redteam.py) runs a sweep. It writes one JSON file per sweep: a summary with the canary and leak counts, one verdict per task the agent finished (`tasks`), and the tasks the harness could not run (`failed`). `--skip-tasks-in` reads such files to leave their finished tasks out of the next sweep.

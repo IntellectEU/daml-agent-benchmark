@@ -16,13 +16,26 @@ from typing import Any
 TOKEN_USAGE_EVENT_TYPES = frozenset({"thread.token_usage.updated"})
 
 
+@dataclass(frozen=True)
+class RequestsCost:
+    """What requests cost in USD, split into fresh input, cached input and output. Over several
+    requests, each is priced alone and every part is a sum over them."""
+
+    input: float
+    cached_input: float
+    output: float
+
+    @property
+    def total(self) -> float:
+        return self.input + self.cached_input + self.output
+
+
 def cost_breakdown(
     model_name: str, input_tokens: int, output_tokens: int, cached_input_tokens: int = 0
-) -> dict[str, float] | None:
+) -> RequestsCost | None:
     """The cost of one request's token usage split into fresh input, cached input and output.
 
-    `input_tokens` includes the cached ones. Each part is in USD under the keys `input`,
-    `cached_input` and `output`. The result is None for a model the price list does not know.
+    `input_tokens` includes the cached ones. The result is None for a model the price list does not know.
     """
     from genai_prices import Usage, calc_price
     from genai_prices.types import calc_unit_price
@@ -39,11 +52,11 @@ def cost_breakdown(
     model_price = price.model_price
     total_input = usage.input_tokens
     fresh_input = max(0, total_input - usage.cache_read_tokens)
-    return {
-        "input": float(calc_unit_price(model_price.input_mtok, fresh_input, total_input, 1_000_000)),
-        "cached_input": float(calc_unit_price(model_price.cache_read_mtok, usage.cache_read_tokens, total_input, 1_000_000)),
-        "output": float(price.output_price),
-    }
+    return RequestsCost(
+        input=float(calc_unit_price(model_price.input_mtok, fresh_input, total_input, 1_000_000)),
+        cached_input=float(calc_unit_price(model_price.cache_read_mtok, usage.cache_read_tokens, total_input, 1_000_000)),
+        output=float(price.output_price),
+    )
 
 
 # --- Requests from the event stream -------------------------------------------------------
@@ -117,19 +130,6 @@ def request_token_usages(events: Iterable[tuple[int, dict[str, Any]]]) -> list[R
 # --- Pricing the requests -----------------------------------------------------------------
 
 
-@dataclass(frozen=True)
-class RequestsCost:
-    """What a list of requests cost, each request priced alone. Every part is a sum over the requests."""
-
-    input: float
-    cached_input: float
-    output: float
-
-    @property
-    def total(self) -> float:
-        return self.input + self.cached_input + self.output
-
-
 def requests_cost(model: str, requests: Iterable[RequestTokenUsage]) -> RequestsCost | None:
     """The cost of the requests, each priced alone; None when the model has no price."""
     fresh = cached = output = 0.0
@@ -137,9 +137,9 @@ def requests_cost(model: str, requests: Iterable[RequestTokenUsage]) -> Requests
         parts = cost_breakdown(model, request.input_tokens, request.output_tokens, request.cached_input_tokens)
         if parts is None:
             return None
-        fresh += parts["input"]
-        cached += parts["cached_input"]
-        output += parts["output"]
+        fresh += parts.input
+        cached += parts.cached_input
+        output += parts.output
     if cost_breakdown(model, 0, 0) is None:
         return None
     return RequestsCost(fresh, cached, output)

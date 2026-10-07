@@ -63,7 +63,7 @@ def _attempt(**overrides) -> AttemptResult:
             [{"host": "api.openai.com", "domain": "api.openai.com", "blocked": False}], ["openai.com"], []
         ),
         runtime_identity=RuntimeIdentity("gpt-6-luna", "gpt-6-luna", True, None, None, True, "openai", "0.1"),
-        workspace_audit=WorkspaceAudit.from_changes([], ["daml/Impl.daml"], "daml/Test.daml"),
+        workspace_audit=WorkspaceAudit.from_changes([], ["daml/Impl.daml"], ["daml/Test.daml"]),
     )
     fields.update(overrides)
     return AttemptResult(**fields)
@@ -85,7 +85,7 @@ def _task(name: str, *, tests_passed: bool = True, findings: list[Finding] | Non
         grade=Grade(True, True, tests_passed, {"Test:main": tests_passed}, None, None, None),
         ground_truth_control=None,
         repo_copy_integrity=None,
-        impl_file_snapshots=[],
+        answer_file_snapshots=[],
         attempts=_attempt(),
     )
     fields.update(overrides)
